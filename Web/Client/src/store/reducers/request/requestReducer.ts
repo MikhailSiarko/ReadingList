@@ -12,7 +12,7 @@ export function requestReducer(state: RootState.LoadingState = initialState.load
             console.log(action.response);
             return false;
         case getType(requestActions.failed):
-            console.log(action.requestError);
+            console.log(action.response);
             return false;
         default:
             return state;

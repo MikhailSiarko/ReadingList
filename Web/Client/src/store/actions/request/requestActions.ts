@@ -1,5 +1,4 @@
-import { AxiosResponse } from 'axios';
-import { RequestError, RequestInfo } from './infrastructure';
+import { RequestInfo, RequestResult } from './infrastructure';
 import { RequestActionType } from './RequestActionType';
 import { createAction, getReturnOfExpression } from 'typesafe-actions';
 
@@ -10,16 +9,16 @@ export const requestActions = {
             info
         };
     }),
-    success: createAction(RequestActionType.REQUEST_SUCCESS, (response: AxiosResponse) => {
+    success: createAction(RequestActionType.REQUEST_SUCCESS, (response: RequestResult<never>) => {
         return {
             type: RequestActionType.REQUEST_SUCCESS,
             response
         };
     }),
-    failed: createAction(RequestActionType.REQUEST_FAILED, (requestError: RequestError) => {
+    failed: createAction(RequestActionType.REQUEST_FAILED, (response: RequestResult<never>) => {
         return {
             type: RequestActionType.REQUEST_FAILED,
-            requestError
+            response
         };
     })
 };

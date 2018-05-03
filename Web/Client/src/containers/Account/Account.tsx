@@ -8,10 +8,11 @@ import { Credentials } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import Layout from '../../components/Layout';
+import { RequestResult } from '../../store/actions/request';
 
 interface AccountProps extends RouteComponentProps<any> {
-    login: (credentials: Credentials) => void;
-    register: (credentials: Credentials) => void;
+    login: (credentials: Credentials) => Promise<void>;
+    register: (credentials: Credentials) => Promise<void>;
 }
 
 class Account extends React.Component<AccountProps> {
@@ -26,19 +27,23 @@ class Account extends React.Component<AccountProps> {
     }
 }
 
+function postAuthReqeustProcess(result: RequestResult<never>, ownProps: AccountProps) {
+    if(result.isSuccess()) {
+        ownProps.history.push('/');
+    } else {
+        alert(result.message);
+    }
+}
+
 function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProps) {
     return {
-        login: (credentials: Credentials) => {
-            AuthenticationService.login(dispatch, credentials)
-                .then(() => {
-                    ownProps.history.push('/');
-                });
+        login: async (credentials: Credentials) => {
+            const result = await AuthenticationService.login(dispatch, credentials);
+            postAuthReqeustProcess(result, ownProps);
         },
-        register: (credentials: Credentials) => {
-            AuthenticationService.register(dispatch, credentials)
-                .then(() => {
-                    ownProps.history.push('/');
-                });
+        register: async (credentials: Credentials) => {
+            const result = await AuthenticationService.register(dispatch, credentials);
+            postAuthReqeustProcess(result, ownProps);
         }
     };
 }

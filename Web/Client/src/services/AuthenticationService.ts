@@ -8,7 +8,7 @@ import { RootState } from '../store/reducers';
 import { requestActions, RequestInfo } from '../store/actions/request';
 import { authenticationActions, AuthenticationData } from '../store/actions/authentication';
 import { UserModel } from '../models';
-import { RequestError } from '../store/actions/request/infrastructure';
+import { RequestResult } from '../store/actions/request/infrastructure';
 
 export class AuthenticationService {
     static login(dispatch: Dispatch<RootState>, credentials: Credentials) {
@@ -34,16 +34,19 @@ export class AuthenticationService {
 
     private static onSuccess(dispatch: Dispatch<RootState>) {
         return function(response: AxiosResponse) {
-            dispatch(requestActions.success(response));
+            const result = new RequestResult<never>(response.statusText, response.status);
+            dispatch(requestActions.success(result));
             dispatch(authenticationActions.signIn(new AuthenticationData(response.data.token,
                 response.data.user as UserModel)));
+            return result;
         };
     }
 
     private static onError(dispatch: Dispatch<RootState>) {
-        return function(error: any) {
-            const requestError = new RequestError(error.data.errorMessage, error.status);
-            dispatch(requestActions.failed(requestError));
+        return function(error: AxiosResponse) {
+            const result = new RequestResult<never>(error.data.errorMessage, error.status);
+            dispatch(requestActions.failed(result));
+            return result;
         };
     }
 

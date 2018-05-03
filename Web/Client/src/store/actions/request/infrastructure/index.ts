@@ -1,2 +1,2 @@
 export * from './RequestInfo';
-export * from './RequestError';
+export * from './RequestResult';
