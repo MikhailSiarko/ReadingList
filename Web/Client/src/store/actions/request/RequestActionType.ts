@@ -1,0 +1,5 @@
+export enum RequestActionType {
+    REQUEST_BEGIN = 'REQUEST_BEGIN',
+    REQUEST_SUCCESS = 'REQUEST_SUCCESS',
+    REQUEST_FAILED = 'REQUEST_FAILED'
+}
