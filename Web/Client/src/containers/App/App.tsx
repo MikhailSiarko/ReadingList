@@ -8,9 +8,9 @@ import { withRouter } from 'react-router';
 import Account from '../Account';
 import ApiConfiguration from '../../config/ApiConfiguration';
 import NavBar from '../../components/NavBar';
-import Main from '../../components/Main';
 import { Dispatch } from 'redux';
 import { authenticationActions } from '../../store/actions/authentication';
+import Layout from '../../components/Layout';
 
 interface AppProps extends RouteComponentProps<any> {
     identity: RootState.IdentityState;
@@ -29,15 +29,17 @@ class App extends React.Component<AppProps> {
                 {text: 'Register', href: ApiConfiguration.register}
             ];
         return (
-            <div className="app">
+            <Layout className="app" tag={'div'}>
                 <NavBar links={navLinks} />
-                <Main className={'main'}>
+                <Layout className={'main'} tag={'main'}>
                     <Switch>
-                        <PrivateRoute exact={true} path="/" component={Hello} />
+                        <PrivateRoute exact={true} path="/" 
+                            component={() => <Hello name={this.props.identity.user 
+                                ? this.props.identity.user.firstname : 'Guest'} />} />
                         <Route path="/account" component={Account} />
                     </Switch>
-                </Main>
-            </div>
+                </Layout>
+            </Layout>
         );
     }
 }

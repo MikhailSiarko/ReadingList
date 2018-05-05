@@ -1,8 +1,7 @@
-﻿using Api.Extensions;
+﻿using Api.Authentication.AuthenticationOptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -10,18 +9,12 @@ namespace Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(ConfigureJwtBearer);
+            services.AddSingleton<IJwtOptions, JwtOptions>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(ConfigureJwtBearer);
             services.AddMvc();
         }
         
@@ -40,24 +33,24 @@ namespace Api
             app.UseMvc();
         }
 
-        private void ConfigureJwtBearer(JwtBearerOptions options)
+        private static void ConfigureJwtBearer(JwtBearerOptions options)
         {
             options.RequireHttpsMetadata = false;
-            var jwtOptions = JwtOptions.GetInstance(Configuration);
-            options.TokenValidationParameters = ConfigureTokenValidationParameters(jwtOptions);
+            options.TokenValidationParameters = ConfigureTokenValidationParameters();
         }
 
-        private TokenValidationParameters ConfigureTokenValidationParameters(IJwtOptions jwtOptions)
+        private static TokenValidationParameters ConfigureTokenValidationParameters()
         {
+            var jwtOptions = new JwtOptions();
             return new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = jwtOptions.Audience,
-                    ValidateLifetime = true,
-                    IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
-                    ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtOptions.Issuer,
+                ValidateAudience = true,
+                ValidAudience = jwtOptions.Audience,
+                ValidateLifetime = true,
+                IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
+                ValidateIssuerSigningKey = true,
             };
         }
     }

@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
-@import url('https://fonts.googleapis.com/css?family=Yellowtail');
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700');
 @import url('colors');
 .shadow {
   box-shadow: 0 0.1rem 0.2rem @gray;
   transition: all 0.1s;
-  &:hover {
-    box-shadow: 0 0.2rem 0.4rem @gray;
-  }
+}
+
+.shadow-hover {
+  box-shadow: 0 0.2rem 0.4rem @gray;
 }
 
 html {
@@ -40,6 +41,7 @@ body {
     background-color: @primary;
     .shadow;
     &:hover {
+      .shadow-hover;
       background-color: @primary_darken;
     }
   }
@@ -66,17 +68,20 @@ input[type="password"]{
   box-shadow: 0 0 0.2rem @gray;
   transition: all 0.3s;
   .shadow;
+  &:hover {
+    .shadow-hover;
+  }
   &:focus {
+    .shadow-hover;
     box-shadow: 0 0.2rem 0.4rem @gray;
   }
   &.invalid-input {
     border-color: @error;
     .shadow;
+    
     &:hover {
       border-color: fadeout(@error, 60%);
-    }
-    &:hover {
-      box-shadow: 0 0.2rem 0.4rem fadeout(@error, 60%);
+      box-shadow: 0 0.2rem 0.4rem fadeout(@error, 40%);
     }
   }
 }
@@ -124,9 +129,9 @@ span.input-validation-message {
 }
 
 .account-header {
-  font-family: 'Yellowtail', cursive;
+  font-family: 'Dosis', sans-serif;
   font-size: 6.4rem;
-  font-weight: 100;
+  font-weight: 600;
   text-shadow: 0 0.2rem 0.2rem @gray;
-  color: darken(@gray_darken, 20%);
+  color: darken(@gray_darken, 10%);
 }

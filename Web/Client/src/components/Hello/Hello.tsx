@@ -1,7 +1,11 @@
 import * as React from 'react';
 
-const Hello = () => {
-    return <h1>Hello!</h1>;
+interface HelloProps {
+    name: string | undefined;
+}
+
+const Hello = (props: HelloProps) => {
+    return <h1>Hello, {props.name}!</h1>;
 };
 
 export default Hello;

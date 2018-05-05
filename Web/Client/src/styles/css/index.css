@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
-@import url('https://fonts.googleapis.com/css?family=Yellowtail');
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700');
 .shadow {
   box-shadow: 0 0.1rem 0.2rem #a5a9af;
   transition: all 0.1s;
 }
-.shadow:hover {
+.shadow-hover {
   box-shadow: 0 0.2rem 0.4rem #a5a9af;
 }
 html {
@@ -39,8 +39,6 @@ body {
 }
 .btn.primary:hover {
   box-shadow: 0 0.2rem 0.4rem #a5a9af;
-}
-.btn.primary:hover {
   background-color: #1259a9;
 }
 .btn.active {
@@ -86,17 +84,8 @@ input[type="password"].invalid-input {
 input[type="text"].invalid-input:hover,
 input[type="email"].invalid-input:hover,
 input[type="password"].invalid-input:hover {
-  box-shadow: 0 0.2rem 0.4rem #a5a9af;
-}
-input[type="text"].invalid-input:hover,
-input[type="email"].invalid-input:hover,
-input[type="password"].invalid-input:hover {
   border-color: rgba(239, 83, 80, 0.4);
-}
-input[type="text"].invalid-input:hover,
-input[type="email"].invalid-input:hover,
-input[type="password"].invalid-input:hover {
-  box-shadow: 0 0.2rem 0.4rem rgba(239, 83, 80, 0.4);
+  box-shadow: 0 0.2rem 0.4rem rgba(239, 83, 80, 0.6);
 }
 span.input-validation-message {
   display: block;
@@ -137,9 +126,9 @@ span.input-validation-message {
   padding: 10vh;
 }
 .account-header {
-  font-family: 'Yellowtail', cursive;
+  font-family: 'Dosis', sans-serif;
   font-size: 6.4rem;
-  font-weight: 100;
+  font-weight: 600;
   text-shadow: 0 0.2rem 0.2rem #a5a9af;
-  color: #646971;
+  color: #7c828b;
 }

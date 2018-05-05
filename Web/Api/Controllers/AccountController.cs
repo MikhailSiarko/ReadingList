@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using Api.Extensions;
+using Api.Authentication.AuthenticationOptions;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -16,11 +15,11 @@ namespace Api.Controllers
     public class AccountController : Controller
     {
         private readonly IEnumerable<User> _users;
-        private readonly IConfiguration _configuration;
+        private readonly IJwtOptions _jwtOptions;
 
-        public AccountController(IConfiguration configuration)
+        public AccountController(IJwtOptions jwtOptions)
         {
-            _configuration = configuration;
+            _jwtOptions = jwtOptions;
             _users = new List<User>
             {
                 new User
@@ -29,7 +28,8 @@ namespace Api.Controllers
                     Email = "mike@mail.com",
                     Password = "123456",
                     Firstname = "Mikhail",
-                    Lastname = "Siarko"
+                    Lastname = "Siarko",
+                    Role = "User"
                 },
 
                 new User
@@ -38,7 +38,8 @@ namespace Api.Controllers
                     Email = "alex@mail.com",
                     Password = "654321",
                     Firstname = "Alexey",
-                    Lastname = "Siarko"
+                    Lastname = "Siarko",
+                    Role = "User"
                 }
             };
         }
@@ -54,19 +55,9 @@ namespace Api.Controllers
                 return BadRequest(new { errorMessage = "Invalid user name or password"});
             }
 
-            var jwtOptions = JwtOptions.GetInstance(_configuration);
-            var encodedJwt = EncodeSecurityToken(jwtOptions, identity);
+            var encodedJwt = EncodeSecurityToken(_jwtOptions, identity);
 
-            var response = new
-            {
-                token = encodedJwt,
-                user = new
-                {
-                    email = user.Email,
-                    firstname = user.Firstname,
-                    lastname = user.Lastname
-                }
-            };
+            var response = GenerateAuthResponse(encodedJwt, user);
 
             return Json(response, new JsonSerializerSettings
             {
@@ -86,19 +77,9 @@ namespace Api.Controllers
                 return BadRequest(new { errorMessage = "Invalid email or password" });
             }
 
-            var jwtOptions = JwtOptions.GetInstance(_configuration);
-            var encodedJwt = EncodeSecurityToken(jwtOptions, identity);
+            var encodedJwt = EncodeSecurityToken(_jwtOptions, identity);
 
-            var response = new
-            {
-                token = encodedJwt,
-                user = new
-                {
-                    email = user.Email,
-                    firstname = user.Firstname,
-                    lastname = user.Lastname
-                }
-            };
+            var response = GenerateAuthResponse(encodedJwt, user);
 
             return Json(response, new JsonSerializerSettings
             {
@@ -123,7 +104,6 @@ namespace Api.Controllers
 
         private static string EncodeSecurityToken(IJwtOptions jwtOptions, ClaimsIdentity identity)
         {
-
             var jwt = GenerateToken(jwtOptions, identity.Claims);
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(jwt);
@@ -133,13 +113,29 @@ namespace Api.Controllers
         {
             var now = DateTime.UtcNow;
             return new JwtSecurityToken(
-                issuer : jwtOptions.Issuer,
-                audience : jwtOptions.Audience,
+                jwtOptions.Issuer,
+                jwtOptions.Audience,
                 notBefore : now,
                 claims : claims,
                 expires : now.Add(TimeSpan.FromMinutes(jwtOptions.Lifetime)),
                 signingCredentials : new SigningCredentials(jwtOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256));
+        }
+
+        private static dynamic GenerateAuthResponse(string token, User user)
+        {
+            return new
+            {
+                token,
+                user = new
+                {
+                    id = user.Id,
+                    email = user.Email,
+                    firstname = user.Firstname,
+                    lastname = user.Lastname,
+                    role = user.Role
+                }
+            };
         }
     }
 }
