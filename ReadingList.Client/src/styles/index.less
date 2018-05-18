@@ -12,17 +12,15 @@
 
 html {
   font-size: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Lato', sans-serif;
   background-color: darken(white, 2.5%);
-}
-
-.app {
-  text-align: center;
 }
 
 .btn {
@@ -55,7 +53,7 @@ body {
 
 input[type="text"],
 input[type="email"],
-input[type="password"]{
+input[type="password"] {
   font-weight: 100;
   padding: 0.3rem 1rem;
   font-size: 2.2rem;
@@ -65,8 +63,6 @@ input[type="password"]{
   color: #757575;
   background-color: white;
   text-align: center;
-  box-shadow: 0 0 0.2rem @gray;
-  transition: all 0.3s;
   .shadow;
   &:hover {
     .shadow-hover;
@@ -96,15 +92,17 @@ span.input-validation-message {
   position: fixed;
   top: 0;
   width: 100%;
+  left: 0;
   min-height: 4.8rem;
   background-color: @primary;
   box-shadow: 0 0.1rem 0.2rem @gray;
   transition: all 0.1s;
   color: white;
   & a.nav-bar-link {
+    text-align: center;
     display: inline-block;
     padding: 1rem 2.5rem;
-    margin: 0;
+    margin: 0 auto;
     cursor: pointer;
     min-width: 7.5rem;
     text-decoration: none;
@@ -125,7 +123,8 @@ span.input-validation-message {
 }
 
 .account-form {
-  padding: 10vh;
+  padding: 10rem;
+  text-align: center;
 }
 
 .account-header {
@@ -134,4 +133,44 @@ span.input-validation-message {
   font-weight: 600;
   text-shadow: 0 0.2rem 0.2rem @gray;
   color: darken(@gray_darken, 10%);
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+  margin: 0 auto;
+  width: 70rem;
+  box-sizing: border-box;
+  & > li {
+    .shadow;
+    &:hover {
+      .shadow-hover;
+    }
+    border: solid 0.1rem @gray;
+    background-color: white;
+    border-radius: 0.4rem;
+    margin: 1.5rem;
+    padding: 0 1rem;
+    & div {
+      display: inline-block;
+      box-sizing: border-box;
+    }
+    & div.book-info {
+      margin-right: 3rem;
+      font-size: 2.2rem;
+      min-width: 40rem;
+    }
+    & div.status-selector {
+      & > p {
+        display: inline-block;
+      }
+      & > select {
+        font-size: 1.6rem;
+        width: 15rem;
+        border: none;
+        text-align: center;
+      }
+    }
+  }
 }

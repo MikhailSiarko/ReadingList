@@ -18,7 +18,7 @@ interface AccountProps extends RouteComponentProps<any> {
 class Account extends React.Component<AccountProps> {
     render() {
         return (
-            <Layout className={'account-form'} tag={'div'}>
+            <Layout className={'account-form'} element={'div'}>
                 <h1 className={'account-header'}>Welcome to Reading List!</h1>
                 <Route path="/account/register" component={() => <Register register={this.props.register} />} />
                 <Route path="/account/login" component={() => <Login login={this.props.login} />} />

@@ -3,14 +3,18 @@ import { RootState } from '../../store/reducers';
 import { connect } from 'react-redux';
 import { Route, RouteComponentProps, Switch } from 'react-router';
 import PrivateRoute from '../PrivateRoute';
-import Hello from '../../components/Hello/Hello';
 import { withRouter } from 'react-router';
 import Account from '../Account';
-import ApiConfiguration from '../../config/ApiConfiguration';
 import NavBar from '../../components/NavBar';
 import { Dispatch } from 'redux';
 import { authenticationActions } from '../../store/actions/authentication';
 import Layout from '../../components/Layout';
+import { BookList } from '../../models/BookList/Implementations/BookList';
+import { ListType } from '../../models/BookList/Abstractions/ListType';
+import { BookListItem } from '../../models/BookList/Implementations/BookListItem';
+import { BookModel } from '../../models/BookModel';
+import PrivateBookList from '../PrivateBookList/PrivateBookList';
+import { BookStatus } from '../../models/BookList/Implementations/BookStatus';
 
 interface AppProps extends RouteComponentProps<any> {
     identity: RootState.IdentityState;
@@ -24,18 +28,31 @@ class App extends React.Component<AppProps> {
     }
     render() {
         const navLinks = this.props.identity.isAuthenticated
-            ? [{text: 'Logout', href: '', action: this.signOutHandler}]
-            : [{text: 'Login', href: ApiConfiguration.login},
-                {text: 'Register', href: ApiConfiguration.register}
+            ? [
+                {text: 'List', href: '/list'},
+                {text: 'Logout', href: '', action: this.signOutHandler}                
+            ]
+            : [
+                {text: 'Login', href: '/account/login'},
+                {text: 'Register', href: '/account/register'}
             ];
+
+        const bookList = {
+            id: '1',
+            type: ListType.Private,
+            items: [
+                new BookListItem('2', 
+                    {id: '35', title: 'Martin Eden', author: 'Jack London'} as BookModel, BookStatus.Reading),
+                new BookListItem('5', {id: '456', title: 'Three comrades', author: 'Erich Maria Remark'} as BookModel)
+            ]
+        } as BookList;
         return (
-            <Layout className="app" tag={'div'}>
+            <Layout element={'div'}>
                 <NavBar links={navLinks} />
-                <Layout className={'main'} tag={'main'}>
+                <Layout className={'main'} element={'main'}>
                     <Switch>
                         <PrivateRoute exact={true} path="/" 
-                            component={() => <Hello name={this.props.identity.user 
-                                ? this.props.identity.user.firstname : 'Guest'} />} />
+                            component={() => <PrivateBookList bookList={bookList} />} />
                         <Route path="/account" component={Account} />
                     </Switch>
                 </Layout>

@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { Props } from 'react';
+import { Component } from 'react-redux';
 
 interface LayoutProps extends Props<any> {
-    tag: string;
+    element: string | Component<any>;
     className?: string;
 }
 
 const Layout = (props: LayoutProps) => {
     return (
-        <props.tag className={props.className}>
+        <props.element className={props.className}>
             {props.children}
-        </props.tag>
+        </props.element>
     );
 };
 

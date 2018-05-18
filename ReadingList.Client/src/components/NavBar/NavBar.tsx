@@ -15,7 +15,7 @@ class NavBar extends React.Component<NavBarProps> {
             );
         });
         return (
-            <Layout className="nav-bar" tag={'nav'}>
+            <Layout className="nav-bar" element={'nav'}>
                 {navLinks}
             </Layout>
         );

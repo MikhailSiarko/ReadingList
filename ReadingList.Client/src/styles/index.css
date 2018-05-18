@@ -1,5 +1,39 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
-@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700');
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v14/S6uyw4BMUTPHjx4wWw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Dosis Light'), local('Dosis-Light'), url(https://fonts.gstatic.com/s/dosis/v7/HhyXU5sn9vOmLzHDKeCFMI4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Dosis Regular'), local('Dosis-Regular'), url(https://fonts.gstatic.com/s/dosis/v7/HhyaU5sn9vOmLzloC_A.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Dosis Medium'), local('Dosis-Medium'), url(https://fonts.gstatic.com/s/dosis/v7/HhyXU5sn9vOmLzGbKOCFMI4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Dosis SemiBold'), local('Dosis-SemiBold'), url(https://fonts.gstatic.com/s/dosis/v7/HhyXU5sn9vOmLzG3L-CFMI4.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Dosis';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Dosis Bold'), local('Dosis-Bold'), url(https://fonts.gstatic.com/s/dosis/v7/HhyXU5sn9vOmLzHTLuCFMI4.ttf) format('truetype');
+}
 .shadow {
   box-shadow: 0 0.1rem 0.2rem #a5a9af;
   transition: all 0.1s;
@@ -9,15 +43,14 @@
 }
 html {
   font-size: 10px;
-}
-body {
   margin: 0;
   padding: 0;
+  border: 0;
+  vertical-align: baseline;
+}
+body {
   font-family: 'Lato', sans-serif;
   background-color: #f9f9f9;
-}
-.app {
-  text-align: center;
 }
 .btn {
   font-size: 2.2rem;
@@ -59,8 +92,6 @@ input[type="password"] {
   color: #757575;
   background-color: white;
   text-align: center;
-  box-shadow: 0 0 0.2rem #a5a9af;
-  transition: all 0.3s;
   box-shadow: 0 0.1rem 0.2rem #a5a9af;
   transition: all 0.1s;
 }
@@ -96,6 +127,7 @@ span.input-validation-message {
   position: fixed;
   top: 0;
   width: 100%;
+  left: 0;
   min-height: 4.8rem;
   background-color: #1565c0;
   box-shadow: 0 0.1rem 0.2rem #a5a9af;
@@ -103,9 +135,10 @@ span.input-validation-message {
   color: white;
 }
 .nav-bar a.nav-bar-link {
+  text-align: center;
   display: inline-block;
   padding: 1rem 2.5rem;
-  margin: 0;
+  margin: 0 auto;
   cursor: pointer;
   min-width: 7.5rem;
   text-decoration: none;
@@ -123,7 +156,8 @@ span.input-validation-message {
   font-size: 2rem;
 }
 .account-form {
-  padding: 10vh;
+  padding: 10rem;
+  text-align: center;
 }
 .account-header {
   font-family: 'Dosis', sans-serif;
@@ -131,4 +165,42 @@ span.input-validation-message {
   font-weight: 600;
   text-shadow: 0 0.2rem 0.2rem #a5a9af;
   color: #7c828b;
+}
+.book-list {
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+  margin: 0 auto;
+  width: 70rem;
+  box-sizing: border-box;
+}
+.book-list > li {
+  box-shadow: 0 0.1rem 0.2rem #a5a9af;
+  transition: all 0.1s;
+  border: solid 0.1rem #a5a9af;
+  background-color: white;
+  border-radius: 0.4rem;
+  margin: 1.5rem;
+  padding: 0 1rem;
+}
+.book-list > li:hover {
+  box-shadow: 0 0.2rem 0.4rem #a5a9af;
+}
+.book-list > li div {
+  display: inline-block;
+  box-sizing: border-box;
+}
+.book-list > li div.book-info {
+  margin-right: 3rem;
+  font-size: 2.2rem;
+  min-width: 40rem;
+}
+.book-list > li div.status-selector > p {
+  display: inline-block;
+}
+.book-list > li div.status-selector > select {
+  font-size: 1.6rem;
+  width: 15rem;
+  border: none;
+  text-align: center;
 }

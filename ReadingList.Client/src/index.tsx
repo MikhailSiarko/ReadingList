@@ -5,7 +5,7 @@ import configureStore, { history } from './store';
 import { Provider } from 'react-redux';
 import App from './containers/App';
 import { ConnectedRouter } from 'connected-react-router';
-import './styles/css/index.css';
+import './styles/index.css';
 
 let store = configureStore();
 
