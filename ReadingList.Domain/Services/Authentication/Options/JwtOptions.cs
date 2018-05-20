@@ -1,9 +1,9 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Api.Authentication.AuthenticationOptions
+namespace ReadingList.Api.Authentication.AuthenticationOptions
 {
-    internal class JwtOptions : IJwtOptions
+    public class JwtOptions : IJwtOptions
     {
         private const string Key = "lfLOpfp90L9kIdfu54s7f";
         public string Issuer { get; } = "ReadingList_API";

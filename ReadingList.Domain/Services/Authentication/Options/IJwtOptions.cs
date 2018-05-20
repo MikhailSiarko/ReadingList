@@ -1,6 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
 
-namespace Api.Authentication.AuthenticationOptions
+namespace ReadingList.Api.Authentication.AuthenticationOptions
 {
     public interface IJwtOptions
     {       

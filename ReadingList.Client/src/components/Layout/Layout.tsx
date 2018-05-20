@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Props } from 'react';
 import { Component } from 'react-redux';
 
-interface LayoutProps extends Props<any> {
+interface LayoutProps extends React.Props<any> {
     element: string | Component<any>;
     className?: string;
 }

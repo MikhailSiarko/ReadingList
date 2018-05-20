@@ -15,6 +15,7 @@ import { BookListItem } from '../../models/BookList/Implementations/BookListItem
 import { BookModel } from '../../models/BookModel';
 import PrivateBookList from '../PrivateBookList/PrivateBookList';
 import { BookStatus } from '../../models/BookList/Implementations/BookStatus';
+import Main from '../../components/Main';
 
 interface AppProps extends RouteComponentProps<any> {
     identity: RootState.IdentityState;
@@ -29,7 +30,7 @@ class App extends React.Component<AppProps> {
     render() {
         const navLinks = this.props.identity.isAuthenticated
             ? [
-                {text: 'List', href: '/list'},
+                {text: 'List', href: '/'},
                 {text: 'Logout', href: '', action: this.signOutHandler}                
             ]
             : [
@@ -49,13 +50,13 @@ class App extends React.Component<AppProps> {
         return (
             <Layout element={'div'}>
                 <NavBar links={navLinks} />
-                <Layout className={'main'} element={'main'}>
+                <Main>
                     <Switch>
-                        <PrivateRoute exact={true} path="/" 
+                        <PrivateRoute exact={true} path="/"
                             component={() => <PrivateBookList bookList={bookList} />} />
                         <Route path="/account" component={Account} />
                     </Switch>
-                </Layout>
+                </Main>
             </Layout>
         );
     }

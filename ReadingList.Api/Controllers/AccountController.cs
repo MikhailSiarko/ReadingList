@@ -1,129 +1,65 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using Api.Authentication.AuthenticationOptions;
-using Api.Models;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+using ReadingList.Api.Queries;
+using ReadingList.Domain.Commands;
+using ReadingList.Domain.Queries;
+using ReadingList.Domain.ReadModel;
+using ReadingList.Domain.Services.Authentication;
 
-namespace Api.Controllers
+namespace ReadingList.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly IEnumerable<User> _users;
-        private readonly IJwtOptions _jwtOptions;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AccountController(IJwtOptions jwtOptions)
+        public AccountController(IAuthenticationService authenticationService)
         {
-            _jwtOptions = jwtOptions;
-            _users = new List<User>
-            {
-                new User
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Email = "mike@mail.com",
-                    Password = "123456",
-                    Firstname = "Mikhail",
-                    Lastname = "Siarko",
-                    Role = "User"
-                },
-
-                new User
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Email = "alex@mail.com",
-                    Password = "654321",
-                    Firstname = "Alexey",
-                    Lastname = "Siarko",
-                    Role = "User"
-                }
-            };
+            _authenticationService = authenticationService;
         }
 
         [HttpPost]
         [Route("login")]
-        public IActionResult Login([FromBody] UserCredentials credentials)
+        public async Task<IActionResult> Login([FromBody] LoginQuery loginQuery)
         {
-            // TODO Should put this functioanality to service
-            var identity = GetIdentity(credentials.Email, credentials.Password, out var user);
-            if (identity == null)
-            {
-                return BadRequest(new { errorMessage = "Invalid user name or password"});
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result = await AskAsync(new LoginUserQuery(loginQuery.Email, loginQuery.Password));
 
-            var encodedJwt = EncodeSecurityToken(_jwtOptions, identity);
-
-            var response = GenerateAuthResponse(encodedJwt, user);
-
-            return Json(response, new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            });
+            if (!result.IsSucceed)
+                return BadRequest(result.ErrorMessage);
+            
+            var token = _authenticationService.EncodeSecurityToken(result.Data);
+            var response = GenerateAuthResponse(token, result.Data);
+            return Ok(response);
         }
 
         [HttpPost]
         [Route("register")]
-        public IActionResult Register([FromBody] UserCredentials credentials)
+        public async Task<IActionResult> Register([FromBody] RegisterQuery registerQuery)
         {
-            // Saving user
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var result =
+                await ExecuteAsync(new RegisterUserCommand(registerQuery.Id, registerQuery.Email,
+                    registerQuery.Password));
 
-            var identity = GetIdentity(credentials.Email, credentials.Password, out var user);
-            if (identity == null)
+            if (!result.IsSucceed)
+                return BadRequest(result.ErrorMessage);
+
+            var user = new UserRm
             {
-                return BadRequest(new { errorMessage = "Invalid email or password" });
-            }
-
-            var encodedJwt = EncodeSecurityToken(_jwtOptions, identity);
-
-            var response = GenerateAuthResponse(encodedJwt, user);
-
-            return Json(response, new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented
-            });
-        }
-
-        private ClaimsIdentity GetIdentity(string email, string password, out User user)
-        {
-            user = _users.FirstOrDefault(x => x.Email == email && x.Password == password);
-            if (user == null) return null;
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                Id = registerQuery.Id,
+                Email = registerQuery.Email
             };
-            var claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-            return claimsIdentity;
-
+            var token = _authenticationService.EncodeSecurityToken(user);
+            var response = GenerateAuthResponse(token, user);
+            return Ok(response);
         }
-
-        private static string EncodeSecurityToken(IJwtOptions jwtOptions, ClaimsIdentity identity)
-        {
-            var jwt = GenerateToken(jwtOptions, identity.Claims);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(jwt);
-        }
-
-        private static JwtSecurityToken GenerateToken(IJwtOptions jwtOptions, IEnumerable<Claim> claims)
-        {
-            var now = DateTime.UtcNow;
-            return new JwtSecurityToken(
-                jwtOptions.Issuer,
-                jwtOptions.Audience,
-                notBefore : now,
-                claims : claims,
-                expires : now.Add(TimeSpan.FromMinutes(jwtOptions.Lifetime)),
-                signingCredentials : new SigningCredentials(jwtOptions.GetSymmetricSecurityKey(),
-                    SecurityAlgorithms.HmacSha256));
-        }
-
-        private static dynamic GenerateAuthResponse(string token, User user)
+        
+        private static dynamic GenerateAuthResponse(string token, UserRm user)
         {
             return new
             {
@@ -133,8 +69,7 @@ namespace Api.Controllers
                     id = user.Id,
                     email = user.Email,
                     firstname = user.Firstname,
-                    lastname = user.Lastname,
-                    role = user.Role
+                    lastname = user.Lastname
                 }
             };
         }

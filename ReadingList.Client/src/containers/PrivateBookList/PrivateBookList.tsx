@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { BookList } from '../../models/BookList/Implementations/BookList';
 import { generateStatusSelectItems, BookStatus, BookStatusKey } from '../../models/BookList/Implementations/BookStatus';
-import Layout from '../../components/Layout';
+import BookUL from '../../components/BookUL';
+import BookLI from '../../components/BookUL/BookLI';
+import ContextMenu from '../../components/ContextMenu/ContextMenu';
 
 interface PrivateListProps {
     bookList: BookList;
     // add: (book: BookModel) => void;
-    // remove: (itemId: string) => void;
+    // remove: (id: string) => void;
     // changeStatus: (itemId: string, newStatus: BookStatus) => void;
 }
 
@@ -20,7 +22,6 @@ class PrivateBookList extends React.Component<PrivateListProps, PrivateListState
         this.state = { bookList: { ...props.bookList } };
     }
     changeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        console.log(event.target);
         const index = this.state.bookList.items.findIndex((value) => value.id === event.target.dataset.itemId);
         const item = this.state.bookList.items[index];
         const copy = [...this.state.bookList.items];
@@ -32,33 +33,31 @@ class PrivateBookList extends React.Component<PrivateListProps, PrivateListState
         const list = Object.assign({}, this.state.bookList, {items: copy});
         this.setState({ bookList: list });
     }
+
+    removeItemHandler(id: string) {
+        const copy = [...this.state.bookList.items];
+        const index = copy.findIndex((value) => value.id === id);
+        copy.splice(index, 1);
+        const list = Object.assign({}, this.state.bookList, {items: copy});
+        this.setState({ bookList: list });
+    }
+
     render() {
         const statusOptions = generateStatusSelectItems();
-        const options = statusOptions.map((item) => {
-            return <option key={item.value} value={item.value}>{item.text}</option>;
-        });
-        const lis = this.state.bookList.items.map((listItem) => {
-            return (
-                <li key={listItem.id}>
-                    <div className={'book-info'}>
-                        <h5 className={'book-title'}>
-                            <q>{listItem.data.title}</q> by {listItem.data.author}
-                        </h5>
-                    </div>
-                    <div className={'status-selector'}>
-                        <p>Status:</p>
-                        <select value={listItem.status}
-                                name="BookStatus" data-item-id={listItem.id} onChange={this.changeHandler}>
-                            {options}
-                        </select>
-                    </div>
-                </li>
-            );
-        });
+        const options = statusOptions.map((item) =>
+            <option key={item.value} value={item.value}>{item.text}</option>
+        );
+        const listItems = this.state.bookList.items.map((listItem) => (
+            <ContextMenu element={'li'} key={'context-menu' + listItem.id}
+                         menuItems={[{onClick:() => this.removeItemHandler(listItem.id), text: 'Remove'}]}>
+                <BookLI key={listItem.id} listItem={listItem} element={'div'}
+                        shouldStatusSelectorRender={true} options={options} onBookStatusChange={this.changeHandler} />
+            </ContextMenu>
+        ));
         return (
-            <Layout element={'ul'} className={'book-list'}>
-                {lis}
-            </Layout>
+            <BookUL>
+                {listItems}
+            </BookUL>
         );
     }
 }

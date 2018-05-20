@@ -1,21 +1,36 @@
-﻿using Api.Authentication.AuthenticationOptions;
+﻿using System;
+using System.Reflection;
+using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using ReadingList.Api.Authentication.AuthenticationOptions;
+using ReadingList.Domain.Helpers;
+using ReadingList.Domain.Services.Authentication;
 
-namespace Api
+namespace ReadingList.Api
 {
     public class Startup
     {
-
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
             services.AddSingleton<IJwtOptions, JwtOptions>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(ConfigureJwtBearer);
-            services.AddMvc();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(AuthenticationService.ConfigureJwtBearer);
+            services.AddMvc().AddFluentValidation(options =>
+                {
+                    options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    options.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Startup)));
+                });
+            services.AddMediatR(typeof(AsyncHelpers).Assembly);
+            var serviceProvider = services.BuildServiceProvider();
+            MediatorContainer.InitializeMediator(serviceProvider);
+            return serviceProvider;
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -31,27 +46,6 @@ namespace Api
             });
             app.UseAuthentication();
             app.UseMvc();
-        }
-
-        private static void ConfigureJwtBearer(JwtBearerOptions options)
-        {
-            options.RequireHttpsMetadata = false;
-            options.TokenValidationParameters = ConfigureTokenValidationParameters();
-        }
-
-        private static TokenValidationParameters ConfigureTokenValidationParameters()
-        {
-            var jwtOptions = new JwtOptions();
-            return new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwtOptions.Issuer,
-                ValidateAudience = true,
-                ValidAudience = jwtOptions.Audience,
-                ValidateLifetime = true,
-                IssuerSigningKey = jwtOptions.GetSymmetricSecurityKey(),
-                ValidateIssuerSigningKey = true,
-            };
-        }
+        }       
     }
 }
