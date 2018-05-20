@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500,600,700');
+html {
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+}
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #f9f9f9;
+}
+.btn {
+  font-size: 2.2rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.6rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 1.5rem;
+  transition: all 0.3s;
+  border-radius: 0.2rem;
+}
+.btn.primary {
+  background-color: #1565c0;
+  box-shadow: 0 0.1rem 0.2rem #a5a9af;
+  transition: all 0.1s;
+}
+.btn.primary:hover {
+  box-shadow: 0 0.2rem 0.4rem #a5a9af;
+  background-color: #1259a9;
+}
+.btn.active {
+  background-color: #1259a9;
+}
+.btn.disabled {
+  background-color: #4a688b;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  font-weight: 100;
+  padding: 0.3rem 1rem;
+  font-size: 2.2rem;
+  border: #ccd0d6 solid 0.1rem;
+  border-radius: 0.4rem;
+  margin: 0.6rem;
+  color: #757575;
+  background-color: white;
+  text-align: center;
+  box-shadow: 0 0.1rem 0.2rem #a5a9af;
+  transition: all 0.1s;
+}
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover {
+  box-shadow: 0 0.2rem 0.4rem #a5a9af;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  box-shadow: 0 0.2rem 0.4rem #a5a9af;
+}
+input[type="text"].invalid-input,
+input[type="email"].invalid-input,
+input[type="password"].invalid-input {
+  border-color: #ef5350;
+  box-shadow: 0 0.1rem 0.2rem #a5a9af;
+  transition: all 0.1s;
+}
+input[type="text"].invalid-input:hover,
+input[type="email"].invalid-input:hover,
+input[type="password"].invalid-input:hover {
+  border-color: rgba(239, 83, 80, 0.4);
+  box-shadow: 0 0.2rem 0.4rem rgba(239, 83, 80, 0.6);
+}

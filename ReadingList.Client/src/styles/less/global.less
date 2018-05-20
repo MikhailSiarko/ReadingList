@@ -1,0 +1,74 @@
+@import url('colors');
+@import url('shadow');
+
+html {
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+  }
+  
+  body {
+    font-family: 'Lato', sans-serif;
+    background-color: darken(white, 2.5%);
+  }
+  
+  .btn {
+    font-size: 2.2rem;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.6rem 2rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 1.5rem;
+    transition: all 0.3s;
+    border-radius: 0.2rem;
+    &.primary {
+      background-color: @primary;
+      .shadow;
+      &:hover {
+        .shadow-hover;
+        background-color: @primary_darken;
+      }
+    }
+    &.active {
+      background-color: @primary_darken;
+    }
+    &.disabled {
+      background-color: desaturate(@primary, 50%);
+    }
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    font-weight: 100;
+    padding: 0.3rem 1rem;
+    font-size: 2.2rem;
+    border: #ccd0d6 solid 0.1rem;
+    border-radius: 0.4rem;
+    margin: 0.6rem;
+    color: #757575;
+    background-color: white;
+    text-align: center;
+    .shadow;
+    &:hover {
+      .shadow-hover;
+    }
+    &:focus {
+      .shadow-hover;
+      box-shadow: 0 0.2rem 0.4rem @gray;
+    }
+    &.invalid-input {
+      border-color: @error;
+      .shadow;
+      
+      &:hover {
+        border-color: fadeout(@error, 60%);
+        box-shadow: 0 0.2rem 0.4rem fadeout(@error, 40%);
+      }
+    }
+  }

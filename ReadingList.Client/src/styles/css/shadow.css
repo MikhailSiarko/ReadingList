@@ -1,0 +1,7 @@
+.shadow {
+  box-shadow: 0 0.1rem 0.2rem #a5a9af;
+  transition: all 0.1s;
+}
+.shadow-hover {
+  box-shadow: 0 0.2rem 0.4rem #a5a9af;
+}
