@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Component } from 'react-redux';
+import { HTMLProps } from 'react';
 
-interface LayoutProps extends React.Props<any> {
+interface LayoutProps extends HTMLProps<any> {
     element: string | Component<any>;
-    className?: string;
 }
 
 const Layout = (props: LayoutProps) => {
