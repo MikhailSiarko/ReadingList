@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Credentials } from '../../store/actions/authentication';
+import Layout from '../Layout';
+import globalStyles from '../../styles/global.css';
 
 interface LoginProps {
-    login: (credentials: Credentials) => void;
 }
 
 export interface LoginState {
@@ -27,18 +27,9 @@ class Login extends React.Component<LoginProps, LoginState> {
         } as LoginState);
     }
 
-    public submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if(this.state.email === '' || this.state.password === '') {
-            return;
-        }
-        const credentials = new Credentials(this.state.email, this.state.password);
-        this.props.login(credentials);
-    }
-
     public render() {
         return (
-            <form onSubmit={this.submitHandler}>
+            <Layout element={'div'} >
                 <div>
                     <input type="email" name="email" placeholder="Email" required={true}
                            value={this.state.email} onChange={this.changeHandler} />
@@ -48,9 +39,9 @@ class Login extends React.Component<LoginProps, LoginState> {
                            value={this.state.password} onChange={this.changeHandler} />
                 </div>
                 <div>
-                    <button className="btn primary" type="submit">Login</button>
+                    <button className={`${globalStyles.btn} ${globalStyles.primary}`} type="submit">Login</button>
                 </div>
-            </form>
+            </Layout>
         );
     }
 }

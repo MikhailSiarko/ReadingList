@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { Component } from 'react-redux';
 import { HTMLProps } from 'react';
+import { isNullOrEmpty, AppElement } from '../../utils';
 
 interface LayoutProps extends HTMLProps<any> {
-    element: string | Component<any>;
+    element: AppElement;
 }
 
 const Layout = (props: LayoutProps) => {
+    if(typeof props.element === 'string' && isNullOrEmpty(props.element as string)) {
+        props.element = 'div';
+    }
     return (
-        <props.element className={props.className}>
+        <props.element {...props}>
             {props.children}
         </props.element>
     );

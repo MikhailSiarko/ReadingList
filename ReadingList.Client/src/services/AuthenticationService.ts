@@ -23,8 +23,8 @@ export class AuthenticationService {
 
     private static configureRequest(dispatch: Dispatch<RootState>, url: string, credentials: Credentials) {
         const axiosDefault = axios.create(axiosDefaultConfig);
-        axiosDefault.interceptors.request.use((config) => {
-            dispatch(requestActions.begin(new RequestInfo(config.method, ApiConfiguration.register, credentials)));
+        axiosDefault.interceptors.request.use((config: any) => {
+            dispatch(requestActions.begin(new RequestInfo(config.method, config.url, credentials)));
             return config;
         });
         return axiosDefault.post(url, credentials)

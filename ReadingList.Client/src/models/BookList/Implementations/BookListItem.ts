@@ -6,9 +6,12 @@ export class BookListItem implements ListItem<BookModel> {
     id: string;
     data: BookModel;
     status: string;
-    constructor(id: string, book: BookModel, status: string = BookStatus[BookStatusKey.ToRead]) {
+    isOnEditMode: boolean;
+    constructor(id: string, book: BookModel, status: string = BookStatus[BookStatusKey.ToRead],
+            isOnEditMode: boolean = false) {
         this.id = id;
         this.data = book;
         this.status = status;
+        this.isOnEditMode = isOnEditMode;
     }
 }

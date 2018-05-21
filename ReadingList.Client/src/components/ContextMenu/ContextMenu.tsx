@@ -1,8 +1,10 @@
 import * as React from 'react';
-import styles from '../BookUL/BookLI/BookLI.css';
+import styles from './ContextMenu.css';
+import Layout from '../Layout';
+import { AppElement } from '../../utils';
 
 interface ContextMenuProps {
-    element: string;
+    element?: AppElement;
     menuItems: {
         onClick: () => void;
         text: string;
@@ -15,15 +17,15 @@ interface ContextMenuState {
 }
 
 class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
-    private root: HTMLElement;
     private contextMenu: HTMLDivElement;
     constructor(props: ContextMenuProps) {
         super(props);
         this.state = { isVisible: false };
     }
 
-    handleContextMenu = (event: MouseEvent) => {
+    handleContextMenu = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+        event.persist();
         this.setState({isVisible: true}, () => {
             const clickX = event.clientX;
             const clickY = event.clientY;
@@ -47,54 +49,54 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
                 this.contextMenu.style.left = `${clickX + 5}px`;
             }
 
-            if (left && this.root) {
+            if (left && this.contextMenu) {
                 this.contextMenu.style.left = `${clickX - rootW - 5}px`;
             }
 
-            if (top && this.root) {
+            if (top && this.contextMenu) {
                 this.contextMenu.style.top = `${clickY + 5}px`;
             }
 
-            if (bottom && this.root) {
+            if (bottom && this.contextMenu) {
                 this.contextMenu.style.top = `${clickY - rootH - 5}px`;
             }
         });
     }
 
-    handleClick = (event: MouseEvent) => {
+    handleWindowClick = (event: MouseEvent) => {
         const { isVisible } = this.state;
         const target = event.target as Node;
-        const wasOutside = !(target.contains(this.contextMenu));
+        const wasOutside = target.contains(this.contextMenu);
 
         if (wasOutside && isVisible) {
             this.setState({ isVisible: false, });
         }
+    }
+
+    handleClick = (event: MouseEvent) => {
+        this.setState({ isVisible: false });
     }
 
     handleScroll = (event: MouseEvent) => {
-        const { isVisible } = this.state;
-        const wasOutside = !(event.target === this.contextMenu);
-
-        if (wasOutside && isVisible) {
-            this.setState({ isVisible: false, });
-        }
+        this.setState({ isVisible: false, });
     }
 
     componentDidMount() {
-        this.root.addEventListener('contextmenu', this.handleContextMenu);
         document.addEventListener('click', this.handleClick);
         document.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
-        this.root.removeEventListener('contextmenu', this.handleContextMenu);
         document.removeEventListener('click', this.handleClick);
         document.removeEventListener('scroll', this.handleScroll);
     }
 
     render() {
+        const isElementUndefined = typeof this.props.element === 'undefined';
         return (
-            <this.props.element ref={(ref: any) => this.root = ref as HTMLElement} className={this.props.className}>
+            <Layout onContextMenu={this.handleContextMenu} className={styles['context-menu-wrapper']} 
+                    element={isElementUndefined ? 'div' : this.props.element as AppElement}
+                    onClick={(event: React.MouseEvent<HTMLElement>) => this.handleClick(event.nativeEvent)}>
                 {this.props.children}
                 {
                     this.state.isVisible
@@ -103,8 +105,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
                                  className={styles['context-menu']}>
                                 {
                                     this.props.menuItems.map((item) => (
-                                        <button key={item.text} className={styles['menu-option']}
-                                                onClick={() => item.onClick()}>
+                                        <button key={item.text} onClick={item.onClick}>
                                             {item.text}
                                         </button>
                                     ))
@@ -114,7 +115,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
                             null
                 }
 
-            </this.props.element>
+            </Layout>
         );
     }
 }

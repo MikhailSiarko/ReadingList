@@ -24,19 +24,19 @@ body {
   transition: all 0.3s;
   border-radius: 0.2rem;
 }
-.btn.primary {
+.primary {
   background-color: #1565c0;
   box-shadow: 0 0.1rem 0.2rem #a5a9af;
   transition: all 0.1s;
 }
-.btn.primary:hover {
+.primary:hover {
   box-shadow: 0 0.2rem 0.4rem #a5a9af;
   background-color: #1259a9;
 }
-.btn.active {
+.active {
   background-color: #1259a9;
 }
-.btn.disabled {
+.disabled {
   background-color: #4a688b;
 }
 input[type="text"],
@@ -64,16 +64,18 @@ input[type="email"]:focus,
 input[type="password"]:focus {
   box-shadow: 0 0.2rem 0.4rem #a5a9af;
 }
-input[type="text"].invalid-input,
-input[type="email"].invalid-input,
-input[type="password"].invalid-input {
+.invalid-input {
   border-color: #ef5350;
   box-shadow: 0 0.1rem 0.2rem #a5a9af;
   transition: all 0.1s;
 }
-input[type="text"].invalid-input:hover,
-input[type="email"].invalid-input:hover,
-input[type="password"].invalid-input:hover {
+.invalid-input:hover {
   border-color: rgba(239, 83, 80, 0.4);
   box-shadow: 0 0.2rem 0.4rem rgba(239, 83, 80, 0.6);
+}
+
+.input-validation-message {
+  display: block;
+  font-size: 1.6rem;
+  color: #ef5350;
 }

@@ -1,0 +1,11 @@
+.account-form {
+    padding: 10rem;
+    text-align: center;
+}
+.account-header {
+    font-family: 'Dosis', sans-serif;
+    font-size: 6.4rem;
+    font-weight: 600;
+    text-shadow: 0 0.2rem 0.2rem #a5a9af;
+    color: #7c828b;
+}

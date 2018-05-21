@@ -9,6 +9,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import Layout from '../../components/Layout';
 import { RequestResult } from '../../store/actions/request';
+import AccountForm from '../../components/AccountForm';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -16,14 +17,37 @@ interface AccountProps extends RouteComponentProps<any> {
 }
 
 class Account extends React.Component<AccountProps> {
+    public submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+        const password = (form.elements.namedItem('password') as HTMLInputElement).value;
+        const confirmPassword = form.elements.namedItem('confirmPassword') as HTMLInputElement;
+        if(confirmPassword === null) {
+            this.processSubmit(email, password, this.props.login);
+        } else {
+            this.processSubmit(email, password, this.props.register);
+        }
+    }
+
     render() {
-        return (
-            <Layout className={'account-form'} element={'div'}>
-                <h1 className={'account-header'}>Welcome to Reading List!</h1>
-                <Route path="/account/register" component={() => <Register register={this.props.register} />} />
-                <Route path="/account/login" component={() => <Login login={this.props.login} />} />
-            </Layout>
+        const account = (
+            <AccountForm onSubmit={this.submitHandler}>
+                <Route path="/account/register" component={Register} />
+                <Route path="/account/login" component={Login} />
+            </AccountForm>
         );
+        return <Layout element={() => account}/>;
+    }
+
+    private processSubmit(email: string, password: string, action: (credentials: Credentials) => void) {
+        if(this.validateCredentials(email, password)) {
+            action(new Credentials(email, password));
+        }
+    }
+
+    private validateCredentials(email: string, password: string) {
+        return email !== '' || password !== '';
     }
 }
 
