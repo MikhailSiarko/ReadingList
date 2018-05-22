@@ -1,18 +1,16 @@
 import * as React from 'react';
 import styles from './ContextMenu.css';
 import Layout from '../Layout';
-import { AppElement } from '../../utils';
 
-interface ContextMenuProps {
-    element?: AppElement;
+export interface ContextMenuProps {
     menuItems: {
         onClick: () => void;
         text: string;
     }[];
-    className?: string;
+    rootId: string;
 }
 
-interface ContextMenuState {
+export interface ContextMenuState {
     isVisible: boolean;
 }
 
@@ -23,9 +21,8 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         this.state = { isVisible: false };
     }
 
-    handleContextMenu = (event: React.MouseEvent<HTMLElement>) => {
+    handleContextMenu = (event: MouseEvent) => {
         event.preventDefault();
-        event.persist();
         this.setState({isVisible: true}, () => {
             const clickX = event.clientX;
             const clickY = event.clientY;
@@ -82,22 +79,28 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
     }
 
     componentDidMount() {
+        const rootElement = document.getElementById(this.props.rootId);
+        if(rootElement) {
+            rootElement.addEventListener('contextmenu', this.handleContextMenu);
+        } 
         document.addEventListener('click', this.handleClick);
         document.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
+        const rootElement = document.getElementById(this.props.rootId);
+        if(rootElement) {
+            rootElement.removeEventListener('contextmenu', this.handleContextMenu);
+        } 
         document.removeEventListener('click', this.handleClick);
         document.removeEventListener('scroll', this.handleScroll);
     }
 
     render() {
-        const isElementUndefined = typeof this.props.element === 'undefined';
         return (
-            <Layout onContextMenu={this.handleContextMenu} className={styles['context-menu-wrapper']} 
-                    element={isElementUndefined ? 'div' : this.props.element as AppElement}
+            <Layout className={styles['context-menu-wrapper']} 
+                    element={'div'}
                     onClick={(event: React.MouseEvent<HTMLElement>) => this.handleClick(event.nativeEvent)}>
-                {this.props.children}
                 {
                     this.state.isVisible
                         ?

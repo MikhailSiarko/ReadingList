@@ -22,9 +22,9 @@ export const bookListAction = {
             item
         };
     }),
-    edit: createAction(BookListActionType.EDIT_ITEM, (itemId: string) => {
+    switchEditMode: createAction(BookListActionType.SWITCH_EDIT_MODE, (itemId: string) => {
         return {
-            type: BookListActionType.EDIT_ITEM,
+            type: BookListActionType.SWITCH_EDIT_MODE,
             itemId
         };
     })

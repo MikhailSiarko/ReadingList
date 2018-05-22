@@ -1,5 +1,3 @@
-import { Component } from 'react-redux';
-
 export function failed(error: any) {
   return Promise.reject(error && error.response);
 }
@@ -16,8 +14,6 @@ export function setAuthHeader() {
 export function isNullOrEmpty(str: string | null | undefined) {
   return str === null || str === undefined || str.length === 0;
 }
-
-export type AppElement = string | Component<any>;
 
 export function guid() {
     function s4() {

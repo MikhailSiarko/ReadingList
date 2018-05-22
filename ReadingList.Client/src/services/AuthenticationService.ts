@@ -5,10 +5,10 @@ import { failed } from '../utils';
 import { Credentials } from '../store/actions/authentication/infrastructure';
 import { Dispatch } from 'redux';
 import { RootState } from '../store/reducers';
-import { requestActions, RequestInfo } from '../store/actions/request';
+import { RequestInfo, RequestResult } from '../models/Request';
 import { authenticationActions, AuthenticationData } from '../store/actions/authentication';
 import { UserModel } from '../models';
-import { RequestResult } from '../store/actions/request/infrastructure';
+import { loadingActions } from '../store/actions/loading';
 
 export class AuthenticationService {
     static login(dispatch: Dispatch<RootState>, credentials: Credentials) {
@@ -24,7 +24,8 @@ export class AuthenticationService {
     private static configureRequest(dispatch: Dispatch<RootState>, url: string, credentials: Credentials) {
         const axiosDefault = axios.create(axiosDefaultConfig);
         axiosDefault.interceptors.request.use((config: any) => {
-            dispatch(requestActions.begin(new RequestInfo(config.method, config.url, credentials)));
+            dispatch(loadingActions.start());
+            console.log(new RequestInfo(config.method, config.url));
             return config;
         });
         return axiosDefault.post(url, credentials)
@@ -35,7 +36,7 @@ export class AuthenticationService {
     private static onSuccess(dispatch: Dispatch<RootState>) {
         return function(response: AxiosResponse) {
             const result = new RequestResult<never>(response.statusText, response.status);
-            dispatch(requestActions.success(result));
+            dispatch(loadingActions.end());
             dispatch(authenticationActions.signIn(new AuthenticationData(response.data.token,
                 response.data.user as UserModel)));
             return result;
@@ -45,7 +46,7 @@ export class AuthenticationService {
     private static onError(dispatch: Dispatch<RootState>) {
         return function(error: AxiosResponse) {
             const result = new RequestResult<never>(error.data.errorMessage, error.status);
-            dispatch(requestActions.failed(result));
+            dispatch(loadingActions.end());
             return result;
         };
     }

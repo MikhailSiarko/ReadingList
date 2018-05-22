@@ -8,7 +8,7 @@ import { Credentials } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import Layout from '../../components/Layout';
-import { RequestResult } from '../../store/actions/request';
+import { RequestResult } from '../../models/Request';
 import AccountForm from '../../components/AccountForm';
 
 interface AccountProps extends RouteComponentProps<any> {

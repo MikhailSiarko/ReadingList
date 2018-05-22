@@ -15,61 +15,39 @@ interface PrivateListProps extends RouteComponentProps<any> {
     add: (book: BookModel) => void;
     remove: (itemId: string) => void;
     update: (item: BookListItem) => void;
-    edit: (itemId: string) => void;
+    switchEditMode: (itemId: string) => void;
 }
 
 class PrivateBookList extends React.Component<PrivateListProps> {
-    // changeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    //     if(this.props.bookList) {
-    //         const index = this.props.bookList.items.findIndex((value) => value.id === event.target.dataset.itemId);
-    //         const item = this.props.bookList.items[index];
-    //         const copy = [...this.props.bookList.items];
-    //         if(item) {
-    //             const key = BookStatusKey[event.target.value];
-    //             item.status = BookStatus[key];
-    //             copy[index] = item;
-    //         }
-    //         const list = Object.assign({}, this.props.bookList, {items: copy});
-    //         this.setState({ bookList: list });
-    //     }
-    // }
-
-    removeItemHandler(id: string) {
-        if(this.props.bookList) {
-            const copy = [...this.props.bookList.items];
-            const index = copy.findIndex((value) => value.id === id);
-            copy.splice(index, 1);
-            const list = Object.assign({}, this.props.bookList, {items: copy});
-            this.setState({ bookList: list });
-        }
-    }
-
     render() {
         const statusOptions = generateStatusSelectItems();
         const options = statusOptions.map((item) =>
             <option key={item.value} value={item.value}>{item.text}</option>
         );
-        return this.props.bookList 
-            ? (
+        let listItems;
+        if(this.props.bookList) {
+            listItems = this.props.bookList.items.map((listItem) => {
+                const bookListItemId = 'bookListItem' + listItem.id;
+                const contextMenu = (() => (
+                   <ContextMenu rootId={bookListItemId} menuItems={
+                           [
+                               {onClick: () => this.props.switchEditMode(listItem.id), text: 'Edit'},
+                               {onClick: () => this.props.remove(listItem.id), text: 'Remove'}
+                           ]
+                       } />))();
+                return (
+                       <BookLI key={listItem.id} listItem={listItem} element={'li'}
+                               shouldStatusSelectorRender={true} options={options}
+                               onSave={this.props.update} id={bookListItemId}
+                               contextMenu={contextMenu} onCancel={this.props.switchEditMode} />
+                );
+           });
+        }
+        return (
                 <BookUL>
-                    {
-                         this.props.bookList.items.map((listItem) => {
-                             return (
-                                <ContextMenu element={'li'} key={'context-menu' + listItem.id}
-                                        menuItems={[
-                                                {onClick: () => this.props.remove(listItem.id), text: 'Remove'},
-                                                {onClick: () => this.props.edit(listItem.id), text: 'Edit'}
-                                            ]}>
-                                    <BookLI key={listItem.id} listItem={listItem} element={'div'}
-                                            shouldStatusSelectorRender={true} options={options}
-                                            onItemChange={() => console.log('He')}
-                                            isInEditMode={listItem.isOnEditMode} />
-                                </ContextMenu>
-                             );
-                        })
-                    }
+                    {listItems}
                 </BookUL>
-            ) : null;
+            );
     }
 }
 
@@ -90,8 +68,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         update: (item: BookListItem) => {
             dispatch(bookListAction.update(item));
         },
-        edit: (itemId: string) => {
-            dispatch(bookListAction.edit(itemId));
+        switchEditMode: (itemId: string) => {
+            dispatch(bookListAction.switchEditMode(itemId));
         }
     };
 }

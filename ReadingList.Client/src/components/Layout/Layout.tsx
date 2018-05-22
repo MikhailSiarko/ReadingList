@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { HTMLProps } from 'react';
-import { isNullOrEmpty, AppElement } from '../../utils';
+import { isNullOrEmpty } from '../../utils';
+import { AppElement } from '../../types';
 
-interface LayoutProps extends HTMLProps<any> {
+interface LayoutProps extends React.HTMLProps<any> {
     element: AppElement;
 }
 
@@ -10,8 +10,10 @@ const Layout = (props: LayoutProps) => {
     if(typeof props.element === 'string' && isNullOrEmpty(props.element as string)) {
         props.element = 'div';
     }
+    let propsCopy = {...props};
+    delete propsCopy.element;
     return (
-        <props.element {...props}>
+        <props.element {...propsCopy}>
             {props.children}
         </props.element>
     );
