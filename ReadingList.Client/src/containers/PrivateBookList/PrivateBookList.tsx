@@ -9,6 +9,8 @@ import { RootState } from '../../store/reducers';
 import { bookListAction } from '../../store/actions/bookList';
 import { BookListItem } from '../../models/BookList/Implementations/BookListItem';
 import { RouteComponentProps } from 'react-router';
+import ItemForm from '../../components/BookUL/ItemForm';
+import { guid } from '../../utils';
 
 interface PrivateListProps extends RouteComponentProps<any> {
     bookList: RootState.PrivateList;
@@ -19,6 +21,16 @@ interface PrivateListProps extends RouteComponentProps<any> {
 }
 
 class PrivateBookList extends React.Component<PrivateListProps> {
+    itemFormSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const target = event.target as HTMLFormElement;
+        const titleInput = target.elements['title'];
+        const authorInput = target.elements['author'];
+        const bookModel = {id: guid(), title: titleInput.value, author: authorInput.value} as BookModel;
+        this.props.add(bookModel);
+        titleInput.value = '';
+        authorInput.value = '';
+    }
     render() {
         const statusOptions = generateStatusSelectItems();
         const options = statusOptions.map((item) =>
@@ -36,7 +48,7 @@ class PrivateBookList extends React.Component<PrivateListProps> {
                            ]
                        } />))();
                 return (
-                       <BookLI key={listItem.id} listItem={listItem} element={'li'}
+                       <BookLI key={listItem.id} listItem={listItem}
                                shouldStatusSelectorRender={true} options={options}
                                onSave={this.props.update} id={bookListItemId}
                                contextMenu={contextMenu} onCancel={this.props.switchEditMode} />
@@ -44,9 +56,12 @@ class PrivateBookList extends React.Component<PrivateListProps> {
            });
         }
         return (
-                <BookUL>
-                    {listItems}
-                </BookUL>
+                <div>
+                    <ItemForm onSubmit={this.itemFormSubmitHandler} />
+                    <BookUL>
+                        {listItems}
+                    </BookUL>
+                </div>
             );
     }
 }

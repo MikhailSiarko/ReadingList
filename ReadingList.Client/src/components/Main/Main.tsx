@@ -1,13 +1,11 @@
 import * as React from 'react';
-import Layout from '../Layout';
 import styles from './Main.css';
-import { HTMLProps } from 'react';
 
-const Main = (props: HTMLProps<any>) => {
+const Main = (props: React.HTMLProps<any>) => {
     return (
-        <Layout element={'main'} className={styles.main}>
+        <main className={styles.main}>
             {props.children}
-        </Layout>
+        </main>
     );
 };
 

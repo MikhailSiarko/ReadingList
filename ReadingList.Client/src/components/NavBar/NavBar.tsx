@@ -1,6 +1,5 @@
 import * as React from 'react';
 import NavBarLink, { NavBarLinkData } from './NavBarLink';
-import Layout from '../Layout';
 import styles from './NavBar.css';
 
 interface NavBarProps {
@@ -16,9 +15,9 @@ class NavBar extends React.Component<NavBarProps> {
             );
         });
         return (
-            <Layout className={styles['nav-bar']} element={'nav'}>
+            <nav className={styles['nav-bar']}>
                 {navLinks}
-            </Layout>
+            </nav>
         );
     }
 }

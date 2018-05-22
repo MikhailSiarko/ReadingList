@@ -1,17 +1,14 @@
 import * as React from 'react';
 import styles from './BookLI.css';
 import globalStyles from '../../../styles/global.css';
-import Layout from '../../Layout/Layout';
 import { BookStatusKey } from '../../../models/BookList/Implementations/BookStatus';
 import { isNullOrEmpty } from '../../../utils';
 import { ContextMenuProps } from '../../ContextMenu';
 import { BookListItem } from '../../../models/BookList/Implementations/BookListItem';
 import { cloneDeep } from 'lodash';
-import { AppElement } from '../../../types';
 
 interface BookLIProps {
     id?: string;
-    element?: AppElement;
     listItem: BookListItem;
     shouldStatusSelectorRender: boolean;
     onSave: (item: BookListItem) => void;
@@ -67,7 +64,7 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
     render() {
         if(this.props.listItem.isOnEditMode) {
             return (
-                <Layout element={this.props.element ? this.props.element : 'li'} className={styles['editing-book-li']}
+                <li className={styles['editing-book-li']}
                         id={this.props.id}>
                     <div className={styles['editable-book-info']}>
                         <div className={styles['editing-book-title']}>
@@ -104,12 +101,11 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
                             onClick={this.cancelHandler}>Cancel</button>
                     </div>
                 </div>
-            </Layout>
+            </li>
             );
         }
         return (
-            <Layout element={this.props.element ? this.props.element : 'li'} 
-                className={styles['book-li']} id={this.props.id}>
+            <li className={styles['book-li']} id={this.props.id}>
                     <div className={styles['book-info']}>
                         <h5 className={styles['book-title']}>
                             <q>{this.props.listItem.data.title}</q> by {this.props.listItem.data.author}
@@ -126,7 +122,7 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
                 {
                     this.props.contextMenu
                 }
-            </Layout>
+            </li>
         );
     }
 }

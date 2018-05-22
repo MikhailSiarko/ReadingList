@@ -8,7 +8,6 @@ import Account from '../Account';
 import NavBar from '../../components/NavBar';
 import { Dispatch } from 'redux';
 import { authenticationActions } from '../../store/actions/authentication';
-import Layout from '../../components/Layout';
 import Main from '../../components/Main';
 import PrivateBookList from '../PrivateBookList/PrivateBookList';
 
@@ -34,7 +33,7 @@ class App extends React.Component<AppProps> {
             ];
 
         return (
-            <Layout element={'div'}>
+            <div>
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>
@@ -43,7 +42,7 @@ class App extends React.Component<AppProps> {
                         <Route path="/account" component={Account} />
                     </Switch>
                 </Main>
-            </Layout>
+            </div>
         );
     }
 }

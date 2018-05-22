@@ -12,7 +12,8 @@ export function bookListReducer(state: RootState.PrivateList = initialState.priv
     switch (action.type) {
         case getType(bookListAction.add):
             const item = new BookListItem(guid(), action.book);
-            const copy = cloneDeep(state as BookList).items.push(item);
+            const copy = cloneDeep(state as BookList);
+            copy.items.push(item);
             return copy;
         case getType(bookListAction.remove):
             let deepCopy = cloneDeep(state as BookList);

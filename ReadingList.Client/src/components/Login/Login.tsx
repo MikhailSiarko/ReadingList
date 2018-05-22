@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Layout from '../Layout';
 import globalStyles from '../../styles/global.css';
 
 interface LoginProps {
@@ -29,7 +28,7 @@ class Login extends React.Component<LoginProps, LoginState> {
 
     public render() {
         return (
-            <Layout element={'div'} >
+            <div>
                 <div>
                     <input type="email" name="email" placeholder="Email" required={true}
                            value={this.state.email} onChange={this.changeHandler} />
@@ -41,7 +40,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                 <div>
                     <button className={`${globalStyles.btn} ${globalStyles.primary}`} type="submit">Login</button>
                 </div>
-            </Layout>
+            </div>
         );
     }
 }

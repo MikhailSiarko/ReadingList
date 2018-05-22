@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Layout from '../Layout';
 import globalStyles from '../../styles/global.css';
 
 interface RegisterProps {
@@ -36,7 +35,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
     render() {
         return (
-            <Layout element={'div'}>
+            <div>
                 <div>
                     <input type="email" name="email" placeholder="Email" required={true}
                            ref={(ref) => this.email = ref as HTMLInputElement} />
@@ -57,11 +56,10 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                     <button ref={(ref) => this.submitButton = ref as HTMLButtonElement}
                             disabled={!this.state.isPasswordsConfirmed}
                             className={`${globalStyles.btn} ${this.state.isPasswordsConfirmed 
-                                ? globalStyles.primary :
-                                 globalStyles.disabled}`}
+                                ? globalStyles.primary : globalStyles.disabled}`}
                             type="submit">Register</button>
                 </div>
-            </Layout>
+            </div>
         );
     }
 }

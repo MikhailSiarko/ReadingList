@@ -7,7 +7,6 @@ import { AuthenticationService } from '../../services';
 import { Credentials } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import Layout from '../../components/Layout';
 import { RequestResult } from '../../models/Request';
 import AccountForm from '../../components/AccountForm';
 
@@ -37,7 +36,7 @@ class Account extends React.Component<AccountProps> {
                 <Route path="/account/login" component={Login} />
             </AccountForm>
         );
-        return <Layout element={() => account}/>;
+        return <div>{account}</div>;
     }
 
     private processSubmit(email: string, password: string, action: (credentials: Credentials) => void) {

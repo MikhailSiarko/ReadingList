@@ -1,0 +1,12 @@
+.add-item-form {
+    padding: 0;
+    font-size: 1.6rem;
+    margin: 1rem auto;
+    width: 80rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.add-item-form > div {
+    display: inline-block;
+}

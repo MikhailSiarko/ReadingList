@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styles from './ContextMenu.css';
-import Layout from '../Layout';
 
 export interface ContextMenuProps {
     menuItems: {
@@ -98,8 +97,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
 
     render() {
         return (
-            <Layout className={styles['context-menu-wrapper']} 
-                    element={'div'}
+            <div className={styles['context-menu-wrapper']} 
                     onClick={(event: React.MouseEvent<HTMLElement>) => this.handleClick(event.nativeEvent)}>
                 {
                     this.state.isVisible
@@ -117,8 +115,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
                         :
                             null
                 }
-
-            </Layout>
+            </div>
         );
     }
 }
