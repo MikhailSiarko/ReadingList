@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styles from './Main.css';
 
-const Main = (props: React.HTMLProps<any>) => {
+const Main: React.SFC<React.HTMLProps<HTMLMainElement>> = (props) => {
     return (
-        <main className={styles.main}>
+        <main className={styles.main} {...props}>
             {props.children}
         </main>
     );

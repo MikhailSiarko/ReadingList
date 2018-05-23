@@ -1,19 +1,28 @@
 ﻿using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.ReadModel;
+using ReadingList.WriteModel;
+using ReadingList.WriteModel.Models;
+using UserWM = ReadingList.WriteModel.Models.User;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class RegisterUserCommandHandler : CommandHandler<RegisterUserCommand>
     {
+        private readonly ReadingListDbContext _context;
+        public RegisterUserCommandHandler(ReadingListDbContext context)
+        {
+            _context = context;
+        }
+
         protected override Task Process(RegisterUserCommand command)
         {
-            return Task.Run(() => UserSource.GetSource().Add(new UserRm
-            {
-                Email = command.Email,
-                Id = command.Id,
-                Password = command.Password
-            }));
+            return _context.Users.AddAsync(new UserWM
+                {
+                    Id = command.Id,
+                    Login = command.Email,
+                    Password = command.Password,
+                    Profile = new Profile {Email = command.Email, UserId = command.Id}
+                });
         }
     }
 }

@@ -9,12 +9,12 @@ namespace ReadingList.Domain.Queries
         public static QueryResult<T> Succeed(T data) => new QueryResult<T>(true, data);
         public new static QueryResult<T> Failed(string errorMessage) => new QueryResult<T>(false, errorMessage);
 
-        public QueryResult(bool isSucceed, T data) : base(isSucceed)
+        private QueryResult(bool isSucceed, T data) : base(isSucceed)
         {
             Data = data;
         }
 
-        public QueryResult(bool isSucceed, string errorMessage) : base(isSucceed, errorMessage)
+        private QueryResult(bool isSucceed, string errorMessage) : base(isSucceed, errorMessage)
         {
         }
     }

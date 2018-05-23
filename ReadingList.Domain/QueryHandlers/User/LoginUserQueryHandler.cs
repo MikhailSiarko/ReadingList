@@ -1,18 +1,26 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using ReadingList.Domain.Queries;
-using ReadingList.Domain.ReadModel;
+using ReadingList.Domain.Services.Authentication;
 
 namespace ReadingList.Domain.QueryHandlers
 {   
-    public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, UserRm>
+    public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationData>
     {
-        protected override Task<UserRm> Process(LoginUserQuery command)
+        private readonly IAuthenticationService _authenticationService;
+        public LoginUserQueryHandler(IAuthenticationService authenticationService)
+        {
+            _authenticationService = authenticationService;
+        }
+
+        protected override Task<AuthenticationData> Process(LoginUserQuery query)
         {
             return Task.Run(() =>
             {
-                return UserSource.GetSource()
-                    .Single(u => u.Email == command.Email && u.Password == command.Password);
+                var user = UserSource.GetSource()
+                    .Single(u => u.Email == query.Email && u.Password == query.Password);
+                var token = _authenticationService.EncodeSecurityToken(user);
+                return _authenticationService.GenerateAuthResponse(token, user);
             });
         }
     }

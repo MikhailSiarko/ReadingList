@@ -1,8 +1,8 @@
-﻿using ReadingList.Domain.ReadModel;
+﻿using ReadingList.Domain.Services.Authentication;
 
 namespace ReadingList.Domain.Queries
 {
-    public class LoginUserQuery : IQuery<UserRm>
+    public class LoginUserQuery : IQuery<AuthenticationData>
     {
         public readonly string Email;
         public readonly string Password;

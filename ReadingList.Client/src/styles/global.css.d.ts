@@ -7,6 +7,7 @@ export interface GlobalStyles {
     ['disabled']: string;
     ['input-validation-message']: string;
     ['invalid-input']: string;
+    ['white']: string;
 }
 
 declare const globalStyles: GlobalStyles;

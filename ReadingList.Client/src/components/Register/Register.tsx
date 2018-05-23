@@ -1,7 +1,7 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.css';
 
-interface RegisterProps {
+interface RegisterProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 interface RegisterState {
@@ -35,7 +35,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
     render() {
         return (
-            <div>
+            <div {...this.props}>
                 <div>
                     <input type="email" name="email" placeholder="Email" required={true}
                            ref={(ref) => this.email = ref as HTMLInputElement} />

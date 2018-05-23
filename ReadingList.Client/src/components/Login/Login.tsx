@@ -1,7 +1,7 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.css';
 
-interface LoginProps {
+interface LoginProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 export interface LoginState {
@@ -28,7 +28,7 @@ class Login extends React.Component<LoginProps, LoginState> {
 
     public render() {
         return (
-            <div>
+            <div {...this.props}>
                 <div>
                     <input type="email" name="email" placeholder="Email" required={true}
                            value={this.state.email} onChange={this.changeHandler} />

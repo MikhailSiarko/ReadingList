@@ -10,12 +10,12 @@
         public static CommandResult Failed(string errorMessage) =>
             new CommandResult(false, errorMessage);
 
-        public CommandResult(bool isSucceed)
+        protected CommandResult(bool isSucceed)
         {
             IsSucceed = isSucceed;
         }
-        
-        public CommandResult(bool isSucceed, string errorMessage) : this(isSucceed)
+
+        protected CommandResult(bool isSucceed, string errorMessage) : this(isSucceed)
         {
             ErrorMessage = errorMessage;
         }

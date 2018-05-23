@@ -3,34 +3,22 @@ import { generateStatusSelectItems } from '../../models/BookList/Implementations
 import BookUL from '../../components/BookUL';
 import BookLI from '../../components/BookUL/BookLI';
 import ContextMenu from '../../components/ContextMenu/ContextMenu';
-import { BookModel } from '../../models/BookModel';
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { bookListAction } from '../../store/actions/bookList';
 import { BookListItem } from '../../models/BookList/Implementations/BookListItem';
 import { RouteComponentProps } from 'react-router';
 import ItemForm from '../../components/BookUL/ItemForm';
-import { guid } from '../../utils';
 
 interface PrivateListProps extends RouteComponentProps<any> {
     bookList: RootState.PrivateList;
-    add: (book: BookModel) => void;
+    add: (listItem: BookListItem) => void;
     remove: (itemId: string) => void;
     update: (item: BookListItem) => void;
     switchEditMode: (itemId: string) => void;
 }
 
 class PrivateBookList extends React.Component<PrivateListProps> {
-    itemFormSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const target = event.target as HTMLFormElement;
-        const titleInput = target.elements['title'];
-        const authorInput = target.elements['author'];
-        const bookModel = {id: guid(), title: titleInput.value, author: authorInput.value} as BookModel;
-        this.props.add(bookModel);
-        titleInput.value = '';
-        authorInput.value = '';
-    }
     render() {
         const statusOptions = generateStatusSelectItems();
         const options = statusOptions.map((item) =>
@@ -57,7 +45,7 @@ class PrivateBookList extends React.Component<PrivateListProps> {
         }
         return (
                 <div>
-                    <ItemForm onSubmit={this.itemFormSubmitHandler} />
+                    <ItemForm onSubmit={this.props.add} />
                     <BookUL>
                         {listItems}
                     </BookUL>
@@ -74,8 +62,8 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
-        add: (book: BookModel) => {
-            dispatch(bookListAction.add(book));
+        add: (listItem: BookListItem) => {
+            dispatch(bookListAction.add(listItem));
         },
         remove: (itemId: string) => {
             dispatch(bookListAction.remove(itemId));

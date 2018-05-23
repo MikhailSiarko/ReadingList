@@ -1,13 +1,12 @@
 import { createAction, getReturnOfExpression } from 'typesafe-actions';
 import { BookListActionType } from './BookListActionType';
-import { BookModel } from '../../../models/BookModel';
 import { BookListItem } from '../../../models/BookList/Implementations/BookListItem';
 
 export const bookListAction = {
-    add: createAction(BookListActionType.ADD_ITEM, (book: BookModel) => {
+    add: createAction(BookListActionType.ADD_ITEM, (listItem: BookListItem) => {
         return {
             type: BookListActionType.ADD_ITEM,
-            book
+            listItem
         };
     }),
     remove: createAction(BookListActionType.REMOVE_ITEM, (itemId: string) => {

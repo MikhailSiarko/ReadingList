@@ -3,7 +3,6 @@ import initialState from '../initialState';
 import { getType } from 'typesafe-actions';
 import { BookListAction, bookListAction } from '../../actions/bookList';
 import { BookListItem } from '../../../models/BookList/Implementations/BookListItem';
-import { guid } from '../../../utils';
 import { BookList } from '../../../models/BookList/Implementations/BookList';
 import { cloneDeep } from 'lodash';
 
@@ -11,9 +10,8 @@ export function bookListReducer(state: RootState.PrivateList = initialState.priv
                                       action: BookListAction) {
     switch (action.type) {
         case getType(bookListAction.add):
-            const item = new BookListItem(guid(), action.book);
             const copy = cloneDeep(state as BookList);
-            copy.items.push(item);
+            copy.items.push(action.listItem);
             return copy;
         case getType(bookListAction.remove):
             let deepCopy = cloneDeep(state as BookList);

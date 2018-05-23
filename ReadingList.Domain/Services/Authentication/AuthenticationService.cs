@@ -5,7 +5,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using ReadingList.Api.Authentication.AuthenticationOptions;
-using ReadingList.Domain.ReadModel;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Services.Authentication
 {
@@ -39,15 +39,15 @@ namespace ReadingList.Domain.Services.Authentication
             };
         }
 
-        public string EncodeSecurityToken(UserRm userRm)
+        public string EncodeSecurityToken(User user)
         {
-            var claimsIdentity = GetIdentity(userRm);
+            var claimsIdentity = GetIdentity(user);
             var jwt = GenerateToken(_jwtOptions, claimsIdentity.Claims);
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(jwt);
         }
         
-        private static ClaimsIdentity GetIdentity(UserRm user)
+        private static ClaimsIdentity GetIdentity(User user)
         {
             if (user == null)
                 throw new ArgumentNullException();
@@ -73,5 +73,8 @@ namespace ReadingList.Domain.Services.Authentication
                 signingCredentials : new SigningCredentials(jwtOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256));
         }
+
+        public AuthenticationData GenerateAuthResponse(string token, User user) =>
+            new AuthenticationData(token, user);
     }
 }

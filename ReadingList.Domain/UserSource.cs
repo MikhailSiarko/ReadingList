@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using ReadingList.Domain.ReadModel;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain
 {
     public static class UserSource
     {
-        private static ConcurrentBag<UserRm> Users { get; } = new ConcurrentBag<UserRm>
+        private static ConcurrentBag<User> Users { get; } = new ConcurrentBag<User>
         {
-            new UserRm
+            new User
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = "mike@mail.com",
@@ -18,7 +17,7 @@ namespace ReadingList.Domain
                 Lastname = "Siarko"
             },
 
-            new UserRm
+            new User
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = "alex@mail.com",
@@ -28,6 +27,6 @@ namespace ReadingList.Domain
             }
         };
 
-        public static ConcurrentBag<UserRm> GetSource() => Users;
+        public static ConcurrentBag<User> GetSource() => Users;
     }
 }

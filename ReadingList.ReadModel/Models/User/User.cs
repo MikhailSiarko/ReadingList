@@ -1,6 +1,6 @@
-﻿namespace ReadingList.Domain.ReadModel
+﻿namespace ReadingList.ReadModel.Models
 {
-    public class UserRm
+    public class User
     {
         public string Id { get; set; }
         public string Email { get; set; }

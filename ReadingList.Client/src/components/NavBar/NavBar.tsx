@@ -1,25 +1,26 @@
 import * as React from 'react';
 import NavBarLink, { NavBarLinkData } from './NavBarLink';
 import styles from './NavBar.css';
+import { cloneDeep } from 'lodash';
 
-interface NavBarProps {
+interface NavBarProps extends React.HTMLProps<HTMLElement> {
     links: NavBarLinkData[];
 }
 
-class NavBar extends React.Component<NavBarProps> {
-    render() {
-        const navLinks = this.props.links.map((value, index) => {
-            return (
-                <NavBarLink className={styles['nav-bar-link']} activeClassName={styles['active-nav-bar-link']}
-                               link={value} key={'nav-link-' + index} />
-            );
-        });
+const NavBar: React.SFC<NavBarProps> = (props) => {
+    const navLinks = props.links.map((value, index) => {
         return (
-            <nav className={styles['nav-bar']}>
-                {navLinks}
-            </nav>
+            <NavBarLink className={styles['nav-bar-link']} activeClassName={styles['active-nav-bar-link']}
+                           link={value} key={'nav-link-' + index} />
         );
-    }
-}
+    });
+    const propsCopy = cloneDeep(props);
+    delete propsCopy.links;
+    return (
+        <nav className={styles['nav-bar']} {...propsCopy}>
+            {navLinks}
+        </nav>
+    );
+};
 
 export default NavBar;

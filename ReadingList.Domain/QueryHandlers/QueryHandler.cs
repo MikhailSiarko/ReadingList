@@ -25,6 +25,6 @@ namespace ReadingList.Domain.QueryHandlers
             });
         }
 
-        protected abstract Task<TResult> Process(TQuery command);
+        protected abstract Task<TResult> Process(TQuery query);
     }
 }

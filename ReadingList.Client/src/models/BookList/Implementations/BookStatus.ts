@@ -1,15 +1,17 @@
 export const BookStatusKey = {
-    ToRead: 'To Read',
+    ToReading: 'To Reading',
     Reading: 'Reading',
     StartedButPostponed: 'Started But Postponed',
-    StartedButВiscarded: 'Started But Вiscarded'
+    StartedButВiscarded: 'Started But Вiscarded',
+    Read: 'Read'
 };
 
 export const BookStatus = {
-    ['To Read']: 'ToRead',
-    ['Reading']: 'Reading',
-    ['Started But Postponed']: 'StartedButPostponed',
-    ['Started But Вiscarded']: 'StartedButВiscarded'
+    [BookStatusKey.ToReading]: 'ToReading',
+    [BookStatusKey.Reading]: 'Reading',
+    [BookStatusKey.StartedButPostponed]: 'StartedButPostponed',
+    [BookStatusKey.StartedButВiscarded]: 'StartedButВiscarded',
+    [BookStatusKey.Read]: 'Read'
 };
 
 export interface SelectListItem {

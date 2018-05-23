@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using ReadingList.Api.Authentication.AuthenticationOptions;
+using ReadingList.Domain;
 using ReadingList.Domain.Helpers;
 using ReadingList.Domain.Services.Authentication;
 
@@ -19,7 +19,7 @@ namespace ReadingList.Api
         {
             services.AddCors();
             services.AddSingleton<IJwtOptions, JwtOptions>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddDomainModule();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(AuthenticationService.ConfigureJwtBearer);
             services.AddMvc().AddFluentValidation(options =>

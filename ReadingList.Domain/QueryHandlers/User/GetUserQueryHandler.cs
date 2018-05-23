@@ -1,15 +1,15 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using ReadingList.Domain.Queries;
-using ReadingList.Domain.ReadModel;
+using UserRM = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
 {
-    public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRm>
+    public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRM>
     {
-        protected override Task<UserRm> Process(GetUserQuery command)
+        protected override Task<UserRM> Process(GetUserQuery query)
         {
-            return Task.Run(() => UserSource.GetSource().SingleOrDefault(u => u.Id == command.UserId));
+            return Task.Run(() => UserSource.GetSource().SingleOrDefault(u => u.Id == query.UserId));
         }
     }
 }
