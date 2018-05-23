@@ -18,7 +18,6 @@
     "html-webpack-plugin": "2.29.0",
     "hygen": "^1.4.8",
     "jest": "20.0.4",
-    "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
     "npm": "^6.0.1",
     "object-assign": "4.1.1",
