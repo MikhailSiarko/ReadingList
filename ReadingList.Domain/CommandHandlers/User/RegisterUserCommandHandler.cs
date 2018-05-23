@@ -14,15 +14,16 @@ namespace ReadingList.Domain.CommandHandlers
             _context = context;
         }
 
-        protected override Task Process(RegisterUserCommand command)
+        protected override async Task Process(RegisterUserCommand command)
         {
-            return _context.Users.AddAsync(new UserWM
-                {
-                    Id = command.Id,
-                    Login = command.Email,
-                    Password = command.Password,
-                    Profile = new Profile {Email = command.Email, UserId = command.Id}
-                });
+            await _context.Users.AddAsync(new UserWM
+            {
+                Id = command.Id,
+                Login = command.Email,
+                Password = command.Password,
+                Profile = new Profile { Email = command.Email, UserId = command.Id }
+            });
+            await _context.SaveChangesAsync();
         }
     }
 }

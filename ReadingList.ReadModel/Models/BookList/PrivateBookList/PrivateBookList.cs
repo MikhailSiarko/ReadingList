@@ -8,7 +8,7 @@ namespace ReadingList.ReadModel.BookList.Models
         {
             Items = new List<PrivateBookListItem>();
         }
-        public string UserId { get; set; }
-        public IEnumerable<PrivateBookListItem> Items { get; set; }
+        public string OwnerId { get; set; }
+        public List<PrivateBookListItem> Items { get; set; }
     }
 }

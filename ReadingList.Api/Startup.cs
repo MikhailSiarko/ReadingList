@@ -10,6 +10,7 @@ using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain;
 using ReadingList.Domain.Helpers;
 using ReadingList.Domain.Services.Authentication;
+using ReadingList.ReadModel;
 
 namespace ReadingList.Api
 {
@@ -20,6 +21,7 @@ namespace ReadingList.Api
             services.AddCors();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddDomainModule();
+            services.AddScoped<ReadingListConnection>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(AuthenticationService.ConfigureJwtBearer);
             services.AddMvc().AddFluentValidation(options =>

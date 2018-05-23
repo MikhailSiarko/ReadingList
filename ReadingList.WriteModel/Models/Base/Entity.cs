@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ReadingList.WriteModel.Models.Base
 {
@@ -6,5 +7,10 @@ namespace ReadingList.WriteModel.Models.Base
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Id { get; set; }
+
+        protected Entity()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
     }
 }

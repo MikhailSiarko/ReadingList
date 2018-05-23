@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ReadingList.WriteModel.Models
+﻿namespace ReadingList.WriteModel.Models
 {
     public class Profile
     {
@@ -10,8 +7,6 @@ namespace ReadingList.WriteModel.Models
         public string Lastname { get; set; }
 
         public User User { get; set; }
-        [Key]
-        [ForeignKey("User")]
         public string UserId { get; set; }
     }
 }

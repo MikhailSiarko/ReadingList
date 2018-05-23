@@ -7,6 +7,8 @@ namespace ReadingList.WriteModel.Models
     {
         public User Owner { get; set; }
         public string OwnerId { get; set; }
+        public Book Book { get; set; }
+        public string BookId { get; set; }
         public List<BookListItem> Items { get; set; }
     }
 }

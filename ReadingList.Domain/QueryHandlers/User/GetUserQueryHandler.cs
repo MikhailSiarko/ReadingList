@@ -1,15 +1,23 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ReadingList.Domain.Queries;
+using ReadingList.ReadModel;
 using UserRM = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
 {
     public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRM>
     {
-        protected override Task<UserRM> Process(GetUserQuery query)
+        private readonly ReadingListConnection _connection;
+
+        public GetUserQueryHandler(ReadingListConnection connection)
         {
-            return Task.Run(() => UserSource.GetSource().SingleOrDefault(u => u.Id == query.UserId));
+            _connection = connection;
+        }
+
+        protected override async Task<UserRM> Process(GetUserQuery query)
+        {
+            return await _connection.QuerySingle<UserRM>("SELECT Id, Login From Users WHERE Id = @id",
+                new {id = query.UserId});
         }
     }
 }

@@ -4,11 +4,11 @@ namespace ReadingList.Domain.Queries.PrivateList
 {
     public class GetPrivateListQuery : IQuery<PrivateBookList>
     {
-        public readonly string Username;
+        public readonly string Login;
 
-        public GetPrivateListQuery(string username)
+        public GetPrivateListQuery(string login)
         {
-            Username = username;
+            Login = login;
         }
     }
 }

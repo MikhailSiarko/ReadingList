@@ -9,7 +9,7 @@ namespace ReadingList.Domain
         public static IServiceCollection AddDomainModule(this IServiceCollection services)
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddSingleton<ReadingListDbContext>();
+            services.AddDbContext<ReadingListDbContext>();
             return services;
         }
     }
