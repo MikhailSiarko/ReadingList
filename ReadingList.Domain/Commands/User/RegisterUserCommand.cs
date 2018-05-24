@@ -1,4 +1,6 @@
-﻿namespace ReadingList.Domain.Commands
+﻿using ReadingList.Domain.Absrtactions;
+
+namespace ReadingList.Domain.Commands
 {
     public class RegisterUserCommand : ICommand
     {

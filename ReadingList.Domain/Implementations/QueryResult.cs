@@ -1,6 +1,6 @@
 ﻿using ReadingList.Domain.Absrtactions;
 
-namespace ReadingList.Domain.Queries
+namespace ReadingList.Domain.Implementations
 {
     public class QueryResult<T> : Result<T>
     { 

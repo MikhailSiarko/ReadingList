@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ReadingList.Domain.Absrtactions;
 using ReadingList.Domain.Commands;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;

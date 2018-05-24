@@ -2,11 +2,13 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ReadingList.Domain.Absrtactions;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Helpers;
+using ReadingList.Domain.Implementations;
 using ReadingList.Domain.Queries;
 
-namespace ReadingList.Api.Controllers
+namespace ReadingList.Api.Abstractions
 {
     public class BaseController : Controller
     {

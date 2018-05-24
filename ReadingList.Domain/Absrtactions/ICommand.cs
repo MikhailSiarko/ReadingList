@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using ReadingList.Domain.Implementations;
 
-namespace ReadingList.Domain.Commands
+namespace ReadingList.Domain.Absrtactions
 {
     public interface ICommand : IRequest<CommandResult>
     {

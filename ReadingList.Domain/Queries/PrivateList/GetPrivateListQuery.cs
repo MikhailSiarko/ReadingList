@@ -1,6 +1,7 @@
-﻿using ReadingList.ReadModel.BookList.Models;
+﻿using ReadingList.Domain.Absrtactions;
+using ReadingList.ReadModel.BookList.Models;
 
-namespace ReadingList.Domain.Queries.PrivateList
+namespace ReadingList.Domain.Queries
 {
     public class GetPrivateListQuery : IQuery<PrivateBookList>
     {

@@ -1,6 +1,6 @@
 ﻿using ReadingList.Domain.Absrtactions;
 
-namespace ReadingList.Domain.Commands
+namespace ReadingList.Domain.Implementations
 {
     public class CommandResult : Result
     {

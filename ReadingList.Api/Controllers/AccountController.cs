@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ReadingList.Api.Abstractions;
 using ReadingList.Api.Queries;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Queries;

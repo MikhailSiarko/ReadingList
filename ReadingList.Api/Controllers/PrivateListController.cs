@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Domain.Queries.PrivateList;
+using ReadingList.Api.Abstractions;
+using ReadingList.Domain.Queries;
 
 namespace ReadingList.Api.Controllers
 {

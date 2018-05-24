@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using ReadingList.Domain.Queries;
+using ReadingList.Domain.Absrtactions;
+using ReadingList.Domain.Implementations;
 
 namespace ReadingList.Domain.QueryHandlers
 {
