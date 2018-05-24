@@ -1,10 +1,10 @@
-﻿using ReadingList.ReadModel.Models;
+﻿using ReadingList.Domain.Queries;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Services.Authentication
 {
     public interface IAuthenticationService
     {
-        string EncodeSecurityToken(User user);
-        AuthenticationData GenerateAuthResponse(string token, User user);
+        AuthenticationResult Authenticate(User user, LoginUserQuery query);
     }
 }

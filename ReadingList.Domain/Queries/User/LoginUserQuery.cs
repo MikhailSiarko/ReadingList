@@ -2,7 +2,7 @@
 
 namespace ReadingList.Domain.Queries
 {
-    public class LoginUserQuery : IQuery<AuthenticationData>
+    public class LoginUserQuery : IQuery<AuthenticationResult>
     {
         public readonly string Login;
         public readonly string Password;

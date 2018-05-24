@@ -6,7 +6,7 @@ using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
 {   
-    public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationData>
+    public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationResult>
     {
         private readonly ReadingListConnection _connection;
         private readonly IAuthenticationService _authenticationService;
@@ -16,12 +16,11 @@ namespace ReadingList.Domain.QueryHandlers
             _connection = connection;
         }
 
-        protected override async Task<AuthenticationData> Process(LoginUserQuery query)
+        protected override async Task<AuthenticationResult> Process(LoginUserQuery query)
         {  
-            var user = await _connection.QuerySingle<UserRm>("SELECT Id, Login, Password FROM Users WHERE Login = @login",
-                new { email =query.Login });
-            var token = _authenticationService.EncodeSecurityToken(user);
-            return _authenticationService.GenerateAuthResponse(token, user);
+            var user = await _connection.QuerySingle<UserRm>("SELECT Id, Login, ProfileId, RoleId FROM Users WHERE Login = @login AND @password",
+                new { login = query.Login, password = query.Password });
+            return _authenticationService.Authenticate(user, query);
         }
     }
 }

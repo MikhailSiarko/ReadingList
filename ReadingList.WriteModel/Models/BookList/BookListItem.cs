@@ -4,7 +4,9 @@ namespace ReadingList.WriteModel.Models
 {
     public class BookListItem : Entity
     {
-        public Book Book { get; set; }
-        public string BookListId { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public BookList BookList { get; set; }
+        public int BookListId { get; set; }
     }
 }

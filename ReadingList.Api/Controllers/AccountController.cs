@@ -31,7 +31,7 @@ namespace ReadingList.Api.Controllers
                 return BadRequest(ModelState);
             
             var result =
-                await ExecuteAsync(new RegisterUserCommand(registerQuery.Id, registerQuery.Email,
+                await ExecuteAsync(new RegisterUserCommand(registerQuery.Email,
                     registerQuery.Password));
 
             if (!result.IsSucceed)

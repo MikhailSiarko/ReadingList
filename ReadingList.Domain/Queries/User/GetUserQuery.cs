@@ -1,8 +1,8 @@
-﻿using ReadingList.ReadModel.Models;
+﻿using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.Queries
 {
-    public class GetUserQuery : IQuery<User>
+    public class GetUserQuery : IQuery<UserRm>
     {
         public readonly string UserId;
 

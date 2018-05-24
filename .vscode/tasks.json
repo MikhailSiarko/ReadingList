@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Web/Api/Api.csproj"
+                "${workspaceFolder}/ReadingList.Api/ReadingList.Api.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

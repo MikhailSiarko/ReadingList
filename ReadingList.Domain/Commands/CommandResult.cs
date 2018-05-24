@@ -1,23 +1,32 @@
-﻿namespace ReadingList.Domain.Commands
+﻿using ReadingList.Domain.Absrtactions;
+
+namespace ReadingList.Domain.Commands
 {
-    public class CommandResult
+    public class CommandResult : Result
     {
-        public bool IsSucceed { get; }
-        public string ErrorMessage { get; }
         
         public static CommandResult Successed() => new CommandResult(true);
 
         public static CommandResult Failed(string errorMessage) =>
             new CommandResult(false, errorMessage);
 
-        protected CommandResult(bool isSucceed)
+        private CommandResult(bool isSucceed, string errorMessage = null) : base(isSucceed, errorMessage)
         {
-            IsSucceed = isSucceed;
+        }
+    }
+    
+    public class CommandResult<T> : Result<T>
+    {
+        
+        public static CommandResult<T> Succeed(T data) => new CommandResult<T>(true, data);
+        public static CommandResult<T> Failed(string errorMessage) => new CommandResult<T>(false, errorMessage);
+
+        private CommandResult(bool isSucceed, T data) : base(isSucceed, data)
+        {
         }
 
-        protected CommandResult(bool isSucceed, string errorMessage) : this(isSucceed)
+        private CommandResult(bool isSucceed, string errorMessage) : base(isSucceed, errorMessage)
         {
-            ErrorMessage = errorMessage;
         }
     }
 }

@@ -11,19 +11,22 @@ namespace ReadingList.WriteModel
         {
             var context = serviceProvider.GetRequiredService<ReadingListDbContext>();
             context.Database.EnsureCreated();
-            var statuses = new BookItemStatuses();
+            InitializeRoles(context);
+            context.SaveChanges();
+        }
 
-            if (!context.BookItemStatuses.Any())
+        private static void InitializeRoles(ReadingListDbContext context)
+        {
+            var roles = ApplicationRoles.GetRoles();
+            if (!context.Roles.Any())
             {
-                context.AddRange(statuses);
-            }  
+                context.Roles.AddRange(roles);
+            }
             else
             {
-                var unregisteredStatuses = statuses.Where(s => !context.BookItemStatuses.Any(i => i.Id == s.Id)).ToList();
-                context.AddRange(unregisteredStatuses);
+                var unregisteredRoles = roles.Where(s => !context.Roles.Any(i => i.Id == s.Id && i.Name == s.Name));
+                context.AddRange(unregisteredRoles);
             }
-
-            context.SaveChanges();
         }
     }
 }

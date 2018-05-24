@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using ReadingList.WriteModel.Models.Base;
+﻿using ReadingList.WriteModel.Models.Base;
 
 namespace ReadingList.WriteModel.Models
 {
     public class BookList : Entity
     {
         public User Owner { get; set; }
-        public string OwnerId { get; set; }
-        public Book Book { get; set; }
-        public string BookId { get; set; }
-        public List<BookListItem> Items { get; set; }
+        public int OwnerId { get; set; }
+        public BookListType Type { get; set; }
+        public string JsonFields { get; set; }
     }
 }

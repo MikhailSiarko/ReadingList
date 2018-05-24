@@ -1,13 +1,13 @@
-﻿using UserRM = ReadingList.ReadModel.Models.User;
+﻿using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.Services.Authentication
 {
     public class AuthenticationData
     {
-        public readonly string Token;
-        public readonly UserRM User;
+        public string Token { get; set; }
+        public UserRm User { get; set; }
 
-        public AuthenticationData(string token, UserRM user)
+        public AuthenticationData(string token, UserRm user)
         {
             Token = token;
             User = user;

@@ -2,7 +2,8 @@
 using ReadingList.Domain.Commands;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
-using UserWM = ReadingList.WriteModel.Models.User;
+using UserWm = ReadingList.WriteModel.Models.User;
+using ProfileWm = ReadingList.WriteModel.Models.Profile;
 
 namespace ReadingList.Domain.CommandHandlers
 {
@@ -16,12 +17,12 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected override async Task Process(RegisterUserCommand command)
         {
-            await _context.Users.AddAsync(new UserWM
+            await _context.Users.AddAsync(new UserWm
             {
-                Id = command.Id,
                 Login = command.Email,
                 Password = command.Password,
-                Profile = new Profile { Email = command.Email, UserId = command.Id }
+                RoleId = (int)UserRole.User,
+                Profile = new ProfileWm { Email = command.Email }
             });
             await _context.SaveChangesAsync();
         }
