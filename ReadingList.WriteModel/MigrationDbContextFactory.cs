@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IO;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace ReadingList.WriteModel
 {
@@ -7,10 +10,14 @@ namespace ReadingList.WriteModel
     {
         public MigrationDbContext CreateDbContext(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile(Path.Combine(
+                    Directory.GetParent(Directory.GetCurrentDirectory()).GetDirectories()
+                        .Single(d => d.Name == "ReadingList.Api").FullName,
+                    "appsettings.json"));
+            var configuration = builder.Build();
             var optionsBuilder = new DbContextOptionsBuilder<MigrationDbContext>();
-            optionsBuilder.UseSqlServer(
-                "Data Source=(localdb)\\ProjectsV13;Initial Catalog=ReadingList;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
             return new MigrationDbContext(optionsBuilder.Options);
         }
     }
