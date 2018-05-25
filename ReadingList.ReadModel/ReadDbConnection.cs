@@ -9,11 +9,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace ReadingList.ReadModel
 {
-    public class ReadingListConnection
+    public class ReadDbConnection
     {
         private readonly IDbConnection _connection;
 
-        public ReadingListConnection(IConfiguration configuration)
+        public ReadDbConnection(IConfiguration configuration)
         {
             _connection = new SqlConnection(configuration.GetConnectionString("Default"));
         }

@@ -4,7 +4,7 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.WriteModel
 {
-    public sealed class ReadingListDbContext : DbContext
+    public sealed class WriteDbContext : DbContext
     {
 
         private readonly IConfiguration _configuration;
@@ -19,7 +19,7 @@ namespace ReadingList.WriteModel
         public DbSet<Category> Categories { get; set; }
         public DbSet<Role> Roles { get; set; }
 
-        public ReadingListDbContext(IConfiguration configuration)
+        public WriteDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
         }

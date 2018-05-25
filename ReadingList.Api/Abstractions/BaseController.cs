@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Domain.Absrtactions;
-using ReadingList.Domain.Commands;
-using ReadingList.Domain.Helpers;
 using ReadingList.Domain.Implementations;
-using ReadingList.Domain.Queries;
+using ReadingList.Domain.Infrastructure.Helpers;
 
 namespace ReadingList.Api.Abstractions
 {

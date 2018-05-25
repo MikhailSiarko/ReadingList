@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Api", "ReadingL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.WriteModel", "ReadingList.WriteModel\ReadingList.WriteModel.csproj", "{4BF05278-BE82-401A-817E-96B813A010B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Tests", "ReadingList.Tests\ReadingList.Tests.csproj", "{C58300A1-ED66-4A69-819E-B5B39A400336}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,17 @@ Global
 		{4BF05278-BE82-401A-817E-96B813A010B4}.Release|x64.Build.0 = Release|Any CPU
 		{4BF05278-BE82-401A-817E-96B813A010B4}.Release|x86.ActiveCfg = Release|Any CPU
 		{4BF05278-BE82-401A-817E-96B813A010B4}.Release|x86.Build.0 = Release|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Debug|x64.Build.0 = Debug|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Debug|x86.Build.0 = Debug|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x64.ActiveCfg = Release|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x64.Build.0 = Release|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x86.ActiveCfg = Release|Any CPU
+		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

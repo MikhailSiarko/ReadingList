@@ -9,13 +9,13 @@ namespace ReadingList.WriteModel
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            var context = serviceProvider.GetRequiredService<ReadingListDbContext>();
+            var context = serviceProvider.GetRequiredService<WriteDbContext>();
             context.Database.EnsureCreated();
             InitializeRoles(context);
             context.SaveChanges();
         }
 
-        private static void InitializeRoles(ReadingListDbContext context)
+        private static void InitializeRoles(WriteDbContext context)
         {
             var roles = ApplicationRoles.GetRoles();
             if (!context.Roles.Any())

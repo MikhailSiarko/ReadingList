@@ -4,11 +4,11 @@ using System.Text;
 
 namespace ReadingList.Domain.Services.Encryption
 {
-    public class EncryptionAlgorithm : IEncryptionAlgorithm
+    public class DefaultEncryptionAlgorithm : IEncryptionAlgorithm
     {
         private readonly Func<string, string> _algorithm;
 
-        public EncryptionAlgorithm()
+        public DefaultEncryptionAlgorithm()
         {
             _algorithm = normalString =>
             {
@@ -20,7 +20,7 @@ namespace ReadingList.Domain.Services.Encryption
                 var stringBuilder = new StringBuilder();
                 foreach (var t in hash)
                 {
-                    stringBuilder.Append(t.ToString("x8"));
+                    stringBuilder.Append(t.ToString("x2"));
                 }
 
                 return stringBuilder.ToString();

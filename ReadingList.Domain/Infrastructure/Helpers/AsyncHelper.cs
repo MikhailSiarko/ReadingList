@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ReadingList.Domain.Helpers
+namespace ReadingList.Domain.Infrastructure.Helpers
 {
     public static class AsyncHelpers
     {

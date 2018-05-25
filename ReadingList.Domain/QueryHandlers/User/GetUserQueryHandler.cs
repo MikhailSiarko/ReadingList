@@ -7,16 +7,16 @@ namespace ReadingList.Domain.QueryHandlers
 {
     public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRM>
     {
-        private readonly ReadingListConnection _connection;
+        private readonly ReadDbConnection _dbConnection;
 
-        public GetUserQueryHandler(ReadingListConnection connection)
+        public GetUserQueryHandler(ReadDbConnection dbConnection)
         {
-            _connection = connection;
+            _dbConnection = dbConnection;
         }
 
         protected override async Task<UserRM> Process(GetUserQuery query)
         {
-            return await _connection.QuerySingle<UserRM>("SELECT Id, Login From Users WHERE Id = @id",
+            return await _dbConnection.QuerySingle<UserRM>("SELECT Id, Login From Users WHERE Id = @id",
                 new {id = query.UserId});
         }
     }

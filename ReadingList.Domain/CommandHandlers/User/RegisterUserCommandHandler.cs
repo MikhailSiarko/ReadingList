@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ReadingList.Domain.Absrtactions;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.Services.Encryption;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using UserWm = ReadingList.WriteModel.Models.User;
@@ -10,20 +11,29 @@ namespace ReadingList.Domain.CommandHandlers
 {
     public class RegisterUserCommandHandler : CommandHandler<RegisterUserCommand>
     {
-        private readonly ReadingListDbContext _context;
-        public RegisterUserCommandHandler(ReadingListDbContext context)
+        private readonly WriteDbContext _context;
+        private readonly IEncryptionService _encryptionService;
+        public RegisterUserCommandHandler(WriteDbContext context, IEncryptionService encryptionService)
         {
             _context = context;
+            _encryptionService = encryptionService;
         }
 
         protected override async Task Process(RegisterUserCommand command)
         {
-            await _context.Users.AddAsync(new UserWm
+            var userRm = new UserWm
             {
                 Login = command.Email,
-                Password = command.Password,
-                RoleId = (int)UserRole.User,
-                Profile = new ProfileWm { Email = command.Email }
+                Password = _encryptionService.Encrypt(command.Password),
+                RoleId = (int) UserRole.User,
+                Profile = new ProfileWm {Email = command.Email}
+            };
+            await _context.Users.AddAsync(userRm);
+            await _context.BookLists.AddAsync(new BookList
+            {
+                Name = "Default",
+                Owner = userRm,
+                Type = BookListType.Private
             });
             await _context.SaveChangesAsync();
         }

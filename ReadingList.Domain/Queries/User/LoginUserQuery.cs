@@ -3,7 +3,7 @@ using ReadingList.Domain.Services.Authentication;
 
 namespace ReadingList.Domain.Queries
 {
-    public class LoginUserQuery : IQuery<AuthenticationResult>
+    public class LoginUserQuery : IQuery<AuthenticationData>
     {
         public readonly string Login;
         public readonly string Password;

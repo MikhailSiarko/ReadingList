@@ -6,8 +6,8 @@ using ReadingList.Domain.Queries;
 
 namespace ReadingList.Api.Controllers
 {
-    [Route("api/[controller]")]
     [Authorize]
+    [Route("api/[controller]")]
     public class PrivateListController : BaseController
     {
         [HttpGet]

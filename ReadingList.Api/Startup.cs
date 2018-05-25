@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain;
-using ReadingList.Domain.Helpers;
+using ReadingList.Domain.Infrastructure.Helpers;
 
 namespace ReadingList.Api
 {

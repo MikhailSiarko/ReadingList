@@ -9,6 +9,11 @@
             _encryptionAlgorithm = encryptionAlgorithm;
         }
 
+        public EncryptionService()
+        {
+            _encryptionAlgorithm = new DefaultEncryptionAlgorithm();
+        }
+
         public string Encrypt(string normalString)
         {
             return _encryptionAlgorithm.Execute(normalString);

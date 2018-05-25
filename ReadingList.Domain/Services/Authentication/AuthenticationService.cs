@@ -32,7 +32,8 @@ namespace ReadingList.Domain.Services.Authentication
                 throw new ArgumentNullException();
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
             };
             var claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
@@ -53,10 +54,10 @@ namespace ReadingList.Domain.Services.Authentication
                     SecurityAlgorithms.HmacSha256));
         }
 
-        public AuthenticationResult Authenticate(UserRm user, LoginUserQuery query)
+        public AuthenticationData Authenticate(UserRm user, LoginUserQuery query)
         {
             var token = EncodeSecurityToken(user);
-            return AuthenticationResult.Succeed(new AuthenticationData(token, user)); 
+            return new AuthenticationData(token, user); 
         }
     }
 }
