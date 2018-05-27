@@ -1,5 +1,5 @@
-export interface ListItem<T> {
-    id: string;
-    data: T;
-    readingTime: number;
+export interface ListItem {
+    id: number;
+    title: string;
+    author: string;
 }

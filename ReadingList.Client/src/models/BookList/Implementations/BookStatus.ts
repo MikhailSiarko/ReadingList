@@ -1,17 +1,9 @@
-export const BookStatusKey = {
-    ToReading: 'To Reading',
-    Reading: 'Reading',
-    StartedButPostponed: 'Started But Postponed',
-    StartedButВiscarded: 'Started But Вiscarded',
-    Read: 'Read'
-};
-
 export const BookStatus = {
-    [BookStatusKey.ToReading]: 'ToReading',
-    [BookStatusKey.Reading]: 'Reading',
-    [BookStatusKey.StartedButPostponed]: 'StartedButPostponed',
-    [BookStatusKey.StartedButВiscarded]: 'StartedButВiscarded',
-    [BookStatusKey.Read]: 'Read'
+    1: 'To Reading',
+    2: 'Reading',
+    3: 'Started But Postponed',
+    4: 'Started But Вiscarded',
+    5: 'Read'
 };
 
 export interface SelectListItem {
@@ -23,8 +15,8 @@ export function generateStatusSelectItems (): SelectListItem[] {
     const options: SelectListItem[] = [];
     for(let key in BookStatus) {
         if(key) {
-            const value = BookStatus[key];
-            const text = key;
+            const text = BookStatus[key];
+            const value = key;
             options.push({value, text});
         }
     }

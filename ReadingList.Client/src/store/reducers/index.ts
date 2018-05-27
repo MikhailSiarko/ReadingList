@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { routerReducer } from 'react-router-redux';
 import { authenticationReducer } from './authentication/authenticationReducer';
-import { BookList } from '../../models/BookList/Implementations/BookList';
+import { PrivateBookList } from '../../models/BookList/Implementations/PrivateBookList';
 import { bookListReducer } from './bookList/bookListReducer';
 import { loadingReducer } from './loading/loadingReducer';
 
@@ -25,7 +25,7 @@ export namespace RootState {
         isAuthenticated: AuthenticatedState;
         user: UserState | undefined;
     };
-    export type PrivateList = BookList | null;
+    export type PrivateList = PrivateBookList | null;
 }
 
 export const rootReducer = combineReducers<RootState>({

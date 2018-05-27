@@ -22,10 +22,20 @@ namespace ReadingList.ReadModel
         {
             return await _connection.QuerySingleAsync<T>(query, param);
         }
+        
+        public async Task<T> QueryFirst<T>(string query, object param = null)
+        {
+            return await _connection.QueryFirstAsync<T>(query, param);
+        }
 
         public async Task<TR> QuerySingle<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
         {
             return (await _connection.QueryAsync(query, map, param)).SingleOrDefault();
+        }
+        
+        public async Task<TR> QueryFirst<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
+        {
+            return (await _connection.QueryAsync(query, map, param)).FirstOrDefault();
         }
 
         public async Task<IEnumerable<T>> Query<T>(string query, object param = null)

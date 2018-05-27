@@ -12,7 +12,7 @@ using System;
 namespace ReadingList.WriteModel.Migrations
 {
     [DbContext(typeof(MigrationDbContext))]
-    [Migration("20180525141551_Initial")]
+    [Migration("20180526183447_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Abstractions;
-using ReadingList.Api.Queries;
+using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Queries;
 
@@ -12,38 +12,38 @@ namespace ReadingList.Api.Controllers
     {
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginQuery loginQuery)
+        public async Task<IActionResult> Login([FromBody] LoginData loginData)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var result = await AskAsync(new LoginUserQuery(loginQuery.Email, loginQuery.Password));
+            var result = await AskAsync(new LoginUserQuery(loginData.Email, loginData.Password));
 
             if (!result.IsSucceed)
-                return BadRequest(result.ErrorMessage);
-            return Ok(result.Data);
+                return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterQuery registerQuery)
+        public async Task<IActionResult> Register([FromBody] RegisterData registerData)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             
             var result =
-                await ExecuteAsync(new RegisterUserCommand(registerQuery.Email,
-                    registerQuery.Password));
+                await ExecuteAsync(new RegisterUserCommand(registerData.Email,
+                    registerData.Password));
 
             if (!result.IsSucceed)
-                return BadRequest(result.ErrorMessage);
+                return BadRequest(result);
 
-            var queryResult = await AskAsync(new LoginUserQuery(registerQuery.Email, registerQuery.Password));
+            var queryResult = await AskAsync(new LoginUserQuery(registerData.Email, registerData.Password));
             
             if (!queryResult.IsSucceed)
-                return StatusCode(500, queryResult.ErrorMessage);
+                return StatusCode(500, queryResult);
             
-            return Ok(queryResult.Data);
+            return Ok(queryResult);
         }
     }
 }

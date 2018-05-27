@@ -1,6 +1,6 @@
-﻿namespace ReadingList.Api.Queries
+﻿namespace ReadingList.Api.QueriesData
 {
-    public class LoginQuery
+    public class LoginData
     {
         public string Email { get; set; }
         public string Password { get; set; }

@@ -2,12 +2,11 @@ import * as React from 'react';
 import style from './ItemForm.css';
 import globalStyles from 'src/styles/global.css';
 import { cloneDeep } from 'lodash';
-import { BookListItem } from '../../../models/BookList/Implementations/BookListItem';
-import { guid, isNullOrEmpty } from '../../../utils';
-import { BookModel } from '../../../models/BookModel';
+import { PrivateBookListItem } from '../../../models/BookList/Implementations/PrivateBookListItem';
+import { isNullOrEmpty } from '../../../utils';
 
 interface ItemFormProps {
-    onSubmit: (bookItem: BookListItem) => void;
+    onSubmit: (bookItem: PrivateBookListItem) => void;
 }
 
 interface ItemFormState {
@@ -36,8 +35,7 @@ class ItemForm extends React.Component<ItemFormProps, ItemFormState> {
         const isTitleValid = !isNullOrEmpty(title);
         const isAuthorValid = !isNullOrEmpty(author);
         if(isTitleValid && isAuthorValid) {
-            const bookModel = {id: guid(), title: this.state.title, author: this.state.author} as BookModel;
-            const item = new BookListItem(guid(), bookModel);
+            const item = {title: this.state.title, author: author} as PrivateBookListItem;
             this.props.onSubmit(item);
             this.setState({ author: '', title: '', isAuthorValid: true, isTitleValid: true });
         } else {

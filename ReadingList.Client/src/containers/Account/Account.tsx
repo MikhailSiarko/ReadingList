@@ -9,6 +9,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { RequestResult } from '../../models/Request';
 import AccountForm from '../../components/AccountForm';
+import { BookListService } from '../../services/BookListService';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -16,6 +17,15 @@ interface AccountProps extends RouteComponentProps<any> {
 }
 
 class Account extends React.Component<AccountProps> {
+    private static processSubmit(email: string, password: string, action: (credentials: Credentials) => void) {
+        if(Account.validateCredentials(email, password)) {
+            action(new Credentials(email, password));
+        }
+    }
+
+    private static validateCredentials(email: string, password: string) {
+        return email !== '' || password !== '';
+    }
     public submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
@@ -23,50 +33,55 @@ class Account extends React.Component<AccountProps> {
         const password = (form.elements.namedItem('password') as HTMLInputElement).value;
         const confirmPassword = form.elements.namedItem('confirmPassword') as HTMLInputElement;
         if(confirmPassword === null) {
-            this.processSubmit(email, password, this.props.login);
+            Account.processSubmit(email, password, this.props.login);
         } else {
-            this.processSubmit(email, password, this.props.register);
+            Account.processSubmit(email, password, this.props.register);
         }
     }
 
     render() {
         const account = (
             <AccountForm onSubmit={this.submitHandler}>
-                <Route path="/account/register" component={Register} />
-                <Route path="/account/login" component={Login} />
+                <Route path="/account/register" component={Register}/>
+                <Route path="/account/login" component={Login}/>
             </AccountForm>
         );
         return <div>{account}</div>;
     }
-
-    private processSubmit(email: string, password: string, action: (credentials: Credentials) => void) {
-        if(this.validateCredentials(email, password)) {
-            action(new Credentials(email, password));
-        }
-    }
-
-    private validateCredentials(email: string, password: string) {
-        return email !== '' || password !== '';
-    }
 }
 
-function postAuthReqeustProcess(result: RequestResult<never>, ownProps: AccountProps) {
-    if(result.isSuccess()) {
-        ownProps.history.push('/');
+function postRequestProcess(result: RequestResult<any>, ownProps?: AccountProps) {
+    if(result.isSucceed) {
+        if(ownProps) {
+            ownProps.history.push('/');
+        }
     } else {
-        alert(result.message);
+        alert(result.errorMessage);
     }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProps) {
+    const authService = new AuthenticationService();
     return {
         login: async (credentials: Credentials) => {
-            const result = await AuthenticationService.login(dispatch, credentials);
-            postAuthReqeustProcess(result, ownProps);
+            const result = await authService.login(dispatch, credentials);
+            if(result.isSucceed) {
+                const bookService = new BookListService();
+                const bookResult = await bookService.getPrivateList(dispatch);
+                postRequestProcess(bookResult, ownProps);
+            } else {
+                postRequestProcess(result, ownProps);
+            }
         },
         register: async (credentials: Credentials) => {
-            const result = await AuthenticationService.register(dispatch, credentials);
-            postAuthReqeustProcess(result, ownProps);
+            const result = await authService.register(dispatch, credentials);
+            if(result.isSucceed) {
+                const bookService = new BookListService();
+                const bookResult = await bookService.getPrivateList(dispatch);
+                postRequestProcess(bookResult, ownProps);
+            } else {
+                postRequestProcess(result, ownProps);
+            }
         }
     };
 }

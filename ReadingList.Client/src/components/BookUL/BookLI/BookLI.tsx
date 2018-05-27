@@ -1,23 +1,23 @@
 import * as React from 'react';
 import styles from './BookLI.css';
 import globalStyles from '../../../styles/global.css';
-import { BookStatusKey } from '../../../models/BookList/Implementations/BookStatus';
+import { BookStatus } from '../../../models/BookList/Implementations/BookStatus';
 import { ContextMenuProps } from '../../ContextMenu';
-import { BookListItem } from '../../../models/BookList/Implementations/BookListItem';
+import { PrivateBookListItem } from '../../../models/BookList/Implementations/PrivateBookListItem';
 import { cloneDeep } from 'lodash';
 
 interface BookLIProps {
     id?: string;
-    listItem: BookListItem;
+    listItem: PrivateBookListItem;
     shouldStatusSelectorRender: boolean;
-    onSave: (item: BookListItem) => void;
-    onCancel: (itemId: string) => void;
+    onSave: (item: PrivateBookListItem) => void;
+    onCancel: (itemId: number) => void;
     options?: JSX.Element[];
     contextMenu?: React.ReactElement<ContextMenuProps>;
 }
 
 interface BookListState {
-    listItem: BookListItem;
+    listItem: PrivateBookListItem;
 }
 
 class BookLI extends React.Component<BookLIProps, BookListState> {
@@ -32,7 +32,7 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
         if(event.target.name === 'status') {
             itemCopy[event.target.name] = event.target.value;
         }
-        itemCopy.data[event.target.name] = event.target.value;
+        itemCopy[event.target.name] = event.target.value;
         this.setState({listItem: itemCopy});
     }
 
@@ -59,11 +59,11 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
                             <div className={styles['editing-book-title']}>
                                 <div>
                                     <input type="text" required={true} onChange={this.changeHandler}
-                                        name="title" value={this.state.listItem.data.title} />
+                                        name="title" value={this.state.listItem.title} />
                                 </div>by 
                                 <div>
                                     <input type="text" required={true} onChange={this.changeHandler}
-                                        name="author" value={this.state.listItem.data.author} />
+                                        name="author" value={this.state.listItem.author} />
                                 </div>
                             </div>
                         </div>
@@ -95,14 +95,14 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
             <li className={styles['book-li']} id={this.props.id}>
                     <div className={styles['book-info']}>
                         <h5 className={styles['book-title']}>
-                            <q>{this.props.listItem.data.title}</q> by {this.props.listItem.data.author}
+                            <q>{this.props.listItem.title}</q> by {this.props.listItem.author}
                         </h5>
                     </div>
                 {
                     this.props.shouldStatusSelectorRender
                         ?
                         <div className={styles['status']}>
-                            <p>Status: {BookStatusKey[this.props.listItem.status]}</p>
+                            <p>Status: {BookStatus[this.props.listItem.status]}</p>
                         </div>
                         : null
                 }

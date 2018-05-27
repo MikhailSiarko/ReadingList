@@ -6,19 +6,28 @@ import ContextMenu from '../../components/ContextMenu/ContextMenu';
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { bookListAction } from '../../store/actions/bookList';
-import { BookListItem } from '../../models/BookList/Implementations/BookListItem';
+import { PrivateBookListItem } from '../../models/BookList/Implementations/PrivateBookListItem';
 import { RouteComponentProps } from 'react-router';
 import ItemForm from '../../components/BookUL/ItemForm';
+import { BookListService } from '../../services/BookListService';
+import { RequestResult } from '../../models/Request';
+import { PrivateBookList } from '../../models/BookList/Implementations/PrivateBookList';
 
 interface PrivateListProps extends RouteComponentProps<any> {
     bookList: RootState.PrivateList;
-    add: (listItem: BookListItem) => void;
-    remove: (itemId: string) => void;
-    update: (item: BookListItem) => void;
-    switchEditMode: (itemId: string) => void;
+    add: (listItem: PrivateBookListItem) => void;
+    remove: (itemId: number) => void;
+    update: (item: PrivateBookListItem) => void;
+    switchEditMode: (itemId: number) => void;
+    getPrivateList: () => Promise<void>;
 }
 
-class PrivateBookList extends React.Component<PrivateListProps> {
+class PrivateList extends React.Component<PrivateListProps> {
+    async componentDidMount() {
+        if(!this.props.bookList) {
+            await this.props.getPrivateList();
+        }
+    }
     render() {
         const statusOptions = generateStatusSelectItems();
         const options = statusOptions.map((item) =>
@@ -54,6 +63,12 @@ class PrivateBookList extends React.Component<PrivateListProps> {
     }
 }
 
+function postRequestProcess(result: RequestResult<PrivateBookList>) {
+    if(!result.isSucceed) {
+        alert(result.errorMessage);
+    }
+}
+
 function mapStateToProps(state: RootState) {
     return {
         bookList: state.privateList
@@ -61,20 +76,25 @@ function mapStateToProps(state: RootState) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
+    const bookService = new BookListService();
     return {
-        add: (listItem: BookListItem) => {
-            dispatch(bookListAction.add(listItem));
+        add: (listItem: PrivateBookListItem) => {
+            dispatch(bookListAction.addItem(listItem));
         },
-        remove: (itemId: string) => {
-            dispatch(bookListAction.remove(itemId));
+        remove: (itemId: number) => {
+            dispatch(bookListAction.removeItem(itemId));
         },
-        update: (item: BookListItem) => {
-            dispatch(bookListAction.update(item));
+        update: (item: PrivateBookListItem) => {
+            dispatch(bookListAction.updateItem(item));
         },
-        switchEditMode: (itemId: string) => {
-            dispatch(bookListAction.switchEditMode(itemId));
+        switchEditMode: (itemId: number) => {
+            dispatch(bookListAction.switchEditModeForItem(itemId));
+        },
+        getPrivateList: async () => {
+            const result = await bookService.getPrivateList(dispatch);
+            postRequestProcess(result);
         }
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrivateBookList);
+export default connect(mapStateToProps, mapDispatchToProps)(PrivateList);

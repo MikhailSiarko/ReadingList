@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using ReadingList.Api.Queries;
+using ReadingList.Api.QueriesData;
 
 namespace ReadingList.Api.Validators
 {
-    public class RegisterQueryValidator : AbstractValidator<RegisterQuery>
+    public class RegisterQueryValidator : AbstractValidator<RegisterData>
     {
         public RegisterQueryValidator()
         {

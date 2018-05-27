@@ -9,7 +9,8 @@ import NavBar from '../../components/NavBar';
 import { Dispatch } from 'redux';
 import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
-import PrivateBookList from '../PrivateBookList/PrivateBookList';
+import PrivateBookList from '../PrivateList/PrivateList';
+import { bookListAction } from '../../store/actions/bookList';
 
 interface AppProps extends RouteComponentProps<any> {
     identity: RootState.IdentityState;
@@ -28,8 +29,8 @@ class App extends React.Component<AppProps> {
                 {text: 'Logout', href: '', action: this.signOutHandler}                
             ]
             : [
-                {text: 'Login', href: '/account/login'},
-                {text: 'Register', href: '/account/register'}
+                {text: 'Login', href: '/account/LOGIN'},
+                {text: 'Register', href: '/account/REGISTER'}
             ];
 
         return (
@@ -56,6 +57,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
         signOut: () => {
+            dispatch(bookListAction.unsetPrivateList());
             dispatch(authenticationActions.signOut());
         }
     };
