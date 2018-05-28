@@ -1,5 +1,5 @@
 ﻿using ReadingList.Domain.Absrtactions;
-using ReadingList.ReadModel.BookList.Models;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Queries
 {

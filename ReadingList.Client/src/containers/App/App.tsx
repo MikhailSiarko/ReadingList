@@ -25,7 +25,7 @@ class App extends React.Component<AppProps> {
     render() {
         const navLinks = this.props.identity.isAuthenticated
             ? [
-                {text: 'List', href: '/'},
+                {text: 'Private List', href: '/'},
                 {text: 'Logout', href: '', action: this.signOutHandler}                
             ]
             : [

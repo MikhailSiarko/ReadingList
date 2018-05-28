@@ -6,3 +6,9 @@
     width: 80rem;
     box-sizing: border-box;
 }
+
+.book-list h3 {
+    width: 20rem;
+    margin: 0 auto;
+    font-family: 'Dosis', sans-serif;
+}

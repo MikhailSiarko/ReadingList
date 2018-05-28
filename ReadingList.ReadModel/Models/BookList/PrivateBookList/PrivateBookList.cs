@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ReadingList.ReadModel.BookList.Models
+namespace ReadingList.ReadModel.Models
 {
     public class PrivateBookList
     {

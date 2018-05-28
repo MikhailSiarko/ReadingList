@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Dapper;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel;
 using UserRM = ReadingList.ReadModel.Models.User;
@@ -16,8 +17,11 @@ namespace ReadingList.Domain.QueryHandlers
 
         protected override async Task<UserRM> Process(GetUserQuery query)
         {
-            return await _dbConnection.QuerySingle<UserRM>("SELECT Id, Login From Users WHERE Id = @id",
-                new {id = query.UserId});
+            var sqlBuilder = new SqlBuilder();
+            sqlBuilder
+                .Select("Id, Login From Users").Where("Id = @id").AddParameters(new {id = query.UserId});
+            var getUserQuery = sqlBuilder.AddTemplate("SELECT /**select**/ FROM Users /**where**/");
+            return await _dbConnection.QuerySingleAsync<UserRM>(getUserQuery.RawSql, getUserQuery.Parameters);
         }
     }
 }

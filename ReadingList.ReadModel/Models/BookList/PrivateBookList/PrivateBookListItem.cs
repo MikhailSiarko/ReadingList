@@ -1,4 +1,4 @@
-﻿namespace ReadingList.ReadModel.BookList.Models
+﻿namespace ReadingList.ReadModel.Models
 {
     public class PrivateBookListItem
     {

@@ -20,7 +20,7 @@ namespace ReadingList.Api.Controllers
             var result = await AskAsync(new LoginUserQuery(loginData.Email, loginData.Password));
 
             if (!result.IsSucceed)
-                return BadRequest(result);
+                return NotFound(result);
             return Ok(result);
         }
 
@@ -36,12 +36,12 @@ namespace ReadingList.Api.Controllers
                     registerData.Password));
 
             if (!result.IsSucceed)
-                return BadRequest(result);
+                return StatusCode(500, result);
 
             var queryResult = await AskAsync(new LoginUserQuery(registerData.Email, registerData.Password));
             
             if (!queryResult.IsSucceed)
-                return StatusCode(500, queryResult);
+                return NotFound(queryResult);
             
             return Ok(queryResult);
         }

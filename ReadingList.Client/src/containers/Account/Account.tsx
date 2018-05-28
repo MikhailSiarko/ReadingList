@@ -4,12 +4,12 @@ import Register from '../../components/Register';
 import Login from '../../components/Login';
 import { connect } from 'react-redux';
 import { AuthenticationService } from '../../services';
-import { Credentials } from '../../store/actions/authentication';
+import { Credentials, AuthenticationData } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { RequestResult } from '../../models/Request';
 import AccountForm from '../../components/AccountForm';
-import { BookListService } from '../../services/BookListService';
+import { PrivateBookListService } from '../../services/PrivateBookListService';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -50,13 +50,22 @@ class Account extends React.Component<AccountProps> {
     }
 }
 
-function postRequestProcess(result: RequestResult<any>, ownProps?: AccountProps) {
+function postRequestProcess(result: RequestResult<any>, ownProps: AccountProps) {
     if(result.isSucceed) {
-        if(ownProps) {
-            ownProps.history.push('/');
-        }
+        ownProps.history.push('/');
     } else {
         alert(result.errorMessage);
+    }
+}
+
+async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
+        ownProps: AccountProps) {
+    if(result.isSucceed) {
+        const bookService = new PrivateBookListService();
+        const bookResult = await bookService.getList(dispatch);
+        postRequestProcess(bookResult, ownProps);
+    } else {
+        postRequestProcess(result, ownProps);
     }
 }
 
@@ -65,23 +74,11 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProp
     return {
         login: async (credentials: Credentials) => {
             const result = await authService.login(dispatch, credentials);
-            if(result.isSucceed) {
-                const bookService = new BookListService();
-                const bookResult = await bookService.getPrivateList(dispatch);
-                postRequestProcess(bookResult, ownProps);
-            } else {
-                postRequestProcess(result, ownProps);
-            }
+            await postAuthProcess(dispatch, result, ownProps);
         },
         register: async (credentials: Credentials) => {
             const result = await authService.register(dispatch, credentials);
-            if(result.isSucceed) {
-                const bookService = new BookListService();
-                const bookResult = await bookService.getPrivateList(dispatch);
-                postRequestProcess(bookResult, ownProps);
-            } else {
-                postRequestProcess(result, ownProps);
-            }
+            await postAuthProcess(dispatch, result, ownProps);
         }
     };
 }

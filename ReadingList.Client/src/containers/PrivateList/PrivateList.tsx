@@ -9,15 +9,14 @@ import { bookListAction } from '../../store/actions/bookList';
 import { PrivateBookListItem } from '../../models/BookList/Implementations/PrivateBookListItem';
 import { RouteComponentProps } from 'react-router';
 import ItemForm from '../../components/BookUL/ItemForm';
-import { BookListService } from '../../services/BookListService';
+import { PrivateBookListService } from '../../services/PrivateBookListService';
 import { RequestResult } from '../../models/Request';
-import { PrivateBookList } from '../../models/BookList/Implementations/PrivateBookList';
 
 interface PrivateListProps extends RouteComponentProps<any> {
     bookList: RootState.PrivateList;
-    add: (listItem: PrivateBookListItem) => void;
-    remove: (itemId: number) => void;
-    update: (item: PrivateBookListItem) => void;
+    add: (listItem: PrivateBookListItem) => Promise<void>;
+    remove: (itemId: number) => Promise<void>;
+    update: (item: PrivateBookListItem) => Promise<void>;
     switchEditMode: (itemId: number) => void;
     getPrivateList: () => Promise<void>;
 }
@@ -34,27 +33,34 @@ class PrivateList extends React.Component<PrivateListProps> {
             <option key={item.value} value={item.value}>{item.text}</option>
         );
         let listItems;
+        let listName = null;
         if(this.props.bookList) {
-            listItems = this.props.bookList.items.map((listItem) => {
-                const bookListItemId = 'bookListItem' + listItem.id;
-                const contextMenu = (() => (
-                   <ContextMenu rootId={bookListItemId} menuItems={
-                           [
-                               {onClick: () => this.props.switchEditMode(listItem.id), text: 'Edit'},
-                               {onClick: () => this.props.remove(listItem.id), text: 'Remove'}
-                           ]
-                       } />))();
-                return (
-                       <BookLI key={listItem.id} listItem={listItem}
-                               shouldStatusSelectorRender={true} options={options}
-                               onSave={this.props.update} id={bookListItemId}
-                               contextMenu={contextMenu} onCancel={this.props.switchEditMode} />
-                );
-           });
+            listName = this.props.bookList.name;
+            if(this.props.bookList.items.length > 0) {
+                listItems = this.props.bookList.items.map((listItem) => {
+                    const bookListItemId = 'bookListItem' + listItem.id;
+                    const contextMenu = (() => (
+                    <ContextMenu rootId={bookListItemId} menuItems={
+                            [
+                                {onClick: () => this.props.switchEditMode(listItem.id), text: 'Edit'},
+                                {onClick: () => this.props.remove(listItem.id), text: 'Remove'}
+                            ]
+                        } />))();
+                    return (
+                        <BookLI key={listItem.id} listItem={listItem}
+                                shouldStatusSelectorRender={true} options={options}
+                                onSave={this.props.update} id={bookListItemId}
+                                contextMenu={contextMenu} onCancel={this.props.switchEditMode} />
+                    );
+                });
+            } else {
+                listItems = <h3>Here are no books yet</h3>;
+            }
         }
         return (
                 <div>
                     <ItemForm onSubmit={this.props.add} />
+                    <h2>{listName}</h2>
                     <BookUL>
                         {listItems}
                     </BookUL>
@@ -63,7 +69,7 @@ class PrivateList extends React.Component<PrivateListProps> {
     }
 }
 
-function postRequestProcess(result: RequestResult<PrivateBookList>) {
+function postRequestProcess(result: RequestResult<any>) {
     if(!result.isSucceed) {
         alert(result.errorMessage);
     }
@@ -76,22 +82,28 @@ function mapStateToProps(state: RootState) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const bookService = new BookListService();
+    const bookService = new PrivateBookListService();
     return {
-        add: (listItem: PrivateBookListItem) => {
-            dispatch(bookListAction.addItem(listItem));
+        add: async (listItem: PrivateBookListItem) => {
+            const result = await bookService.addItem(dispatch, listItem);
+            postRequestProcess(result);
         },
-        remove: (itemId: number) => {
-            dispatch(bookListAction.removeItem(itemId));
+        remove: async (itemId: number) => {
+            const result = await bookService.removeItem(dispatch, itemId);
+            const castedResult = result as RequestResult<any>;
+            if(!castedResult) {
+                postRequestProcess(castedResult);
+            }
         },
-        update: (item: PrivateBookListItem) => {
-            dispatch(bookListAction.updateItem(item));
+        update: async (item: PrivateBookListItem) => {
+            const result = await bookService.updateItem(dispatch, item);
+            postRequestProcess(result);
         },
         switchEditMode: (itemId: number) => {
             dispatch(bookListAction.switchEditModeForItem(itemId));
         },
         getPrivateList: async () => {
-            const result = await bookService.getPrivateList(dispatch);
+            const result = await bookService.getList(dispatch);
             postRequestProcess(result);
         }
     };
