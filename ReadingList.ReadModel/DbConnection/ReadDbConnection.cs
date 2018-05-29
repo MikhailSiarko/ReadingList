@@ -11,48 +11,41 @@ namespace ReadingList.ReadModel.DbConnection
 {
     public class ReadDbConnection : IReadDbConnection
     {
-        private readonly IConfiguration _configuration;
+        private readonly IDbConnection _dbConnection;
 
-        public ReadDbConnection(IConfiguration configuration)
+        public ReadDbConnection(IDbConnection dbConnection)
         {
-            _configuration = configuration;
+            _dbConnection = dbConnection;
         }
 
         public async Task<T> QuerySingleAsync<T>(string query, object param = null)
         {
-            return await MakeQuery(query, param, async (q, p, c) => await c.QuerySingleAsync<T>(q, p));
+            return await _dbConnection.QuerySingleAsync<T>(query, param);
         }
         
         public async Task<T> QueryFirstAsync<T>(string query, object param = null)
         {
-            return await MakeQuery(query, param, async (q, p, c) => await c.QueryFirstAsync<T>(q, p));
+            return  await _dbConnection.QueryFirstAsync<T>(query, param);
         }
 
         public async Task<TR> QuerySingleAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
         {
-            return await MakeQuery(query, param,
-                async (q, p, c) => (await c.QueryAsync(q, map, p)).SingleOrDefault());
+            return (await _dbConnection.QueryAsync(query, map, param)).SingleOrDefault();
         }
         
         public async Task<TR> QueryFirstAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
         {
-            return await MakeQuery(query, param,
-                async (q, p, c) => (await c.QueryAsync(q, map, p)).FirstOrDefault());
+            return (await _dbConnection.QueryAsync(query, map, param)).FirstOrDefault();
         }
 
         public async Task<IEnumerable<T>> QueryAsync<T>(string query, object param = null)
         {
-            return await MakeQuery(query, param, async (q, p, c) => await c.QueryAsync<T>(q, p));
+            return await _dbConnection.QueryAsync<T>(query, param);
         }
 
-        private async Task<T> MakeQuery<T>(string query, object param, Func<string, object, IDbConnection, Task<T>> func)
+        public void Dispose()
         {
-            T result;          
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("Default")))
-            {
-                result = await func(query, param, connection);
-            }
-            return result;
+            _dbConnection?.Dispose();
         }
     }
 }

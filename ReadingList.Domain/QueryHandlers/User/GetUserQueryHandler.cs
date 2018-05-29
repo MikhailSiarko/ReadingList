@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Dapper;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel.FluentSqlBuilder;
 using UserRM = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
@@ -15,13 +15,15 @@ namespace ReadingList.Domain.QueryHandlers
             _dbConnection = dbConnection;
         }
 
-        protected override async Task<UserRM> Process(GetUserQuery query)
+        protected override async Task<UserRM> Handle(GetUserQuery query)
         {
-            var sqlBuilder = new SqlBuilder();
-            sqlBuilder
-                .Select("Id, Login From Users").Where("Id = @id").AddParameters(new {id = query.UserId});
-            var getUserQuery = sqlBuilder.AddTemplate("SELECT /**select**/ FROM Users /**where**/");
-            return await _dbConnection.QuerySingleAsync<UserRM>(getUserQuery.RawSql, getUserQuery.Parameters);
+            var sqlResult = FluentSqlBuilder.NewBuilder()
+                .Select("Id, Login")
+                .From("Users")
+                .Where("Id = @id")
+                .Build();
+
+            return await _dbConnection.QuerySingleAsync<UserRM>(sqlResult.RawSql, sqlResult.Parameters);
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Data;
+using System.Data.SqlClient;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain.MapperProfiles;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
-using ReadingList.ReadModel;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel;
 
@@ -19,6 +21,8 @@ namespace ReadingList.Domain
             services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddDbContext<WriteDbContext>();
+            services.AddScoped<IDbConnection, SqlConnection>(provider =>
+                new SqlConnection(provider.GetService<IConfiguration>().GetConnectionString("Default")));
             services.AddScoped<IReadDbConnection, ReadDbConnection>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);

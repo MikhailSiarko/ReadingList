@@ -18,7 +18,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             _dbContext = dbContext;
         }
 
-        protected override async Task Process(AddPrivateItemCommand command)
+        protected override async Task Handle(AddPrivateItemCommand command)
         {
             var userId = await _dbContext.Users.AsNoTracking().Where(u => u.Login == command.Login).Select(u => u.Id)
                 .SingleAsync();

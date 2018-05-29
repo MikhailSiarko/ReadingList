@@ -13,7 +13,7 @@ namespace ReadingList.Domain.Absrtactions
         {
             try
             {
-                await Process(request);
+                await Handle(request);
                 return CommandResult.Successed();
             }
             catch (Exception e)
@@ -22,6 +22,6 @@ namespace ReadingList.Domain.Absrtactions
             }
         }
 
-        protected abstract Task Process(TCommand command);
+        protected abstract Task Handle(TCommand command);
     }
 }

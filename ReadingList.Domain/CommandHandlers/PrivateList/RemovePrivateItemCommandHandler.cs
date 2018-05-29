@@ -15,7 +15,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             _dbContext = dbContext;
         }
 
-        protected override async Task Process(RemovePrivateItemCommand command)
+        protected override async Task Handle(RemovePrivateItemCommand command)
         {
             var item = await _dbContext.PrivateBookListItems.SingleAsync(i => i.Id == command.Id);
             _dbContext.PrivateBookListItems.Remove(item);

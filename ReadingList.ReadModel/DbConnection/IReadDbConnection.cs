@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ReadingList.ReadModel.DbConnection
 {
-    public interface IReadDbConnection
+    public interface IReadDbConnection : IDisposable
     {
         Task<T> QuerySingleAsync<T>(string query, object param = null);
 

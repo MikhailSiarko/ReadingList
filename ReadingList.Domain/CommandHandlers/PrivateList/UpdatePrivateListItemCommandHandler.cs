@@ -16,7 +16,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             _dbContext = dbContext;
         }
 
-        protected override async Task Process(UpdatePrivateListItemCommand command)
+        protected override async Task Handle(UpdatePrivateListItemCommand command)
         {
             var item = await _dbContext.PrivateBookListItems.SingleAsync(i => i.Id == command.ItemId);
             item.Title = command.Title;

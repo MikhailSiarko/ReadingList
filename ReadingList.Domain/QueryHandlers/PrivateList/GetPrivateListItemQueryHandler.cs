@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Dapper;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel.FluentSqlBuilder;
 using ReadingList.WriteModel.Models;
 using PrivateListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
 
@@ -16,11 +16,11 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
             _dbConnection = dbConnection;
         }
 
-        protected override async Task<PrivateListItemRm> Process(GetPrivateListItemQuery query)
+        protected override async Task<PrivateListItemRm> Handle(GetPrivateListItemQuery query)
         {
-            var sqlBuilder = new SqlBuilder();
-            sqlBuilder
+            var sqlResult = FluentSqlBuilder.NewBuilder()
                 .Select("Id, Title, Author, Status, ReadingTimeInTicks")
+                .From("PrivateBookListItems")
                 .Where(
                     "BookListId = (SELECT Id From BookLists WHERE OwnerId = (SELECT Id FROM Users WHERE Login = @login) AND Type = @type) AND Title = @title AND Author = @author")
                 .AddParameters(new
@@ -29,10 +29,9 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                     type = BookListType.Private,
                     title = query.Title,
                     author = query.Author
-                });
-            var getItemQuery = sqlBuilder.AddTemplate("SELECT /**select**/ FROM PrivateBookListItems /**where**/");
-            return await _dbConnection.QuerySingleAsync<PrivateListItemRm>(getItemQuery.RawSql,
-                getItemQuery.Parameters);
+                }).Build();
+            return await _dbConnection.QuerySingleAsync<PrivateListItemRm>(sqlResult.RawSql,
+                sqlResult.Parameters);
         }
     }
 }

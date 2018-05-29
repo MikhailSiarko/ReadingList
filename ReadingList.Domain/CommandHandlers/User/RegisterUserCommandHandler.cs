@@ -19,7 +19,7 @@ namespace ReadingList.Domain.CommandHandlers
             _encryptionService = encryptionService;
         }
 
-        protected override async Task Process(RegisterUserCommand command)
+        protected override async Task Handle(RegisterUserCommand command)
         {
             var userRm = new UserWm
             {

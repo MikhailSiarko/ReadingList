@@ -13,7 +13,7 @@ namespace ReadingList.Domain.QueryHandlers
         {
             try
             {
-                var result = await Process(request);
+                var result = await Handle(request);
                 return QueryResult<TResult>.Succeed(result);
             }
             catch (Exception e)
@@ -22,6 +22,6 @@ namespace ReadingList.Domain.QueryHandlers
             }
         }
 
-        protected abstract Task<TResult> Process(TQuery query);
+        protected abstract Task<TResult> Handle(TQuery query);
     }
 }
