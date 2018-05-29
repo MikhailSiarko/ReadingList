@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Awesome.Data.Sql.Builder;
+using Awesome.Data.Sql.Builder.Renderers;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
-using ReadingList.ReadModel.FluentSqlBuilder;
 using ReadingList.WriteModel.Models;
 using ListRM = ReadingList.ReadModel.Models.PrivateBookList;
 using ItemRM = ReadingList.ReadModel.Models.PrivateBookListItem;
@@ -22,17 +23,18 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
         {
             var listDictionary = new Dictionary<int, ListRM>();
 
-            var sqlResult = FluentSqlBuilder.NewBuilder()
-                .Select("l.Id, l.Name, l.OwnerId, i.Id, i.ReadingTimeInTicks, i.Title, i.Author, i.Status")
+            var sql = SqlStatements.Select("l.Id", "l.Name", "l.OwnerId", "i.Id", "i.ReadingTimeInTicks", "i.Title",
+                    "i.Author", "i.Status")
                 .From("BookLists AS l")
-                .LeftJoin(
-                    "(SELECT li.Id, li.Title, li.Author, li.BookListId, li.Status, li.ReadingTimeInTicks FROM PrivateBookListItems li) AS i ON i.BookListId = l.Id")
-                .Where("l.OwnerId = (SELECT u.Id FROM Users AS u WHERE u.Login = @login) AND l.Type = @type")
-                .AddParameters(new {login = query.Login, type = (int) BookListType.Private})
-                .Build();
-            
+                .LeftOuterJoin(
+                    new TableClause(
+                            "(SELECT Id, Title, Author, BookListId, Status, ReadingTimeInTicks FROM PrivateBookListItems)")
+                        .As("i"), "i.BookListId = l.Id")
+                .Where("l.OwnerId = (SELECT Id FROM Users WHERE Login = @login)")
+                .Where("l.Type = @type")
+                .ToSql(new SqlServerSqlRenderer());
             return 
-                await _dbConnection.QueryFirstAsync<ListRM, ItemRM, ListRM>(sqlResult.RawSql,
+                await _dbConnection.QueryFirstAsync<ListRM, ItemRM, ListRM>(sql,
                     (list, item) =>
                     {
                         if (!listDictionary.TryGetValue(list.Id, out var listEntry))
@@ -45,7 +47,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                         if(item != null)
                             listEntry.Items.Add(item);
                         return listEntry;
-                    }, sqlResult.Parameters);
+                    }, new {login = query.Login, type = (int) BookListType.Private});
         }
     }
 }

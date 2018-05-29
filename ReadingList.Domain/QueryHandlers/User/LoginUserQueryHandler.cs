@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Awesome.Data.Sql.Builder;
+using Awesome.Data.Sql.Builder.Renderers;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.ReadModel.DbConnection;
-using ReadingList.ReadModel.FluentSqlBuilder;
 using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
@@ -23,14 +24,15 @@ namespace ReadingList.Domain.QueryHandlers
 
         protected override async Task<AuthenticationData> Handle(LoginUserQuery query)
         {
-            var sqlResult = FluentSqlBuilder.NewBuilder()
-                .Select("Id, Login, ProfileId, (SELECT Name FROM Roles WHERE Id = RoleId) AS Role")
+            var sql = SqlStatements
+                .Select("Id", "Login", "ProfileId", "(SELECT Name FROM Roles WHERE Id = RoleId) AS Role")
                 .From("Users")
-                .Where("Login = @login AND Password = @password")
-                .AddParameters(new {login = query.Login, password = _encryptionService.Encrypt(query.Password)})
-                .Build();
+                .Where("Login = @login")
+                .Where("Password = @password")
+                .ToSql(new SqlServerSqlRenderer());
 
-            var user = await _dbConnection.QuerySingleAsync<UserRm>(sqlResult.RawSql, sqlResult.Parameters);
+            var user = await _dbConnection.QuerySingleAsync<UserRm>(sql,
+                new {login = query.Login, password = _encryptionService.Encrypt(query.Password)});
             return _authenticationService.Authenticate(user, query);
         }
     }
