@@ -46,17 +46,21 @@ class ItemForm extends React.Component<ItemFormProps, ItemFormState> {
 
     render() {
         return (
-            <form onSubmit={this.submitHandler} className={style['add-item-form']}>
-                <div>
-                    <input type="text" required={true} onChange={this.changeHandler} value={this.state.title}
-                        name={'title'} placeholder={'Title'} />
-                </div>
-                <div>
-                    <input type="text" required={true} onChange={this.changeHandler} value={this.state.author}
-                        name={'author'} placeholder={'Author'} />
-                </div>
-                <button type={'submit'} className={`${globalStyles.btn} ${globalStyles.primary}`}>Add</button>
-            </form>
+            <fieldset className={style['form-fieldset']}>
+                <legend>Add book</legend>
+                <form onSubmit={this.submitHandler} className={style['add-item-form']}>
+                    <div>
+                        <input type="text" required={true} onChange={this.changeHandler} value={this.state.title}
+                            name={'title'} placeholder={'Title'} />
+                    </div>
+                    <div>
+                        <input type="text" required={true} onChange={this.changeHandler} value={this.state.author}
+                            name={'author'} placeholder={'Author'} />
+                    </div>
+                    <button type={'submit'} className={`${globalStyles.btn} ${globalStyles.primary}`}>Add</button>
+                </form>
+            </fieldset>
+            
         );
     }
 }

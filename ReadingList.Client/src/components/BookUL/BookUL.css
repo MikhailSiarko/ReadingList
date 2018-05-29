@@ -1,13 +1,19 @@
+.list-fieldset {
+    margin: 0 auto;
+    width: 80rem;
+}
+
 .book-list {
     list-style: none;
     padding: 0;
     font-size: 1.6rem;
     margin: 0 auto;
-    width: 80rem;
     box-sizing: border-box;
+    text-align: left;
 }
 
 .book-list h3 {
+    text-align: center;
     width: 20rem;
     margin: 0 auto;
     font-family: 'Dosis', sans-serif;

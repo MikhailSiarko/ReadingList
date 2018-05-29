@@ -1,11 +1,19 @@
 import * as React from 'react';
 import styles from './BookUL.css';
 
-const BookUL: React.SFC<React.HTMLProps<HTMLUListElement>> = (props) => {
+interface Props {
+    listName: string;
+    children: React.ReactNode;
+}
+
+const BookUL: React.SFC<Props> = (props) => {
     return (
-        <ul className={styles['book-list']} {...props}>
-            {props.children ? props.children : <h3>Here are no book yet</h3>}
-        </ul>
+        <fieldset className={styles['list-fieldset']}>
+            <legend>{props.listName}</legend>
+            <ul className={styles['book-list']}>
+                {props.children ? props.children : <h3>Here are no book yet</h3>}
+            </ul>
+        </fieldset>
     );
 };
 

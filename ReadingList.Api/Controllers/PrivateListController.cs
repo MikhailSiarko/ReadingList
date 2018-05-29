@@ -23,10 +23,15 @@ namespace ReadingList.Api.Controllers
             return NotFound(queryResult);
         }
         
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] UpdatePrivateListData listData)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] UpdatePrivateListData listData)
         {
-            var queryResult = await ExecuteAsync(new UpdatePrivateListCommand(User.Identity.Name, listData.Name));
+            var result = await ExecuteAsync(new UpdatePrivateListCommand(User.Identity.Name, listData.Name));
+            
+            if(!result.IsSucceed)
+                return StatusCode(500, result);
+
+            var queryResult = await AskAsync(new GetPrivateListQuery(User.Identity.Name));
             
             if(queryResult.IsSucceed)
                 return Ok(queryResult);

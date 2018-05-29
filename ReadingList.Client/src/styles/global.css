@@ -99,3 +99,11 @@ select {
   font-size: 1.6rem;
   color: #ef5350;
 }
+
+fieldset {
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 0.4rem;
+  border-color: #989ba0;
+  border-width: 0.1rem;
+}

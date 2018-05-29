@@ -14,9 +14,9 @@ import { RequestResult } from '../../models/Request';
 
 interface PrivateListProps extends RouteComponentProps<any> {
     bookList: RootState.PrivateList;
-    add: (listItem: PrivateBookListItem) => Promise<void>;
-    remove: (itemId: number) => Promise<void>;
-    update: (item: PrivateBookListItem) => Promise<void>;
+    addItem: (listItem: PrivateBookListItem) => Promise<void>;
+    removeItem: (itemId: number) => Promise<void>;
+    updateItem: (item: PrivateBookListItem) => Promise<void>;
     switchEditMode: (itemId: number) => void;
     getPrivateList: () => Promise<void>;
 }
@@ -33,7 +33,7 @@ class PrivateList extends React.Component<PrivateListProps> {
             <option key={item.value} value={item.value}>{item.text}</option>
         );
         let listItems;
-        let listName = null;
+        let listName = '';
         if(this.props.bookList) {
             listName = this.props.bookList.name;
             if(this.props.bookList.items.length > 0) {
@@ -43,13 +43,13 @@ class PrivateList extends React.Component<PrivateListProps> {
                     <ContextMenu rootId={bookListItemId} menuItems={
                             [
                                 {onClick: () => this.props.switchEditMode(listItem.id), text: 'Edit'},
-                                {onClick: () => this.props.remove(listItem.id), text: 'Remove'}
+                                {onClick: () => this.props.removeItem(listItem.id), text: 'Remove'}
                             ]
                         } />))();
                     return (
                         <BookLI key={listItem.id} listItem={listItem}
                                 shouldStatusSelectorRender={true} options={options}
-                                onSave={this.props.update} id={bookListItemId}
+                                onSave={this.props.updateItem} id={bookListItemId}
                                 contextMenu={contextMenu} onCancel={this.props.switchEditMode} />
                     );
                 });
@@ -59,9 +59,8 @@ class PrivateList extends React.Component<PrivateListProps> {
         }
         return (
                 <div>
-                    <ItemForm onSubmit={this.props.add} />
-                    <h2>{listName}</h2>
-                    <BookUL>
+                    <ItemForm onSubmit={this.props.addItem} />
+                    <BookUL listName={listName}>
                         {listItems}
                     </BookUL>
                 </div>
@@ -84,18 +83,18 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     const bookService = new PrivateBookListService();
     return {
-        add: async (listItem: PrivateBookListItem) => {
+        addItem: async (listItem: PrivateBookListItem) => {
             const result = await bookService.addItem(dispatch, listItem);
             postRequestProcess(result);
         },
-        remove: async (itemId: number) => {
+        removeItem: async (itemId: number) => {
             const result = await bookService.removeItem(dispatch, itemId);
             const castedResult = result as RequestResult<any>;
             if(!castedResult) {
                 postRequestProcess(castedResult);
             }
         },
-        update: async (item: PrivateBookListItem) => {
+        updateItem: async (item: PrivateBookListItem) => {
             const result = await bookService.updateItem(dispatch, item);
             postRequestProcess(result);
         },
