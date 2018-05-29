@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Dapper;
 using ReadingList.Domain.Queries;
-using ReadingList.ReadModel;
+using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
 using PrivateListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
 
@@ -9,9 +9,9 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
 {
     public class GetPrivateListItemQueryHandler : QueryHandler<GetPrivateListItemQuery, PrivateListItemRm>
     {
-        private readonly ReadDbConnection _dbConnection;
+        private readonly IReadDbConnection _dbConnection;
 
-        public GetPrivateListItemQueryHandler(ReadDbConnection dbConnection)
+        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }

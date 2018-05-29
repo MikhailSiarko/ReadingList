@@ -3,17 +3,17 @@ using Dapper;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
-using ReadingList.ReadModel;
+using ReadingList.ReadModel.DbConnection;
 using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
 {   
     public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationData>
     {
-        private readonly ReadDbConnection _dbConnection;
+        private readonly IReadDbConnection _dbConnection;
         private readonly IAuthenticationService _authenticationService;
         private readonly IEncryptionService _encryptionService;
-        public LoginUserQueryHandler(IAuthenticationService authenticationService, ReadDbConnection dbConnection,
+        public LoginUserQueryHandler(IAuthenticationService authenticationService, IReadDbConnection dbConnection,
             IEncryptionService encryptionService)
         {
             _authenticationService = authenticationService;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using ReadingList.Domain.Implementations;
 
 namespace ReadingList.Domain.Absrtactions

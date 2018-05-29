@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Dapper;
 using ReadingList.Domain.Queries;
-using ReadingList.ReadModel;
+using ReadingList.ReadModel.DbConnection;
 using UserRM = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
 {
     public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRM>
     {
-        private readonly ReadDbConnection _dbConnection;
+        private readonly IReadDbConnection _dbConnection;
 
-        public GetUserQueryHandler(ReadDbConnection dbConnection)
+        public GetUserQueryHandler(IReadDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }

@@ -6,6 +6,7 @@ using ReadingList.Domain.MapperProfiles;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.ReadModel;
+using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel;
 
 namespace ReadingList.Domain
@@ -18,7 +19,7 @@ namespace ReadingList.Domain
             services.AddScoped<IEncryptionService, EncryptionService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddDbContext<WriteDbContext>();
-            services.AddScoped<ReadDbConnection>();
+            services.AddScoped<IReadDbConnection, ReadDbConnection>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);
             Mapper.Initialize(conf =>
