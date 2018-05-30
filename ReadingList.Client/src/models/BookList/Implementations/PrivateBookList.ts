@@ -1,9 +1,10 @@
 import { List } from '../Abstractions/List';
-import { PrivateBookListItem } from './PrivateBookListItem';
+import { PrivateBookListItemModel } from './PrivateBookListItem';
 
-export class PrivateBookList implements List<PrivateBookListItem> {
+export class PrivateBookListModel implements List<PrivateBookListItemModel> {
+    isInEditMode: boolean = false;
     name: string;
     id: number;
-    items: PrivateBookListItem[];
+    items: PrivateBookListItemModel[];
     type: number;
 }

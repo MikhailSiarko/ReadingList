@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using ReadingList.Domain.Absrtactions;
 using ReadingList.Domain.Implementations;
 
-namespace ReadingList.Domain.QueryHandlers
+namespace ReadingList.Domain.Abstractions
 {
     public abstract class QueryHandler<TQuery, TResult> : AsyncRequestHandler<TQuery, QueryResult<TResult>> 
         where TQuery : IQuery<TResult>

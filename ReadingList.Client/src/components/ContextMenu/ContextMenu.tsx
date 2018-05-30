@@ -22,6 +22,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
 
     handleContextMenu = (event: MouseEvent) => {
         event.preventDefault();
+        event.stopPropagation();
         this.setState({isVisible: true}, () => {
             const clickX = event.clientX;
             const clickY = event.clientY;

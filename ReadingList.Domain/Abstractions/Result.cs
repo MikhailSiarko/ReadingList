@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Domain.Absrtactions
+﻿namespace ReadingList.Domain.Abstractions
 {
     public abstract class Result
     {

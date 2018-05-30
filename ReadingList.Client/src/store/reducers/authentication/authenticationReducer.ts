@@ -17,7 +17,7 @@ export function authenticationReducer(state: RootState.IdentityState = initialSt
             sessionStorage.removeItem('token');
             return Object.assign({}, state, {
                 isAuthenticated: false,
-                user: undefined
+                user: null
             } as RootState.IdentityState);
         default:
             return state;

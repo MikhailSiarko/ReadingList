@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Awesome.Data.Sql.Builder;
-using Awesome.Data.Sql.Builder.Renderers;
+using Cinch.SqlBuilder;
+using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
 using UserRM = ReadingList.ReadModel.Models.User;
@@ -18,10 +18,10 @@ namespace ReadingList.Domain.QueryHandlers
 
         protected override async Task<UserRM> Handle(GetUserQuery query)
         {
-            var sql = SqlStatements.Select("Id", "Login")
+            var sql = new SqlBuilder().Select("Id", "Login")
                 .From("Users")
                 .Where("Id = @id")
-                .ToSql(new SqlServerSqlRenderer());
+                .ToSql();
 
             return await _dbConnection.QuerySingleAsync<UserRM>(sql, new {id = query.UserId});
         }

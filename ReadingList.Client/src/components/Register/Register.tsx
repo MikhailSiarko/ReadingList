@@ -1,5 +1,6 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.css';
+import PrimaryButton from '../PrimaryButton';
 
 interface RegisterProps {
 }
@@ -53,11 +54,10 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                           hidden={this.state.isPasswordsConfirmed}>Passwords don't confirm</span>
                 </div>
                 <div>
-                    <button ref={(ref) => this.submitButton = ref as HTMLButtonElement}
+                    <PrimaryButton ref={(ref) => this.submitButton = ref as HTMLButtonElement}
                             disabled={!this.state.isPasswordsConfirmed}
-                            className={`${globalStyles.btn} ${this.state.isPasswordsConfirmed 
-                                ? globalStyles.primary : globalStyles.disabled}`}
-                            type="submit">Register</button>
+                            className={`${this.state.isPasswordsConfirmed ? '' : globalStyles.disabled}`}
+                            type="submit">Register</PrimaryButton>
                 </div>
             </div>
         );

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import style from './ItemForm.css';
-import globalStyles from 'src/styles/global.css';
 import { cloneDeep } from 'lodash';
-import { PrivateBookListItem } from '../../../models/BookList/Implementations/PrivateBookListItem';
-import { isNullOrEmpty } from '../../../utils';
+import { PrivateBookListItemModel } from '../../models';
+import { isNullOrEmpty } from '../../utils';
+import Fieldset from '../Fieldset';
+import PrimaryButton from '../PrimaryButton';
 
 interface ItemFormProps {
-    onSubmit: (bookItem: PrivateBookListItem) => void;
+    onSubmit: (bookItem: PrivateBookListItemModel) => void;
 }
 
 interface ItemFormState {
@@ -35,7 +36,7 @@ class ItemForm extends React.Component<ItemFormProps, ItemFormState> {
         const isTitleValid = !isNullOrEmpty(title);
         const isAuthorValid = !isNullOrEmpty(author);
         if(isTitleValid && isAuthorValid) {
-            const item = {title: this.state.title, author: author} as PrivateBookListItem;
+            const item = {title: this.state.title, author: author} as PrivateBookListItemModel;
             this.props.onSubmit(item);
             this.setState({ author: '', title: '', isAuthorValid: true, isTitleValid: true });
         } else {
@@ -46,8 +47,7 @@ class ItemForm extends React.Component<ItemFormProps, ItemFormState> {
 
     render() {
         return (
-            <fieldset className={style['form-fieldset']}>
-                <legend>Add book</legend>
+            <Fieldset className={style['form-fieldset']} legend={'Add book'}>
                 <form onSubmit={this.submitHandler} className={style['add-item-form']}>
                     <div>
                         <input type="text" required={true} onChange={this.changeHandler} value={this.state.title}
@@ -57,10 +57,9 @@ class ItemForm extends React.Component<ItemFormProps, ItemFormState> {
                         <input type="text" required={true} onChange={this.changeHandler} value={this.state.author}
                             name={'author'} placeholder={'Author'} />
                     </div>
-                    <button type={'submit'} className={`${globalStyles.btn} ${globalStyles.primary}`}>Add</button>
+                    <PrimaryButton type={'submit'}>Add</PrimaryButton>
                 </form>
-            </fieldset>
-            
+            </Fieldset>           
         );
     }
 }

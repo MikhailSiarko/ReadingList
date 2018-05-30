@@ -4,8 +4,8 @@ namespace ReadingList.Domain.Services.Authentication
 {
     public class AuthenticationData
     {
-        public string Token { get; set; }
-        public UserRm User { get; set; }
+        public string Token { get; }
+        public UserRm User { get; }
 
         public AuthenticationData(string token, UserRm user)
         {

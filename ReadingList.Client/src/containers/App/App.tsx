@@ -9,8 +9,8 @@ import NavBar from '../../components/NavBar';
 import { Dispatch } from 'redux';
 import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
-import PrivateBookList from '../PrivateList/PrivateList';
-import { bookListAction } from '../../store/actions/bookList';
+import { privateBookListAction } from '../../store/actions/privateBookList';
+import PrivateBookList from '../PrivateBookList';
 
 interface AppProps extends RouteComponentProps<any> {
     identity: RootState.IdentityState;
@@ -57,7 +57,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
         signOut: () => {
-            dispatch(bookListAction.unsetPrivateList());
+            dispatch(privateBookListAction.unsetPrivateList());
             dispatch(authenticationActions.signOut());
         }
     };

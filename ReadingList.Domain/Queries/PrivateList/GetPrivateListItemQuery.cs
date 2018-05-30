@@ -1,4 +1,4 @@
-﻿using ReadingList.Domain.Absrtactions;
+﻿using ReadingList.Domain.Abstractions;
 using PrivateBookListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
 
 namespace ReadingList.Domain.Queries

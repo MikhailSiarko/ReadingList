@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.WriteModel.Models;
 
@@ -10,7 +11,6 @@ namespace ReadingList.WriteModel
         public static void Initialize(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<WriteDbContext>();
-            context.Database.EnsureCreated();
             InitializeRoles(context);
             context.SaveChanges();
         }

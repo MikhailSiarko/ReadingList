@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Awesome.Data.Sql.Builder;
-using Awesome.Data.Sql.Builder.Renderers;
+using Cinch.SqlBuilder;
+using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
@@ -24,13 +24,12 @@ namespace ReadingList.Domain.QueryHandlers
 
         protected override async Task<AuthenticationData> Handle(LoginUserQuery query)
         {
-            var sql = SqlStatements
+            var sql = new SqlBuilder()
                 .Select("Id", "Login", "ProfileId", "(SELECT Name FROM Roles WHERE Id = RoleId) AS Role")
                 .From("Users")
                 .Where("Login = @login")
                 .Where("Password = @password")
-                .ToSql(new SqlServerSqlRenderer());
-
+                .ToSql();
             var user = await _dbConnection.QuerySingleAsync<UserRm>(sql,
                 new {login = query.Login, password = _encryptionService.Encrypt(query.Password)});
             return _authenticationService.Authenticate(user, query);

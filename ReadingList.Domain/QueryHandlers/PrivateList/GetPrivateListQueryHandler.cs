@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Awesome.Data.Sql.Builder;
-using Awesome.Data.Sql.Builder.Renderers;
+using Cinch.SqlBuilder;
+using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
@@ -23,16 +23,13 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
         {
             var listDictionary = new Dictionary<int, ListRM>();
 
-            var sql = SqlStatements.Select("l.Id", "l.Name", "l.OwnerId", "i.Id", "i.ReadingTimeInTicks", "i.Title",
+            var sql = new SqlBuilder().Select("l.Id", "l.Name", "l.OwnerId", "i.Id", "i.ReadingTimeInTicks", "i.Title",
                     "i.Author", "i.Status")
                 .From("BookLists AS l")
-                .LeftOuterJoin(
-                    new TableClause(
-                            "(SELECT Id, Title, Author, BookListId, Status, ReadingTimeInTicks FROM PrivateBookListItems)")
-                        .As("i"), "i.BookListId = l.Id")
+                .LeftJoin("(SELECT Id, Title, Author, BookListId, Status, ReadingTimeInTicks FROM PrivateBookListItems) AS i ON i.BookListId = l.Id")
                 .Where("l.OwnerId = (SELECT Id FROM Users WHERE Login = @login)")
                 .Where("l.Type = @type")
-                .ToSql(new SqlServerSqlRenderer());
+                .ToSql();
             return 
                 await _dbConnection.QueryFirstAsync<ListRM, ItemRM, ListRM>(sql,
                     (list, item) =>

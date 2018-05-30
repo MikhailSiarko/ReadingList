@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { routerReducer } from 'react-router-redux';
 import { authenticationReducer } from './authentication/authenticationReducer';
-import { PrivateBookList } from '../../models/BookList/Implementations/PrivateBookList';
-import { bookListReducer } from './bookList/bookListReducer';
+import { PrivateBookListModel } from '../../models';
+import { privateBookListReducer } from './privateBookList/privateBookListReducer';
 import { loadingReducer } from './loading/loadingReducer';
 
 export type RootState = Readonly<{
@@ -23,15 +23,15 @@ export namespace RootState {
     export type AuthenticatedState = boolean;
     export type IdentityState = {
         isAuthenticated: AuthenticatedState;
-        user: UserState | undefined;
+        user: UserState | null;
     };
-    export type PrivateList = PrivateBookList | null;
+    export type PrivateList = PrivateBookListModel | null;
 }
 
 export const rootReducer = combineReducers<RootState>({
         loading: loadingReducer,
         identity: authenticationReducer,
-        privateList: bookListReducer,
+        privateList: privateBookListReducer,
         router: routerReducer
     }
 );

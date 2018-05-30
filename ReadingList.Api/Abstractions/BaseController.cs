@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Domain.Absrtactions;
+using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Implementations;
 using ReadingList.Domain.Infrastructure.Helpers;
 

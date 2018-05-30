@@ -1,4 +1,4 @@
-﻿using ReadingList.Domain.Absrtactions;
+﻿using ReadingList.Domain.Abstractions;
 
 namespace ReadingList.Domain.Implementations
 {

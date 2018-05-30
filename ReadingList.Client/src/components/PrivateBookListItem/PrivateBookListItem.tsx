@@ -1,23 +1,22 @@
 import * as React from 'react';
-import styles from './BookLI.css';
-import globalStyles from '../../../styles/global.css';
-import { BookStatus } from '../../../models/BookList/Implementations/BookStatus';
-import { ContextMenuProps } from '../../ContextMenu';
-import { PrivateBookListItem } from '../../../models/BookList/Implementations/PrivateBookListItem';
+import styles from './PrivateBookListItem.css';
+import { ContextMenuProps } from '../../components/ContextMenu';
+import { PrivateBookListItemModel, BookStatus } from '../../models';
 import { cloneDeep } from 'lodash';
+import PrimaryButton from '../PrimaryButton';
+import RedButton from '../RedButton';
 
 interface BookLIProps {
     id?: string;
-    listItem: PrivateBookListItem;
-    shouldStatusSelectorRender: boolean;
-    onSave: (item: PrivateBookListItem) => void;
+    listItem: PrivateBookListItemModel;
+    onSave: (item: PrivateBookListItemModel) => void;
     onCancel: (itemId: number) => void;
     options?: JSX.Element[];
     contextMenu?: React.ReactElement<ContextMenuProps>;
 }
 
 interface BookListState {
-    listItem: PrivateBookListItem;
+    listItem: PrivateBookListItemModel;
 }
 
 class BookLI extends React.Component<BookLIProps, BookListState> {
@@ -67,24 +66,17 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
                                 </div>
                             </div>
                         </div>
-                        {
-                            this.props.shouldStatusSelectorRender
-                                ?
-                                <div className={styles['status']}>
-                                    <p>Status:</p>
-                                    <select onChange={this.changeHandler}
-                                            name="status" value={this.state.listItem.status}>
-                                        {this.props.options}
-                                    </select>
-                                </div>
-                                : null
-                        }
+                        <div className={styles['status']}>
+                            <p>Status:</p>
+                            <select onChange={this.changeHandler}
+                                    name="status" value={this.state.listItem.status}>
+                                {this.props.options}
+                            </select>
+                        </div>
                         <div>
                             <div>
-                                <button type="submit" 
-                                    className={`${globalStyles.btn} ${globalStyles.primary}`}>Save</button>
-                                <button className={`${globalStyles.btn} ${globalStyles.white}`}
-                                    onClick={this.cancelHandler}>Cancel</button>
+                                <PrimaryButton type="submit">Save</PrimaryButton>
+                                <RedButton onClick={this.cancelHandler}>Cancel</RedButton>
                             </div>
                         </div>
                     </form>
@@ -98,14 +90,9 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
                             <q>{this.props.listItem.title}</q> by {this.props.listItem.author}
                         </h5>
                     </div>
-                {
-                    this.props.shouldStatusSelectorRender
-                        ?
-                        <div className={styles['status']}>
-                            <p>Status: {BookStatus[this.props.listItem.status]}</p>
-                        </div>
-                        : null
-                }
+                    <div className={styles['status']}>
+                        <p>Status: {BookStatus[this.props.listItem.status]}</p>
+                    </div>
                 {
                     this.props.contextMenu
                 }

@@ -3,13 +3,12 @@ import { Route, RouteComponentProps } from 'react-router';
 import Register from '../../components/Register';
 import Login from '../../components/Login';
 import { connect } from 'react-redux';
-import { AuthenticationService } from '../../services';
+import { AuthenticationService, PrivateBookListService } from '../../services';
 import { Credentials, AuthenticationData } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import { RequestResult } from '../../models/Request';
+import { RequestResult } from '../../models';
 import AccountForm from '../../components/AccountForm';
-import { PrivateBookListService } from '../../services/PrivateBookListService';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -61,8 +60,8 @@ function postRequestProcess(result: RequestResult<any>, ownProps: AccountProps) 
 async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
         ownProps: AccountProps) {
     if(result.isSucceed) {
-        const bookService = new PrivateBookListService();
-        const bookResult = await bookService.getList(dispatch);
+        const bookService = new PrivateBookListService(dispatch);
+        const bookResult = await bookService.getList();
         postRequestProcess(bookResult, ownProps);
     } else {
         postRequestProcess(result, ownProps);

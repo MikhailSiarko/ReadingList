@@ -1,5 +1,5 @@
 import * as React from 'react';
-import globalStyles from '../../styles/global.css';
+import PrimaryButton from '../PrimaryButton';
 
 interface LoginProps {
 }
@@ -38,7 +38,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                            value={this.state.password} onChange={this.changeHandler} />
                 </div>
                 <div>
-                    <button className={`${globalStyles.btn} ${globalStyles.primary}`} type="submit">Login</button>
+                    <PrimaryButton type="submit">Login</PrimaryButton>
                 </div>
             </div>
         );

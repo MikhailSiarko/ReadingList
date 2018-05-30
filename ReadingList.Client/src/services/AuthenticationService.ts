@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { Credentials } from '../store/actions/authentication/infrastructure';
 import { Dispatch } from 'redux';
 import { RootState } from '../store/reducers';
-import { RequestResult } from '../models/Request';
+import { RequestResult } from '../models';
 import { authenticationActions, AuthenticationData } from '../store/actions/authentication';
 import { loadingActions } from '../store/actions/loading';
 import ApiService from './ApiService';

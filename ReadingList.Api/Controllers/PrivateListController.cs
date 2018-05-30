@@ -30,13 +30,8 @@ namespace ReadingList.Api.Controllers
             
             if(!result.IsSucceed)
                 return StatusCode(500, result);
-
-            var queryResult = await AskAsync(new GetPrivateListQuery(User.Identity.Name));
             
-            if(queryResult.IsSucceed)
-                return Ok(queryResult);
-            
-            return NotFound(queryResult);
+            return Ok();
         }
 
         [HttpPost("items")]

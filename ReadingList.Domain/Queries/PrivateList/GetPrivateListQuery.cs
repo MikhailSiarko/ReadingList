@@ -1,4 +1,4 @@
-﻿using ReadingList.Domain.Absrtactions;
+﻿using ReadingList.Domain.Abstractions;
 using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Queries

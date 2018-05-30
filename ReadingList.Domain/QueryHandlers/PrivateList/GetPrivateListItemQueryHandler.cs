@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Awesome.Data.Sql.Builder;
-using Awesome.Data.Sql.Builder.Renderers;
+using Cinch.SqlBuilder;
+using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
@@ -19,12 +19,12 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
 
         protected override async Task<PrivateListItemRm> Handle(GetPrivateListItemQuery query)
         {
-            var sql = SqlStatements
+            var sql = new SqlBuilder()
                 .Select("Id", "Title", "Author", "Status", "ReadingTimeInTicks")
                 .From("PrivateBookListItems")
                 .Where(
                     "BookListId = (SELECT Id From BookLists WHERE OwnerId = (SELECT Id FROM Users WHERE Login = @login) AND Type = @type) AND Title = @title AND Author = @author")
-                .ToSql(new SqlServerSqlRenderer());
+                .ToSql();
             return await _dbConnection.QuerySingleAsync<PrivateListItemRm>(sql, new
             {
                 login = query.Login,

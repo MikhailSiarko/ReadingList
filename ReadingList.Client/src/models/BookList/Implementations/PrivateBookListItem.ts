@@ -1,6 +1,6 @@
 import { ListItem } from '../Abstractions/ListItem';
 
-export class PrivateBookListItem implements ListItem {
+export class PrivateBookListItemModel implements ListItem {
     readingTimeInTicks: number;
     id: number;
     status: string;

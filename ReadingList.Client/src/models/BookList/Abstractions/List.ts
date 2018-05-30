@@ -5,4 +5,5 @@ export interface List<T extends ListItem> {
     name: string;
     items: T[];
     type: number;
+    isInEditMode: boolean;
 }

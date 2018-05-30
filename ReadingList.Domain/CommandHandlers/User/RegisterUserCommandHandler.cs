@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using ReadingList.Domain.Absrtactions;
+using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.WriteModel;
