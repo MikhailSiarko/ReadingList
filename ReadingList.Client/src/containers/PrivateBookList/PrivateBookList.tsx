@@ -98,20 +98,25 @@ class PrivateBookUL extends React.Component<Props> {
                 );
             } else {
                 list = (
-                    <div>
-                        <ItemForm onSubmit={this.props.addItem} />
-                        <Fieldset id={bookListId} className={styles['list-fieldset']} legend={this.props.bookList.name}>
-                            <ul className={styles['book-list']}>
-                                {listItems ? listItems : <h3>Here are no book yet</h3>}
-                            </ul>
-                            {bookListContextMenu}
-                        </Fieldset>
-                    </div>
+                    <Fieldset id={bookListId} className={styles['list-fieldset']} legend={this.props.bookList.name}>
+                        <ul className={styles['book-list']}>
+                            {listItems ? listItems : <h3>Here are no book yet</h3>}
+                        </ul>
+                        {bookListContextMenu}
+                    </Fieldset>
                 );
             }
 
         }
-        return list ? list : 'Sorry no list detected';
+        return (
+            <div>
+                {
+                    this.props.bookList && !this.props.bookList.isInEditMode 
+                        ? <ItemForm onSubmit={this.props.addItem} /> : null
+                }               
+                {list}
+            </div>
+        );
     }
 }
 

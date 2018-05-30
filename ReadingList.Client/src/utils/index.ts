@@ -3,7 +3,7 @@ export function failed(error: any) {
 }
 
 export function setAuthHeader() {
-  let token = sessionStorage.getItem('token');
+  let token = sessionStorage.getItem('reading_list');
   if (token) {
     return { 'Authorization': 'Bearer ' + token };
   } else {

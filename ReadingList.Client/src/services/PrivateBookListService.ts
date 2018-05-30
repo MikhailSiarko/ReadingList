@@ -8,7 +8,7 @@ import { PrivateBookListModel, PrivateBookListItemModel, RequestResult } from '.
 import ApiService from './ApiService';
 
 export class PrivateBookListService extends ApiService {
-    private readonly dispatch: Dispatch<RootState>;
+    private dispatch: Dispatch<RootState>;
     constructor(dispatch: Dispatch<RootState>) {
         super();
         this.dispatch = dispatch;
@@ -17,15 +17,15 @@ export class PrivateBookListService extends ApiService {
         const requestPromise = this.configureRequest(ApiConfiguration.PRIVATE_LIST, 'GET');
         return requestPromise
             .then(this.onGetListSuccess())
-            .catch(this.onError);
+            .catch(this.onError());
     }
 
     public addItem(item: PrivateBookListItemModel) {
         const requestPromise = this.configureRequest(`${ApiConfiguration.PRIVATE_LIST_ITEMS}`,
             'POST', {title: item.title, author: item.author});
         return requestPromise
-            .then(this.onAddItemSuccess)
-            .catch(this.onError);
+            .then(this.onAddItemSuccess())
+            .catch(this.onError());
     }
 
     public updateItem(item: PrivateBookListItemModel) {
@@ -38,7 +38,7 @@ export class PrivateBookListService extends ApiService {
             });
         return requestPromise
             .then(this.onUpdateItemSuccess())
-            .catch(this.onError);
+            .catch(this.onError());
     }
 
     public removeItem(id: number) {
@@ -47,7 +47,7 @@ export class PrivateBookListService extends ApiService {
             'DELETE');
         return requestPromise
             .then(this.onDeleteItemSuccess(id))
-            .catch(this.onError);
+            .catch(this.onError());
     }
 
     public updateListName(name: string) {
@@ -55,7 +55,7 @@ export class PrivateBookListService extends ApiService {
             `${ApiConfiguration.PRIVATE_LIST}`, 'PUT', {name});
         return requestPromise
             .then(this.onListNameUpdate(name))
-            .catch(this.onError);
+            .catch(this.onError());
     }
 
     private onListNameUpdate(name: string) {
@@ -76,11 +76,14 @@ export class PrivateBookListService extends ApiService {
         };
     }
 
-    private onAddItemSuccess(response: AxiosResponse) {
-        const result = response.data as RequestResult<PrivateBookListItemModel>;
-        this.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItemModel));
-        this.dispatch(loadingActions.end());
-        return result;
+    private onAddItemSuccess() {
+        const that = this;
+        return function(response: AxiosResponse) {
+            const result = response.data as RequestResult<PrivateBookListItemModel>;
+            that.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItemModel));
+            that.dispatch(loadingActions.end());
+            return result;
+        };
     }
 
     private onUpdateItemSuccess() {
@@ -101,9 +104,12 @@ export class PrivateBookListService extends ApiService {
         };
     }
 
-    private onError(error: AxiosResponse) {
-        const result = error.data as RequestResult<never>;
-        this.dispatch(loadingActions.end());
-        return result;
+    private onError() {
+        const that = this;
+        return function(error: AxiosResponse) {
+            const result = error.data as RequestResult<never>;
+            that.dispatch(loadingActions.end());
+            return result;
+        };
     }
 }
