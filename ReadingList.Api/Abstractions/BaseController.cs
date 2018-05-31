@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Domain.Abstractions;
-using ReadingList.Domain.Implementations;
+using ReadingList.Domain.Commands;
 using ReadingList.Domain.Infrastructure.Helpers;
+using ReadingList.Domain.Queries;
 
 namespace ReadingList.Api.Abstractions
 {

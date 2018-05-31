@@ -1,6 +1,6 @@
-﻿using ReadingList.Domain.Abstractions;
+﻿using ReadingList.Domain.Infrastructure;
 
-namespace ReadingList.Domain.Implementations
+namespace ReadingList.Domain.Commands
 {
     public class CommandResult : Result
     {

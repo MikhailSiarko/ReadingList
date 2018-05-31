@@ -1,6 +1,4 @@
-﻿using ReadingList.Domain.Abstractions;
-
-namespace ReadingList.Domain.Commands
+﻿namespace ReadingList.Domain.Commands
 {
     public class RegisterUserCommand : ICommand
     {

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;

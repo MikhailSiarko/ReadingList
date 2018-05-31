@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Cinch.SqlBuilder;
-using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;

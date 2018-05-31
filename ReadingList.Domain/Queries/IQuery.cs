@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using ReadingList.Domain.Implementations;
 
-namespace ReadingList.Domain.Abstractions
+namespace ReadingList.Domain.Queries
 {
     public interface IQuery<TResult> : IRequest<QueryResult<TResult>>
     { 

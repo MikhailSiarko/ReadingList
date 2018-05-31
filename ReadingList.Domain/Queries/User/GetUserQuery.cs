@@ -1,5 +1,4 @@
-﻿using ReadingList.Domain.Abstractions;
-using UserRm = ReadingList.ReadModel.Models.User;
+﻿using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.Queries
 {

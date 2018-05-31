@@ -1,6 +1,4 @@
-﻿using ReadingList.Domain.Abstractions;
-
-namespace ReadingList.Domain.Commands.PrivateList
+﻿namespace ReadingList.Domain.Commands.PrivateList
 {
     public class UpdatePrivateListItemCommand : ICommand
     {

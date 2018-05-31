@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using ReadingList.Domain.Implementations;
+using ReadingList.Domain.Commands;
 
-namespace ReadingList.Domain.Abstractions
+namespace ReadingList.Domain.CommandHandlers
 {
     public abstract class CommandHandler<TCommand> : AsyncRequestHandler<TCommand, CommandResult>
         where TCommand : ICommand

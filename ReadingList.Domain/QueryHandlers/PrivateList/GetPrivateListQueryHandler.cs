@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cinch.SqlBuilder;
-using ReadingList.Domain.Abstractions;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
