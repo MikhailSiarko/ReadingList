@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReadingList.ReadModel\ReadingList.ReadModel.csproj" />
+    <ProjectReference Include="..\ReadingList.Resources\ReadingList.Resources.csproj" />
     <ProjectReference Include="..\ReadingList.WriteModel\ReadingList.WriteModel.csproj" />
   </ItemGroup>
 </Project>

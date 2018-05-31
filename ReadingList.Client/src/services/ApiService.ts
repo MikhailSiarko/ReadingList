@@ -15,10 +15,16 @@ abstract class ApiService {
         axiosInstance.interceptors.request.use(config => {
             this.dispatch(loadingActions.start());
             return config;
+        }, error => {
+            this.dispatch(loadingActions.end());
+            return Promise.reject(error);
         });
         axiosInstance.interceptors.response.use(response => {
             this.dispatch(loadingActions.end());
             return response;
+        }, error => {
+            this.dispatch(loadingActions.end());
+            return Promise.reject(error);
         });
         return axiosInstance.request({
             url: url,

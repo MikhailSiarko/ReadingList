@@ -8,6 +8,8 @@ using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain.MapperProfiles;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
+using ReadingList.Domain.Services.Sql;
+using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel;
 
@@ -17,8 +19,9 @@ namespace ReadingList.Domain
     {
         public static IServiceCollection AddDomainModule(this IServiceCollection services)
         {
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IEncryptionService, EncryptionService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IEncryptionService, EncryptionService>();
+            services.AddTransient<IUserSqlService, UserSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddDbContext<WriteDbContext>();
             services.AddScoped<IDbConnection, SqlConnection>(provider =>

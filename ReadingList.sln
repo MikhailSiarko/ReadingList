@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.WriteModel", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Tests", "ReadingList.Tests\ReadingList.Tests.csproj", "{C58300A1-ED66-4A69-819E-B5B39A400336}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Resources", "ReadingList.Resources\ReadingList.Resources.csproj", "{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,5 +88,17 @@ Global
 		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x64.Build.0 = Release|Any CPU
 		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x86.ActiveCfg = Release|Any CPU
 		{C58300A1-ED66-4A69-819E-B5B39A400336}.Release|x86.Build.0 = Release|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Debug|x64.Build.0 = Debug|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Debug|x86.Build.0 = Debug|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x64.ActiveCfg = Release|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x64.Build.0 = Release|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -18,12 +18,12 @@ namespace ReadingList.ReadModel.DbConnection
 
         public async Task<T> QuerySingleAsync<T>(string query, object param = null)
         {
-            return await _dbConnection.QuerySingleAsync<T>(query, param);
+            return await _dbConnection.QuerySingleOrDefaultAsync<T>(query, param);
         }
         
         public async Task<T> QueryFirstAsync<T>(string query, object param = null)
         {
-            return  await _dbConnection.QueryFirstAsync<T>(query, param);
+            return  await _dbConnection.QueryFirstOrDefaultAsync<T>(query, param);
         }
 
         public async Task<TR> QuerySingleAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
