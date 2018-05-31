@@ -7,6 +7,7 @@ namespace ReadingList.WriteModel.Models
         public string Title { get; set; }
         public string Author { get; set; }
         public BookList BookList { get; set; }
+        [IgnoreUpdate]
         public int BookListId { get; set; }
     }
 }

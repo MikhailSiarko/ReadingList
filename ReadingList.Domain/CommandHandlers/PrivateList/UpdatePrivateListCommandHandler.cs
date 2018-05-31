@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -22,7 +23,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 .SingleAsync();
             var list = await _dbContext.BookLists.SingleAsync(
                 l => l.OwnerId == userId && l.Type == BookListType.Private);
-            list.Name = command.Name;
+            list.Update(command);
             await _dbContext.SaveChangesAsync();
         }
     }
