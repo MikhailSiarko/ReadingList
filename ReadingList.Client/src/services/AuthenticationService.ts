@@ -5,38 +5,37 @@ import { Dispatch } from 'redux';
 import { RootState } from '../store/reducers';
 import { RequestResult } from '../models';
 import { authenticationActions, AuthenticationData } from '../store/actions/authentication';
-import { loadingActions } from '../store/actions/loading';
 import ApiService from './ApiService';
 
 export class AuthenticationService extends ApiService {
-    login(dispatch: Dispatch<RootState>, credentials: Credentials) {
+    constructor(dispatch: Dispatch<RootState>) {
+        super(dispatch);
+    }
+    login(credentials: Credentials) {
         const requestPromise = this.configureRequest(ApiConfiguration.LOGIN, 'POST', credentials);
         return requestPromise
-            .then(this.onSuccess(dispatch))
-            .catch(this.onError(dispatch));
+            .then(this.onSuccess())
+            .catch(this.onError);
     }
 
-    register(dispatch: Dispatch<RootState>, credentials: Credentials) {
+    register(credentials: Credentials) {
         const requestPromise = this.configureRequest(ApiConfiguration.REGISTER, 'POST', credentials);
         return requestPromise
-            .then(this.onSuccess(dispatch))
-            .catch(this.onError(dispatch));
+            .then(this.onSuccess())
+            .catch(this.onError);
     }
 
-    private onSuccess(dispatch: Dispatch<RootState>) {
+    private onSuccess() {
+        const dispatch = this.dispatch;
         return function(response: AxiosResponse) {
             const result = response.data as RequestResult<AuthenticationData>;
             dispatch(authenticationActions.signIn(result.data));
-            dispatch(loadingActions.end());
             return result;
         };
     }
 
-    private onError(dispatch: Dispatch<RootState>) {
-        return function(error: AxiosResponse) {
-            const result = error.data as RequestResult<never>;
-            dispatch(loadingActions.end());
-            return result;
-        };
+    private onError(error: AxiosResponse) {
+        const result = error.data as RequestResult<never>;
+        return result;
     }
 }

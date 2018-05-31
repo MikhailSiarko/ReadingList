@@ -69,14 +69,14 @@ async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestRes
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProps) {
-    const authService = new AuthenticationService();
+    const authService = new AuthenticationService(dispatch);
     return {
         login: async (credentials: Credentials) => {
-            const result = await authService.login(dispatch, credentials);
+            const result = await authService.login(credentials);
             await postAuthProcess(dispatch, result, ownProps);
         },
         register: async (credentials: Credentials) => {
-            const result = await authService.register(dispatch, credentials);
+            const result = await authService.register(credentials);
             await postAuthProcess(dispatch, result, ownProps);
         }
     };

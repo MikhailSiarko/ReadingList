@@ -13,7 +13,7 @@ class Register extends React.Component<RegisterProps, RegisterState> {
     private password: HTMLInputElement;
     private confirmPassword: HTMLInputElement;
     private email: HTMLInputElement;
-    private submitButton: HTMLButtonElement;
+    private vaidationSpan: HTMLSpanElement;
 
     constructor(props: RegisterProps) {
         super(props);
@@ -22,14 +22,21 @@ class Register extends React.Component<RegisterProps, RegisterState> {
 
     validationChangeHandler = () => {
         if(this.password && this.confirmPassword) {
+            const submitButton = document.getElementById('submit-button');
             if(this.confirmPassword.value === this.password.value) {
-                if(this.submitButton) {
-                    this.setState({isPasswordsConfirmed: true});
+                if(submitButton) {
+                    submitButton.classList.remove(globalStyles.disabled);
                 }
+                this.setState({isPasswordsConfirmed: true});
+                this.confirmPassword.classList.remove(globalStyles['invalid-input']);
+                this.vaidationSpan.classList.remove(globalStyles['input-validation-message']);
             } else {
-                if(this.submitButton) {
-                    this.setState({isPasswordsConfirmed: false});
+                if(submitButton) {
+                    submitButton.classList.add(globalStyles.disabled);
                 }
+                this.setState({isPasswordsConfirmed: false});
+                this.confirmPassword.classList.add(globalStyles['invalid-input']);
+                this.vaidationSpan.classList.add(globalStyles['input-validation-message']);
             }
         }
     }
@@ -48,14 +55,12 @@ class Register extends React.Component<RegisterProps, RegisterState> {
                 <div>
                     <input type="password" name="confirmPassword" placeholder="Confirm Password" required={true}
                            ref={(ref) => this.confirmPassword = ref as HTMLInputElement}
-                           onChange={this.validationChangeHandler}
-                           className={this.state.isPasswordsConfirmed ? '' : globalStyles['invalid-input']}/>
-                    <span className={this.state.isPasswordsConfirmed ? '' : globalStyles['input-validation-message']}
+                           onChange={this.validationChangeHandler} />
+                    <span ref={span => this.vaidationSpan = span as HTMLSpanElement}
                           hidden={this.state.isPasswordsConfirmed}>Passwords don't confirm</span>
                 </div>
                 <div>
-                    <PrimaryButton ref={(ref) => this.submitButton = ref as HTMLButtonElement}
-                            disabled={!this.state.isPasswordsConfirmed}
+                    <PrimaryButton id={'submit-button'} disabled={!this.state.isPasswordsConfirmed}
                             className={`${this.state.isPasswordsConfirmed ? '' : globalStyles.disabled}`}
                             type="submit">Register</PrimaryButton>
                 </div>

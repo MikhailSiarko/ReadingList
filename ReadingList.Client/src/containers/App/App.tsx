@@ -11,8 +11,10 @@ import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import PrivateBookList from '../PrivateBookList';
+import Spinner from '../../components/Spinner';
 
 interface AppProps extends RouteComponentProps<any> {
+    loading: RootState.LoadingState;
     identity: RootState.IdentityState;
     signOut: () => void;
 }
@@ -29,12 +31,13 @@ class App extends React.Component<AppProps> {
                 {text: 'Logout', href: '', action: this.signOutHandler}                
             ]
             : [
-                {text: 'Login', href: '/account/LOGIN'},
-                {text: 'Register', href: '/account/REGISTER'}
+                {text: 'Login', href: '/account/login'},
+                {text: 'Register', href: '/account/register'}
             ];
 
         return (
             <div>
+                <Spinner loading={this.props.loading} />
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>
@@ -49,9 +52,10 @@ class App extends React.Component<AppProps> {
 }
 
 function mapStateToProps(state: RootState) {
-  return {
-    identity: state.identity
-  };
+    return {
+        loading: state.loading,
+        identity: state.identity
+    };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
