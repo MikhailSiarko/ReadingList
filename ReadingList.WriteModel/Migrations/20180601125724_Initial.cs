@@ -10,20 +10,6 @@ namespace ReadingList.WriteModel.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Books",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Author = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Books", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -77,6 +63,27 @@ namespace ReadingList.WriteModel.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Author = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -94,6 +101,30 @@ namespace ReadingList.WriteModel.Migrations
                         name: "FK_Users_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookTags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(nullable: false),
+                    BookId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookTags", x => new { x.TagId, x.BookId });
+                    table.ForeignKey(
+                        name: "FK_BookTags_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -164,17 +195,39 @@ namespace ReadingList.WriteModel.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SharedBookListItemTags",
+                columns: table => new
+                {
+                    SharedBookListItemId = table.Column<int>(nullable: false),
+                    TagId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SharedBookListItemTags", x => new { x.SharedBookListItemId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_SharedBookListItemTags_SharedBookListItems_SharedBookListItemId",
+                        column: x => x.SharedBookListItemId,
+                        principalTable: "SharedBookListItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SharedBookListItemTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BookLists_OwnerId",
                 table: "BookLists",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Author",
+                name: "IX_Books_CategoryId",
                 table: "Books",
-                column: "Author",
-                unique: true,
-                filter: "[Author] IS NOT NULL");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_Title",
@@ -182,6 +235,18 @@ namespace ReadingList.WriteModel.Migrations
                 column: "Title",
                 unique: true,
                 filter: "[Title] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookTags_BookId",
+                table: "BookTags",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PrivateBookListItems_BookListId",
@@ -208,6 +273,18 @@ namespace ReadingList.WriteModel.Migrations
                 column: "BookListId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SharedBookListItemTags_TagId",
+                table: "SharedBookListItemTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_Name",
+                table: "Tags",
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Login",
                 table: "Users",
                 column: "Login",
@@ -223,10 +300,7 @@ namespace ReadingList.WriteModel.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
+                name: "BookTags");
 
             migrationBuilder.DropTable(
                 name: "PrivateBookListItems");
@@ -235,10 +309,19 @@ namespace ReadingList.WriteModel.Migrations
                 name: "Roles");
 
             migrationBuilder.DropTable(
+                name: "SharedBookListItemTags");
+
+            migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
                 name: "SharedBookListItems");
 
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "BookLists");

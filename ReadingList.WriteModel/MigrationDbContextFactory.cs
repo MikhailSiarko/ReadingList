@@ -6,9 +6,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace ReadingList.WriteModel
 {
-    public class MigrationDbContextFactory : IDesignTimeDbContextFactory<MigrationDbContext>
+    public class MigrationDbContextFactory : IDesignTimeDbContextFactory<WriteDbContext>
     {
-        public MigrationDbContext CreateDbContext(string[] args)
+        public WriteDbContext CreateDbContext(string[] args)
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile(Path.Combine(
@@ -16,9 +16,9 @@ namespace ReadingList.WriteModel
                         .Single(d => d.Name == "ReadingList.Api").FullName,
                     "appsettings.json"));
             var configuration = builder.Build();
-            var optionsBuilder = new DbContextOptionsBuilder<MigrationDbContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<WriteDbContext>();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
-            return new MigrationDbContext(optionsBuilder.Options);
+            return new WriteDbContext(optionsBuilder.Options);
         }
     }
 }

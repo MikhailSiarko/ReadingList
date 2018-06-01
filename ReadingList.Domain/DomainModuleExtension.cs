@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Authentication.AuthenticationOptions;
@@ -23,7 +24,8 @@ namespace ReadingList.Domain
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddTransient<IUserSqlService, UserSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
-            services.AddDbContext<WriteDbContext>();
+            services.AddDbContext<WriteDbContext>((provider, builder) =>
+                builder.UseSqlServer(provider.GetService<IConfiguration>().GetConnectionString("Default")));
             services.AddScoped<IDbConnection, SqlConnection>(provider =>
                 new SqlConnection(provider.GetService<IConfiguration>().GetConnectionString("Default")));
             services.AddScoped<IReadDbConnection, ReadDbConnection>();

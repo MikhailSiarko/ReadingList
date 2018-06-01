@@ -11,11 +11,10 @@ using System;
 
 namespace ReadingList.WriteModel.Migrations
 {
-    [DbContext(typeof(MigrationDbContext))]
-    [Migration("20180528072946_Initial")]
-    partial class Initial
+    [DbContext(typeof(WriteDbContext))]
+    partial class WriteDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,13 +28,13 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.Property<string>("Author");
 
+                    b.Property<int>("CategoryId");
+
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Author")
-                        .IsUnique()
-                        .HasFilter("[Author] IS NOT NULL");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("Title")
                         .IsUnique()
@@ -73,7 +72,37 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ReadingList.WriteModel.Models.HelpEntities.BookTag", b =>
+                {
+                    b.Property<int>("TagId");
+
+                    b.Property<int>("BookId");
+
+                    b.HasKey("TagId", "BookId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("BookTags");
+                });
+
+            modelBuilder.Entity("ReadingList.WriteModel.Models.HelpEntities.SharedBookListItemTag", b =>
+                {
+                    b.Property<int>("SharedBookListItemId");
+
+                    b.Property<int>("TagId");
+
+                    b.HasKey("SharedBookListItemId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("SharedBookListItemTags");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.PrivateBookListItem", b =>
@@ -118,6 +147,24 @@ namespace ReadingList.WriteModel.Migrations
                     b.ToTable("Profiles");
                 });
 
+            modelBuilder.Entity("ReadingList.WriteModel.Models.ReadingJournalRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ItemId");
+
+                    b.Property<DateTime>("StatusChangedDate");
+
+                    b.Property<int>("StatusSetTo");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("ReadingJournalRecords");
+                });
+
             modelBuilder.Entity("ReadingList.WriteModel.Models.Role", b =>
                 {
                     b.Property<int>("Id");
@@ -160,6 +207,10 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
+
                     b.ToTable("Tags");
                 });
 
@@ -187,6 +238,14 @@ namespace ReadingList.WriteModel.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ReadingList.WriteModel.Models.Book", b =>
+                {
+                    b.HasOne("ReadingList.WriteModel.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("ReadingList.WriteModel.Models.BookList", b =>
                 {
                     b.HasOne("ReadingList.WriteModel.Models.User", "Owner")
@@ -195,11 +254,45 @@ namespace ReadingList.WriteModel.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("ReadingList.WriteModel.Models.HelpEntities.BookTag", b =>
+                {
+                    b.HasOne("ReadingList.WriteModel.Models.Book", "Book")
+                        .WithMany("BookTags")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ReadingList.WriteModel.Models.Tag", "Tag")
+                        .WithMany("BookTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ReadingList.WriteModel.Models.HelpEntities.SharedBookListItemTag", b =>
+                {
+                    b.HasOne("ReadingList.WriteModel.Models.SharedBookListItem", "SharedBookListItem")
+                        .WithMany("SharedBookListItemTags")
+                        .HasForeignKey("SharedBookListItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ReadingList.WriteModel.Models.Tag", "Tag")
+                        .WithMany("SharedBookListItemTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("ReadingList.WriteModel.Models.PrivateBookListItem", b =>
                 {
                     b.HasOne("ReadingList.WriteModel.Models.BookList", "BookList")
                         .WithMany()
                         .HasForeignKey("BookListId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ReadingList.WriteModel.Models.ReadingJournalRecord", b =>
+                {
+                    b.HasOne("ReadingList.WriteModel.Models.PrivateBookListItem", "Item")
+                        .WithMany("ReadingJournalRecords")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

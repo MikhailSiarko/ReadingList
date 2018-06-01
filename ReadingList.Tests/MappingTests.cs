@@ -19,7 +19,6 @@ namespace ReadingList.Tests
         {
             var shared = new SharedBookListDto
             {
-                Category = "Fantasy",
                 Id = 1,
                 Name = "My Shared List",
                 OwnerId = 2,

@@ -16,7 +16,6 @@ namespace ReadingList.Domain.Infrastructure.Converters
                 Name = source.Name,
                 OwnerId = source.OwnerId,
                 Type = source.Type,
-                Category = deserialized.Category,
                 Tags = deserialized.Tags
             };
         }

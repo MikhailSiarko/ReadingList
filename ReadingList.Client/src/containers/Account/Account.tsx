@@ -9,6 +9,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { RequestResult } from '../../models';
 import AccountForm from '../../components/AccountForm';
+import { isNullOrEmpty } from '../../utils';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -16,15 +17,10 @@ interface AccountProps extends RouteComponentProps<any> {
 }
 
 class Account extends React.Component<AccountProps> {
-    private static processSubmit(email: string, password: string, action: (credentials: Credentials) => void) {
-        if(Account.validateCredentials(email, password)) {
-            action(new Credentials(email, password));
-        }
+    private static validateCredentials(email: string, password: string, confirmPassword?: string) {
+        return isNullOrEmpty(email) || !isNullOrEmpty(password) || !isNullOrEmpty(confirmPassword);
     }
 
-    private static validateCredentials(email: string, password: string) {
-        return email !== '' || password !== '';
-    }
     public submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
@@ -32,9 +28,9 @@ class Account extends React.Component<AccountProps> {
         const password = (form.elements.namedItem('password') as HTMLInputElement).value;
         const confirmPassword = form.elements.namedItem('confirmPassword') as HTMLInputElement;
         if(confirmPassword === null) {
-            Account.processSubmit(email, password, this.props.login);
+            this.submitLogin(email, password);
         } else {
-            Account.processSubmit(email, password, this.props.register);
+            this.submitRegister(email, password, confirmPassword.value);
         }
     }
 
@@ -46,6 +42,17 @@ class Account extends React.Component<AccountProps> {
             </AccountForm>
         );
         return <div>{account}</div>;
+    }
+
+    private submitLogin(email: string, password: string) {
+        if(Account.validateCredentials(email, password)) {
+            this.props.login(new Credentials(email, password));
+        }
+    }
+    private submitRegister(email: string, password: string, confirmPassword: string) {
+        if(Account.validateCredentials(email, password)) {
+            this.props.register(new Credentials(email, password, confirmPassword));
+        }
     }
 }
 
