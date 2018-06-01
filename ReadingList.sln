@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.ReadModel", "ReadingList.ReadModel\ReadingList.ReadModel.csproj", "{8CBB2B06-CFD1-4FE8-949F-08BCE276B0C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.ReadModel", "ReadingList.ReadModel\ReadingList.ReadModel.csproj", "{8CBB2B06-CFD1-4FE8-949F-08BCE276B0C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Domain", "ReadingList.Domain\ReadingList.Domain.csproj", "{BFFE4517-EEC9-4D52-AC25-A312A26ED5B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Domain", "ReadingList.Domain\ReadingList.Domain.csproj", "{BFFE4517-EEC9-4D52-AC25-A312A26ED5B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Api", "ReadingList.Api\ReadingList.Api.csproj", "{7BC5E5CF-07DB-4014-AB16-424E29F70911}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Api", "ReadingList.Api\ReadingList.Api.csproj", "{7BC5E5CF-07DB-4014-AB16-424E29F70911}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.WriteModel", "ReadingList.WriteModel\ReadingList.WriteModel.csproj", "{4BF05278-BE82-401A-817E-96B813A010B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.WriteModel", "ReadingList.WriteModel\ReadingList.WriteModel.csproj", "{4BF05278-BE82-401A-817E-96B813A010B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Tests", "ReadingList.Tests\ReadingList.Tests.csproj", "{C58300A1-ED66-4A69-819E-B5B39A400336}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Tests", "ReadingList.Tests\ReadingList.Tests.csproj", "{C58300A1-ED66-4A69-819E-B5B39A400336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Resources", "ReadingList.Resources\ReadingList.Resources.csproj", "{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Resources", "ReadingList.Resources\ReadingList.Resources.csproj", "{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ReadingList.Client", "ReadingList.Client\ReadingList.Client.njsproj", "{52FF70CE-18E5-4726-9783-5DB0DF28C898}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,9 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{8CBB2B06-CFD1-4FE8-949F-08BCE276B0C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -100,5 +99,22 @@ Global
 		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x64.Build.0 = Release|Any CPU
 		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x86.ActiveCfg = Release|Any CPU
 		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x86.Build.0 = Release|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x64.Build.0 = Debug|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x86.Build.0 = Debug|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x64.ActiveCfg = Release|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x64.Build.0 = Release|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x86.ActiveCfg = Release|Any CPU
+		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {768A24BD-101C-415E-AE54-FB065B2AEB53}
 	EndGlobalSection
 EndGlobal

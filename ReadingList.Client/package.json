@@ -19,7 +19,7 @@
     "hygen": "^1.4.8",
     "jest": "20.0.4",
     "lodash": "^4.17.10",
-    "npm": "^6.0.1",
+    "npm": "^6.1.0",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
@@ -125,4 +125,5 @@
   "eslintConfig": {
     "extends": "react-app"
   }
+, "-vs-binding":{"AfterBuild":["start"]}
 }

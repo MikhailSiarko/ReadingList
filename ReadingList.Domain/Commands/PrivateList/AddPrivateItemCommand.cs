@@ -2,7 +2,7 @@
 {
     public class AddPrivateItemCommand : ICommand
     {
-        public readonly string Login;  
+        public readonly string Login;
         public readonly string Title;
         public readonly string Author;
 

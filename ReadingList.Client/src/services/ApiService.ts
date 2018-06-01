@@ -7,7 +7,7 @@ import { loadingActions } from '../store/actions/loading';
 
 abstract class ApiService {
     protected dispatch: Dispatch<RootState>;
-    constructor(dispatch: Dispatch<RootState>) {
+    protected constructor(dispatch: Dispatch<RootState>) {
         this.dispatch = dispatch;
     }
     protected configureRequest<T>(url: string, method: string, data?: T): AxiosPromise<any> {

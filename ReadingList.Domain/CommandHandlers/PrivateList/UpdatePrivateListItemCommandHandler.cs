@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.WriteModel;
-using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {

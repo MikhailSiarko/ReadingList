@@ -48,7 +48,7 @@ select {
 }
 .invalid-input {
   border-color: #ef5350!important;
-  box-shadow: 0 0.1rem 0.2rem #f16c6ad0 important;
+  box-shadow: 0 0.1rem 0.2rem #f16c6a !important;
   transition: all 0.1s;
 }
 .invalid-input:hover {
