@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ReadingList.WriteModel.Models;
 using ReadingList.WriteModel.Models.HelpEntities;
 
@@ -7,8 +6,6 @@ namespace ReadingList.WriteModel
 {
     public sealed class WriteDbContext : DbContext
     {
-
-        private readonly IConfiguration _configuration;
         
         public DbSet<BookList> BookLists { get; set; }
         public DbSet<PrivateBookListItem> PrivateBookListItems { get; set; }

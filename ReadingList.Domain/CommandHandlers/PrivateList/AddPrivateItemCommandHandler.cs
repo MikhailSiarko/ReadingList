@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
@@ -31,6 +32,12 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 Author = command.Author
             };
             await _dbContext.PrivateBookListItems.AddAsync(listItem);
+            await _dbContext.ReadingJournalRecords.AddAsync(new ReadingJournalRecord
+            {
+                StatusChangedDate = DateTime.Now,
+                StatusSetTo = BookItemStatus.ToReading,
+                Item = listItem
+            });            
             await _dbContext.SaveChangesAsync();
         }
     }
