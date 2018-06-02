@@ -4,6 +4,7 @@ interface BookLIStyle {
     ['book-title']: string;
     ['status-selector']: string;
     ['book-title']: string;
+    ['reading-time']: string;
 }
 
 declare const bookLIStyle: BookLIStyle;

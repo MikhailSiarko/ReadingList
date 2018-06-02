@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace ReadingList.WriteModel.Models
 {
     public class PrivateBookListItem : BookListItem
     {
         public BookItemStatus Status { get; set; }
-        public long ReadingTimeInTicks { get; set; }
-
-        public List<ReadingJournalRecord> ReadingJournalRecords { get; set; }
+        public DateTime LastStatusUpdateDate { get; set; }
+        public TimeSpan ReadingTime { get; set; }
     }
 }

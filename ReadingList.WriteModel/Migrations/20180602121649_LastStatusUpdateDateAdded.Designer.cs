@@ -12,8 +12,8 @@ using System;
 namespace ReadingList.WriteModel.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20180601133721_ReadingJournalRecordAdded")]
-    partial class ReadingJournalRecordAdded
+    [Migration("20180602121649_LastStatusUpdateDateAdded")]
+    partial class LastStatusUpdateDateAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -115,7 +115,9 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.Property<int>("BookListId");
 
-                    b.Property<long>("ReadingTimeInTicks");
+                    b.Property<DateTime>("LastStatusUpdateDate");
+
+                    b.Property<TimeSpan>("ReadingTime");
 
                     b.Property<int>("Status");
 
@@ -146,24 +148,6 @@ namespace ReadingList.WriteModel.Migrations
                         .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Profiles");
-                });
-
-            modelBuilder.Entity("ReadingList.WriteModel.Models.ReadingJournalRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ItemId");
-
-                    b.Property<DateTime>("StatusChangedDate");
-
-                    b.Property<int>("StatusSetTo");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("ReadingJournalRecords");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.Role", b =>
@@ -286,14 +270,6 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasOne("ReadingList.WriteModel.Models.BookList", "BookList")
                         .WithMany()
                         .HasForeignKey("BookListId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ReadingList.WriteModel.Models.ReadingJournalRecord", b =>
-                {
-                    b.HasOne("ReadingList.WriteModel.Models.PrivateBookListItem", "Item")
-                        .WithMany("ReadingJournalRecords")
-                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

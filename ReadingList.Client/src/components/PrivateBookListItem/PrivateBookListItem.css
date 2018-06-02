@@ -23,16 +23,17 @@
 
 .book-info {
     margin-right: 3rem;
-    font-size: 2.2rem;
-    min-width: 40rem;
+    font-size: 2.4rem;
+    min-width: 50rem;
 }
 
 .status {
-    font-size: 2rem;
+    font-size: 1rem;
+    padding: 0.8rem;
 }
 
 .status p {
-    margin: 0.8rem;
+    margin: 0;
     display: inline-block;
 }
 
@@ -68,5 +69,15 @@
 }
 
 .editing-book-title > div {
+    display: inline-block;
+}
+
+.reading-time {
+    font-size: 1rem;
+    padding: 0.8rem;
+}
+
+.reading-time p {
+    margin: 0;
     display: inline-block;
 }

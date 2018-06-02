@@ -7,7 +7,7 @@ namespace ReadingList.Tests.TestComparers
     {
         public bool Equals(PrivateBookListDto x, PrivateBookListDto y)
         {
-            return x.Id == y.Id && string.Equals(x.Name, y.Name) && x.Type == y.Type &&
+            return x.Id == y.Id && string.Equals(x.Name, y.Name) &&
                    x.OwnerId == y.OwnerId;
         }
 
@@ -17,7 +17,6 @@ namespace ReadingList.Tests.TestComparers
             {
                 var hashCode = obj.Id;
                 hashCode = (hashCode * 397) ^ (obj.Name != null ? obj.Name.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (int) obj.Type;
                 hashCode = (hashCode * 397) ^ obj.OwnerId;
                 return hashCode;
             }

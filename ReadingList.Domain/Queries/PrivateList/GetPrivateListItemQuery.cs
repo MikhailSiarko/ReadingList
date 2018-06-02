@@ -1,8 +1,9 @@
-﻿using PrivateBookListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
+﻿using ReadingList.Domain.DTO.BookList;
+using PrivateBookListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
 
 namespace ReadingList.Domain.Queries
 {
-    public class GetPrivateListItemQuery : IQuery<PrivateBookListItemRm>
+    public class GetPrivateListItemQuery : IQuery<PrivateBookListItemDto>
     {
         public readonly string Login;
         public readonly string Title;

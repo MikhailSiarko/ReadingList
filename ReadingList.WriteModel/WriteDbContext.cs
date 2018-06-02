@@ -18,7 +18,6 @@ namespace ReadingList.WriteModel
         public DbSet<Role> Roles { get; set; }
         public DbSet<BookTag> BookTags { get; set; }
         public DbSet<SharedBookListItemTag> SharedBookListItemTags { get; set; }
-        public DbSet<ReadingJournalRecord> ReadingJournalRecords { get; set; }
 
         public WriteDbContext(DbContextOptions options) : base(options)
         {
@@ -34,8 +33,6 @@ namespace ReadingList.WriteModel
             modelBuilder.Entity<Role>().HasIndex(r => r.Name).IsUnique();
             modelBuilder.Entity<Tag>().HasIndex(t => t.Name).IsUnique();
             modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
-            modelBuilder.Entity<ReadingJournalRecord>().HasOne(j => j.Item).WithMany(i => i.ReadingJournalRecords)
-                .HasForeignKey(j => j.ItemId);
 
             modelBuilder.Entity<BookTag>().HasKey(bt => new {bt.TagId, bt.BookId});
             modelBuilder.Entity<BookTag>().HasOne(bt => bt.Tag).WithMany(t => t.BookTags).HasForeignKey(bt => bt.TagId);

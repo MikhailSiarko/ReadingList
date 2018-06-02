@@ -27,17 +27,12 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             var listItem = new PrivateBookListItemWm
             {
                 Status = BookItemStatus.ToReading,
+                LastStatusUpdateDate = DateTime.Now,
                 BookListId = listId,
                 Title = command.Title,
                 Author = command.Author
             };
-            await _dbContext.PrivateBookListItems.AddAsync(listItem);
-            await _dbContext.ReadingJournalRecords.AddAsync(new ReadingJournalRecord
-            {
-                StatusChangedDate = DateTime.Now,
-                StatusSetTo = BookItemStatus.ToReading,
-                Item = listItem
-            });            
+            await _dbContext.PrivateBookListItems.AddAsync(listItem);           
             await _dbContext.SaveChangesAsync();
         }
     }

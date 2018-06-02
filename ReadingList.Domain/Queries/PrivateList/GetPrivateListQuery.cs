@@ -1,8 +1,8 @@
-﻿using ReadingList.ReadModel.Models;
+﻿using ReadingList.Domain.DTO.BookList;
 
 namespace ReadingList.Domain.Queries
 {
-    public class GetPrivateListQuery : IQuery<PrivateBookList>
+    public class GetPrivateListQuery : IQuery<PrivateBookListDto>
     {
         public readonly string Login;
 

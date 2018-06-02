@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Cinch.SqlBuilder;
+using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
@@ -9,7 +11,7 @@ using ItemRM = ReadingList.ReadModel.Models.PrivateBookListItem;
 
 namespace ReadingList.Domain.QueryHandlers.PrivateList
 {
-    public class GetPrivateListQueryHandler : QueryHandler<GetPrivateListQuery, ListRM>
+    public class GetPrivateListQueryHandler : QueryHandler<GetPrivateListQuery, PrivateBookListDto>
     {
         private readonly IReadDbConnection _dbConnection;
 
@@ -18,18 +20,19 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
             _dbConnection = dbConnection;
         }
 
-        protected override async Task<ListRM> Handle(GetPrivateListQuery query)
+        protected override async Task<PrivateBookListDto> Handle(GetPrivateListQuery query)
         {
             var listDictionary = new Dictionary<int, ListRM>();
 
-            var sql = new SqlBuilder().Select("l.Id", "l.Name", "l.OwnerId", "i.Id", "i.ReadingTimeInTicks", "i.Title",
+            var sql = new SqlBuilder().Select("l.Id", "l.Name", "l.OwnerId", "i.Id", "i.ReadingTime", "i.Title",
                     "i.Author", "i.Status")
                 .From("BookLists AS l")
-                .LeftJoin("(SELECT Id, Title, Author, BookListId, Status, ReadingTimeInTicks FROM PrivateBookListItems) AS i ON i.BookListId = l.Id")
+                .LeftJoin("(SELECT Id, Title, Author, BookListId, Status, ReadingTime FROM PrivateBookListItems) AS i ON i.BookListId = l.Id")
                 .Where("l.OwnerId = (SELECT Id FROM Users WHERE Login = @login)")
                 .Where("l.Type = @type")
                 .ToSql();
-            return 
+
+            var privateList =
                 await _dbConnection.QueryFirstAsync<ListRM, ItemRM, ListRM>(sql,
                     (list, item) =>
                     {
@@ -39,11 +42,13 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                             listEntry.Items = new List<ItemRM>();
                             listDictionary.Add(listEntry.Id, list);
                         }
-        
-                        if(item != null)
+
+                        if (item != null)
                             listEntry.Items.Add(item);
                         return listEntry;
                     }, new {login = query.Login, type = (int) BookListType.Private});
+
+            return Mapper.Map<ListRM, PrivateBookListDto>(privateList);
         }
     }
 }

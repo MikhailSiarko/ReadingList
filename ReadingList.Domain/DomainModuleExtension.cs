@@ -34,6 +34,8 @@ namespace ReadingList.Domain
             Mapper.Initialize(conf =>
             {
                 conf.AddProfile<BookListProfile>();
+                conf.AddProfile<PrivateBookListItemProfile>();
+                conf.AddProfile<UserProfile>();
             });
             return services;
         }

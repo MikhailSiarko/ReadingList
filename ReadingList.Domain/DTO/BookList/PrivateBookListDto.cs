@@ -1,4 +1,5 @@
-﻿using ReadingList.WriteModel.Models;
+﻿using System.Collections.Generic;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.DTO.BookList
 {
@@ -7,6 +8,7 @@ namespace ReadingList.Domain.DTO.BookList
         public int Id { get; set; }
         public string Name { get; set; }
         public int OwnerId { get; set; }
-        public BookListType Type { get; set; }
+
+        public IEnumerable<PrivateBookListItemDto> Items { get; set; }
     }
 }

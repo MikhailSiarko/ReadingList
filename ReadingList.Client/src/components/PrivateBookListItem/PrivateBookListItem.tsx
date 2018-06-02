@@ -47,6 +47,23 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
         this.setState({listItem: cloneDeep(this.props.listItem)});
         this.props.onCancel(this.props.listItem.id);
     }
+    
+    convertSecondsToTime = (seconds: number): string => {
+        let hours: any = Math.floor(seconds / 3600);
+        let minutes: any = Math.floor((seconds - (hours * 3600)) / 60);
+        let sec: any = Math.floor(seconds - (hours * 3600) - (minutes * 60));
+
+        if (hours   < 10) {
+            hours = '0' + hours;
+        }
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        if (sec < 10) {
+            sec = '0' + sec;
+        }
+        return hours + ':' + minutes + ':' + sec;
+    }
 
     render() {
         if(this.props.listItem.isOnEditMode) {
@@ -85,14 +102,23 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
         }
         return (
             <li className={styles['book-li']} id={this.props.id}>
-                    <div className={styles['book-info']}>
-                        <h5 className={styles['book-title']}>
-                            <q>{this.props.listItem.title}</q> by {this.props.listItem.author}
-                        </h5>
-                    </div>
-                    <div className={styles['status']}>
-                        <p>Status: {BookStatus[this.props.listItem.status]}</p>
-                    </div>
+                <div className={styles['book-info']}>
+                    <h5 className={styles['book-title']}>
+                        <q>{this.props.listItem.title}</q> by {this.props.listItem.author}
+                    </h5>
+                </div>
+                <div className={styles['reading-time']}>
+                    <p>
+                        Reading time:
+                    </p>
+                    <br />
+                    <p>{this.convertSecondsToTime(this.props.listItem.readingTimeInSeconds)}</p>    
+                </div>
+                <div className={styles['status']}>
+                    <p>Status:</p>
+                    <br />
+                    <p>{BookStatus[this.props.listItem.status]}</p>
+                </div>
                 {
                     this.props.contextMenu
                 }

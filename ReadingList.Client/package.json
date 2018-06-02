@@ -124,6 +124,10 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "-vs-binding": {
+    "AfterBuild": [
+      "start"
+    ]
   }
-, "-vs-binding":{"AfterBuild":["start"]}
 }

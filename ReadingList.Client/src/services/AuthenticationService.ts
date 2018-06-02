@@ -35,7 +35,6 @@ export class AuthenticationService extends ApiService {
     }
 
     private onError(error: AxiosResponse) {
-        const result = error.data as RequestResult<never>;
-        return result;
+        return error.data as RequestResult<never>;
     }
 }

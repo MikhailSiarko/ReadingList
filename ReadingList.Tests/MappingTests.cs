@@ -38,8 +38,7 @@ namespace ReadingList.Tests
             {
                 Id = 54,
                 Name = "My private list",
-                OwnerId = 895,
-                Type = BookListType.Private
+                OwnerId = 895
             };
             var mapped = Mapper.Map<PrivateBookListDto, BookList>(privateList);
             var remapped = Mapper.Map<BookList, PrivateBookListDto>(mapped);
