@@ -21,16 +21,16 @@ class Account extends React.Component<AccountProps> {
         return isNullOrEmpty(email) || !isNullOrEmpty(password) || !isNullOrEmpty(confirmPassword);
     }
 
-    public submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    public submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const email = (form.elements.namedItem('email') as HTMLInputElement).value;
         const password = (form.elements.namedItem('password') as HTMLInputElement).value;
         const confirmPassword = form.elements.namedItem('confirmPassword') as HTMLInputElement;
         if(confirmPassword === null) {
-            this.submitLogin(email, password);
+            await this.submitLogin(email, password);
         } else {
-            this.submitRegister(email, password, confirmPassword.value);
+            await this.submitRegister(email, password, confirmPassword.value);
         }
     }
 
@@ -44,14 +44,14 @@ class Account extends React.Component<AccountProps> {
         return <div>{account}</div>;
     }
 
-    private submitLogin(email: string, password: string) {
+    private async submitLogin(email: string, password: string) {
         if(Account.validateCredentials(email, password)) {
-            this.props.login(new Credentials(email, password));
+            await this.props.login(new Credentials(email, password));
         }
     }
-    private submitRegister(email: string, password: string, confirmPassword: string) {
+    private async submitRegister(email: string, password: string, confirmPassword: string) {
         if(Account.validateCredentials(email, password)) {
-            this.props.register(new Credentials(email, password, confirmPassword));
+            await this.props.register(new Credentials(email, password, confirmPassword));
         }
     }
 }

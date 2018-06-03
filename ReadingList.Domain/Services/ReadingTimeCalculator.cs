@@ -13,7 +13,6 @@ namespace ReadingList.Domain.Services
             switch (newStatus)
             {
                 case BookItemStatus.StartedButPostponed:
-                case BookItemStatus.StartedButВiscarded:
                 case BookItemStatus.Read:
                     diff = TimeSpan.FromTicks(DateTime.Now.Ticks - previousDate.Ticks);
                     break;

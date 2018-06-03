@@ -23,7 +23,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 .SingleAsync();
             var list = await _dbContext.BookLists.SingleAsync(
                 l => l.OwnerId == userId && l.Type == BookListType.Private);
-            list.Update(command);
+            list.Update(new {command.Name});
             await _dbContext.SaveChangesAsync();
         }
     }

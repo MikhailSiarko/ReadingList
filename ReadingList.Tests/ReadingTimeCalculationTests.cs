@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ReadingList.Tests
 {
-    public class ReafingTimeCalculationTests
+    public class ReadingTimeCalculationTests
     {
         [Fact]
         public void StatusChangedFromToReadingToReading()

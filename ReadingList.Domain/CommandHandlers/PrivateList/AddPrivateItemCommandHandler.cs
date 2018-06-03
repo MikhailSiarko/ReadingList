@@ -20,6 +20,10 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
 
         protected override async Task Handle(AddPrivateItemCommand command)
         {
+            var book = await _dbContext.Books.SingleOrDefaultAsync(b =>
+                b.Author == command.Author && b.Title == command.Title);
+            if (book == null)
+                await _dbContext.Books.AddAsync(new Book {Author = command.Author, Title = command.Title});
             var userId = await _dbContext.Users.AsNoTracking().Where(u => u.Login == command.Login).Select(u => u.Id)
                 .SingleAsync();
             var listId = await _dbContext.BookLists.AsNoTracking()

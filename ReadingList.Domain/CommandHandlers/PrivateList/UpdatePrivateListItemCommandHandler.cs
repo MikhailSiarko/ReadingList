@@ -21,6 +21,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
         protected override async Task Handle(UpdatePrivateListItemCommand command)
         {
             var item = await _dbContext.PrivateBookListItems.SingleAsync(i => i.Id == command.ItemId);
+            PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
             var readingTime = item.ReadingTime +
                 ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate, (BookItemStatus) command.Status);
             item.Update(new

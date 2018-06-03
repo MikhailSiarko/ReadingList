@@ -2,8 +2,7 @@ export const BookStatus = {
     1: 'To Reading',
     2: 'Reading',
     3: 'Started But Postponed',
-    4: 'Started But Вiscarded',
-    5: 'Read'
+    4: 'Read'
 };
 
 export interface SelectListItem {
@@ -16,8 +15,7 @@ export function generateStatusSelectItems (): SelectListItem[] {
     for(let key in BookStatus) {
         if(key) {
             const text = BookStatus[key];
-            const value = key;
-            options.push({value, text});
+            options.push({value: key, text});
         }
     }
     return options;

@@ -123,4 +123,7 @@
   <data name="WrongPassword" xml:space="preserve">
     <value>You entered wrong password. Please try again</value>
   </data>
+  <data name="CannotChangeStatusFromTo" xml:space="preserve">
+    <value>Can't change status from {0} to {1}</value>
+  </data>
 </root>
