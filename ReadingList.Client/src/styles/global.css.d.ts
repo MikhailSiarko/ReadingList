@@ -5,6 +5,8 @@ export interface GlobalStyles {
     ['disabled']: string;
     ['input-validation-message']: string;
     ['invalid-input']: string;
+    ['context-menu-wrapper']: string;
+    ['context-menu']: string;
 }
 
 declare const globalStyles: GlobalStyles;

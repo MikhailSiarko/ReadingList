@@ -5,6 +5,7 @@ interface BookLIStyle {
     ['status-selector']: string;
     ['book-title']: string;
     ['reading-time']: string;
+    ['edited-status']: string;
 }
 
 declare const bookLIStyle: BookLIStyle;

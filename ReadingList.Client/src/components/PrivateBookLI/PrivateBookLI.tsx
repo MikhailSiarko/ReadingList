@@ -1,54 +1,35 @@
 import * as React from 'react';
-import styles from './PrivateBookListItem.css';
-import { ContextMenuProps } from '../../components/ContextMenu';
+import styles from './PrivateBookLI.css';
 import { PrivateBookListItemModel, BookStatus } from '../../models';
 import { cloneDeep } from 'lodash';
 import PrimaryButton from '../PrimaryButton';
 import RedButton from '../RedButton';
 
-interface BookLIProps {
-    id?: string;
+export interface PrivateBookLIProps {
     listItem: PrivateBookListItemModel;
     onSave: (item: PrivateBookListItemModel) => void;
     onCancel: (itemId: number) => void;
-    options?: JSX.Element[];
-    contextMenu?: React.ReactElement<ContextMenuProps>;
+    options: JSX.Element[];
 }
 
-interface BookListState {
-    listItem: PrivateBookListItemModel;
-}
-
-class BookLI extends React.Component<BookLIProps, BookListState> {
-    constructor(props: BookLIProps) {
-        super(props);
-        this.state = { 
-            listItem: cloneDeep(this.props.listItem) };
-    }
-
-    changeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const itemCopy = cloneDeep(this.state.listItem);
-        if(event.target.name === 'status') {
-            itemCopy[event.target.name] = event.target.value;
-        }
-        itemCopy[event.target.name] = event.target.value;
-        this.setState({listItem: itemCopy});
-    }
-
+class PrivateBookLI extends React.Component<PrivateBookLIProps> {
     submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const copy = cloneDeep(this.state.listItem);
-        copy.isOnEditMode = false;
+        let copy = cloneDeep(this.props.listItem);
+        const target = event.target as HTMLFormElement;
+        const title = target.elements['title'].value;
+        const author = target.elements['author'].value;
+        const status = target.elements['status'].value;
+        copy = Object.assign(copy, {title, author, status, isOnEditMode: false});
         this.props.onSave(copy); 
     }
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        this.setState({listItem: cloneDeep(this.props.listItem)});
         this.props.onCancel(this.props.listItem.id);
     }
     
-    convertSecondsToTime = (seconds: number): string => {
+    convertSecondsToTime(seconds: number): string {
         let hours: any = Math.floor(seconds / 3600);
         let minutes: any = Math.floor((seconds - (hours * 3600)) / 60);
         let sec: any = Math.floor(seconds - (hours * 3600) - (minutes * 60));
@@ -68,25 +49,23 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
     render() {
         if(this.props.listItem.isOnEditMode) {
             return (
-                <li className={styles['editing-book-li']}
-                        id={this.props.id}>
+                <li className={styles['editing-book-li']} >
                     <form onSubmit={this.submitHandler}>
                         <div className={styles['editable-book-info']}>
                             <div className={styles['editing-book-title']}>
                                 <div>
-                                    <input type="text" required={true} onChange={this.changeHandler}
-                                        name="title" value={this.state.listItem.title} />
+                                    <input type="text" required={true}
+                                        name="title" defaultValue={this.props.listItem.title} />
                                 </div>by 
                                 <div>
-                                    <input type="text" required={true} onChange={this.changeHandler}
-                                        name="author" value={this.state.listItem.author} />
+                                    <input type="text" required={true}
+                                        name="author" defaultValue={this.props.listItem.author} />
                                 </div>
                             </div>
                         </div>
-                        <div className={styles['status']}>
+                        <div className={styles['edited-status']}>
                             <p>Status:</p>
-                            <select onChange={this.changeHandler}
-                                    name="status" value={this.state.listItem.status}>
+                            <select name="status" defaultValue={this.props.listItem.status}>
                                 {this.props.options}
                             </select>
                         </div>
@@ -101,7 +80,7 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
             );
         }
         return (
-            <li className={styles['book-li']} id={this.props.id}>
+            <li className={styles['book-li']}>
                 <div className={styles['book-info']}>
                     <h5 className={styles['book-title']}>
                         <q>{this.props.listItem.title}</q> by {this.props.listItem.author}
@@ -119,12 +98,9 @@ class BookLI extends React.Component<BookLIProps, BookListState> {
                     <br />
                     <p>{BookStatus[this.props.listItem.status]}</p>
                 </div>
-                {
-                    this.props.contextMenu
-                }
             </li>
         );
     }
 }
 
-export default BookLI;
+export default PrivateBookLI;

@@ -1,18 +1,17 @@
 import * as React from 'react';
-import styles from './PrivateBookList.css';
-import Fieldset from '../../components/Fieldset';
 import { RootState } from '../../store/reducers';
 import { PrivateBookListItemModel, PrivateBookListModel, generateStatusSelectItems, RequestResult } from '../../models';
-import ContextMenu from '../../components/ContextMenu';
-import PrivateBookListItem from '../../components/PrivateBookListItem';
+import PrivateBookLI from '../../components/PrivateBookLI';
 import { cloneDeep } from 'lodash';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
-import ItemForm from '../../components/ItemForm';
 import PrimaryButton from '../../components/PrimaryButton';
 import RedButton from '../../components/RedButton';
 import { isNullOrEmpty } from '../../utils';
+import { withContextMenu } from '../../hoc/withContextMenu';
+import PrivateBookUL from '../../components/PrivateBookUL';
+import ItemForm from '../../components/ItemForm';
 
 interface Props {
     bookList: RootState.PrivateList;
@@ -25,7 +24,7 @@ interface Props {
     getPrivateList: () => Promise<void>;
 }
 
-class PrivateBookUL extends React.Component<Props> {
+class PrivateBookList extends React.Component<Props> {
     async componentDidMount() {
         if(this.props.bookList == null) {
             await this.props.getPrivateList();
@@ -49,7 +48,7 @@ class PrivateBookUL extends React.Component<Props> {
 
     render() {
         const statusOptions = generateStatusSelectItems();
-        const options = statusOptions.map((item) =>
+        const options = statusOptions.map(item =>
             <option key={item.value} value={item.value}>{item.text}</option>
         );
 
@@ -57,56 +56,35 @@ class PrivateBookUL extends React.Component<Props> {
         if(this.props.bookList) {
             let listItems;
             if(this.props.bookList.items.length > 0) {
-                listItems = this.props.bookList.items.map((listItem: PrivateBookListItemModel) => {
-                    const bookListItemId = 'bookListItem' + listItem.id;
-                    const contextMenu = (() => (
-                    <ContextMenu rootId={bookListItemId} menuItems={
-                            [
-                                {onClick: () => this.props.switchItemEditMode(listItem.id), text: 'Edit'},
-                                {onClick: () => this.props.removeItem(listItem.id), text: 'Remove'}
-                            ]
-                        } />))();
+                listItems = this.props.bookList.items.map(listItem => {
+                    const actions = [
+                        {onClick: () => this.props.switchItemEditMode(listItem.id), text: 'Edit'},
+                        {onClick: () => this.props.removeItem(listItem.id), text: 'Remove'}
+                    ];
+                    const Contexed = withContextMenu(actions, PrivateBookLI);
                     return (
-                        <PrivateBookListItem key={listItem.id} listItem={listItem}
-                                options={options} onSave={this.props.updateItem} id={bookListItemId}
-                                contextMenu={contextMenu} onCancel={this.props.switchItemEditMode} />
+                        <Contexed key={listItem.id}
+                            listItem={listItem}
+                            options={options}
+                            onSave={this.props.updateItem}
+                            onCancel={this.props.switchItemEditMode} />
                     );
                 });
-            } else {
-                listItems = <h3>Here are no books yet</h3>;
             }
-            const bookListId = 'Private_book_List_' + this.props.bookList.id;
-            const bookListContextMenu = (
-                <ContextMenu rootId={bookListId} menuItems={[
-                    {onClick: this.props.switchListEditMode, text: 'Edit list name'}
-                ]} />
-            );
-            if(this.props.bookList.isInEditMode) {
-                const legendForm = (
+            const legend = (
+                this.props.bookList.isInEditMode ?
+                (
                     <form onSubmit={this.submitHandler}>
                         <input name={'list-name'} type={'text'} defaultValue={this.props.bookList.name} />
                         <PrimaryButton type={'submit'}>Save</PrimaryButton>
                         <RedButton onClick={this.cancelHandler}>Cancel</RedButton>
                     </form>
-                );
-                list = (
-                    <Fieldset className={styles['list-fieldset']} legend={legendForm}>
-                        <ul className={styles['book-list']}>
-                            {listItems ? listItems : <h3>Here are no book yet</h3>}
-                        </ul>
-                    </Fieldset>
-                );
-            } else {
-                list = (
-                    <Fieldset id={bookListId} className={styles['list-fieldset']} legend={this.props.bookList.name}>
-                        <ul className={styles['book-list']}>
-                            {listItems ? listItems : <h3>Here are no book yet</h3>}
-                        </ul>
-                        {bookListContextMenu}
-                    </Fieldset>
-                );
-            }
+                ) : this.props.bookList.name
 
+            );
+            const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
+            const ContexedList = withContextMenu(bookListActions, PrivateBookUL);
+            list = <ContexedList items={listItems} legend={legend} />;
         }
         return (
             <div>
@@ -170,4 +148,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PrivateBookUL);
+export default connect(mapStateToProps, mapDispatchToProps)(PrivateBookList);

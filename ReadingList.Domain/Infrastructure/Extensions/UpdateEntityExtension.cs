@@ -7,7 +7,7 @@ namespace ReadingList.Domain.Infrastructure.Extensions
 {
     public static class UpdateEntityExtension
     {
-        public static void Update<TEntity, TSource>(this TEntity entity, TSource source) where TEntity : Entity
+        public static void Update<TEntity>(this TEntity entity, object source) where TEntity : Entity
         {
             var entityProperties = entity.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var sourceFields = source.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);

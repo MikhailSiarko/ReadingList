@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Tests", "Readin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Resources", "ReadingList.Resources\ReadingList.Resources.csproj", "{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "ReadingList.Client", "ReadingList.Client\ReadingList.Client.njsproj", "{52FF70CE-18E5-4726-9783-5DB0DF28C898}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,17 +97,6 @@ Global
 		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x64.Build.0 = Release|Any CPU
 		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x86.ActiveCfg = Release|Any CPU
 		{40B1E08C-E82C-4F26-AF25-BBF04FABFA2C}.Release|x86.Build.0 = Release|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x64.Build.0 = Debug|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Debug|x86.Build.0 = Debug|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x64.ActiveCfg = Release|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x64.Build.0 = Release|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x86.ActiveCfg = Release|Any CPU
-		{52FF70CE-18E5-4726-9783-5DB0DF28C898}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

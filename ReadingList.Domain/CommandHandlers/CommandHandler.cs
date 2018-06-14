@@ -13,7 +13,7 @@ namespace ReadingList.Domain.CommandHandlers
             try
             {
                 await Handle(request);
-                return CommandResult.Successed();
+                return CommandResult.Succeed();
             }
             catch (Exception e)
             {

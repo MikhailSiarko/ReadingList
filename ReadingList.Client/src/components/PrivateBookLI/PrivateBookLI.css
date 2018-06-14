@@ -37,6 +37,12 @@
     display: inline-block;
 }
 
+.edited-status p {
+    margin: 0;
+    display: inline-block;
+    font-size: 1.8rem;
+}
+
 .status > select {
     border: none;
     text-align: left;

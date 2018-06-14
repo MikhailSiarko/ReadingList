@@ -66,3 +66,33 @@ select {
   font-size: 1.6rem;
   color: #ef5350;
 }
+
+.context-menu-wrapper {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.context-menu {
+  display: block;
+  position: fixed;
+  background: white;
+  box-shadow: 0 0.2rem 1rem #999999;
+}
+
+.context-menu button {
+  display: block;
+  text-align: left;
+  border: none;
+  padding: 0.6rem 5rem 0.5rem 1rem;
+  min-width: 12rem;
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-family: 'Dosis';
+  letter-spacing: 0.05rem;
+  background: white;
+}
+
+.context-menu button:hover {
+  background-color: #ddd;
+}

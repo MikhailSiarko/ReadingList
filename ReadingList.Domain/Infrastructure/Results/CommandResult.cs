@@ -5,7 +5,7 @@ namespace ReadingList.Domain.Commands
     public class CommandResult : Result
     {
         
-        public static CommandResult Successed() => new CommandResult(true);
+        public static CommandResult Succeed() => new CommandResult(true);
 
         public static CommandResult Failed(string errorMessage) =>
             new CommandResult(false, errorMessage);
