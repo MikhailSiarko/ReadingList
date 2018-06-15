@@ -10,6 +10,7 @@ import { RootState } from '../../store/reducers';
 import { RequestResult } from '../../models';
 import AccountForm from '../../components/AccountForm';
 import { isNullOrEmpty } from '../../utils';
+import globalStyles from '../../styles/global.css';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -34,10 +35,36 @@ class Account extends React.Component<AccountProps> {
         }
     }
 
+    confirmPasswordChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const confirmPasswordInput = event.target as HTMLInputElement;
+        const form = confirmPasswordInput.form as HTMLFormElement;
+        const passwordInput = form.elements.namedItem('password') as HTMLInputElement;
+        const validationSpan = document.getElementById('validation-message') as HTMLSpanElement;
+        if(passwordInput && confirmPasswordInput) {
+            const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+            if(confirmPasswordInput.value === passwordInput.value) {
+                if(submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.classList.remove(globalStyles.disabled);
+                }
+                confirmPasswordInput.classList.remove(globalStyles['invalid-input']);
+                validationSpan.classList.remove(globalStyles['input-validation-message']);
+            } else {
+                if(submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.classList.add(globalStyles.disabled);
+                }
+                confirmPasswordInput.classList.add(globalStyles['invalid-input']);
+                validationSpan.classList.add(globalStyles['input-validation-message']);
+            }
+        }
+    }
+
     render() {
         const account = (
-            <AccountForm onSubmit={this.submitHandler}>
-                <Route path="/account/register" component={Register}/>
+            <AccountForm onSubmit={this.submitHandler} id={'account-form'}>
+                <Route path="/account/register" 
+                    component={() => <Register onConfirmPasswordChange={this.confirmPasswordChangeHandler}  />} />
                 <Route path="/account/login" component={Login}/>
             </AccountForm>
         );
@@ -50,7 +77,7 @@ class Account extends React.Component<AccountProps> {
         }
     }
     private async submitRegister(email: string, password: string, confirmPassword: string) {
-        if(Account.validateCredentials(email, password)) {
+        if(Account.validateCredentials(email, password, confirmPassword)) {
             await this.props.register(new Credentials(email, password, confirmPassword));
         }
     }

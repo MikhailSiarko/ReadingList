@@ -31,12 +31,25 @@ class PrivateBookList extends React.Component<Props> {
         }
     }
 
-    submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    submitListNameHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
         const newName = target.elements['list-name'].value;
         if(!isNullOrEmpty(newName)) {
             this.props.updateListName(newName);
+        }
+    }
+
+    submitNewItemHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const target = event.target as HTMLFormElement;
+        const title = target.elements['title'].value;
+        const author = target.elements['author'].value;
+        const isTitleValid = !isNullOrEmpty(title);
+        const isAuthorValid = !isNullOrEmpty(author);
+        if(isTitleValid && isAuthorValid) {
+            const item = {title, author} as PrivateBookListItemModel;
+            this.props.addItem(item);
         }
     }
 
@@ -74,7 +87,7 @@ class PrivateBookList extends React.Component<Props> {
             const legend = (
                 this.props.bookList.isInEditMode ?
                 (
-                    <form onSubmit={this.submitHandler}>
+                    <form onSubmit={this.submitListNameHandler}>
                         <input name={'list-name'} type={'text'} defaultValue={this.props.bookList.name} />
                         <PrimaryButton type={'submit'}>Save</PrimaryButton>
                         <RedButton onClick={this.cancelHandler}>Cancel</RedButton>
@@ -90,7 +103,7 @@ class PrivateBookList extends React.Component<Props> {
             <div>
                 {
                     this.props.bookList && !this.props.bookList.isInEditMode 
-                        ? <ItemForm onSubmit={this.props.addItem} /> : null
+                        ? <ItemForm onSubmit={this.submitNewItemHandler} /> : null
                 }               
                 {list}
             </div>

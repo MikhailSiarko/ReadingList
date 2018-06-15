@@ -7,7 +7,7 @@ interface NavBarProps extends React.HTMLProps<HTMLElement> {
     links: NavBarLinkData[];
 }
 
-const NavBar: React.SFC<NavBarProps> = (props) => {
+const NavBar: React.SFC<NavBarProps> = props => {
     const navLinks = props.links.map((value, index) => {
         return (
             <NavBarLink className={styles['nav-bar-link']} activeClassName={styles['active-nav-bar-link']}
