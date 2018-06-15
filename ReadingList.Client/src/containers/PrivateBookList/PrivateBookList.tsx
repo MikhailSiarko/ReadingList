@@ -26,8 +26,38 @@ interface Props {
 
 class PrivateBookList extends React.Component<Props> {
     async componentDidMount() {
-        if(this.props.bookList == null) {
+        if(!this.props.bookList) {
             await this.props.getPrivateList();
+        }
+    }
+
+    submitItemChangesHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if(this.props.bookList) {
+            const form = event.target as HTMLFormElement;
+            const itemIdInput = form.elements.namedItem('item-id') as HTMLInputElement;
+            if(itemIdInput) {
+                let item = this.props.bookList.items.find(value => value.id.toString() === itemIdInput.value);
+                if(item) {
+                    let copy = cloneDeep(item);
+                    const target = event.target as HTMLFormElement;
+                    const title = target.elements['title'].value;
+                    const author = target.elements['author'].value;
+                    const status = target.elements['status'].value;
+                    Object.assign(copy, {title, author, status, isOnEditMode: false});
+                    this.props.updateItem(copy); 
+                }
+            }
+        }
+    }
+
+    cancelItemChangesHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const button = event.target as HTMLButtonElement;
+        const form = button.form;
+        if(this.props.bookList && form) {
+            const itemIdInput = form.elements.namedItem('item-id') as HTMLInputElement;
+            this.props.switchItemEditMode(parseInt(itemIdInput.value, 10));
         }
     }
 
@@ -80,7 +110,8 @@ class PrivateBookList extends React.Component<Props> {
                             listItem={listItem}
                             options={options}
                             onSave={this.props.updateItem}
-                            onCancel={this.props.switchItemEditMode} />
+                            onCancel={this.cancelItemChangesHandler}
+                            onChangesSubmit={this.submitItemChangesHandler} />
                     );
                 });
             }

@@ -8,7 +8,7 @@ interface Props {
     legend: string | JSX.Element;
 }
 
-const Fieldset: React.SFC<Props> = (props) => {
+const Fieldset: React.SFC<Props> = props => {
     return (
         <fieldset className={style.fieldset + ` ${props.className}`} id={props.id}>
             <legend>{props.legend}</legend>
