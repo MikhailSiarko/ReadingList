@@ -6,7 +6,6 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain.DTO.User;
-using ReadingList.Domain.Queries;
 using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.Services.Authentication
@@ -56,7 +55,7 @@ namespace ReadingList.Domain.Services.Authentication
                     SecurityAlgorithms.HmacSha256));
         }
 
-        public AuthenticationData Authenticate(UserRm user, LoginUserQuery query)
+        public AuthenticationData Authenticate(UserRm user)
         {
             var token = EncodeSecurityToken(user);
             var userIdentityDto = Mapper.Map<UserRm, UserIdentityDto>(user);

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Cinch.SqlBuilder;
 using ReadingList.Domain.DTO.BookList;
+using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
@@ -46,7 +47,10 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                         if (item != null)
                             listEntry.Items.Add(item);
                         return listEntry;
-                    }, new {login = query.Login, type = (int) BookListType.Private});
+                    }, new {login = query.UserLogin, type = (int) BookListType.Private});
+            
+            if(privateList == null)
+                throw new ObjectNotFoundException($"Private list for user {query.UserLogin}");
 
             return Mapper.Map<ListRM, PrivateBookListDto>(privateList);
         }

@@ -70,11 +70,56 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User with such email wasn&apos;t found. Please check the email you entered.
+        ///   Looks up a localized string similar to Mediator is not initialized.
         /// </summary>
-        public static string UserWithEmailNotFound {
+        public static string MediatorNotInitialized {
             get {
-                return ResourceManager.GetString("UserWithEmailNotFound", resourceCulture);
+                return ResourceManager.GetString("MediatorNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} doesn&apos;t exist.
+        /// </summary>
+        public static string ObjectNotExist {
+            get {
+                return ResourceManager.GetString("ObjectNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} wasn&apos;t found.
+        /// </summary>
+        public static string ObjectNotFound {
+            get {
+                return ResourceManager.GetString("ObjectNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} with {1} wasn&apos;t found.
+        /// </summary>
+        public static string ObjectNotFoundWithData {
+            get {
+                return ResourceManager.GetString("ObjectNotFoundWithData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with email {0} already exists.
+        /// </summary>
+        public static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with email {0}.
+        /// </summary>
+        public static string UserWithEmail {
+            get {
+                return ResourceManager.GetString("UserWithEmail", resourceCulture);
             }
         }
         

@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
+using ReadingList.Api.Extensions;
 using ReadingList.Api.QueriesData;
+using ReadingList.Domain.Infrastructure.Extensions;
+using ReadingList.Resources;
 
 namespace ReadingList.Api.Validators
 {
@@ -8,10 +11,10 @@ namespace ReadingList.Api.Validators
         public LoginQueryValidator()
         {
             RuleFor(query => query.Email)
-                .NotEmpty().WithMessage("Please specify a email")
-                .EmailAddress().WithMessage("Please enter a valid email");
+                .NotEmptyWithMessage(m => nameof(m.Email))
+                .EmailAddress().WithMessage(m => ValidationMessages.InvalidValue.F(nameof(m.Email)));
             RuleFor(query => query.Password)
-                .NotEmpty().WithMessage("Please specify a password");
+                .NotEmptyWithMessage(m => nameof(m.Password));
         }
     }
 }

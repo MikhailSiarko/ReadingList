@@ -9,12 +9,12 @@ interface MenuItem {
 interface ContextMenuState {
     isVisible: boolean;
 }
-
+// TODO: Fix handleContextMenu on another contexed item
 export function withContextMenu<P>(menuItems: MenuItem[], Child: React.ComponentType<P>) {
     return class extends React.Component<P, ContextMenuState> {
         static displayName = `withContextMenu(${Child.displayName || Child.name})`;
         private contextMenu: HTMLDivElement;
-        private wrapper: HTMLDivElement;      
+        private wrapper: HTMLDivElement;
         constructor(props: P) {
             super(props);
             this.state = { isVisible: false };

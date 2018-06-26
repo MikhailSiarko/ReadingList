@@ -11,6 +11,7 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ReadingList.Api\ReadingList.Api.csproj" />
     <ProjectReference Include="..\ReadingList.Domain\ReadingList.Domain.csproj" />
     <ProjectReference Include="..\ReadingList.ReadModel\ReadingList.ReadModel.csproj" />
     <ProjectReference Include="..\ReadingList.WriteModel\ReadingList.WriteModel.csproj" />

@@ -2,7 +2,7 @@
 
 namespace ReadingList.Domain.Queries
 {
-    public interface IQuery<TResult> : IRequest<QueryResult<TResult>>
+    public interface IQuery<out TResult> : IRequest<TResult>
     { 
     }
 }

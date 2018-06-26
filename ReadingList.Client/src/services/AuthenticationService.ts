@@ -6,6 +6,7 @@ import { RootState } from '../store/reducers';
 import { RequestResult } from '../models';
 import { authenticationActions, AuthenticationData } from '../store/actions/authentication';
 import ApiService from './ApiService';
+import { onError } from '../utils';
 
 export class AuthenticationService extends ApiService {
     constructor(dispatch: Dispatch<RootState>) {
@@ -15,26 +16,22 @@ export class AuthenticationService extends ApiService {
         const requestPromise = this.configureRequest(ApiConfiguration.LOGIN, 'POST', credentials);
         return requestPromise
             .then(this.onSuccess())
-            .catch(this.onError);
+            .catch(onError);
     }
 
     register(credentials: Credentials) {
         const requestPromise = this.configureRequest(ApiConfiguration.REGISTER, 'POST', credentials);
         return requestPromise
             .then(this.onSuccess())
-            .catch(this.onError);
+            .catch(onError);
     }
 
     private onSuccess() {
         const dispatch = this.dispatch;
         return function(response: AxiosResponse) {
-            const result = response.data as RequestResult<AuthenticationData>;
-            dispatch(authenticationActions.signIn(result.data));
+            const result = new RequestResult<AuthenticationData>(true, response.data);
+            dispatch(authenticationActions.signIn(result.data as AuthenticationData));
             return result;
         };
-    }
-
-    private onError(error: AxiosResponse) {
-        return error.data as RequestResult<never>;
     }
 }

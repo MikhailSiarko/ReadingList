@@ -117,13 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UserWithEmailNotFound" xml:space="preserve">
-    <value>User with such email wasn't found. Please check the email you entered</value>
+  <data name="UserWithEmail" xml:space="preserve">
+    <value>User with email {0}</value>
   </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>You entered wrong password. Please try again</value>
   </data>
   <data name="CannotChangeStatusFromTo" xml:space="preserve">
     <value>Can't change status from {0} to {1}</value>
+  </data>
+  <data name="MediatorNotInitialized" xml:space="preserve">
+    <value>Mediator is not initialized</value>
+  </data>
+  <data name="ObjectNotFoundWithData" xml:space="preserve">
+    <value>{0} with {1} wasn't found</value>
+  </data>
+  <data name="ObjectNotFound" xml:space="preserve">
+    <value>{0} wasn't found</value>
+  </data>
+  <data name="ObjectNotExist" xml:space="preserve">
+    <value>{0} doesn't exist</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>User with email {0} already exists</value>
   </data>
 </root>

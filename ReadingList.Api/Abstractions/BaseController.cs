@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.Infrastructure.Helpers;
+using ReadingList.Domain.Infrastructure;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Queries;
+using ReadingList.Resources;
 
 namespace ReadingList.Api.Abstractions
 {
@@ -12,37 +14,39 @@ namespace ReadingList.Api.Abstractions
     {
         private readonly IMediator _mediator;
 
+        private void ValidateMediator()
+        {
+            if (_mediator == null)
+                throw new InvalidOperationException(ExceptionMessages.MediatorNotInitialized);
+        }
+
         protected BaseController()
         {
             _mediator = MediatorContainer.GetMediator();
         }
 
-        protected async Task<CommandResult> ExecuteAsync(ICommand command)
+        protected async Task ExecuteAsync(ICommand command)
         {
-            if (_mediator == null)
-                throw new NullReferenceException();
-            return await _mediator.Send(command);
+            ValidateMediator();
+            await _mediator.Send(command);
         }
 
-        protected async Task<QueryResult<TResult>> AskAsync<TResult>(IQuery<TResult> query)
+        protected async Task<TResult> AskAsync<TResult>(IQuery<TResult> query)
         {
-            if(_mediator == null)
-                throw new NullReferenceException();
+            ValidateMediator();
             return await _mediator.Send(query);
         }
         
-        protected CommandResult Execute(ICommand command)
+        protected void Execute(ICommand command)
         {
-            if (_mediator == null)
-                throw new NullReferenceException();
-            return AsyncHelpers.RunSync(() => _mediator.Send(command));
+            ValidateMediator();
+            _mediator.Send(command).RunSync();
         }
 
-        protected QueryResult<TResult> Ask<TResult>(IQuery<TResult> query)
+        protected TResult Ask<TResult>(IQuery<TResult> query)
         {
-            if(_mediator == null)
-                throw new NullReferenceException();
-            return AsyncHelpers.RunSync(() => _mediator.Send(query));
+            ValidateMediator();
+            return _mediator.Send(query).RunSync();
         }
     }
 }

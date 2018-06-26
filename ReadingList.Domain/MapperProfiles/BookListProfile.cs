@@ -16,7 +16,9 @@ namespace ReadingList.Domain.MapperProfiles
                     JsonSerializer.Create(new JsonSerializerSettings
                     {
                         Formatting = Formatting.Indented
-                    })))).ReverseMap().ConvertUsing<BookListConverter>();
+                    }))))
+                .ReverseMap()
+                .ConvertUsing<BookListConverter>();
             CreateMap<PrivateBookListDto, BookList>().ReverseMap();
         }
     }

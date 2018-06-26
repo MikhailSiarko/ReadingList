@@ -1,14 +1,12 @@
 ﻿namespace ReadingList.Domain.Commands.PrivateList
 {
-    public class UpdatePrivateListCommand : ICommand
+    public class UpdatePrivateListCommand : SecuredCommand
     {
         public readonly string Name;
-        public readonly string Login;
 
-        public UpdatePrivateListCommand(string login, string name)
+        public UpdatePrivateListCommand(string login, string name) : base(login)
         {
             Name = name;
-            Login = login;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace ReadingList.Domain.Services
             {
                 case BookItemStatus.StartedButPostponed:
                 case BookItemStatus.Read:
-                    diff = TimeSpan.FromTicks(DateTime.Now.Ticks - previousDate.Ticks);
+                    diff = DateTime.Now - previousDate;
                     break;
                 case BookItemStatus.ToReading:
                     break;

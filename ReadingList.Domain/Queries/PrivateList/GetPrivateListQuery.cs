@@ -2,13 +2,10 @@
 
 namespace ReadingList.Domain.Queries
 {
-    public class GetPrivateListQuery : IQuery<PrivateBookListDto>
+    public class GetPrivateListQuery : SecuredQuery<PrivateBookListDto>
     {
-        public readonly string Login;
-
-        public GetPrivateListQuery(string login)
+        public GetPrivateListQuery(string login) : base(login)
         {
-            Login = login;
         }
     }
 }

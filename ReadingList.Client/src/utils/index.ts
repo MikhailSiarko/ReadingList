@@ -1,5 +1,7 @@
-export function failed(error: any) {
-  return Promise.reject(error && error.response);
+import { RequestResult } from '../models';
+
+export function onError(error: RequestResult<never>) {
+  return error;
 }
 
 export function setAuthHeader() {

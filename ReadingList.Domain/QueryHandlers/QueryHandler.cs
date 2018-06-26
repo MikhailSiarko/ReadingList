@@ -1,24 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using ReadingList.Domain.Queries;
 
 namespace ReadingList.Domain.QueryHandlers
 {
-    public abstract class QueryHandler<TQuery, TResult> : AsyncRequestHandler<TQuery, QueryResult<TResult>> 
+    public abstract class QueryHandler<TQuery, TResult> : AsyncRequestHandler<TQuery, TResult> 
         where TQuery : IQuery<TResult>
     {
-        protected sealed override async Task<QueryResult<TResult>> HandleCore(TQuery request)
+        protected sealed override async Task<TResult> HandleCore(TQuery request)
         {
-            try
-            {
-                var result = await Handle(request);
-                return QueryResult<TResult>.Succeed(result);
-            }
-            catch (Exception e)
-            {
-                return QueryResult<TResult>.Failed(e.Message);
-            }
+            return await Handle(request);
         }
 
         protected abstract Task<TResult> Handle(TQuery query);

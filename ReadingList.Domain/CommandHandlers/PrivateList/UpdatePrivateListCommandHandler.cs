@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
+using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
@@ -19,11 +19,14 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
 
         protected override async Task Handle(UpdatePrivateListCommand command)
         {
-            var userId = await _dbContext.Users.AsNoTracking().Where(u => u.Login == command.Login).Select(u => u.Id)
-                .SingleAsync();
             var list = await _dbContext.BookLists.SingleAsync(
-                l => l.OwnerId == userId && l.Type == BookListType.Private);
+                l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private);
+            
+            if(list == null)
+                throw new ObjectNotFoundException($"Private list for user {command.UserLogin}");
+            
             list.Update(new {command.Name});
+            
             await _dbContext.SaveChangesAsync();
         }
     }

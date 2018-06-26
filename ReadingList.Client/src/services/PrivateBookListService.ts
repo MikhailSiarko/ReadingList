@@ -5,6 +5,7 @@ import { AxiosResponse } from 'axios';
 import { privateBookListAction } from '../store/actions/privateBookList';
 import { PrivateBookListModel, PrivateBookListItemModel, RequestResult } from '../models';
 import ApiService from './ApiService';
+import { onError } from '../utils';
 
 export class PrivateBookListService extends ApiService {
     constructor(dispatch: Dispatch<RootState>) {
@@ -14,7 +15,7 @@ export class PrivateBookListService extends ApiService {
         const requestPromise = this.configureRequest(ApiConfiguration.PRIVATE_LIST, 'GET');
         return requestPromise
             .then(this.onGetListSuccess())
-            .catch(this.onError);
+            .catch(onError);
     }
 
     public addItem(item: PrivateBookListItemModel) {
@@ -22,7 +23,7 @@ export class PrivateBookListService extends ApiService {
             'POST', {title: item.title, author: item.author});
         return requestPromise
             .then(this.onAddItemSuccess())
-            .catch(this.onError);
+            .catch(onError);
     }
 
     public updateItem(item: PrivateBookListItemModel) {
@@ -35,7 +36,7 @@ export class PrivateBookListService extends ApiService {
             });
         return requestPromise
             .then(this.onUpdateItemSuccess())
-            .catch(this.onError);
+            .catch(onError);
     }
 
     public removeItem(id: number) {
@@ -44,7 +45,7 @@ export class PrivateBookListService extends ApiService {
             'DELETE');
         return requestPromise
             .then(this.onDeleteItemSuccess(id))
-            .catch(this.onError);
+            .catch(onError);
     }
 
     public updateListName(name: string) {
@@ -52,7 +53,7 @@ export class PrivateBookListService extends ApiService {
             `${ApiConfiguration.PRIVATE_LIST}`, 'PUT', {name});
         return requestPromise
             .then(this.onListNameUpdate(name))
-            .catch(this.onError);
+            .catch(onError);
     }
 
     private onListNameUpdate(name: string) {
@@ -65,7 +66,7 @@ export class PrivateBookListService extends ApiService {
     private onGetListSuccess() {
         const that = this;
         return function(response: AxiosResponse) {
-            const result = response.data as RequestResult<PrivateBookListModel>;
+            const result = new RequestResult<PrivateBookListModel>(true, response.data);
             that.dispatch(privateBookListAction.setPrivateList(result.data as PrivateBookListModel));
             return result;
         };
@@ -74,7 +75,7 @@ export class PrivateBookListService extends ApiService {
     private onAddItemSuccess() {
         const that = this;
         return function(response: AxiosResponse) {
-            const result = response.data as RequestResult<PrivateBookListItemModel>;
+            const result = new RequestResult<PrivateBookListItemModel>(true, response.data);
             that.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItemModel));
             return result;
         };
@@ -83,7 +84,7 @@ export class PrivateBookListService extends ApiService {
     private onUpdateItemSuccess() {
         const that = this;
         return function(response: AxiosResponse) {
-            const result = response.data as RequestResult<PrivateBookListItemModel>;
+            const result = new RequestResult<PrivateBookListItemModel>(true, response.data);
             that.dispatch(privateBookListAction.updateItem(result.data as PrivateBookListItemModel));
             return result;
         };
@@ -94,10 +95,5 @@ export class PrivateBookListService extends ApiService {
         return function() {
             that.dispatch(privateBookListAction.removeItem(id));
         };
-    }
-
-    private onError(error: AxiosResponse) {
-        const result = error.data as RequestResult<never>;
-        return result;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
@@ -20,6 +22,11 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected override async Task Handle(RegisterUserCommand command)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == command.Email);
+            
+            if(user != null)
+                throw new UserAlreadyExistsException(command.Email);
+            
             var userRm = new UserWm
             {
                 Login = command.Email,
@@ -27,13 +34,16 @@ namespace ReadingList.Domain.CommandHandlers
                 RoleId = (int) UserRole.User,
                 Profile = new ProfileWm {Email = command.Email}
             };
+            
             await _context.Users.AddAsync(userRm);
+            
             await _context.BookLists.AddAsync(new BookList
             {
                 Name = "Default",
                 Owner = userRm,
                 Type = BookListType.Private
             });
+            
             await _context.SaveChangesAsync();
         }
     }

@@ -2,11 +2,10 @@
 {
     public interface IUserSqlService
     {
-        string GetUserByLoginSql(string parameterName = "login");
+        string GetUserByLoginSql();
 
-        string GetUserByIdSql(string parameterName = "id");
+        string GetUserByIdSql();
 
-        string GetUserByLoginAndPasswordSql(string loginParameterName = "login",
-            string passwordParameterName = "password");
+        string GetUserByLoginAndPasswordSql();
     }
 }

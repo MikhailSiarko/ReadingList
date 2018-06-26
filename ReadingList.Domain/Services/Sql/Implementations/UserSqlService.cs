@@ -14,14 +14,13 @@ namespace ReadingList.Domain.Services.Sql
                 .From("Users");
         }
 
-        public string GetUserByLoginSql(string parameterName = "login") =>
-            _sqlBuilder.Where($"Login = @{parameterName}").ToSql();
+        public string GetUserByLoginSql() =>
+            _sqlBuilder.Where("Login = @login").ToSql();
 
-        public string GetUserByIdSql(string parameterName = "id") =>
-            _sqlBuilder.Where($"Id = @{parameterName}").ToSql();
+        public string GetUserByIdSql() =>
+            _sqlBuilder.Where("Id = @id").ToSql();
 
-        public string GetUserByLoginAndPasswordSql(string loginParameterName = "login",
-            string passwordParameterName = "password") =>
-            _sqlBuilder.Where($"Login = @{loginParameterName}").Where($"Password = @{passwordParameterName}").ToSql();
+        public string GetUserByLoginAndPasswordSql() =>
+            _sqlBuilder.Where("Login = @login").Where($"Password = @password").ToSql();
     }
 }

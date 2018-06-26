@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using ReadingList.Api.QueriesData;
+using ReadingList.Resources;
 
 namespace ReadingList.Api.Validators
 {
@@ -7,14 +8,10 @@ namespace ReadingList.Api.Validators
     {
         public RegisterQueryValidator()
         {
-            RuleFor(query => query.Email)
-                .NotEmpty().WithMessage("Please specify a email")
-                .EmailAddress().WithMessage("Please enter a valid email");
-            RuleFor(query => query.Password)
-                .NotEmpty().WithMessage("Please specify a password");
+            Include(new LoginQueryValidator());
             RuleFor(query => query.ConfirmPassword)
                 .NotEmpty().Matches(query => query.Password)
-                    .WithMessage("Passwords do not confirm");
+                    .WithMessage(m => ValidationMessages.PasswordsNotConfirm);
         }
     }
 }
