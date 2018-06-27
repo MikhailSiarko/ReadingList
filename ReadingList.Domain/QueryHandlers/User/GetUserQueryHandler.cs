@@ -25,7 +25,7 @@ namespace ReadingList.Domain.QueryHandlers
                 new {id = query.UserId});
             
             if(user == null)
-                throw new ObjectNotFoundException("User", $"Id: {query.UserId}");
+                throw new ObjectNotExistException($"User with Id: {query.UserId}");
             
             return user;
         }

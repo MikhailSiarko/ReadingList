@@ -23,7 +23,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private);
             
             if(list == null)
-                throw new ObjectNotFoundException($"Private list for user {command.UserLogin}");
+                throw new ObjectNotExistException($"Private list for user {command.UserLogin}");
             
             list.Update(new {command.Name});
             

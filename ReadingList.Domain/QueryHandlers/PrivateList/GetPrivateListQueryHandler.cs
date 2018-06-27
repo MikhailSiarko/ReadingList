@@ -50,7 +50,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                     }, new {login = query.UserLogin, type = (int) BookListType.Private});
             
             if(privateList == null)
-                throw new ObjectNotFoundException($"Private list for user {query.UserLogin}");
+                throw new ObjectNotExistException($"Private list for user {query.UserLogin}");
 
             return Mapper.Map<ListRM, PrivateBookListDto>(privateList);
         }

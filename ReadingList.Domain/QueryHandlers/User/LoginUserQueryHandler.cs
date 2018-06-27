@@ -33,7 +33,7 @@ namespace ReadingList.Domain.QueryHandlers
                 new {login = query.Login});
             
             if (user == null)
-                throw new ObjectNotFoundException(ExceptionMessages.UserWithEmail.F(query.Login)) ;
+                throw new ObjectNotExistException(ExceptionMessages.UserWithEmail.F(query.Login)) ;
             
             if(_encryptionService.Encrypt(query.Password) != user.Password)
                 throw new WrongPasswordException();

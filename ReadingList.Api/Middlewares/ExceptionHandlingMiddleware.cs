@@ -10,16 +10,13 @@ namespace ReadingList.Api.Middlewares
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ExceptionToStatusCodeProvider _exceptionToStatusCodeProvider;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, Dictionary<HttpStatusCode, Type[]> map)
+        public ExceptionHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
-            _exceptionToStatusCodeProvider =
-                new ExceptionToStatusCodeProvider(map);
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
         {
             try
             {
@@ -27,14 +24,15 @@ namespace ReadingList.Api.Middlewares
             }
             catch (Exception e)
             {
-                await HandleExceptionAsync(context, e);
+                await HandleExceptionAsync(context, e, exceptionToStatusCodeProvider);
             }
         }
         
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception,
+            ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int) _exceptionToStatusCodeProvider.GetStatusCode(exception.GetType());
+            context.Response.StatusCode = (int) exceptionToStatusCodeProvider.GetStatusCode(exception.GetType());
             var result = JsonConvert.SerializeObject(new { errorMessage = exception.Message });
             return context.Response.WriteAsync(result);
         }

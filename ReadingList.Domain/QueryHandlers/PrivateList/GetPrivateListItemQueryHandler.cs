@@ -37,7 +37,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
             });
             
             if(item == null)
-                throw new ObjectNotFoundException("Item", $"Author: {query.Author} and Title: {query.Title}");
+                throw new ObjectNotExistException($"Item with Author: {query.Author} and Title: {query.Title} for private list of user {query.UserLogin}");
 
             return Mapper.Map<PrivateListItemRm, PrivateBookListItemDto>(item);
         }
