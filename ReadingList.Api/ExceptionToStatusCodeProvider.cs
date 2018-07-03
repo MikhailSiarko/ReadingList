@@ -7,10 +7,10 @@ namespace ReadingList.Api
 {
     public class ExceptionToStatusCodeProvider
     {
-        private readonly Dictionary<Type, HttpStatusCode> _source;
+        private readonly IReadOnlyDictionary<Type, HttpStatusCode> _source;
         private readonly Type _baseCaseExceptionType;
 
-        public ExceptionToStatusCodeProvider(Dictionary<HttpStatusCode, Type[]> map)
+        public ExceptionToStatusCodeProvider(IReadOnlyDictionary<HttpStatusCode, Type[]> map)
         {
             _baseCaseExceptionType = typeof(Exception);
             _source = InitializeExceptionToStatusCodeMap(map);
@@ -18,21 +18,23 @@ namespace ReadingList.Api
 
         public HttpStatusCode GetStatusCode(Type exceptionType)
         {
-            while (true)
+            while (exceptionType.IsSubclassOf(_baseCaseExceptionType))
             {
-                if (!exceptionType.IsSubclassOf(_baseCaseExceptionType))
-                    return HttpStatusCode.InternalServerError;
                 if (_source.TryGetValue(exceptionType, out var statusCode))
                     return statusCode;
                 exceptionType = exceptionType.BaseType;
             }
+
+            return HttpStatusCode.InternalServerError;
         }
 
-        private static Dictionary<Type, HttpStatusCode> InitializeExceptionToStatusCodeMap(Dictionary<HttpStatusCode, Type[]> map)
+        private static IReadOnlyDictionary<Type, HttpStatusCode> InitializeExceptionToStatusCodeMap(IReadOnlyDictionary<HttpStatusCode, Type[]> map)
         {
             return
-                map.SelectMany(pair => pair.Value.Select(t => new KeyValuePair<Type, HttpStatusCode>(t, pair.Key)),
-                    (p, c) => c).Distinct(new KeyValueEqualityComparer()).ToDictionary(pair => pair.Key, pair => pair.Value);
+                map.SelectMany(pair => pair.Value
+                        .Select(t => new KeyValuePair<Type, HttpStatusCode>(t, pair.Key)), (p, c) => c)
+                        .Distinct(new KeyValueEqualityComparer())
+                    .ToDictionary(pair => pair.Key, pair => pair.Value);
         }
         
         private class KeyValueEqualityComparer : IEqualityComparer<KeyValuePair<Type, HttpStatusCode>>

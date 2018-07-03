@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -10,13 +8,15 @@ namespace ReadingList.Api.Middlewares
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ExceptionToStatusCodeProvider _exceptionToStatusCodeProvider;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
         {
             _next = next;
+            _exceptionToStatusCodeProvider = exceptionToStatusCodeProvider;
         }
 
-        public async Task InvokeAsync(HttpContext context, ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -24,15 +24,17 @@ namespace ReadingList.Api.Middlewares
             }
             catch (Exception e)
             {
-                await HandleExceptionAsync(context, e, exceptionToStatusCodeProvider);
+                if (e.GetType() != typeof(OperationCanceledException))
+                {
+                    await HandleExceptionAsync(context, e);
+                }                  
             }
         }
         
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception,
-            ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int) exceptionToStatusCodeProvider.GetStatusCode(exception.GetType());
+            context.Response.StatusCode = (int) _exceptionToStatusCodeProvider.GetStatusCode(exception.GetType());
             var result = JsonConvert.SerializeObject(new { errorMessage = exception.Message });
             return context.Response.WriteAsync(result);
         }

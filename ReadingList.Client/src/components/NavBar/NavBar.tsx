@@ -8,12 +8,14 @@ interface NavBarProps extends React.HTMLProps<HTMLElement> {
 }
 
 const NavBar: React.SFC<NavBarProps> = props => {
-    const navLinks = props.links.map((value, index) => {
-        return (
-            <NavBarLink className={styles['nav-bar-link']} activeClassName={styles['active-nav-bar-link']}
-                           link={value} key={'nav-link-' + index} />
-        );
-    });
+    const navLinks = props.links.map((value, index) => (
+        <NavBarLink 
+            className={styles['nav-bar-link']} 
+            activeClassName={styles['active-nav-bar-link']}
+            link={value}
+            key={'nav-link-' + index} 
+        />
+    ));
     const propsCopy = cloneDeep(props);
     delete propsCopy.links;
     return (

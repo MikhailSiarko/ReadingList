@@ -12,8 +12,8 @@ const Fieldset: React.SFC<Props> = props => {
     return (
         <fieldset className={style.fieldset + ` ${props.className}`} id={props.id}>
             <legend>{props.legend}</legend>
-                {props.children}
-            </fieldset>
+            {props.children}
+        </fieldset>
     );    
 };
 

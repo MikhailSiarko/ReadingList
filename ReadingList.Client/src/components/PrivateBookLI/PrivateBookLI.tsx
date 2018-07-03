@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.css';
-import { PrivateBookListItemModel, BookStatus } from '../../models';
+import { PrivateBookListItemModel, BookStatus as BookStatusEnum } from '../../models';
 import PrimaryButton from '../PrimaryButton';
 import RedButton from '../RedButton';
 import { convertSecondsToReadingTime } from '../../utils';
@@ -13,59 +13,88 @@ export interface PrivateBookLIProps {
     onChangesSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-const PrivateBookLI: React.SFC<PrivateBookLIProps> = props =>  {   
+const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
+    <div>
+        <div>
+            <PrimaryButton type="submit">Save</PrimaryButton>
+            <RedButton onClick={onCancel}>Cancel</RedButton>
+        </div>
+    </div>
+);
+
+const Input: React.SFC<{value: string, name: string}> = ({value, name}) => (
+    <div>
+        <input
+            type="text"
+            required={true}
+            name={name}
+            defaultValue={value}
+        />
+    </div>
+);
+
+const BookInfoEditor: React.SFC<{title: string, author: string}> = ({title, author}) => (
+    <div className={styles['editable-book-info']}>
+        <div className={styles['editing-book-title']}>
+            <Input value={title} name={'title'} />by
+            <Input value={author} name={'author'} />
+        </div>
+    </div>
+);
+
+const BookStatusEditor: React.SFC<{status: string, options: JSX.Element[]}> = ({status, options}) => (
+    <div className={styles['edited-status']}>
+        <p>Status:</p>
+        <select name="status" defaultValue={status}>
+            {options}
+        </select>
+    </div>
+);
+
+const BookStatus = ({status}: {status: string}) => (
+    <div className={styles['status']}>
+        <p>Status:</p>
+        <br />
+        <p>{BookStatusEnum[status]}</p>
+    </div>
+);
+
+const ReadingTime = ({readingTimeInSeconds}: {readingTimeInSeconds: number}) => (
+    <div className={styles['reading-time']}>
+        <p>
+            Reading time:
+        </p>
+        <br />
+        <p>{convertSecondsToReadingTime(readingTimeInSeconds)}</p>
+    </div>
+);
+
+const BookInfo = ({title, author}: {title: string, author: string}) => (
+    <div className={styles['book-info']}>
+        <h5 className={styles['book-title']}>
+            <q>{title}</q> by {author}
+        </h5>
+    </div>
+);
+
+const PrivateBookLI: React.SFC<PrivateBookLIProps> = props =>  {
     if(props.listItem.isOnEditMode) {
         return (
             <li className={styles['editing-book-li']} >
                 <form onSubmit={props.onChangesSubmit}>
                     <input type="hidden" name="item-id" value={props.listItem.id} />
-                    <div className={styles['editable-book-info']}>
-                        <div className={styles['editing-book-title']}>
-                            <div>
-                                <input type="text" required={true}
-                                    name="title" defaultValue={props.listItem.title} />
-                            </div>by 
-                            <div>
-                                <input type="text" required={true}
-                                    name="author" defaultValue={props.listItem.author} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles['edited-status']}>
-                        <p>Status:</p>
-                        <select name="status" defaultValue={props.listItem.status}>
-                            {props.options}
-                        </select>
-                    </div>
-                    <div>
-                        <div>
-                            <PrimaryButton type="submit">Save</PrimaryButton>
-                            <RedButton onClick={props.onCancel}>Cancel</RedButton>
-                        </div>
-                    </div>
+                    <BookInfoEditor title={props.listItem.title} author={props.listItem.author} />
+                    <BookStatusEditor status={props.listItem.status} options={props.options} />
+                    <Footer onCancel={props.onCancel} />
                 </form>
-        </li>
+            </li>
         );
     }
     return (
         <li className={styles['book-li']}>
-            <div className={styles['book-info']}>
-                <h5 className={styles['book-title']}>
-                    <q>{props.listItem.title}</q> by {props.listItem.author}
-                </h5>
-            </div>
-            <div className={styles['reading-time']}>
-                <p>
-                    Reading time:
-                </p>
-                <br />
-                <p>{convertSecondsToReadingTime(props.listItem.readingTimeInSeconds)}</p>    
-            </div>
-            <div className={styles['status']}>
-                <p>Status:</p>
-                <br />
-                <p>{BookStatus[props.listItem.status]}</p>
-            </div>
+            <BookInfo title={props.listItem.title} author={props.listItem.author} />
+            <ReadingTime readingTimeInSeconds={props.listItem.readingTimeInSeconds} />
+            <BookStatus status={props.listItem.status} />
         </li>
     );
 };

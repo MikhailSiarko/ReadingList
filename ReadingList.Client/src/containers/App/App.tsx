@@ -28,7 +28,7 @@ class App extends React.Component<AppProps> {
         const navLinks = this.props.identity.isAuthenticated
             ? [
                 {text: 'Private List', href: '/'},
-                {text: 'Logout', href: '', action: this.signOutHandler}                
+                {text: 'Logout', href: '', action: this.signOutHandler}
             ]
             : [
                 {text: 'Login', href: '/account/login'},
@@ -41,8 +41,11 @@ class App extends React.Component<AppProps> {
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>
-                        <PrivateRoute exact={true} path="/"
-                            component={PrivateBookList} />
+                        <PrivateRoute
+                            exact={true}
+                            path="/"
+                            component={PrivateBookList}
+                        />
                         <Route path="/account" component={Account} />
                     </Switch>
                 </Main>

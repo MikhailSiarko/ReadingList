@@ -13,16 +13,20 @@ interface NavBarLinkProps {
     activeClassName?: string;
 }
 
-const NavBarLink: React.SFC<NavBarLinkProps> = props => {
-    const link = props.link.action
-        ? (<a className={props.className} onClick={props.link.action}>{props.link.text}</a>)
-        : (
-            <NavLink className={props.className} activeClassName={props.activeClassName}
-                        to={props.link.href}>
-                {props.link.text}
-            </NavLink>
-        );
-    return link;
-};
+const renderAnchor = (props: NavBarLinkProps) => (
+    <a className={props.className} onClick={props.link.action}>{props.link.text}</a>
+);
+
+const renderNavLink = (props: NavBarLinkProps) => (
+    <NavLink 
+        className={props.className}
+        activeClassName={props.activeClassName}
+        to={props.link.href}
+    >
+        {props.link.text}
+    </NavLink>
+);
+
+const NavBarLink: React.SFC<NavBarLinkProps> = props => props.link.action ? renderAnchor(props) : renderNavLink(props);
 
 export default NavBarLink;

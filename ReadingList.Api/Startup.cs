@@ -4,14 +4,12 @@ using System.Net;
 using System.Reflection;
 using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Middlewares;
 using ReadingList.Domain;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Api
 {
@@ -19,8 +17,6 @@ namespace ReadingList.Api
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(provider =>
-                new ExceptionToStatusCodeProvider(InitializeMap()));
             services.AddCors();
             services.AddDomainModule();
             services.AddMvc().AddFluentValidation(options =>
@@ -36,7 +32,7 @@ namespace ReadingList.Api
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>(new ExceptionToStatusCodeProvider(InitializeMap()));
             app.UseCors(builder =>
             {
                 builder.AllowAnyHeader();

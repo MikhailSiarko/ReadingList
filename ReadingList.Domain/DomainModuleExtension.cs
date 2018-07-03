@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Authentication.AuthenticationOptions;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.MapperProfiles;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
@@ -25,9 +26,9 @@ namespace ReadingList.Domain
             services.AddTransient<IUserSqlService, UserSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddDbContext<WriteDbContext>((provider, builder) =>
-                builder.UseSqlServer(provider.GetService<IConfiguration>().GetConnectionString("Default")));
+                builder.UseSqlServer(provider.GetDefaultConnectionString()));
             services.AddScoped<IDbConnection, SqlConnection>(provider =>
-                new SqlConnection(provider.GetService<IConfiguration>().GetConnectionString("Default")));
+                new SqlConnection(provider.GetDefaultConnectionString()));
             services.AddScoped<IReadDbConnection, ReadDbConnection>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);

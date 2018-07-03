@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Queries;
 using ReadingList.Resources;

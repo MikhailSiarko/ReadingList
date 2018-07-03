@@ -45,7 +45,7 @@ class PrivateBookList extends React.Component<Props> {
                     const author = target.elements['author'].value;
                     const status = target.elements['status'].value;
                     Object.assign(copy, {title, author, status, isOnEditMode: false});
-                    this.props.updateItem(copy); 
+                    this.props.updateItem(copy);
                 }
             }
         }
@@ -106,12 +106,14 @@ class PrivateBookList extends React.Component<Props> {
                     ];
                     const Contexed = withContextMenu(actions, PrivateBookLI);
                     return (
-                        <Contexed key={listItem.id}
+                        <Contexed
+                            key={listItem.id}
                             listItem={listItem}
                             options={options}
                             onSave={this.props.updateItem}
                             onCancel={this.cancelItemChangesHandler}
-                            onChangesSubmit={this.submitItemChangesHandler} />
+                            onChangesSubmit={this.submitItemChangesHandler}
+                        />
                     );
                 });
             }
@@ -133,9 +135,9 @@ class PrivateBookList extends React.Component<Props> {
         return (
             <div>
                 {
-                    this.props.bookList && !this.props.bookList.isInEditMode 
+                    this.props.bookList && !this.props.bookList.isInEditMode
                         ? <ItemForm onSubmit={this.submitNewItemHandler} /> : null
-                }               
+                }
                 {list}
             </div>
         );
