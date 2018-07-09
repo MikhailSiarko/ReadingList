@@ -9,7 +9,7 @@ interface MenuItem {
 interface ContextMenuState {
     isVisible: boolean;
 }
-// TODO: Fix handleContextMenu on another contexed item
+// TODO: Fix handleContextMenu on another contexed item (Chrome, Edge and Opera issue)
 export function withContextMenu<P>(menuItems: MenuItem[], Child: React.ComponentType<P>) {
     return class extends React.Component<P, ContextMenuState> {
         static displayName = `withContextMenu(${Child.displayName || Child.name})`;

@@ -28,7 +28,7 @@ abstract class ApiService {
         }, error => {
             this.dispatch(loadingActions.end());
             if(error.response && error.response.status === 401) {
-                error.response.data = new RequestResult<never>(false, undefined, 'You are not authenticate');
+                error.response.data = new RequestResult<never>(false, undefined, 'You are not authenticated');
                 this.dispatch(authenticationActions.signOut());
             }
             let result = new RequestResult<never>(false, undefined,

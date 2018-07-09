@@ -22,12 +22,9 @@ namespace ReadingList.Api.Middlewares
             {
                 await _next(context);
             }
-            catch (Exception e)
+            catch (Exception e) when (!(e is OperationCanceledException))
             {
-                if (e.GetType() != typeof(OperationCanceledException))
-                {
-                    await HandleExceptionAsync(context, e);
-                }                  
+                await HandleExceptionAsync(context, e);
             }
         }
         
