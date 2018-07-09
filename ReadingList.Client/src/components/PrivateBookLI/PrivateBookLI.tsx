@@ -8,9 +8,8 @@ import { convertSecondsToReadingTime } from '../../utils';
 export interface PrivateBookLIProps {
     listItem: PrivateBookListItemModel;
     onSave: (item: PrivateBookListItemModel) => void;
-    onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
+    onCancel: (itemId: number) => void;
     options: JSX.Element[];
-    onChangesSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
@@ -77,26 +76,47 @@ const BookInfo = ({title, author}: {title: string, author: string}) => (
     </div>
 );
 
-const PrivateBookLI: React.SFC<PrivateBookLIProps> = props =>  {
-    if(props.listItem.isOnEditMode) {
+class PrivateBookLI extends React.Component<PrivateBookLIProps> {
+    onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const target = event.target as HTMLFormElement;
+        const title = target.elements['title'].value;
+        const author = target.elements['author'].value;
+        const status = target.elements['status'].value;
+        const item = Object.assign({}, this.props.listItem, {
+            title,
+            author,
+            status,
+            isOnEditMode: false
+        });
+        this.props.onSave(item);
+    }
+
+    cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        this.props.onCancel(this.props.listItem.id);
+    }
+
+    render() {
+        if(this.props.listItem.isOnEditMode) {
+            return (
+                <li className={styles['editing-book-li']} >
+                    <form onSubmit={this.onSubmitHandler}>
+                        <BookInfoEditor title={this.props.listItem.title} author={this.props.listItem.author} />
+                        <BookStatusEditor status={this.props.listItem.status} options={this.props.options} />
+                        <Footer onCancel={this.cancelHandler} />
+                    </form>
+                </li>
+            );
+        }
         return (
-            <li className={styles['editing-book-li']} >
-                <form onSubmit={props.onChangesSubmit}>
-                    <input type="hidden" name="item-id" value={props.listItem.id} />
-                    <BookInfoEditor title={props.listItem.title} author={props.listItem.author} />
-                    <BookStatusEditor status={props.listItem.status} options={props.options} />
-                    <Footer onCancel={props.onCancel} />
-                </form>
+            <li className={styles['book-li']}>
+                <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
+                <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
+                <BookStatus status={this.props.listItem.status} />
             </li>
         );
     }
-    return (
-        <li className={styles['book-li']}>
-            <BookInfo title={props.listItem.title} author={props.listItem.author} />
-            <ReadingTime readingTimeInSeconds={props.listItem.readingTimeInSeconds} />
-            <BookStatus status={props.listItem.status} />
-        </li>
-    );
-};
+}
 
 export default PrivateBookLI;

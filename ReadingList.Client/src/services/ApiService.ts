@@ -4,6 +4,7 @@ import { Dispatch } from 'react-redux';
 import { RootState } from '../store/reducers';
 import { loadingActions } from '../store/actions/loading';
 import { RequestResult } from '../models';
+import { authenticationActions } from '../store/actions/authentication';
 
 abstract class ApiService {
     protected dispatch: Dispatch<RootState>;
@@ -28,6 +29,7 @@ abstract class ApiService {
             this.dispatch(loadingActions.end());
             if(error.response && error.response.status === 401) {
                 error.response.data = new RequestResult<never>(false, undefined, 'You are not authenticate');
+                this.dispatch(authenticationActions.signOut());
             }
             let result = new RequestResult<never>(false, undefined,
                 error.response ? error.response.data.errorMessage : error.message);

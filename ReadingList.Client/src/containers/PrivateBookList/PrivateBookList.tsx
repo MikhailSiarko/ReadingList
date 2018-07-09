@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItemModel, PrivateBookListModel, generateStatusSelectItems, RequestResult } from '../../models';
+import { PrivateBookListItemModel, generateStatusSelectItems, RequestResult } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
-import { cloneDeep } from 'lodash';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
-import PrimaryButton from '../../components/PrimaryButton';
-import RedButton from '../../components/RedButton';
-import { isNullOrEmpty } from '../../utils';
 import { withContextMenu } from '../../hoc/withContextMenu';
 import PrivateBookUL from '../../components/PrivateBookUL';
 import ItemForm from '../../components/ItemForm';
+import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 
 interface Props {
     bookList: RootState.PrivateList;
@@ -29,64 +26,6 @@ class PrivateBookList extends React.Component<Props> {
         if(!this.props.bookList) {
             await this.props.getPrivateList();
         }
-    }
-
-    submitItemChangesHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if(this.props.bookList) {
-            const form = event.target as HTMLFormElement;
-            const itemIdInput = form.elements.namedItem('item-id') as HTMLInputElement;
-            if(itemIdInput) {
-                let item = this.props.bookList.items.find(value => value.id.toString() === itemIdInput.value);
-                if(item) {
-                    let copy = cloneDeep(item);
-                    const target = event.target as HTMLFormElement;
-                    const title = target.elements['title'].value;
-                    const author = target.elements['author'].value;
-                    const status = target.elements['status'].value;
-                    Object.assign(copy, {title, author, status, isOnEditMode: false});
-                    this.props.updateItem(copy);
-                }
-            }
-        }
-    }
-
-    cancelItemChangesHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        const button = event.target as HTMLButtonElement;
-        const form = button.form;
-        if(this.props.bookList && form) {
-            const itemIdInput = form.elements.namedItem('item-id') as HTMLInputElement;
-            this.props.switchItemEditMode(parseInt(itemIdInput.value, 10));
-        }
-    }
-
-    submitListNameHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const target = event.target as HTMLFormElement;
-        const newName = target.elements['list-name'].value;
-        if(!isNullOrEmpty(newName)) {
-            this.props.updateListName(newName);
-        }
-    }
-
-    submitNewItemHandler = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const target = event.target as HTMLFormElement;
-        const title = target.elements['title'].value;
-        const author = target.elements['author'].value;
-        const isTitleValid = !isNullOrEmpty(title);
-        const isAuthorValid = !isNullOrEmpty(author);
-        if(isTitleValid && isAuthorValid) {
-            const item = {title, author} as PrivateBookListItemModel;
-            this.props.addItem(item);
-        }
-    }
-
-    cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        this.setState({bookList: cloneDeep(this.props.bookList as PrivateBookListModel)});
-        this.props.switchListEditMode();
     }
 
     render() {
@@ -111,8 +50,7 @@ class PrivateBookList extends React.Component<Props> {
                             listItem={listItem}
                             options={options}
                             onSave={this.props.updateItem}
-                            onCancel={this.cancelItemChangesHandler}
-                            onChangesSubmit={this.submitItemChangesHandler}
+                            onCancel={this.props.switchItemEditMode}
                         />
                     );
                 });
@@ -120,11 +58,11 @@ class PrivateBookList extends React.Component<Props> {
             const legend = (
                 this.props.bookList.isInEditMode ?
                 (
-                    <form onSubmit={this.submitListNameHandler}>
-                        <input name={'list-name'} type={'text'} defaultValue={this.props.bookList.name} />
-                        <PrimaryButton type={'submit'}>Save</PrimaryButton>
-                        <RedButton onClick={this.cancelHandler}>Cancel</RedButton>
-                    </form>
+                    <PrivateListNameEditor
+                        name={this.props.bookList.name}
+                        onSave={this.props.updateListName}
+                        onCancel={this.props.switchListEditMode}
+                    />
                 ) : this.props.bookList.name
 
             );
@@ -136,7 +74,7 @@ class PrivateBookList extends React.Component<Props> {
             <div>
                 {
                     this.props.bookList && !this.props.bookList.isInEditMode
-                        ? <ItemForm onSubmit={this.submitNewItemHandler} /> : null
+                        ? <ItemForm onSubmit={this.props.addItem} /> : null
                 }
                 {list}
             </div>
