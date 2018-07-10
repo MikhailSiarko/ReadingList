@@ -5,87 +5,110 @@ interface MenuItem {
     onClick: () => void;
     text: string;
 }
-interface ContextMenuState {
-    isVisible: boolean;
-}
-// TODO: Fix handleContextMenu on another contexed item (Chrome, Edge and Opera issue)
+
 export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menuItems: MenuItem[],
         Child: React.ComponentType<P>) {
-    return class extends React.Component<P, ContextMenuState> {
-        static displayName = `withContextMenu(${Child.displayName || Child.name})`;
-        private contextMenu: HTMLDivElement;
-        constructor(props: P) {
-            super(props);
-            this.state = { isVisible: false };
+
+    function createMenu(items: MenuItem[]) {
+        const contextMenu = document.createElement('div');
+            contextMenu.className = styles['context-menu'];
+
+            items.map((item) => {
+                const button = document.createElement('button');
+                button.onclick = item.onClick;
+                button.innerText = item.text;
+                contextMenu.appendChild(button);
+            });
+        return contextMenu;
+    }
+
+    function closeOtherMenues() {
+        let menues = document.getElementsByClassName(styles['context-menu']);
+        Array.from(menues).forEach(item => item.remove());
+    }
+
+    function setMenuPosition(eventClientX: number, eventClientY: number, contextMenu: HTMLElement) {
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+
+        let rootW: number = 0;
+        let rootH: number = 0;
+
+        if(contextMenu) {
+            rootW = contextMenu.offsetWidth;
+            rootH = contextMenu.offsetHeight;
         }
+
+        const right = (screenW - eventClientX) > rootW;
+        const left = !right;
+        const top = (screenH - eventClientY) > rootH;
+        const bottom = !top;
+
+        if (right && contextMenu) {
+            contextMenu.style.left = `${eventClientX + 5}px`;
+        }
+
+        if (left && contextMenu) {
+            contextMenu.style.left = `${eventClientX - rootW - 5}px`;
+        }
+
+        if (top && contextMenu) {
+            contextMenu.style.top = `${eventClientY + 5}px`;
+        }
+
+        if (bottom && contextMenu) {
+            contextMenu.style.top = `${eventClientY - rootH - 5}px`;
+        }
+    }
+
+    return class extends React.Component<P> {
+        static displayName = `withContextMenu(${Child.displayName || Child.name})`;
+        private menuWrapper: HTMLDivElement;
 
         handleContextMenu = (event: React.MouseEvent<HTMLElement>) => {
             event.persist();
             event.preventDefault();
             event.stopPropagation();
-            this.setState({isVisible: true}, () => {
-                const clickX = event.clientX;
-                const clickY = event.clientY;
-                const screenW = window.innerWidth;
-                const screenH = window.innerHeight;
 
-                let rootW: number = 0;
-                let rootH: number = 0;
+            closeOtherMenues();
 
-                if(this.contextMenu) {
-                    rootW = this.contextMenu.offsetWidth;
-                    rootH = this.contextMenu.offsetHeight;
-                }
+            let contextMenu = createMenu(menuItems);
 
-                const right = (screenW - clickX) > rootW;
-                const left = !right;
-                const top = (screenH - clickY) > rootH;
-                const bottom = !top;
+            this.menuWrapper.appendChild(contextMenu);
 
-                if (right && this.contextMenu) {
-                    this.contextMenu.style.left = `${clickX + 5}px`;
-                }
-
-                if (left && this.contextMenu) {
-                    this.contextMenu.style.left = `${clickX - rootW - 5}px`;
-                }
-
-                if (top && this.contextMenu) {
-                    this.contextMenu.style.top = `${clickY + 5}px`;
-                }
-
-                if (bottom && this.contextMenu) {
-                    this.contextMenu.style.top = `${clickY - rootH - 5}px`;
-                }
-            });
+            setMenuPosition(event.clientX, event.clientY, contextMenu);
         }
 
         handleWindowClick = (event: MouseEvent) => {
-            const { isVisible } = this.state;
             const target = event.target as Node;
-            const wasOutside = target.contains(this.contextMenu);
-
-            if (wasOutside && isVisible) {
-                this.setState({isVisible: false});
+            if(this.menuWrapper) {
+                const contextMenu = this.menuWrapper.firstElementChild;
+                if(contextMenu) {
+                    const wasOutside = target.contains(contextMenu);
+                    if (wasOutside) {
+                        contextMenu.remove();
+                    }
+                }
             }
         }
 
-        handleClick = () => {
-            this.setState({isVisible: false});
-        }
-
-        handleScroll = () => {
-            this.setState({isVisible: false});
+        hideContextMenu = () => {
+            if(this.menuWrapper) {
+                const contextMenu = this.menuWrapper.firstElementChild as HTMLElement;
+                if(contextMenu) {
+                    contextMenu.remove();
+                }
+            }
         }
 
         componentDidMount() {
             document.addEventListener('click', this.handleWindowClick);
-            document.addEventListener('scroll', this.handleScroll);
+            document.addEventListener('scroll', this.hideContextMenu);
         }
 
         componentWillUnmount() {
-            document.removeEventListener('click', this.handleClick);
-            document.removeEventListener('scroll', this.handleScroll);
+            document.removeEventListener('click', this.hideContextMenu);
+            document.removeEventListener('scroll', this.hideContextMenu);
         }
 
         render() {
@@ -94,26 +117,12 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
                     <Child
                         {...this.props}
                         onContextMenu={this.handleContextMenu}
-                        onClick={this.handleClick}
+                        onClick={this.hideContextMenu}
                     />
-                    <div className={styles['context-menu-wrapper']}>
-                        {
-                            this.state.isVisible
-                                ?
-                                    <div ref={(ref) => this.contextMenu = ref as HTMLDivElement}
-                                        className={styles['context-menu']}>
-                                        {
-                                            menuItems.map((item) => (
-                                                    <button key={item.text} onClick={item.onClick}>
-                                                        {item.text}
-                                                    </button>
-                                                ))
-                                        }
-                                    </div>
-                                :
-                                    null
-                        }
-                    </div>
+                    <div
+                        className={styles['context-menu-wrapper']}
+                        ref={ref => this.menuWrapper = ref as HTMLDivElement}
+                    />
                 </div>
             );
         }
