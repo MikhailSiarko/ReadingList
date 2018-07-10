@@ -64,7 +64,6 @@ class PrivateBookList extends React.Component<Props> {
                         onCancel={this.props.switchListEditMode}
                     />
                 ) : this.props.bookList.name
-
             );
             const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
             const ContexedList = withContextMenu(bookListActions, PrivateBookUL);

@@ -3,9 +3,9 @@ import styles from './PrivateBookLI.css';
 import { PrivateBookListItemModel, BookStatus as BookStatusEnum } from '../../models';
 import PrimaryButton from '../PrimaryButton';
 import RedButton from '../RedButton';
-import { convertSecondsToReadingTime } from '../../utils';
+import { convertSecondsToReadingTime, createDOMAttributeProps } from '../../utils';
 
-export interface PrivateBookLIProps {
+export interface PrivateBookLIProps extends React.DOMAttributes<HTMLLIElement> {
     listItem: PrivateBookListItemModel;
     onSave: (item: PrivateBookListItemModel) => void;
     onCancel: (itemId: number) => void;
@@ -98,9 +98,10 @@ class PrivateBookLI extends React.Component<PrivateBookLIProps> {
     }
 
     render() {
+        const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options');
         if(this.props.listItem.isOnEditMode) {
             return (
-                <li className={styles['editing-book-li']} >
+                <li className={styles['editing-book-li']} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoEditor title={this.props.listItem.title} author={this.props.listItem.author} />
                         <BookStatusEditor status={this.props.listItem.status} options={this.props.options} />
@@ -110,7 +111,7 @@ class PrivateBookLI extends React.Component<PrivateBookLIProps> {
             );
         }
         return (
-            <li className={styles['book-li']}>
+            <li className={styles['book-li']} {...liProps}>
                 <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
                 <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
                 <BookStatus status={this.props.listItem.status} />

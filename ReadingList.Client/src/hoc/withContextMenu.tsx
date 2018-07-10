@@ -5,22 +5,22 @@ interface MenuItem {
     onClick: () => void;
     text: string;
 }
-
 interface ContextMenuState {
     isVisible: boolean;
 }
 // TODO: Fix handleContextMenu on another contexed item (Chrome, Edge and Opera issue)
-export function withContextMenu<P>(menuItems: MenuItem[], Child: React.ComponentType<P>) {
+export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menuItems: MenuItem[],
+        Child: React.ComponentType<P>) {
     return class extends React.Component<P, ContextMenuState> {
         static displayName = `withContextMenu(${Child.displayName || Child.name})`;
         private contextMenu: HTMLDivElement;
-        private wrapper: HTMLDivElement;
         constructor(props: P) {
             super(props);
             this.state = { isVisible: false };
         }
 
-        handleContextMenu = (event: MouseEvent) => {
+        handleContextMenu = (event: React.MouseEvent<HTMLElement>) => {
+            event.persist();
             event.preventDefault();
             event.stopPropagation();
             this.setState({isVisible: true}, () => {
@@ -66,38 +66,36 @@ export function withContextMenu<P>(menuItems: MenuItem[], Child: React.Component
             const wasOutside = target.contains(this.contextMenu);
 
             if (wasOutside && isVisible) {
-                this.setState({ isVisible: false, });
+                this.setState({isVisible: false});
             }
         }
 
         handleClick = () => {
-            this.setState({ isVisible: false });
+            this.setState({isVisible: false});
         }
 
         handleScroll = () => {
-            this.setState({ isVisible: false, });
+            this.setState({isVisible: false});
         }
 
         componentDidMount() {
-            if(this.wrapper) {
-                this.wrapper.addEventListener('contextmenu', this.handleContextMenu);
-            }
-            document.addEventListener('click', this.handleClick);
+            document.addEventListener('click', this.handleWindowClick);
             document.addEventListener('scroll', this.handleScroll);
         }
 
         componentWillUnmount() {
-            if(this.wrapper) {
-                this.wrapper.removeEventListener('contextmenu', this.handleContextMenu);
-            }
             document.removeEventListener('click', this.handleClick);
             document.removeEventListener('scroll', this.handleScroll);
         }
 
         render() {
             return (
-                <div onClick={this.handleClick} ref={ref => this.wrapper = ref as HTMLDivElement}>
-                    <Child {...this.props} />
+                <div>
+                    <Child
+                        {...this.props}
+                        onContextMenu={this.handleContextMenu}
+                        onClick={this.handleClick}
+                    />
                     <div className={styles['context-menu-wrapper']}>
                         {
                             this.state.isVisible

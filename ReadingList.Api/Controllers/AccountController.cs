@@ -16,9 +16,7 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Login([FromBody] LoginData loginData)
         {
-            var authenticationData = await AskAsync(new LoginUserQuery(loginData.Email, loginData.Password));
-            
-            return Ok(authenticationData);
+            return await AuthenticateUser(loginData.Email, loginData.Password);
         }
 
         [HttpPost]
@@ -27,8 +25,13 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterData registerData)
         {
             await ExecuteAsync(new RegisterUserCommand(registerData.Email, registerData.Password));
-            
-            var authenticationData = await AskAsync(new LoginUserQuery(registerData.Email, registerData.Password));
+
+            return await AuthenticateUser(registerData.Email, registerData.Password);
+        }
+
+        private async Task<IActionResult> AuthenticateUser(string email, string password)
+        {
+            var authenticationData = await AskAsync(new LoginUserQuery(email, password));
             
             return Ok(authenticationData);
         }
