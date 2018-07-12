@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { RootState } from '../../store/reducers';
 
 interface PrivateRouteProps {
-    component: any;
+    component: React.ComponentType<any>;
     exact: boolean;
     path: string;
     isAuthenticated: boolean;

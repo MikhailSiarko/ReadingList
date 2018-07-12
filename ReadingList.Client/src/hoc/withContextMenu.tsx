@@ -94,7 +94,7 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
 
         hideContextMenu = () => {
             if(this.menuWrapper) {
-                const contextMenu = this.menuWrapper.firstElementChild as HTMLElement;
+                const contextMenu = this.menuWrapper.firstElementChild;
                 if(contextMenu) {
                     contextMenu.remove();
                 }
