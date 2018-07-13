@@ -24,7 +24,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private);
             
             EntitiesValidator.Validate(list,
-                new OnNotExistExceptionData(typeof(BookListWm), new {email = command.UserLogin}));
+                new OnNotExistExceptionData(typeof(BookListWm).Name, new {email = command.UserLogin}));
             
             list.Update(new {command.Name});
             

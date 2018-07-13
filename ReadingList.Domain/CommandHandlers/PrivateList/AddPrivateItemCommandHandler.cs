@@ -27,7 +27,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 .FirstOrDefaultAsync();
 
             EntitiesValidator.Validate(list,
-                new OnNotExistExceptionData(typeof(BookListWm), new {email = command.UserLogin}));
+                new OnNotExistExceptionData(typeof(BookListWm).Name, new {email = command.UserLogin}));
             
             var book = await _dbContext.Books.SingleOrDefaultAsync(b =>
                 b.Author == command.Author && b.Title == command.Title);

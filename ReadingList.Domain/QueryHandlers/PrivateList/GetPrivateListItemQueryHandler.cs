@@ -33,7 +33,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                 });
 
             EntitiesValidator.Validate(item,
-                new OnNotExistExceptionData(typeof(PrivateListItemRm),
+                new OnNotExistExceptionData(typeof(PrivateListItemRm).Name,
                     new {author = query.Author, title = query.Title}));
 
             return Mapper.Map<PrivateListItemRm, PrivateBookListItemDto>(item);

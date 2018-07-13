@@ -26,7 +26,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 i.BookList.Owner.Login == command.UserLogin && i.Id == command.ItemId);
 
             EntitiesValidator.Validate(item,
-                new OnNotExistExceptionData(typeof(PrivateBookListItemWm), new {id = command.ItemId}));
+                new OnNotExistExceptionData(typeof(PrivateBookListItemWm).Name, new {id = command.ItemId}));
             
             PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
             

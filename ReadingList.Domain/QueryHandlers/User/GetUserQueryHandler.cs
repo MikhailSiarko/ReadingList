@@ -26,7 +26,7 @@ namespace ReadingList.Domain.QueryHandlers
                 new {id = query.UserId});
 
             EntitiesValidator.Validate(user,
-                new OnNotExistExceptionData(typeof(UserRM), new {id = query.UserId}));
+                new OnNotExistExceptionData(typeof(UserRM).Name, new {id = query.UserId}));
             
             return user;
         }

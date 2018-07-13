@@ -45,7 +45,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                     }, new {login = query.UserLogin, type = (int) BookListType.Private});
 
             EntitiesValidator.Validate(privateList,
-                new OnNotExistExceptionData(typeof(ListRM), new {email = query.UserLogin}));
+                new OnNotExistExceptionData(typeof(ListRM).Name, new {email = query.UserLogin}));
 
             return Mapper.Map<ListRM, PrivateBookListDto>(privateList);
         }

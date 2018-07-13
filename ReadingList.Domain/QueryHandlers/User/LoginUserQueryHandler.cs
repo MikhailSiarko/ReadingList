@@ -32,7 +32,7 @@ namespace ReadingList.Domain.QueryHandlers
                 new {login = query.Login});
 
             EntitiesValidator.Validate(user,
-                new OnNotExistExceptionData(typeof(UserRm), new {email = query.Login}));
+                new OnNotExistExceptionData(typeof(UserRm).Name, new {email = query.Login}));
             
             if(_encryptionService.Encrypt(query.Password) != user.Password)
                 throw new WrongPasswordException();

@@ -22,7 +22,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 i.BookList.Owner.Login == command.UserLogin && i.Id == command.Id);
 
             EntitiesValidator.Validate(item,
-                new OnNotExistExceptionData(typeof(PrivateBookListItemWm), new {id = command.Id}));
+                new OnNotExistExceptionData(typeof(PrivateBookListItemWm).Name, new {id = command.Id}));
             
             _dbContext.PrivateBookListItems.Remove(item);
             
