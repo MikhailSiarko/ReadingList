@@ -24,6 +24,7 @@ namespace ReadingList.Domain
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddTransient<IUserSqlService, UserSqlService>();
+            services.AddTransient<IPrivateBookListSqlService, PrivateBookListSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddDbContext<WriteDbContext>((provider, builder) =>
                 builder.UseSqlServer(provider.GetDefaultConnectionString()));

@@ -9,11 +9,11 @@ namespace ReadingList.Domain.Services.Sql
             .Select("Id", "Login", "Password", "ProfileId", "(SELECT Name FROM Roles WHERE Id = RoleId) AS Role")
             .From("Users");
 
-        public string GetUserByLoginSql() => CreateSqlBuilder().Where("Login = @login").ToSql();            
+        public string GetUserByLoginSqlQuery() => CreateSqlBuilder().Where("Login = @login").ToSql();            
 
-        public string GetUserByIdSql() => CreateSqlBuilder().Where("Id = @id").ToSql();
+        public string GetUserByIdSqlQuery() => CreateSqlBuilder().Where("Id = @id").ToSql();
 
-        public string GetUserByLoginAndPasswordSql() =>
+        public string GetUserByLoginAndPasswordSqlQuery() =>
             CreateSqlBuilder().Where("Login = @login").Where("Password = @password").ToSql();
     }
 }

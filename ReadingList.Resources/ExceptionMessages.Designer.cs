@@ -88,6 +88,33 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Private list for user with {0}.
+        /// </summary>
+        public static string ObjectNotExist_PrivateBookList {
+            get {
+                return ResourceManager.GetString("ObjectNotExist_PrivateBookList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item with {0}.
+        /// </summary>
+        public static string ObjectNotExist_PrivateBookListItem {
+            get {
+                return ResourceManager.GetString("ObjectNotExist_PrivateBookListItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with {0}.
+        /// </summary>
+        public static string ObjectNotExist_User {
+            get {
+                return ResourceManager.GetString("ObjectNotExist_User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} wasn&apos;t found.
         /// </summary>
         public static string ObjectNotFound {
@@ -111,15 +138,6 @@ namespace ReadingList.Resources {
         public static string UserAlreadyExists {
             get {
                 return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User with email {0}.
-        /// </summary>
-        public static string UserWithEmail {
-            get {
-                return ResourceManager.GetString("UserWithEmail", resourceCulture);
             }
         }
         

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
-using Cinch.SqlBuilder;
 using ReadingList.Domain.DTO.BookList;
-using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
+using ReadingList.Domain.Services.Sql.Interfaces;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
 using PrivateListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
@@ -13,31 +13,28 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
     public class GetPrivateListItemQueryHandler : QueryHandler<GetPrivateListItemQuery, PrivateBookListItemDto>
     {
         private readonly IReadDbConnection _dbConnection;
+        private readonly IPrivateBookListSqlService _privateBookListSqlService;
 
-        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection)
+        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection, IPrivateBookListSqlService privateBookListSqlService)
         {
             _dbConnection = dbConnection;
+            _privateBookListSqlService = privateBookListSqlService;
         }
 
         protected override async Task<PrivateBookListItemDto> Handle(GetPrivateListItemQuery query)
         {
-            var sql = new SqlBuilder()
-                .Select("Id", "Title", "Author", "Status", "ReadingTime")
-                .From("PrivateBookListItems")
-                .Where(
-                    "BookListId = (SELECT Id From BookLists WHERE OwnerId = (SELECT Id FROM Users WHERE Login = @login) AND Type = @type) AND Title = @title AND Author = @author")
-                .ToSql();
-            
-            var item = await _dbConnection.QueryFirstAsync<PrivateListItemRm>(sql, new
-            {
-                login = query.UserLogin,
-                type = BookListType.Private,
-                title = query.Title,
-                author = query.Author
-            });
-            
-            if(item == null)
-                throw new ObjectNotExistException($"Item with Author: {query.Author} and Title: {query.Title} for private list of user {query.UserLogin}");
+            var item = await _dbConnection.QueryFirstAsync<PrivateListItemRm>(
+                _privateBookListSqlService.GetPrivateBookListItemSqlQuery(), new
+                {
+                    login = query.UserLogin,
+                    type = BookListType.Private,
+                    title = query.Title,
+                    author = query.Author
+                });
+
+            EntitiesValidator.Validate(item,
+                new OnNotExistExceptionData(typeof(PrivateListItemRm),
+                    new {author = query.Author, title = query.Title}));
 
             return Mapper.Map<PrivateListItemRm, PrivateBookListItemDto>(item);
         }

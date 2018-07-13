@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
-using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
+using PrivateBookListItemWm = ReadingList.WriteModel.Models.PrivateBookListItem;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
@@ -19,9 +20,9 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
         {
             var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
                 i.BookList.Owner.Login == command.UserLogin && i.Id == command.Id);
-            
-            if(item == null)
-                throw new ObjectNotExistException($"Item Id: {command.Id.ToString()}");
+
+            EntitiesValidator.Validate(item,
+                new OnNotExistExceptionData(typeof(PrivateBookListItemWm), new {id = command.Id}));
             
             _dbContext.PrivateBookListItems.Remove(item);
             

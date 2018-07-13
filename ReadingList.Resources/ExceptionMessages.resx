@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UserWithEmail" xml:space="preserve">
-    <value>User with email {0}</value>
+  <data name="ObjectNotExist_User" xml:space="preserve">
+    <value>User with {0}</value>
   </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>You entered wrong password. Please try again</value>
@@ -140,5 +140,11 @@
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>User with email {0} already exists</value>
+  </data>
+  <data name="ObjectNotExist_PrivateBookList" xml:space="preserve">
+    <value>Private list for user with {0}</value>
+  </data>
+  <data name="ObjectNotExist_PrivateBookListItem" xml:space="preserve">
+    <value>Item with {0}</value>
   </data>
 </root>

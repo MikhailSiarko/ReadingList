@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.Domain.Services.Sql.Interfaces;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.ReadModel.DbConnection;
-using ReadingList.Resources;
 using UserRm = ReadingList.ReadModel.Models.User;
 
 namespace ReadingList.Domain.QueryHandlers
@@ -29,11 +28,11 @@ namespace ReadingList.Domain.QueryHandlers
 
         protected override async Task<AuthenticationData> Handle(LoginUserQuery query)
         {
-            var user = await _dbConnection.QueryFirstAsync<UserRm>(_userSqlService.GetUserByLoginSql(),
+            var user = await _dbConnection.QueryFirstAsync<UserRm>(_userSqlService.GetUserByLoginSqlQuery(),
                 new {login = query.Login});
-            
-            if (user == null)
-                throw new ObjectNotExistException(ExceptionMessages.UserWithEmail.F(query.Login)) ;
+
+            EntitiesValidator.Validate(user,
+                new OnNotExistExceptionData(typeof(UserRm), new {email = query.Login}));
             
             if(_encryptionService.Encrypt(query.Password) != user.Password)
                 throw new WrongPasswordException();

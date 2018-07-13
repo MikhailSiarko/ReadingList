@@ -2,14 +2,12 @@
 
 namespace ReadingList.ReadModel.Models
 {
-    public class PrivateBookList
+    public class PrivateBookList : ReadEntity
     {
         public PrivateBookList()
         {
             Items = new List<PrivateBookListItem>();
         }
-    
-        public int Id { get; set; }
 
         public string Name { get; set; }
 

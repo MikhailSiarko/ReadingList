@@ -3,10 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
-using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using PrivateBookListItemWm = ReadingList.WriteModel.Models.PrivateBookListItem;
+using BookListWm = ReadingList.WriteModel.Models.BookList;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
@@ -25,8 +26,8 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 .Where(l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private)
                 .FirstOrDefaultAsync();
 
-            if (list == null)
-                throw new ObjectNotExistException($"Private list for user {command.UserLogin}");
+            EntitiesValidator.Validate(list,
+                new OnNotExistExceptionData(typeof(BookListWm), new {email = command.UserLogin}));
             
             var book = await _dbContext.Books.SingleOrDefaultAsync(b =>
                 b.Author == command.Author && b.Title == command.Title);

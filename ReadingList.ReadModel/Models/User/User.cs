@@ -1,9 +1,7 @@
 ﻿namespace ReadingList.ReadModel.Models
 {
-    public class User
+    public class User : ReadEntity
     {
-        public int Id { get; set; }
-
         public string Login { get; set; }
 
         public int ProfileId { get; set; }
