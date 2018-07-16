@@ -8,7 +8,7 @@ export interface PrivateBookULProps extends React.DOMAttributes<HTMLFieldSetElem
     legend: string | JSX.Element;
 }
 
-const PrivateBookUL: React.StatelessComponent<PrivateBookULProps> = (props) => {
+const PrivateBookUL: React.StatelessComponent<PrivateBookULProps> = props => {
     var fieldsetProps = createDOMAttributeProps(props, 'items', 'legend');
     return (
         <Fieldset className={styles['list-fieldset']} legend={props.legend} {...fieldsetProps}>

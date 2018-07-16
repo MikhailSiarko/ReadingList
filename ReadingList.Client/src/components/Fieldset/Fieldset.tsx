@@ -3,9 +3,7 @@ import style from './Fieldset.css';
 import { createDOMAttributeProps } from '../../utils';
 
 interface Props extends React.DOMAttributes<HTMLFieldSetElement> {
-    id?: string;
     className?: string;
-    children: React.ReactNode;
     legend: string | JSX.Element;
 }
 

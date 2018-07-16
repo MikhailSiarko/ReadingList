@@ -11,14 +11,14 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
 
     function createMenu(items: MenuItem[]) {
         const contextMenu = document.createElement('div');
-            contextMenu.className = styles['context-menu'];
+        contextMenu.className = styles['context-menu'];
 
-            items.map((item) => {
-                const button = document.createElement('button');
-                button.onclick = item.onClick;
-                button.innerText = item.text;
-                contextMenu.appendChild(button);
-            });
+        items.map(item => {
+            const button = document.createElement('button');
+            button.onclick = item.onClick;
+            button.innerText = item.text;
+            contextMenu.appendChild(button);
+        });
         return contextMenu;
     }
 
