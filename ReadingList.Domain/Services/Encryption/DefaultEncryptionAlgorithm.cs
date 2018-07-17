@@ -8,6 +8,9 @@ namespace ReadingList.Domain.Services.Encryption
     {
         public string Execute(string normalString)
         {
+            if(string.IsNullOrEmpty(normalString))
+                throw new ArgumentNullException(nameof(normalString));
+            
             const string localeParameter = "ytrewQ";
             SHA1 sh1 = new SHA1CryptoServiceProvider();
             var bytes = Encoding.UTF8.GetBytes(normalString.Insert(normalString.Length - 2, localeParameter));

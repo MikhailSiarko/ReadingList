@@ -13,6 +13,7 @@ abstract class ApiService {
     }
     protected configureRequest<T>(url: string, method: string, data?: T) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
+
         axiosInstance.interceptors.request.use(config => {
             this.dispatch(loadingActions.start());
             return config;
@@ -22,6 +23,7 @@ abstract class ApiService {
                 error.response ? error.response.data.errorMessage : error.message);
             return Promise.reject(result);
         });
+
         axiosInstance.interceptors.response.use(response => {
             this.dispatch(loadingActions.end());
             return response;
@@ -35,6 +37,7 @@ abstract class ApiService {
                 error.response ? error.response.data.errorMessage : error.message);
             return Promise.reject(result);
         });
+
         return axiosInstance.request({
             url: url,
             method: method,

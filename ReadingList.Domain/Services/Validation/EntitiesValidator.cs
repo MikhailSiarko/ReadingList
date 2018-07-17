@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Resources;
@@ -15,10 +13,15 @@ namespace ReadingList.Domain.Services.Validation
         public static void Validate(object entity, OnNotExistExceptionData notExistExceptionData)
         {
             if (entity != null) return;
+            
+            if(notExistExceptionData == null)
+                throw new ArgumentNullException(nameof(notExistExceptionData));
+            
             if (TryGetNotExistExceptionMessageByTypeName(notExistExceptionData.EntityTypeName, out var message))
             {
                 throw new ObjectNotExistException(message.F(notExistExceptionData.Params));
             }
+            
             throw new ObjectNotExistException("Object");
         }
         

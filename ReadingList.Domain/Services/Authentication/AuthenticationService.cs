@@ -30,12 +30,14 @@ namespace ReadingList.Domain.Services.Authentication
         private static ClaimsIdentity GetIdentity(UserRm user)
         {
             if (user == null)
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(user));
+            
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
             };
+            
             var claimsIdentity =
                 new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                     ClaimsIdentity.DefaultRoleClaimType);
@@ -44,6 +46,9 @@ namespace ReadingList.Domain.Services.Authentication
 
         private static JwtSecurityToken GenerateToken(IJwtOptions jwtOptions, IEnumerable<Claim> claims)
         {
+            if (jwtOptions == null)
+                throw new ArgumentNullException(nameof(jwtOptions));
+            
             var now = DateTime.UtcNow;
             return new JwtSecurityToken(
                 jwtOptions.Issuer,
@@ -57,6 +62,9 @@ namespace ReadingList.Domain.Services.Authentication
 
         public AuthenticationData Authenticate(UserRm user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+            
             var token = EncodeSecurityToken(user);
             var userIdentityDto = Mapper.Map<UserRm, UserIdentityDto>(user);
             return new AuthenticationData(token, userIdentityDto); 

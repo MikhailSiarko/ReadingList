@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models.Base;
@@ -9,6 +10,9 @@ namespace ReadingList.Domain.Infrastructure.Extensions
     {
         public static void Update<TEntity>(this TEntity entity, object source) where TEntity : Entity
         {
+            if(source == null)
+                throw new ArgumentNullException(nameof(source));
+            
             var entityProperties = entity.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             var sourceFields = source.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
             if (sourceFields.Any())

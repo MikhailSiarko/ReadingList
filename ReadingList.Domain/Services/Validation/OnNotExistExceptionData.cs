@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -24,8 +25,11 @@ namespace ReadingList.Domain.Services.Validation
 
         public OnNotExistExceptionData(string entityTypeName, object messageParams)
         {
-            EntityTypeName = entityTypeName;
-            _messageParams = messageParams;
+            EntityTypeName = !string.IsNullOrEmpty(entityTypeName)
+                ? entityTypeName
+                : throw new ArgumentNullException(nameof(entityTypeName));
+            
+            _messageParams = messageParams ?? throw new ArgumentNullException(nameof(messageParams));
         }
     }
 }

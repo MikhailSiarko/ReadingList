@@ -12,6 +12,9 @@ namespace ReadingList.Api
 
         public ExceptionToStatusCodeProvider(IReadOnlyDictionary<HttpStatusCode, Type[]> map)
         {
+            if(map == null)
+                throw new ArgumentNullException(nameof(map));
+            
             _baseCaseExceptionType = typeof(Exception);
             _source = InitializeExceptionToStatusCodeMap(map);
         }
