@@ -35,7 +35,7 @@ namespace ReadingList.Api
         {
             return
                 map.SelectMany(pair => pair.Value
-                        .Select(t => new KeyValuePair<Type, HttpStatusCode>(t, pair.Key)), (p, c) => c)
+                        .Select(t => new KeyValuePair<Type, HttpStatusCode>(t, pair.Key)))
                         .Distinct(new KeyValueEqualityComparer())
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
         }
