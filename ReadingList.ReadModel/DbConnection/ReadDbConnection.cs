@@ -26,12 +26,12 @@ namespace ReadingList.ReadModel.DbConnection
             return  await _dbConnection.QueryFirstOrDefaultAsync<T>(query, param);
         }
 
-        public async Task<TR> QuerySingleAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
+        public async Task<TResult> QuerySingleAsync<TSource1, TSource2, TResult>(string query, Func<TSource1, TSource2, TResult> map, object param = null)
         {
             return (await _dbConnection.QueryAsync(query, map, param)).SingleOrDefault();
         }
         
-        public async Task<TR> QueryFirstAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null)
+        public async Task<TResult> QueryFirstAsync<TSource1, TSource2, TResult>(string query, Func<TSource1, TSource2, TResult> map, object param = null)
         {
             return (await _dbConnection.QueryAsync(query, map, param)).FirstOrDefault();
         }

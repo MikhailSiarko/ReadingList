@@ -10,9 +10,9 @@ namespace ReadingList.ReadModel.DbConnection
 
         Task<T> QueryFirstAsync<T>(string query, object param = null);
 
-        Task<TR> QuerySingleAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null);
+        Task<TResult> QuerySingleAsync<TSource1, TSource2, TResult>(string query, Func<TSource1, TSource2, TResult> map, object param = null);
 
-        Task<TR> QueryFirstAsync<TP, TS, TR>(string query, Func<TP, TS, TR> map, object param = null);
+        Task<TResult> QueryFirstAsync<TSource1, TSource2, TResult>(string query, Func<TSource1, TSource2, TResult> map, object param = null);
 
         Task<IEnumerable<T>> QueryAsync<T>(string query, object param = null);
     }
