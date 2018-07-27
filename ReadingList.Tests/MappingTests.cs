@@ -15,7 +15,7 @@ namespace ReadingList.Tests
             Mapper.Initialize(conf => conf.AddProfile<BookListProfile>());
         }
         [Fact]
-        public void SharedBookListDtoToBookListMappingAndReverseMapping()
+        public void Map_ReturnsBookList_When_SharedBookListDtoIsMapped_Then_ReverseMapping_ReversedSharedBookListDtoIsEqualToSourceSharedBookListDto()
         {
             var shared = new SharedBookListDto
             {
@@ -32,7 +32,7 @@ namespace ReadingList.Tests
         }
 
         [Fact]
-        public void PrivateBookListDtoToBookListMappingAndReverseMapping()
+        public void Map_ReturnsBookList_When_PrivateBookListDtoIsMapped_Then_ReversMapping_ReversedPrivateBookListDtoIsEqualToSourcePrivateBookListDto()
         {
             var privateList = new PrivateBookListDto
             {

@@ -88,6 +88,15 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Object with {0}.
+        /// </summary>
+        public static string ObjectNotExist_Default {
+            get {
+                return ResourceManager.GetString("ObjectNotExist_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Private list for user with {0}.
         /// </summary>
         public static string ObjectNotExist_PrivateBookList {

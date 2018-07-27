@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Cinch.SqlBuilder;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.Domain.Services.Validation;
 using ReadingList.ReadModel.DbConnection;
 using UserRM = ReadingList.ReadModel.Models.User;
 
@@ -23,10 +21,8 @@ namespace ReadingList.Domain.QueryHandlers
         protected override async Task<UserRM> Handle(GetUserQuery query)
         {
             var user = await _dbConnection.QueryFirstAsync<UserRM>(_userSqlService.GetUserByIdSqlQuery(),
-                new {id = query.UserId});
-
-            EntitiesValidator.Validate(user,
-                new OnNotExistExceptionData(typeof(UserRM).Name, new {id = query.UserId}));
+                           new {id = query.UserId}) ??
+                       throw new ObjectNotExistException<UserRM>(new {id = query.UserId});
             
             return user;
         }

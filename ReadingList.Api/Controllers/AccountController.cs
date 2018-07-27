@@ -9,11 +9,11 @@ using ReadingList.Domain.Queries;
 namespace ReadingList.Api.Controllers
 {
     [Route("api/[controller]")]
+    [ValidateModelState]
     public class AccountController : BaseController
     {
         [HttpPost]
         [Route("login")]
-        [ValidateModelState]
         public async Task<IActionResult> Login([FromBody] LoginData loginData)
         {
             return await AuthenticateUser(loginData.Email, loginData.Password);
@@ -21,7 +21,6 @@ namespace ReadingList.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        [ValidateModelState]
         public async Task<IActionResult> Register([FromBody] RegisterData registerData)
         {
             await ExecuteAsync(new RegisterUserCommand(registerData.Email, registerData.Password));

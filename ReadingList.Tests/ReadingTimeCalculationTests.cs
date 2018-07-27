@@ -8,7 +8,7 @@ namespace ReadingList.Tests
     public class ReadingTimeCalculationTests
     {
         [Fact]
-        public void StatusChangedFromToReadingToReading()
+        public void Calculate_Returns0_When_BookStatusChangedFromToReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
             var item = new PrivateBookListItem
             {
@@ -29,28 +29,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void StatusChangedFromReadingToReadingWithReadingTimeEqualsZero()
-        {
-            var item = new PrivateBookListItem
-            {
-                Author = "Author",
-                Title = "Title",
-                BookListId = 3,
-                Id = 5,
-                ReadingTime = default(TimeSpan),
-                LastStatusUpdateDate = DateTime.Now.AddDays(-3),
-                Status = BookItemStatus.Reading
-            };
-
-            var readingTime = item.ReadingTime +
-                              ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
-                                  BookItemStatus.Reading);
-
-            Assert.Equal(default(TimeSpan).Minutes, readingTime.Minutes);
-        }
-        
-        [Fact]
-        public void StatusChangedFromReadingToReadingWithReadingTimeNotEqualsZero()
+        public void Calculate_Returns0_When_BookStatusChangedFromReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
             var item = new PrivateBookListItem
             {
@@ -71,7 +50,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void StatusChangedFromReadingToReadWithReadingTimeNotEqualZero()
+        public void Calculate_Returns135Minutes_When_BookStatusChangedFromReadingToRead_And_LastStatusUpdateDateIsNowMinus135Minutes()
         {
             var item = new PrivateBookListItem
             {
@@ -94,7 +73,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void StatusChangedFromReadingToStartedButPostponed()
+        public void Calculate_Returns3Days_When_BookStatusChangedFromReadingToStartedButPostponed_And_LastStatusUpdateDateIsNowMinus3Days()
         {
             var item = new PrivateBookListItem
             {

@@ -147,4 +147,7 @@
   <data name="ObjectNotExist_PrivateBookListItem" xml:space="preserve">
     <value>Item with {0}</value>
   </data>
+  <data name="ObjectNotExist_Default" xml:space="preserve">
+    <value>Object with {0}</value>
+  </data>
 </root>

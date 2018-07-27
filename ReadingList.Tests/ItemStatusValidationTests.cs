@@ -8,7 +8,7 @@ namespace ReadingList.Tests
     public class ItemStatusValidationTests
     {
         [Fact]
-        public void ChangeStatusFromReadToReading()
+        public void Validate_ReturnsCantChangeStatusFromReadToReading_When_OldStatusIsReadAndNewStatusIsReading()
         {
             var item = new PrivateBookListItem
             {
@@ -21,7 +21,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void ChangeStatusFromReadingToToReading()
+        public void Validate_ReturnsCantChangeStatusFromReadingToToReading_When_OldStatusIsReadingAndNewStatusIsToReading()
         {
             var item = new PrivateBookListItem
             {
@@ -34,7 +34,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void ChangeStatusFromStartedButPostponedToToReading()
+        public void Validate_ReturnsCantChangeStatusFromStartedButPostonedToToReading_When_OldStatusIsStartedButPostonedAndNewStatusIsToReading()
         {
             var item = new PrivateBookListItem
             {

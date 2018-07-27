@@ -45,7 +45,7 @@ namespace ReadingList.Api.Controllers
         
         [HttpPut("items/{id}")]
         [ValidateModelState]
-        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] UpdatePrivateListItemData updatePrivateListItemData)
+        public async Task<IActionResult> UpdateListItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updatePrivateListItemData)
         {
             await ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
                 updatePrivateListItemData.Title, updatePrivateListItemData.Author, updatePrivateListItemData.Status));

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
+using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.Domain.Services.Validation;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel.Models;
 using ListRM = ReadingList.ReadModel.Models.PrivateBookList;
@@ -42,10 +42,8 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                         if (item != null)
                             listEntry.Items.Add(item);
                         return listEntry;
-                    }, new {login = query.UserLogin, type = (int) BookListType.Private});
-
-            EntitiesValidator.Validate(privateList,
-                new OnNotExistExceptionData(typeof(ListRM).Name, new {email = query.UserLogin}));
+                    }, new {login = query.UserLogin, type = (int) BookListType.Private}) ??
+                throw new ObjectNotExistException<ListRM>(new {email = query.UserLogin});
 
             return Mapper.Map<ListRM, PrivateBookListDto>(privateList);
         }

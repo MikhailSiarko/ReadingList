@@ -8,11 +8,11 @@ using Xunit;
 
 namespace ReadingList.Tests
 {
-    public class ExceptionToStatusCodeMapTests
+    public class ExceptionToStatusCodeMappingTests
     {
         private readonly Dictionary<HttpStatusCode, Type[]> _map;
 
-        public ExceptionToStatusCodeMapTests()
+        public ExceptionToStatusCodeMappingTests()
         {
             _map =
                 typeof(Startup).GetMethod("InitializeMap", BindingFlags.Static | BindingFlags.NonPublic)
@@ -20,7 +20,7 @@ namespace ReadingList.Tests
         }
 
         [Fact]
-        public void MapNullReferenceExceptionType()
+        public void GetStatusCode_ReturnsInternalServerError_When_TypeIsNullReferenceException()
         {
             var provider = new ExceptionToStatusCodeProvider(_map);
             var statusCode = provider.GetStatusCode(typeof(NullReferenceException));
@@ -28,7 +28,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void MapNotExceptionType()
+        public void GetStatusCode_ReturnsInternalServerError_When_TypeIsFactAttribute()
         {
             var provider = new ExceptionToStatusCodeProvider(_map);
             var statusCode = provider.GetStatusCode(typeof(FactAttribute));
@@ -36,7 +36,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void MapUserWithEmailNotFoundType()
+        public void GetStatusCode_ReturnsBadRequest_When_TypeIsObjectNotExistException()
         {
             var provider = new ExceptionToStatusCodeProvider(_map);
             var statusCode = provider.GetStatusCode(typeof(ObjectNotExistException));
@@ -44,7 +44,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void MapExceptionType()
+        public void GetStatusCode_ReturnsInternalServerError_When_TypeIsException()
         {
             var provider = new ExceptionToStatusCodeProvider(_map);
             var statusCode = provider.GetStatusCode(typeof(Exception));

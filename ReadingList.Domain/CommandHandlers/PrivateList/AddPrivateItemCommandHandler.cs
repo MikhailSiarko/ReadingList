@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
-using ReadingList.Domain.Services.Validation;
+using ReadingList.Domain.Exceptions;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using PrivateBookListItemWm = ReadingList.WriteModel.Models.PrivateBookListItem;
@@ -23,11 +23,9 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
         protected override async Task Handle(AddPrivateItemCommand command)
         {
             var list = await _dbContext.BookLists.AsNoTracking()
-                .Where(l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private)
-                .FirstOrDefaultAsync();
-
-            EntitiesValidator.Validate(list,
-                new OnNotExistExceptionData(typeof(BookListWm).Name, new {email = command.UserLogin}));
+                           .Where(l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private)
+                           .FirstOrDefaultAsync() ??
+                       throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
             
             var book = await _dbContext.Books.SingleOrDefaultAsync(b =>
                 b.Author == command.Author && b.Title == command.Title);
