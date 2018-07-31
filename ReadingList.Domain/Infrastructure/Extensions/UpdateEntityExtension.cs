@@ -55,17 +55,22 @@ namespace ReadingList.Domain.Infrastructure.Extensions
             var entityProperties = entity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var properties = Expression.Constant(entityProperties);
             
-            var n = Expression.Constant(entityProperties.Length);
             var i = Expression.Parameter(typeof(int), "i");
+            var j = Expression.Parameter(typeof(int), "j");
+
+            var propertiesArrayLength = Expression.Parameter(typeof(int), "propertiesArrayLength");
+            var customAttributesLength = Expression.Parameter(typeof(int), "customAttributesLength");
+
             var property = Expression.Parameter(typeof(PropertyInfo), "property");
             var value = Expression.Parameter(typeof(object), "value");
-            var endLoop = Expression.Label();
+            var endOuterLoop = Expression.Label("endOuterLoop");
+            var endInnerLoop = Expression.Label("endInnerLoop");
 
             var containsKeyMethodInfo =
                 source.GetType().GetMethod("ContainsKey", BindingFlags.Instance | BindingFlags.Public);
 
-            var anyMethodInfo = typeof(Enumerable).GetMethods()
-                .Single(m => m.Name == "Any" && m.GetParameters().Length == 2).MakeGenericMethod(typeof(CustomAttributeData));
+            var toArrayMethodInfo = typeof(Enumerable).GetMethods()
+                .Single(m => m.Name == "ToArray" && m.GetParameters().Length == 1).MakeGenericMethod(typeof(CustomAttributeData));
 
             var getValueOrDefaultMethodInfo = typeof(CollectionExtensions).GetMethods()
                 .Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
@@ -76,27 +81,53 @@ namespace ReadingList.Domain.Infrastructure.Extensions
             var entityParameter = Expression.Parameter(entity.GetType(), "entity");
             var sourceParameter = Expression.Parameter(typeof(Dictionary<string, object>), "source");
 
-            Expression<Func<CustomAttributeData, bool>> predicate = a =>
-                a.AttributeType == typeof(IgnoreUpdateAttribute);
+
+            var customAttribute = Expression.Parameter(typeof(CustomAttributeData), "customAttribute");
+
+            var isIgnoreAttributeDefined = Expression.Parameter(typeof(bool), "isIgnoreAttributeDefined");
+
+            var customAttributesArray =
+                Expression.Parameter(typeof(CustomAttributeData[]), "customAttributesArray");
 
             var block = Expression.Block(
-                new[] {i},
-                Expression.Assign(i, Expression.Constant(1)),
+                new[] { i, propertiesArrayLength },
+                Expression.Assign(i, Expression.Constant(0)),
+                Expression.Assign(propertiesArrayLength, Expression.Property(properties, "Length")),
                 Expression.Loop(
                     Expression.Block(
-                        new[] {property},
+                        new[] { property },
                         Expression.IfThenElse(
-                            Expression.Not(Expression.LessThanOrEqual(i, Expression.Subtract(n, Expression.Constant(1)))),
-                            Expression.Break(endLoop),
+                            Expression.Not(Expression.LessThanOrEqual(i, Expression.Subtract(propertiesArrayLength, Expression.Constant(1)))),
+                            Expression.Break(endOuterLoop),
                             Expression.Assign(property, Expression.ArrayIndex(properties, i))),
                         Expression.IfThen(
-                            Expression.Call(sourceParameter, containsKeyMethodInfo, Expression.Property(property, "Name")),
+                            Expression.AndAlso(
+                                Expression.Block(
+                                    new[] { j, customAttributesLength, customAttributesArray, isIgnoreAttributeDefined },
+                                    Expression.Assign(j, Expression.Constant(0)),
+                                    Expression.Assign(customAttributesArray, Expression.Call(toArrayMethodInfo, Expression.Property(property, "CustomAttributes"))),
+                                    Expression.Assign(customAttributesLength, Expression.Property(customAttributesArray, "Length")),
+                                    Expression.Assign(isIgnoreAttributeDefined, Expression.Constant(false)),
+                                    Expression.Loop(
+                                        Expression.Block(
+                                            new[]{ customAttribute },
+                                            Expression.IfThenElse(
+                                                Expression.OrElse(
+                                                    isIgnoreAttributeDefined,
+                                                    Expression.Not(Expression.LessThanOrEqual(j, Expression.Subtract(customAttributesLength, Expression.Constant(1))))),
+                                                Expression.Break(endInnerLoop),
+                                                Expression.Block(
+                                                    Expression.Assign(customAttribute, Expression.ArrayIndex(customAttributesArray, j)),
+                                                    Expression.Assign(isIgnoreAttributeDefined, Expression.Equal(Expression.Property(customAttribute, "AttributeType"), Expression.Constant(typeof(IgnoreUpdateAttribute), typeof(Type)))))),
+                                            Expression.PostIncrementAssign(i)), endInnerLoop),
+                                    Expression.Not(isIgnoreAttributeDefined)), 
+                                Expression.Call(sourceParameter, containsKeyMethodInfo, Expression.Property(property, "Name"))),
                             Expression.Block(
-                                new[] {value},
+                                new[] { value },
                                 Expression.Assign(value, Expression.Call(getValueOrDefaultMethodInfo, sourceParameter, Expression.Property(property, "Name"))),
                                 Expression.Call(property, setValueMethodInfo, entityParameter, value))),
-                        Expression.PostIncrementAssign(i)), endLoop));
-            
+                        Expression.PostIncrementAssign(i)), endOuterLoop));
+
             // TODO Put it to the cache
             var expr = Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
 
