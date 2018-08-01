@@ -3,11 +3,11 @@ using System.Data.SqlClient;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.MapperProfiles;
+using ReadingList.Domain.Services;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.Domain.Services.Sql;
@@ -26,6 +26,7 @@ namespace ReadingList.Domain
             services.AddTransient<IUserSqlService, UserSqlService>();
             services.AddTransient<IPrivateBookListSqlService, PrivateBookListSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
+            services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
             services.AddDbContext<WriteDbContext>((provider, builder) =>
                 builder.UseSqlServer(provider.GetDefaultConnectionString()));
             services.AddScoped<IDbConnection, SqlConnection>(provider =>

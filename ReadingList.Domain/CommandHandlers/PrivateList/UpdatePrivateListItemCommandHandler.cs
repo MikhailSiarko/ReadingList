@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
@@ -14,10 +14,12 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
     public class UpdatePrivateListItemCommandHandler : CommandHandler<UpdatePrivateListItemCommand>
     {
         private readonly WriteDbContext _dbContext;
+        private readonly IEntityUpdateService _entityUpdateService;
 
-        public UpdatePrivateListItemCommandHandler(WriteDbContext dbContext)
+        public UpdatePrivateListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService)
         {
             _dbContext = dbContext;
+            _entityUpdateService = entityUpdateService;
         }
 
         protected override async Task Handle(UpdatePrivateListItemCommand command)
@@ -31,13 +33,13 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             var readingTime = item.ReadingTime +
                 ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate, (BookItemStatus) command.Status);
             
-            item.Update(new
+            _entityUpdateService.Update(item, new Dictionary<string, object>
             {
-                command.Title,
-                command.Author,
-                command.Status,
-                ReadingTime = readingTime,
-                LastStatusUpdateDate = DateTime.Now
+                [nameof(PrivateBookListItemWm.Title)] = command.Title,
+                [nameof(PrivateBookListItemWm.Author)] = command.Author,
+                [nameof(PrivateBookListItemWm.Status)] = command.Status,
+                [nameof(PrivateBookListItemWm.ReadingTime)] = readingTime,
+                [nameof(PrivateBookListItemWm.LastStatusUpdateDate)] = DateTime.Now
             });
             
             await _dbContext.SaveChangesAsync();
