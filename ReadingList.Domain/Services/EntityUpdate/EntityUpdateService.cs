@@ -19,6 +19,12 @@ namespace ReadingList.Domain.Services
 
         public void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where TEntity : Entity
         {
+            if(source == null)
+                throw new ArgumentNullException(nameof(source));
+
+            if (!source.Any())
+                return;
+            
             var updater = GetUpdater<TEntity>();
             updater(entity, source);
         }
