@@ -4,6 +4,7 @@ namespace ReadingList.WriteModel.Models
 {
     public class BookList : NamedEntity
     {
+        [IgnoreUpdate]
         public User Owner { get; set; }
 
         [IgnoreUpdate]
