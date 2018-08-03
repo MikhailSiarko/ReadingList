@@ -54,9 +54,9 @@ class AccountForm extends React.Component<Props> {
                 <h1 className={styles['account-header']}>Welcome to Reading List!</h1>
                 <Route
                     path="/account/register"
-                    component={() => <Register onConfirmPasswordChange={this.confirmPasswordChangeHandler}  />}
+                    component={() => <Register onConfirmPasswordChange={this.confirmPasswordChangeHandler} />}
                  />
-                <Route path="/account/login" component={Login}/>
+                <Route path="/account/login" component={Login} />
             </form>
         );
     }

@@ -77,10 +77,10 @@ namespace ReadingList.Domain.Services
                     Expression.Block(
                         new[] {property},
                         Expression.IfThenElse(
-                            Expression.Not(Expression.LessThanOrEqual(i,
-                                Expression.Subtract(propertiesArrayLength, Expression.Constant(1)))),
-                            Expression.Break(endOuterLoop),
-                            Expression.Assign(property, Expression.ArrayIndex(properties, i))),
+                            Expression.LessThanOrEqual(i,
+                                Expression.Subtract(propertiesArrayLength, Expression.Constant(1))),
+                            Expression.Assign(property, Expression.ArrayIndex(properties, i)),
+                            Expression.Break(endOuterLoop)),
                         Expression.IfThen(
                             Expression.AndAlso(
                                 Expression.Block(
@@ -111,7 +111,7 @@ namespace ReadingList.Domain.Services
                                                         Expression.Property(customAttribute, "AttributeType"),
                                                         Expression.Constant(typeof(IgnoreUpdateAttribute),
                                                             typeof(Type)))))),
-                                            Expression.PostIncrementAssign(i)), endInnerLoop),
+                                            Expression.PostIncrementAssign(j)), endInnerLoop),
                                     Expression.Not(isIgnoreAttributeDefined)),
                                 Expression.Call(sourceParameter,
                                     typeof(Dictionary<string, object>).GetMethod("ContainsKey"),

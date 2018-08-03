@@ -17,7 +17,6 @@ namespace ReadingList.Domain.Services
                     diff = DateTime.Now - previousDate;
                     break;
                 case BookItemStatus.ToReading:
-                    break;
                 case BookItemStatus.Reading:
                     break;
                 default:
