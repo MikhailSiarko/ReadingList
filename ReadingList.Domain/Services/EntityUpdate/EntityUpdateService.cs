@@ -41,11 +41,10 @@ namespace ReadingList.Domain.Services
 
         private void RegisterUpdater<TEntity>() where TEntity : Entity
         {
+            var propertyInfos = typeof(TEntity).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
             var i = Expression.Parameter(typeof(int), "i");
             var j = Expression.Parameter(typeof(int), "j");
-
-            var propertiesArrayLength = Expression.Parameter(typeof(int), "propertiesArrayLength");
-            var customAttributesLength = Expression.Parameter(typeof(int), "customAttributesLength");
 
             var property = Expression.Parameter(typeof(PropertyInfo), "property");
             var value = Expression.Parameter(typeof(object), "value");
@@ -53,8 +52,7 @@ namespace ReadingList.Domain.Services
             var entityParameter = Expression.Parameter(typeof(TEntity), "entity");
             var sourceParameter = Expression.Parameter(typeof(Dictionary<string, object>), "source");
 
-            var entityType = Expression.Parameter(typeof(Type), "entityType");
-            var properties = Expression.Parameter(typeof(PropertyInfo[]), "properties");
+            var properties = Expression.Constant(propertyInfos, typeof(PropertyInfo[]));
 
             var customAttribute = Expression.Parameter(typeof(CustomAttributeData), "customAttribute");
             var isIgnoreAttributeDefined = Expression.Parameter(typeof(bool), "isIgnoreAttributeDefined");
@@ -64,35 +62,35 @@ namespace ReadingList.Domain.Services
             var endOuterLoop = Expression.Label("endOuterLoop");
             var endInnerLoop = Expression.Label("endInnerLoop");
 
+            var getValueOrDefaultMethodInfo = typeof(CollectionExtensions)
+                .GetMethods().Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(string), typeof(object));
+
+            var toArrayMethodInfo = typeof(Enumerable).GetMethods().Single(m => m.Name == "ToArray" && m.GetParameters().Length == 1)
+                .MakeGenericMethod(typeof(CustomAttributeData));
+
+            var containsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
+
+            var setValueMethodInfo = typeof(PropertyInfo).GetMethod("SetValue", new[] {typeof(object), typeof(object)});
+
             var block = Expression.Block(
-                new[] {i, propertiesArrayLength, entityType, properties},
-                Expression.Assign(entityType, Expression.Call(entityParameter, typeof(TEntity).GetMethod("GetType"))),
-                Expression.Assign(properties,
-                    Expression.Call(entityType,
-                        typeof(Type).GetMethods()
-                            .Single(m => m.Name == "GetProperties" && m.GetParameters().Length == 0))),
+                new[] {i},
                 Expression.Assign(i, Expression.Constant(0)),
-                Expression.Assign(propertiesArrayLength, Expression.Property(properties, "Length")),
                 Expression.Loop(
                     Expression.Block(
                         new[] {property},
                         Expression.IfThenElse(
                             Expression.LessThanOrEqual(i,
-                                Expression.Subtract(propertiesArrayLength, Expression.Constant(1))),
+                                Expression.Subtract(Expression.Property(properties, "Length"), Expression.Constant(1))),
                             Expression.Assign(property, Expression.ArrayIndex(properties, i)),
                             Expression.Break(endOuterLoop)),
                         Expression.IfThen(
                             Expression.AndAlso(
                                 Expression.Block(
-                                    new[] {j, customAttributesLength, customAttributesArray, isIgnoreAttributeDefined},
+                                    new[] {j, customAttributesArray, isIgnoreAttributeDefined},
                                     Expression.Assign(j, Expression.Constant(0)),
                                     Expression.Assign(customAttributesArray,
-                                        Expression.Call(typeof(Enumerable).GetMethods()
-                                                .Single(m => m.Name == "ToArray" && m.GetParameters().Length == 1)
-                                                .MakeGenericMethod(typeof(CustomAttributeData)),
-                                            Expression.Property(property, "CustomAttributes"))),
-                                    Expression.Assign(customAttributesLength,
-                                        Expression.Property(customAttributesArray, "Length")),
+                                        Expression.Call(toArrayMethodInfo, Expression.Property(property, "CustomAttributes"))),
                                     Expression.Assign(isIgnoreAttributeDefined, Expression.Constant(false)),
                                     Expression.Loop(
                                         Expression.Block(
@@ -101,7 +99,7 @@ namespace ReadingList.Domain.Services
                                                 Expression.OrElse(
                                                     isIgnoreAttributeDefined,
                                                     Expression.Not(Expression.LessThanOrEqual(j,
-                                                        Expression.Subtract(customAttributesLength,
+                                                        Expression.Subtract(Expression.Property(customAttributesArray, "Length"),
                                                             Expression.Constant(1))))),
                                                 Expression.Break(endInnerLoop),
                                                 Expression.Block(
@@ -113,19 +111,12 @@ namespace ReadingList.Domain.Services
                                                             typeof(Type)))))),
                                             Expression.PostIncrementAssign(j)), endInnerLoop),
                                     Expression.Not(isIgnoreAttributeDefined)),
-                                Expression.Call(sourceParameter,
-                                    typeof(Dictionary<string, object>).GetMethod("ContainsKey"),
-                                    Expression.Property(property, "Name"))),
+                                Expression.Call(sourceParameter, containsKeyMethodInfo, Expression.Property(property, "Name"))),
                             Expression.Block(
                                 new[] {value},
                                 Expression.Assign(value,
-                                    Expression.Call(typeof(CollectionExtensions).GetMethods().Single(m =>
-                                                m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
-                                            .MakeGenericMethod(typeof(string), typeof(object)), sourceParameter,
-                                        Expression.Property(property, "Name"))),
-                                Expression.Call(property,
-                                    typeof(PropertyInfo).GetMethod("SetValue", new[] {typeof(object), typeof(object)}),
-                                    entityParameter, value))),
+                                    Expression.Call(getValueOrDefaultMethodInfo, sourceParameter, Expression.Property(property, "Name"))),
+                                Expression.Call(property, setValueMethodInfo, entityParameter, value))),
                         Expression.PostIncrementAssign(i)), endOuterLoop));
 
             var updater = Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
