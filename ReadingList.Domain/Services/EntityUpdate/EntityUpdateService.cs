@@ -11,10 +11,26 @@ namespace ReadingList.Domain.Services
     public class EntityUpdateService : IEntityUpdateService
     {
         private readonly Dictionary<Type, object> _cache;
+        private readonly MethodInfo _getValueOrDefaultMethodInfo;
+        private readonly MethodInfo _containsKeyMethodInfo;
+        private readonly MethodInfo _toArrayMethodInfo;
+        private readonly MethodInfo _setValueMethodInfo;
 
         public EntityUpdateService()
         {
             _cache = new Dictionary<Type, object>();
+
+            _getValueOrDefaultMethodInfo = typeof(CollectionExtensions)
+                .GetMethods().Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(string), typeof(object));
+
+            _containsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
+
+            _setValueMethodInfo = typeof(PropertyInfo).GetMethod("SetValue", new[] {typeof(object), typeof(object)});
+
+            _toArrayMethodInfo = typeof(Enumerable).GetMethods()
+                .Single(m => m.Name == "ToArray" && m.GetParameters().Length == 1)
+                .MakeGenericMethod(typeof(CustomAttributeData));
         }
 
         public void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where TEntity : Entity
@@ -62,17 +78,6 @@ namespace ReadingList.Domain.Services
             var endOuterLoop = Expression.Label("endOuterLoop");
             var endInnerLoop = Expression.Label("endInnerLoop");
 
-            var getValueOrDefaultMethodInfo = typeof(CollectionExtensions)
-                .GetMethods().Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(string), typeof(object));
-
-            var toArrayMethodInfo = typeof(Enumerable).GetMethods().Single(m => m.Name == "ToArray" && m.GetParameters().Length == 1)
-                .MakeGenericMethod(typeof(CustomAttributeData));
-
-            var containsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
-
-            var setValueMethodInfo = typeof(PropertyInfo).GetMethod("SetValue", new[] {typeof(object), typeof(object)});
-
             var block = Expression.Block(
                 new[] {i},
                 Expression.Assign(i, Expression.Constant(0)),
@@ -90,7 +95,7 @@ namespace ReadingList.Domain.Services
                                     new[] {j, customAttributesArray, isIgnoreAttributeDefined},
                                     Expression.Assign(j, Expression.Constant(0)),
                                     Expression.Assign(customAttributesArray,
-                                        Expression.Call(toArrayMethodInfo, Expression.Property(property, "CustomAttributes"))),
+                                        Expression.Call(_toArrayMethodInfo, Expression.Property(property, "CustomAttributes"))),
                                     Expression.Assign(isIgnoreAttributeDefined, Expression.Constant(false)),
                                     Expression.Loop(
                                         Expression.Block(
@@ -111,12 +116,12 @@ namespace ReadingList.Domain.Services
                                                             typeof(Type)))))),
                                             Expression.PostIncrementAssign(j)), endInnerLoop),
                                     Expression.Not(isIgnoreAttributeDefined)),
-                                Expression.Call(sourceParameter, containsKeyMethodInfo, Expression.Property(property, "Name"))),
+                                Expression.Call(sourceParameter, _containsKeyMethodInfo, Expression.Property(property, "Name"))),
                             Expression.Block(
                                 new[] {value},
                                 Expression.Assign(value,
-                                    Expression.Call(getValueOrDefaultMethodInfo, sourceParameter, Expression.Property(property, "Name"))),
-                                Expression.Call(property, setValueMethodInfo, entityParameter, value))),
+                                    Expression.Call(_getValueOrDefaultMethodInfo, sourceParameter, Expression.Property(property, "Name"))),
+                                Expression.Call(property, _setValueMethodInfo, entityParameter, value))),
                         Expression.PostIncrementAssign(i)), endOuterLoop));
 
             var updater = Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
