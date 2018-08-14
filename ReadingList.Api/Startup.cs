@@ -5,9 +5,15 @@ using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Api.Middlewares;
 using ReadingList.Domain;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Authentication;
+using ReadingList.Domain.Services.Encryption;
+using ReadingList.Domain.Services.Sql;
+using ReadingList.Domain.Services.Sql.Interfaces;
 
 namespace ReadingList.Api
 {
@@ -16,7 +22,7 @@ namespace ReadingList.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddDomainModule();
+            ConfigureDomain(services);
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
@@ -59,6 +65,18 @@ namespace ReadingList.Api
                     }
                 }
             };
+        }
+
+        private static void ConfigureDomain(IServiceCollection services)
+        {
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IEncryptionService, EncryptionService>();
+            services.AddTransient<IUserSqlService, UserSqlService>();
+            services.AddTransient<IPrivateBookListSqlService, PrivateBookListSqlService>();
+            services.AddSingleton<IJwtOptions, JwtOptions>();
+            services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
+            services.AddScoped<IDomainService, DomainService>();
+            services.AddDomainModule();
         }
     }
 }

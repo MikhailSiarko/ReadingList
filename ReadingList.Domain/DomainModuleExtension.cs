@@ -5,15 +5,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.MapperProfiles;
-using ReadingList.Domain.Services;
-using ReadingList.Domain.Services.Authentication;
-using ReadingList.Domain.Services.Encryption;
-using ReadingList.Domain.Services.Sql;
-using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.WriteModel;
 
@@ -23,14 +17,7 @@ namespace ReadingList.Domain
     {
         public static IServiceCollection AddDomainModule(this IServiceCollection services)
         {
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IEncryptionService, EncryptionService>();
-            services.AddTransient<IUserSqlService, UserSqlService>();
-            services.AddTransient<IPrivateBookListSqlService, PrivateBookListSqlService>();
-            services.AddSingleton<IJwtOptions, JwtOptions>();
-            services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
             services.AddMediatR(typeof(ICommand).Assembly);
-            services.AddScoped<IDomainService, DomainService>();
             services.AddDbContext<WriteDbContext>((provider, builder) =>
                 builder.UseSqlServer(provider.GetDefaultConnectionString()));
             services.AddScoped<IDbConnection, SqlConnection>(provider =>
