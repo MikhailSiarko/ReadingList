@@ -40,52 +40,36 @@ namespace ReadingList.Domain.Services
 
         private Action<TEntity, Dictionary<string, object>> GetUpdater<TEntity>() where TEntity : Entity
         {
-            var entityType = typeof(TEntity);
-
-            if (_cache.TryGetValue(entityType, out var updater))
-            {
-                return (Action<TEntity, Dictionary<string, object>>) updater;
-            }
-
-            RegisterUpdater<TEntity>();
-            _cache.TryGetValue(entityType, out updater);
-
-            return (Action<TEntity, Dictionary<string, object>>) updater;
+            return (Action<TEntity, Dictionary<string, object>>) _cache.GetOrAdd(typeof(TEntity), _ => RegisterUpdater<TEntity>());
         }
 
-        private void RegisterUpdater<TEntity>() where TEntity : Entity
+        private Action<TEntity, Dictionary<string, object>> RegisterUpdater<TEntity>() where TEntity : Entity
         {
             var entityType = typeof(TEntity);
 
             var propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p =>
-                p.CustomAttributes.All(a => a.AttributeType != typeof(IgnoreUpdateAttribute))).ToList();
+                p.GetCustomAttribute<IgnoreUpdateAttribute>(true) == null).ToList();
 
             var entityParameter = Expression.Parameter(entityType, "entity");
             var sourceParameter = Expression.Parameter(typeof(Dictionary<string, object>), "source");
 
             var block = Expression.Block(BuildExpressionSequence(propertyInfos, entityParameter, sourceParameter));
 
-            var updater = Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
-
-            _cache.TryAdd(entityType, updater);
+            return Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
         }
 
         private IEnumerable<Expression> BuildExpressionSequence(IEnumerable<PropertyInfo> propertyInfos, Expression entityParameter, Expression sourceParameter)
         {
-            var expressions = new List<Expression>();
-
             foreach (var propertyInfo in propertyInfos)
             {
                 var propertyName = Expression.Constant(propertyInfo.Name);
                 var propertyExpression = Expression.PropertyOrField(entityParameter, propertyInfo.Name);
-                expressions.Add(Expression.IfThen(
+                yield return Expression.IfThen(
                     Expression.Call(sourceParameter, _containsKeyMethodInfo, propertyName),
                     Expression.Assign(
                         propertyExpression,
-                        Expression.Convert(Expression.Call(_getValueOrDefaultMethodInfo, sourceParameter, propertyName), propertyInfo.PropertyType))));
+                        Expression.Convert(Expression.Call(_getValueOrDefaultMethodInfo, sourceParameter, propertyName), propertyInfo.PropertyType)));
             }
-
-            return expressions;
         }
     }
 }
