@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.MapperProfiles;
 using ReadingList.Tests.TestComparers;
 using ReadingList.WriteModel.Models;
+using PrivateBookListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -43,6 +45,27 @@ namespace ReadingList.Tests
             var mapped = Mapper.Map<PrivateBookListDto, BookList>(privateList);
             var remapped = Mapper.Map<BookList, PrivateBookListDto>(mapped);
             Assert.Equal(privateList, remapped, new PrivateBookListDtoEqualityComparer());
+        }
+
+        [Fact]
+        public void Map_ReturnsPrivateBookListItemDto_When_PrivateBookListItemIsMapped()
+        {
+            var privateListItem = new PrivateBookListItemRm()
+            {
+                Id = 54,
+                Author = "Author",
+                Title = "Title",
+                Status = (int)BookItemStatus.Reading,
+                ReadingTimeInSeconds = Convert.ToInt32(TimeSpan.FromHours(5).TotalSeconds)
+            };
+            var mapped = Mapper.Map<PrivateBookListItemRm, PrivateBookListItemDto>(privateListItem);
+
+            Assert.IsType<PrivateBookListItemDto>(mapped);
+            Assert.Equal(privateListItem.Id, mapped.Id);
+            Assert.Equal(privateListItem.Title, mapped.Title);
+            Assert.Equal(privateListItem.Author, mapped.Author);
+            Assert.Equal(privateListItem.Status, mapped.Status);
+            Assert.Equal(privateListItem.ReadingTimeInSeconds, mapped.ReadingTimeInSeconds);
         }
     }
 }

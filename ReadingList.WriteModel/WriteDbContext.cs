@@ -6,7 +6,7 @@ namespace ReadingList.WriteModel
 {
     public sealed class WriteDbContext : DbContext
     {
-        
+
         public DbSet<BookList> BookLists { get; set; }
         public DbSet<PrivateBookListItem> PrivateBookListItems { get; set; }
         public DbSet<SharedBookListItem> SharedBookListItems { get; set; }
@@ -43,7 +43,7 @@ namespace ReadingList.WriteModel
                 .WithMany(si => si.SharedBookListItemTags).HasForeignKey(st => st.SharedBookListItemId);
             modelBuilder.Entity<SharedBookListItemTag>().HasOne(st => st.Tag).WithMany(t => t.SharedBookListItemTags)
                 .HasForeignKey(st => st.TagId);
-            
+
             base.OnModelCreating(modelBuilder);
         }
     }

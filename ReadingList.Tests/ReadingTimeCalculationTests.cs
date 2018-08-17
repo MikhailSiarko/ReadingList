@@ -16,18 +16,18 @@ namespace ReadingList.Tests
                 Title = "Title",
                 BookListId = 3,
                 Id = 5,
-                ReadingTime = default(TimeSpan),
+                ReadingTimeInSeconds = default(int),
                 LastStatusUpdateDate = DateTime.Now.AddDays(-3),
                 Status = BookItemStatus.ToReading
             };
 
-            var readingTime = item.ReadingTime +
+            var readingTime = item.ReadingTimeInSeconds +
                               ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Reading);
 
-            Assert.Equal(default(TimeSpan).Minutes, readingTime.Minutes);
+            Assert.True(readingTime == default(double));
         }
-        
+
         [Fact]
         public void Calculate_Returns0_When_BookStatusChangedFromReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
@@ -37,18 +37,18 @@ namespace ReadingList.Tests
                 Title = "Title",
                 BookListId = 3,
                 Id = 5,
-                ReadingTime = TimeSpan.FromMinutes(65),
+                ReadingTimeInSeconds = Convert.ToInt32(TimeSpan.FromMinutes(65).TotalSeconds),
                 LastStatusUpdateDate = DateTime.Now.AddDays(-3),
                 Status = BookItemStatus.Reading
             };
 
-            var readingTime = item.ReadingTime +
+            var readingTime = item.ReadingTimeInSeconds +
                               ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Reading);
 
-            Assert.Equal(item.ReadingTime.Minutes, readingTime.Minutes);
+            Assert.True(item.ReadingTimeInSeconds == readingTime);
         }
-        
+
         [Fact]
         public void Calculate_Returns135Minutes_When_BookStatusChangedFromReadingToRead_And_LastStatusUpdateDateIsNowMinus135Minutes()
         {
@@ -58,20 +58,20 @@ namespace ReadingList.Tests
                 Title = "Title",
                 BookListId = 3,
                 Id = 5,
-                ReadingTime = TimeSpan.FromMinutes(165),
+                ReadingTimeInSeconds = Convert.ToInt32(TimeSpan.FromMinutes(165).TotalSeconds),
                 LastStatusUpdateDate = DateTime.Now.AddMinutes(-135),
                 Status = BookItemStatus.Reading
             };
 
-            var oldReadingTime = item.ReadingTime;
+            var oldReadingTime = item.ReadingTimeInSeconds;
 
-            var readingTime = item.ReadingTime +
+            var readingTime = item.ReadingTimeInSeconds +
                               ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Read);
 
-            Assert.Equal(oldReadingTime.Add(TimeSpan.FromMinutes(135)).Minutes, readingTime.Minutes);
+            Assert.True(oldReadingTime + Convert.ToInt32(TimeSpan.FromMinutes(135).TotalSeconds) == readingTime);
         }
-        
+
         [Fact]
         public void Calculate_Returns3Days_When_BookStatusChangedFromReadingToStartedButPostponed_And_LastStatusUpdateDateIsNowMinus3Days()
         {
@@ -81,16 +81,16 @@ namespace ReadingList.Tests
                 Title = "Title",
                 BookListId = 3,
                 Id = 5,
-                ReadingTime = default(TimeSpan),
+                ReadingTimeInSeconds = default(int),
                 LastStatusUpdateDate = DateTime.Now.AddDays(-3),
                 Status = BookItemStatus.Reading
             };
 
-            var readingTime = item.ReadingTime +
+            var readingTime = item.ReadingTimeInSeconds +
                               ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.StartedButPostponed);
 
-            Assert.Equal(TimeSpan.FromDays(3).Minutes, readingTime.Minutes);
+            Assert.True(Convert.ToInt32(TimeSpan.FromDays(3).TotalSeconds) == readingTime);
         }
     }
 }

@@ -5,16 +5,16 @@ namespace ReadingList.Domain.Services
 {
     public static class ReadingTimeCalculator
     {
-        public static TimeSpan Calculate(BookItemStatus previousStatus, DateTime previousDate, BookItemStatus newStatus)
+        public static int Calculate(BookItemStatus previousStatus, DateTime previousDate, BookItemStatus newStatus)
         {
-            var diff = default(TimeSpan);
+            var diff = default(int);
             if (previousStatus == newStatus)
                 return diff;
             switch (newStatus)
             {
                 case BookItemStatus.StartedButPostponed:
                 case BookItemStatus.Read:
-                    diff = DateTime.Now - previousDate;
+                    diff = Convert.ToInt32(Math.Round((DateTime.Now - previousDate).TotalSeconds, MidpointRounding.AwayFromZero));
                     break;
                 case BookItemStatus.ToReading:
                 case BookItemStatus.Reading:

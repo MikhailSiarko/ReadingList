@@ -16,6 +16,7 @@
     <ProjectReference Include="..\ReadingList.WriteModel\ReadingList.WriteModel.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="MapperProfiles\PrivateBookListItemProfile.cs" />
     <Compile Remove="Services\Validation\EntitiesValidator.cs" />
   </ItemGroup>
 </Project>

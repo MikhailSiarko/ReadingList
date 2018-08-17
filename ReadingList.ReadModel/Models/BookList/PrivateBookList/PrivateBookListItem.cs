@@ -10,6 +10,6 @@ namespace ReadingList.ReadModel.Models
 
         public int Status { get; set; }
 
-        public TimeSpan ReadingTime { get; set; }
+        public int ReadingTimeInSeconds { get; set; }
     }
 }

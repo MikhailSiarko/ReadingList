@@ -30,7 +30,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             
             PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
             
-            var readingTime = item.ReadingTime +
+            var readingTime = item.ReadingTimeInSeconds +
                 ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate, (BookItemStatus) command.Status);
             
             _entityUpdateService.Update(item, new Dictionary<string, object>
@@ -38,7 +38,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 [nameof(PrivateBookListItemWm.Title)] = command.Title,
                 [nameof(PrivateBookListItemWm.Author)] = command.Author,
                 [nameof(PrivateBookListItemWm.Status)] = command.Status,
-                [nameof(PrivateBookListItemWm.ReadingTime)] = readingTime,
+                [nameof(PrivateBookListItemWm.ReadingTimeInSeconds)] = readingTime,
                 [nameof(PrivateBookListItemWm.LastStatusUpdateDate)] = DateTime.Now
             });
             

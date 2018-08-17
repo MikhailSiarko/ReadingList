@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ReadingList.WriteModel.Models
 {
@@ -8,6 +9,6 @@ namespace ReadingList.WriteModel.Models
 
         public DateTime LastStatusUpdateDate { get; set; }
 
-        public TimeSpan ReadingTime { get; set; }
+        public int ReadingTimeInSeconds { get; set; }
     }
 }

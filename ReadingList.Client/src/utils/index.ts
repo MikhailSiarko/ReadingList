@@ -31,18 +31,15 @@ export function isNullOrEmpty(str: string | null | undefined) {
 }
 
 export function convertSecondsToReadingTime(seconds: number): string {
-  let hours: any = Math.floor(seconds / 3600);
-  let minutes: any = Math.floor((seconds - (hours * 3600)) / 60);
-  let sec: any = Math.floor(seconds - (hours * 3600) - (minutes * 60));
+  let days: any = Math.floor(seconds / 86400);
+  let hours: any = Math.floor((seconds - (days * 86400)) / 3600);
+  let minutes: any = Math.floor((seconds - (hours * 3600) - (days * 86400)) / 60);
 
-  if (hours   < 10) {
+  if (hours < 10) {
       hours = '0' + hours;
   }
   if (minutes < 10) {
       minutes = '0' + minutes;
   }
-  if (sec < 10) {
-      sec = '0' + sec;
-  }
-  return hours + ':' + minutes + ':' + sec;
+  return `days: ${days} | hours: ${hours} | minutes: ${minutes}`;
 }
