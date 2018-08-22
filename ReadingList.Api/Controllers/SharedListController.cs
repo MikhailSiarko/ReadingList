@@ -8,11 +8,11 @@ namespace ReadingList.Api.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class SharedListController : Controller
+    public class SharedListsController : Controller
     {
         private readonly IDomainService _domainService;
 
-        public SharedListController(IDomainService domainService)
+        public SharedListsController(IDomainService domainService)
         {
             _domainService = domainService;
         }
@@ -23,6 +23,14 @@ namespace ReadingList.Api.Controllers
             var bookList = await _domainService.AskAsync(new GetSharedListQuery(id));
 
             return Ok(bookList);
+        }
+
+        [HttpGet("own")]
+        public async Task<IActionResult> GetUserSharedLists()
+        {
+            var bookLists = await _domainService.AskAsync(new GetSharedListsQuery(User.Identity.Name));
+            
+            return Ok(bookLists);
         }
     }
 }

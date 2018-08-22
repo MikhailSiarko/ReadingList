@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
@@ -7,7 +6,6 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries.SharedList;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
-using ReadingList.WriteModel.Models;
 using SharedListRM = ReadingList.ReadModel.Models.SharedBookList;
 using SharedItemRM = ReadingList.ReadModel.Models.SharedBookListItem;
 
@@ -16,12 +14,12 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
     public class GetSharedListQueryHandler : QueryHandler<GetSharedListQuery, SharedBookListDto>
     {
         private readonly IReadDbConnection _dbConnection;
-        private readonly IBookListSqlService _bookListSqlService;
+        private readonly ISharedBookListSqlService _sharedBookListSqlService;
 
-        public GetSharedListQueryHandler(IReadDbConnection dbConnection, Func<BookListType, IBookListSqlService> sqlServiceAccessor)
+        public GetSharedListQueryHandler(IReadDbConnection dbConnection, ISharedBookListSqlService sharedBookListSqlService)
         {
             _dbConnection = dbConnection;
-            _bookListSqlService = sqlServiceAccessor(BookListType.Shared);
+            _sharedBookListSqlService = sharedBookListSqlService;
         }
         
         protected override async Task<SharedBookListDto> Handle(GetSharedListQuery query)
@@ -30,7 +28,7 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
 
             var privateList =
                 await _dbConnection.QueryFirstAsync<SharedListRM, SharedItemRM, SharedListRM>(
-                    _bookListSqlService.GetBookListSqlQuery(),
+                    _sharedBookListSqlService.GetBookListSqlQuery(),
                     (list, item) =>
                     {
                         if (!listDictionary.TryGetValue(list.Id, out var listEntry))

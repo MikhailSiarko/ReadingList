@@ -4,7 +4,7 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.Services.Sql
 {
-    public class SharedBookListSqlService : IBookListSqlService
+    public class SharedBookListSqlService : ISharedBookListSqlService
     {
         public string GetBookListSqlQuery()
         {
@@ -22,6 +22,15 @@ namespace ReadingList.Domain.Services.Sql
                 .Select("Id", "Title", "Author")
                 .From("SharedBookListItems")
                 .Where("Id = @id AND Title = @title AND Author = @author")
+                .ToSql();
+        }
+
+        public string GetListsSqlQuery()
+        {
+            return new SqlBuilder()
+                .Select("Id", "Name", "OwnerId", "JsonFields")
+                .From("BookLists")
+                .Where($"Type = {BookListType.Shared:D} AND OwnerId = (SELECT Id FROM Users WHERE Login = @login)")
                 .ToSql();
         }
     }

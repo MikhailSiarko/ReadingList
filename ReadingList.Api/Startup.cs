@@ -73,20 +73,8 @@ namespace ReadingList.Api
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddTransient<IUserSqlService, UserSqlService>();
-            services.AddTransient<PrivateBookListSqlService>();
-            services.AddTransient<SharedBookListSqlService>();
-            services.AddTransient<Func<BookListType, IBookListSqlService>>(serviceProvider => bookType =>
-            {
-                switch (bookType)
-                {
-                    case BookListType.Private:
-                        return serviceProvider.GetService<PrivateBookListSqlService>();
-                    case BookListType.Shared:
-                        return serviceProvider.GetService<SharedBookListSqlService>();
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(bookType), bookType, null);
-                }
-            });
+            services.AddTransient<IBookListSqlService, PrivateBookListSqlService>();
+            services.AddTransient<ISharedBookListSqlService, SharedBookListSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
             services.AddScoped<IDomainService, DomainService>();

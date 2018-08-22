@@ -1,12 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
-using ReadingList.WriteModel.Models;
 using PrivateListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
 
 namespace ReadingList.Domain.QueryHandlers.PrivateList
@@ -16,10 +14,10 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
         private readonly IReadDbConnection _dbConnection;
         private readonly IBookListSqlService _bookListSqlService;
 
-        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection, Func<BookListType, IBookListSqlService> sqlServiceAccessor)
+        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection, IBookListSqlService bookListSqlService)
         {
             _dbConnection = dbConnection;
-            _bookListSqlService = sqlServiceAccessor(BookListType.Private);
+            _bookListSqlService = bookListSqlService;
         }
 
         protected override async Task<PrivateBookListItemDto> Handle(GetPrivateListItemQuery query)
