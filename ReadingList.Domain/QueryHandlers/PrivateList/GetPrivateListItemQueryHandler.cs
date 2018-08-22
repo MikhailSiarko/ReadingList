@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
@@ -13,21 +14,20 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
     public class GetPrivateListItemQueryHandler : QueryHandler<GetPrivateListItemQuery, PrivateBookListItemDto>
     {
         private readonly IReadDbConnection _dbConnection;
-        private readonly IPrivateBookListSqlService _privateBookListSqlService;
+        private readonly IBookListSqlService _bookListSqlService;
 
-        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection, IPrivateBookListSqlService privateBookListSqlService)
+        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection, Func<BookListType, IBookListSqlService> sqlServiceAccessor)
         {
             _dbConnection = dbConnection;
-            _privateBookListSqlService = privateBookListSqlService;
+            _bookListSqlService = sqlServiceAccessor(BookListType.Private);
         }
 
         protected override async Task<PrivateBookListItemDto> Handle(GetPrivateListItemQuery query)
         {
             var item = await _dbConnection.QueryFirstAsync<PrivateListItemRm>(
-                           _privateBookListSqlService.GetPrivateBookListItemSqlQuery(), new
+                           _bookListSqlService.GetBookListItemSqlQuery(), new
                            {
                                login = query.UserLogin,
-                               type = BookListType.Private,
                                title = query.Title,
                                author = query.Author
                            }) ??

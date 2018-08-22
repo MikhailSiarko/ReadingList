@@ -1,11 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ReadingList.Domain.DTO.BookList;
-using ReadingList.Domain.MapperProfiles;
-using ReadingList.Tests.TestComparers;
+using ReadingList.Domain.Infrastructure.Converters;
 using ReadingList.WriteModel.Models;
 using PrivateBookListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
+using PrivateBookListRm = ReadingList.ReadModel.Models.PrivateBookList;
+using SharedBookListItemRm = ReadingList.ReadModel.Models.SharedBookListItem;
+using SharedBookListRm = ReadingList.ReadModel.Models.SharedBookList;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -14,43 +18,29 @@ namespace ReadingList.Tests
     {
         static MappingTests()
         {
-            Mapper.Initialize(conf => conf.AddProfile<BookListProfile>());
-        }
-        [Fact]
-        public void Map_ReturnsBookList_When_SharedBookListDtoIsMapped_Then_ReverseMapping_ReversedSharedBookListDtoIsEqualToSourceSharedBookListDto()
-        {
-            var shared = new SharedBookListDto
-            {
-                Id = 1,
-                Name = "My Shared List",
-                OwnerId = 2,
-                Tags = new List<string> {"fantasy", "awesome", "cool"},
-                Type = BookListType.Shared
-            };
-
-            var mappedList = Mapper.Map<SharedBookListDto, BookList>(shared);
-            var remappedShared = Mapper.Map<BookList, SharedBookListDto>(mappedList);
-            Assert.Equal(remappedShared, shared, new TestSharedBookListEqualityComparer());
+            Mapper.Initialize(conf =>
+                conf.CreateMap<SharedBookListRm, SharedBookListDto>().ConvertUsing<SharedBookListConverter>());
         }
 
         [Fact]
-        public void Map_ReturnsBookList_When_PrivateBookListDtoIsMapped_Then_ReversMapping_ReversedPrivateBookListDtoIsEqualToSourcePrivateBookListDto()
+        public void Map_ReturnsPrivateBookListDto_When_PrivateBookListIsMapped()
         {
-            var privateList = new PrivateBookListDto
+            var privateList = new PrivateBookListRm
             {
                 Id = 54,
                 Name = "My private list",
                 OwnerId = 895
             };
-            var mapped = Mapper.Map<PrivateBookListDto, BookList>(privateList);
-            var remapped = Mapper.Map<BookList, PrivateBookListDto>(mapped);
-            Assert.Equal(privateList, remapped, new PrivateBookListDtoEqualityComparer());
+            var mapped = Mapper.Map<PrivateBookListRm, PrivateBookListDto>(privateList);
+            Assert.Equal(privateList.Id, mapped.Id);
+            Assert.Equal(privateList.Name, mapped.Name);
+            Assert.Equal(privateList.OwnerId, mapped.OwnerId);
         }
 
         [Fact]
         public void Map_ReturnsPrivateBookListItemDto_When_PrivateBookListItemIsMapped()
         {
-            var privateListItem = new PrivateBookListItemRm()
+            var privateListItem = new PrivateBookListItemRm
             {
                 Id = 54,
                 Author = "Author",
@@ -60,12 +50,50 @@ namespace ReadingList.Tests
             };
             var mapped = Mapper.Map<PrivateBookListItemRm, PrivateBookListItemDto>(privateListItem);
 
-            Assert.IsType<PrivateBookListItemDto>(mapped);
             Assert.Equal(privateListItem.Id, mapped.Id);
             Assert.Equal(privateListItem.Title, mapped.Title);
             Assert.Equal(privateListItem.Author, mapped.Author);
             Assert.Equal(privateListItem.Status, mapped.Status);
             Assert.Equal(privateListItem.ReadingTimeInSeconds, mapped.ReadingTimeInSeconds);
+        }
+        
+        [Fact]
+        public void Map_ReturnsSharedBookListDto_When_SharedBookListIsMapped()
+        {
+            var testObj = new {Category = "Stories", Tags = new[] {"story"}};
+            var sharedList = new SharedBookListRm
+            {
+                Id = 54,
+                Name = "My private list",
+                OwnerId = 895,
+                JsonFields = JObject.FromObject(testObj,
+                    JsonSerializer.Create(new JsonSerializerSettings
+                    {
+                        Formatting = Formatting.Indented
+                    })).ToString()
+            };
+            var mapped = Mapper.Map<SharedBookListRm, SharedBookListDto>(sharedList);
+            Assert.Equal(sharedList.Id, mapped.Id);
+            Assert.Equal(sharedList.Name, mapped.Name);
+            Assert.Equal(sharedList.OwnerId, mapped.OwnerId);
+            Assert.Equal(testObj.Category, mapped.Category);
+            Assert.False(mapped.Tags.Except(testObj.Tags).Any());
+        }
+        
+        [Fact]
+        public void Map_ReturnsSharedBookListItem_When_SharedBookListItemIsMapped()
+        {
+            var sharedBookListItem = new SharedBookListItemRm
+            {
+                Id = 54,
+                Author = "Author",
+                Title = "Title"
+            };
+            var mapped = Mapper.Map<SharedBookListItemRm, SharedBookListItemDto>(sharedBookListItem);
+
+            Assert.Equal(sharedBookListItem.Id, mapped.Id);
+            Assert.Equal(sharedBookListItem.Title, mapped.Title);
+            Assert.Equal(sharedBookListItem.Author, mapped.Author);
         }
     }
 }

@@ -1,13 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Newtonsoft.Json;
 using ReadingList.Domain.DTO.BookList;
-using ReadingList.WriteModel.Models;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Infrastructure.Converters
 {
-    public class BookListConverter : ITypeConverter<BookList, SharedBookListDto>
+    public class SharedBookListConverter : ITypeConverter<SharedBookList, SharedBookListDto>
     {
-        public SharedBookListDto Convert(BookList source, SharedBookListDto destination, ResolutionContext context)
+        public SharedBookListDto Convert(SharedBookList source, SharedBookListDto destination, ResolutionContext context)
         {
             var deserialized = JsonConvert.DeserializeObject<SharedBookListDto>(source.JsonFields);
             return new SharedBookListDto
@@ -15,8 +16,8 @@ namespace ReadingList.Domain.Infrastructure.Converters
                 Id = source.Id,
                 Name = source.Name,
                 OwnerId = source.OwnerId,
-                Type = source.Type,
-                Tags = deserialized.Tags
+                Tags = deserialized?.Tags ?? new List<string>(),
+                Category = deserialized?.Category
             };
         }
     }

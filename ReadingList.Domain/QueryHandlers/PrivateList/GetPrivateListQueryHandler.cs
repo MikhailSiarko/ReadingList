@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
@@ -15,12 +16,12 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
     public class GetPrivateListQueryHandler : QueryHandler<GetPrivateListQuery, PrivateBookListDto>
     {
         private readonly IReadDbConnection _dbConnection;
-        private readonly IPrivateBookListSqlService _privateBookListSqlService;
+        private readonly IBookListSqlService _bookListSqlService;
 
-        public GetPrivateListQueryHandler(IReadDbConnection dbConnection, IPrivateBookListSqlService privateBookListSqlService)
+        public GetPrivateListQueryHandler(IReadDbConnection dbConnection, Func<BookListType, IBookListSqlService> sqlServiceAccessor)
         {
             _dbConnection = dbConnection;
-            _privateBookListSqlService = privateBookListSqlService;
+            _bookListSqlService = sqlServiceAccessor(BookListType.Private);
         }
 
         protected override async Task<PrivateBookListDto> Handle(GetPrivateListQuery query)
@@ -29,7 +30,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
 
             var privateList =
                 await _dbConnection.QueryFirstAsync<ListRM, ItemRM, ListRM>(
-                    _privateBookListSqlService.GetPrivateBookListSqlQuery(),
+                    _bookListSqlService.GetBookListSqlQuery(),
                     (list, item) =>
                     {
                         if (!listDictionary.TryGetValue(list.Id, out var listEntry))
@@ -42,7 +43,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                         if (item != null)
                             listEntry.Items.Add(item);
                         return listEntry;
-                    }, new {login = query.UserLogin, type = (int) BookListType.Private}) ??
+                    }, new {login = query.UserLogin}) ??
                 throw new ObjectNotExistException<ListRM>(new {email = query.UserLogin});
 
             return Mapper.Map<ListRM, PrivateBookListDto>(privateList);

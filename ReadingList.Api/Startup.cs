@@ -14,6 +14,7 @@ using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.Domain.Services.Sql;
 using ReadingList.Domain.Services.Sql.Interfaces;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Api
 {
@@ -72,7 +73,20 @@ namespace ReadingList.Api
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddTransient<IUserSqlService, UserSqlService>();
-            services.AddTransient<IPrivateBookListSqlService, PrivateBookListSqlService>();
+            services.AddTransient<PrivateBookListSqlService>();
+            services.AddTransient<SharedBookListSqlService>();
+            services.AddTransient<Func<BookListType, IBookListSqlService>>(serviceProvider => bookType =>
+            {
+                switch (bookType)
+                {
+                    case BookListType.Private:
+                        return serviceProvider.GetService<PrivateBookListSqlService>();
+                    case BookListType.Shared:
+                        return serviceProvider.GetService<SharedBookListSqlService>();
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(bookType), bookType, null);
+                }
+            });
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
             services.AddScoped<IDomainService, DomainService>();

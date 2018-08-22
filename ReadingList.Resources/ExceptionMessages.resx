@@ -150,4 +150,7 @@
   <data name="ObjectNotExist_Default" xml:space="preserve">
     <value>Object with {0}</value>
   </data>
+  <data name="ObjectNotExist_SharedBookList" xml:space="preserve">
+    <value>Shared list with {0}</value>
+  </data>
 </root>

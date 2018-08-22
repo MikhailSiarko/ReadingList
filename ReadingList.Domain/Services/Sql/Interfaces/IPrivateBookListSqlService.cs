@@ -1,9 +1,9 @@
 ﻿namespace ReadingList.Domain.Services.Sql.Interfaces
 {
-    public interface IPrivateBookListSqlService
+    public interface IBookListSqlService
     {
-        string GetPrivateBookListSqlQuery();
+        string GetBookListSqlQuery();
 
-        string GetPrivateBookListItemSqlQuery();
+        string GetBookListItemSqlQuery();
     }
 }

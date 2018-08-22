@@ -1,29 +1,29 @@
 ﻿using Cinch.SqlBuilder;
 using ReadingList.Domain.Services.Sql.Interfaces;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.Services.Sql
 {
-    public class PrivateBookListSqlService : IPrivateBookListSqlService
+    public class PrivateBookListSqlService : IBookListSqlService
     {
-        public string GetPrivateBookListSqlQuery()
+        public string GetBookListSqlQuery()
         {
             return new SqlBuilder().Select("l.Id", "l.Name", "l.OwnerId", "i.Id", "i.ReadingTimeInSeconds", "i.Title",
                     "i.Author", "i.Status")
                 .From("BookLists AS l")
                 .LeftJoin(
                     "(SELECT Id, Title, Author, BookListId, Status, ReadingTimeInSeconds FROM PrivateBookListItems) AS i ON i.BookListId = l.Id")
-                .Where("l.OwnerId = (SELECT Id FROM Users WHERE Login = @login)")
-                .Where("l.Type = @type")
+                .Where($"l.OwnerId = (SELECT Id FROM Users WHERE Login = @login) AND l.Type = {BookListType.Private:D}")
                 .ToSql();
         }
 
-        public string GetPrivateBookListItemSqlQuery()
+        public string GetBookListItemSqlQuery()
         {
             return new SqlBuilder()
                 .Select("Id", "Title", "Author", "Status", "ReadingTimeInSeconds")
                 .From("PrivateBookListItems")
                 .Where(
-                    "BookListId = (SELECT Id From BookLists WHERE OwnerId = (SELECT Id FROM Users WHERE Login = @login) AND Type = @type) AND Title = @title AND Author = @author")
+                    $"BookListId = (SELECT Id FROM BookLists WHERE OwnerId = (SELECT Id FROM Users WHERE Login = @login) AND Type = {BookListType.Private:D}) AND Title = @title AND Author = @author")
                 .ToSql();
         }
     }

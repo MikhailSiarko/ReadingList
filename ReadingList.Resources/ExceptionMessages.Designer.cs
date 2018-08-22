@@ -115,6 +115,15 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shared list with {0}.
+        /// </summary>
+        public static string ObjectNotExist_SharedBookList {
+            get {
+                return ResourceManager.GetString("ObjectNotExist_SharedBookList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User with {0}.
         /// </summary>
         public static string ObjectNotExist_User {
