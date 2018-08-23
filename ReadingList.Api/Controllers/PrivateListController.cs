@@ -41,6 +41,7 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Post([FromBody] AddItemToPrivateListData addItemToPrivateListData)
         {
+            //TODO Need to change current approach of saved item returning to executing commands which return value since there is issue with items which have the same title and author in one list
             await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
                 addItemToPrivateListData.Title, addItemToPrivateListData.Author));
 

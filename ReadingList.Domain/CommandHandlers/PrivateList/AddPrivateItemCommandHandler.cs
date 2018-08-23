@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
@@ -11,40 +10,35 @@ using BookListWm = ReadingList.WriteModel.Models.BookList;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
-    public class AddPrivateItemCommandHandler : CommandHandler<AddPrivateItemCommand>
+    public class AddPrivateItemCommandHandler : AddBookItemCommandHandler<AddPrivateItemCommand>
     {
-        private readonly WriteDbContext _dbContext;
-
-        public AddPrivateItemCommandHandler(WriteDbContext dbContext)
+        public AddPrivateItemCommandHandler(WriteDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
-        protected override async Task Handle(AddPrivateItemCommand command)
+        protected override async Task<BookList> GetBookList(AddPrivateItemCommand command)
         {
-            var list = await _dbContext.BookLists.AsNoTracking()
-                           .Where(l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private)
-                           .FirstOrDefaultAsync() ??
-                       throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
-            
-            var book = await _dbContext.Books.SingleOrDefaultAsync(b =>
-                b.Author == command.Author && b.Title == command.Title);
-            
-            if (book == null)
-                await _dbContext.Books.AddAsync(new Book {Author = command.Author, Title = command.Title});
-            
-            var listItem = new PrivateBookListItemWm
+            return await DbContext.BookLists.AsNoTracking()
+                       .SingleOrDefaultAsync(p =>
+                           p.Owner.Login == command.UserLogin && p.Type == BookListType.Private) ??
+                   throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
+        }
+
+        protected override BookListItem CreateItem(string title, string author, BookList list)
+        {
+            return new PrivateBookListItemWm
             {
                 Status = BookItemStatus.ToReading,
                 LastStatusUpdateDate = DateTime.Now,
                 BookListId = list.Id,
-                Title = command.Title,
-                Author = command.Author
+                Title = title,
+                Author = author
             };
-            
-            await _dbContext.PrivateBookListItems.AddAsync(listItem);
-            
-            await _dbContext.SaveChangesAsync();
+        }
+
+        protected override async Task AddItem(BookListItem item)
+        {
+            await DbContext.PrivateBookListItems.AddAsync((PrivateBookListItem) item);
         }
     }
 }

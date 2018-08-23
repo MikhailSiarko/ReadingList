@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReadingList.Api.QueriesData;
+using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Queries.SharedList;
 using ReadingList.Domain.Services;
 
@@ -31,6 +33,23 @@ namespace ReadingList.Api.Controllers
             var bookLists = await _domainService.AskAsync(new GetSharedListsQuery(User.Identity.Name));
             
             return Ok(bookLists);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> Post([FromBody] CreateSharedListData sharedListData)
+        {
+            await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name, sharedListData.Name));
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddItem([FromBody] AddItemToSharedListData itemToSharedListData)
+        {
+            await _domainService.ExecuteAsync(new AddSharedListItemCommand(itemToSharedListData.ListId,
+                User.Identity.Name, itemToSharedListData.Title, itemToSharedListData.Author));
+
+            return Ok();
         }
     }
 }

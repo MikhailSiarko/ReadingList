@@ -17,7 +17,7 @@ namespace ReadingList.Domain.DTO.BookList
 
         public int OwnerId { get; set; }
         
-        public IEnumerable<PrivateBookListItemDto> Items { get; }
+        public IEnumerable<PrivateBookListItemDto> Items { get; set; }
 
         [JsonProperty("category")]
         public string Category { get; set; }
