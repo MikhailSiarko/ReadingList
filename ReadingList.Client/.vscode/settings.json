@@ -1,3 +1,4 @@
 {
-    "todo-tree.flat": true
+    "todo-tree.flat": true,
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }

@@ -34,7 +34,7 @@ namespace ReadingList.Tests
         }
         
         [Fact]
-        public void Validate_ReturnsCantChangeStatusFromStartedButPostonedToToReading_When_OldStatusIsStartedButPostonedAndNewStatusIsToReading()
+        public void Validate_ReturnsCantChangeStatusFromStartedButPostponedToToReading_When_OldStatusIsStartedButPostponedAndNewStatusIsToReading()
         {
             var item = new PrivateBookListItem
             {

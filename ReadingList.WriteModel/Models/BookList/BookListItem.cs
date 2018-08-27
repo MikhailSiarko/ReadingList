@@ -8,6 +8,7 @@ namespace ReadingList.WriteModel.Models
 
         public string Author { get; set; }
 
+        [IgnoreUpdate]
         public BookList BookList { get; set; }
 
         [IgnoreUpdate]
