@@ -26,7 +26,7 @@ namespace ReadingList.Domain.Services
             _containsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
         }
 
-        public void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where TEntity : Entity
+        public void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where TEntity : EntityWm
         {
             if(source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,12 +38,12 @@ namespace ReadingList.Domain.Services
             updater(entity, source);
         }
 
-        private Action<TEntity, Dictionary<string, object>> GetUpdater<TEntity>() where TEntity : Entity
+        private Action<TEntity, Dictionary<string, object>> GetUpdater<TEntity>() where TEntity : EntityWm
         {
             return (Action<TEntity, Dictionary<string, object>>) _cache.GetOrAdd(typeof(TEntity), _ => RegisterUpdater<TEntity>());
         }
 
-        private Action<TEntity, Dictionary<string, object>> RegisterUpdater<TEntity>() where TEntity : Entity
+        private Action<TEntity, Dictionary<string, object>> RegisterUpdater<TEntity>() where TEntity : EntityWm
         {
             var entityType = typeof(TEntity);
 

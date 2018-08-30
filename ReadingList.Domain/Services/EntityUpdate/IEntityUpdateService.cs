@@ -5,6 +5,6 @@ namespace ReadingList.Domain.Services
 {
     public interface IEntityUpdateService
     {
-        void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where  TEntity : Entity;
+        void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where  TEntity : EntityWm;
     }
 }

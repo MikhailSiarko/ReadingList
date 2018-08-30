@@ -5,11 +5,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Infrastructure.Converters;
+using ReadingList.ReadModel.Models;
 using ReadingList.WriteModel.Models;
-using PrivateBookListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
-using PrivateBookListRm = ReadingList.ReadModel.Models.PrivateBookList;
-using SharedBookListItemRm = ReadingList.ReadModel.Models.SharedBookListItem;
-using SharedBookListRm = ReadingList.ReadModel.Models.SharedBookList;
 using Xunit;
 
 namespace ReadingList.Tests

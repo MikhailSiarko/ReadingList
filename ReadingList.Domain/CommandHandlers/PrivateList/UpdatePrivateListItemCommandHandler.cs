@@ -7,7 +7,6 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
-using PrivateBookListItemWm = ReadingList.WriteModel.Models.PrivateBookListItem;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {

@@ -1,6 +1,6 @@
 ﻿namespace ReadingList.ReadModel.Models
 {
-    public abstract class BookListItem : ReadEntity
+    public abstract class BookListItemRm : EntityRm
     {
         public string Title { get; set; }
 

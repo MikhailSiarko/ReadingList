@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.WriteModel;
-using PrivateBookListItemWm = ReadingList.WriteModel.Models.PrivateBookListItem;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {

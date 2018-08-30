@@ -4,6 +4,6 @@ namespace ReadingList.Domain.Services.Authentication
 {
     public interface IAuthenticationService
     {
-        AuthenticationData Authenticate(User user);
+        AuthenticationData Authenticate(UserRm user);
     }
 }

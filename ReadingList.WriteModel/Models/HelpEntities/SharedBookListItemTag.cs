@@ -1,13 +1,13 @@
 ﻿namespace ReadingList.WriteModel.Models.HelpEntities
 {
-    public class SharedBookListItemTag
+    public class SharedBookListItemTagWm
     {
         public int SharedBookListItemId { get; set; }
 
-        public SharedBookListItem SharedBookListItem { get; set; }
+        public SharedBookListItemWm SharedBookListItem { get; set; }
 
         public int TagId { get; set; }
 
-        public Tag Tag { get; set; }
+        public TagWm Tag { get; set; }
     }
 }

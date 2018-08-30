@@ -1,6 +1,6 @@
 ﻿namespace ReadingList.ReadModel.Models
 {
-    public class User : ReadEntity
+    public class UserRm : EntityRm
     {
         public string Login { get; set; }
 

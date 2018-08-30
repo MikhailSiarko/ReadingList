@@ -2,7 +2,7 @@
 
 namespace ReadingList.WriteModel.Models
 {
-    public class Category : NamedEntity
+    public class CategoryWm : NamedEntityWm
     {
     }
 }

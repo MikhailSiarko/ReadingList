@@ -5,18 +5,16 @@ using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
-using PrivateBookListItemWm = ReadingList.WriteModel.Models.PrivateBookListItem;
-using BookListWm = ReadingList.WriteModel.Models.BookList;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
-    public class AddPrivateItemCommandHandler : AddBookItemCommandHandler<AddPrivateItemCommand>
+    public class AddPrivateItemCommandHandler : AddBookItemCommandHandler<AddPrivateItemCommand, PrivateBookListItemWm>
     {
         public AddPrivateItemCommandHandler(WriteDbContext dbContext) : base(dbContext)
         {
         }
 
-        protected override async Task<BookList> GetBookList(AddPrivateItemCommand command)
+        protected override async Task<BookListWm> GetBookList(AddPrivateItemCommand command)
         {
             return await DbContext.BookLists.AsNoTracking()
                        .SingleOrDefaultAsync(p =>
@@ -24,7 +22,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                    throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
         }
 
-        protected override BookListItem CreateItem(string title, string author, BookList list)
+        protected override PrivateBookListItemWm CreateItem(string title, string author, BookListWm list)
         {
             return new PrivateBookListItemWm
             {
@@ -34,11 +32,6 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 Title = title,
                 Author = author
             };
-        }
-
-        protected override async Task AddItem(BookListItem item)
-        {
-            await DbContext.PrivateBookListItems.AddAsync((PrivateBookListItem) item);
         }
     }
 }

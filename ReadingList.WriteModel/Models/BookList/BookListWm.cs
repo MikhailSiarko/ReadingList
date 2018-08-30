@@ -2,10 +2,10 @@
 
 namespace ReadingList.WriteModel.Models
 {
-    public class BookList : NamedEntity
+    public class BookListWm : NamedEntityWm
     {
         [IgnoreUpdate]
-        public User Owner { get; set; }
+        public UserWm Owner { get; set; }
 
         [IgnoreUpdate]
         public int OwnerId { get; set; }

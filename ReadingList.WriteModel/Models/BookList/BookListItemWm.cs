@@ -2,14 +2,14 @@
 
 namespace ReadingList.WriteModel.Models
 {
-    public class BookListItem : Entity
+    public class BookListItemWm : EntityWm
     {
         public string Title { get; set; }
 
         public string Author { get; set; }
 
         [IgnoreUpdate]
-        public BookList BookList { get; set; }
+        public BookListWm BookList { get; set; }
 
         [IgnoreUpdate]
         public int BookListId { get; set; }

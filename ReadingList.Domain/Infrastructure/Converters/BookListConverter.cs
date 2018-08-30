@@ -6,9 +6,9 @@ using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Infrastructure.Converters
 {
-    public class SharedBookListConverter : ITypeConverter<SharedBookList, SharedBookListDto>
+    public class SharedBookListConverter : ITypeConverter<SharedBookListRm, SharedBookListDto>
     {
-        public SharedBookListDto Convert(SharedBookList source, SharedBookListDto destination, ResolutionContext context)
+        public SharedBookListDto Convert(SharedBookListRm source, SharedBookListDto destination, ResolutionContext context)
         {
             var deserialized = JsonConvert.DeserializeObject<SharedBookListDto>(source.JsonFields);
             return new SharedBookListDto

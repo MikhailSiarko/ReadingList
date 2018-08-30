@@ -17,7 +17,7 @@ namespace ReadingList.WriteModel
                     "appsettings.json"));
             var configuration = builder.Build();
             var optionsBuilder = new DbContextOptionsBuilder<WriteDbContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Write"));
             return new WriteDbContext(optionsBuilder.Options);
         }
     }

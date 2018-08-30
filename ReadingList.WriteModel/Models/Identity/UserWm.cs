@@ -3,11 +3,11 @@ using ReadingList.WriteModel.Models.Base;
 
 namespace ReadingList.WriteModel.Models
 {
-    public class User : Entity
+    public class UserWm : EntityWm
     {
-        public User()
+        public UserWm()
         {
-            BookLists = new List<BookList>();
+            BookLists = new List<BookListWm>();
         }
         public string Login { get; set; }
 
@@ -15,10 +15,10 @@ namespace ReadingList.WriteModel.Models
 
         public int RoleId { get; set; }
 
-        public Profile Profile { get; set; }
+        public ProfileWm Profile { get; set; }
 
         public int ProfileId { get; set; }
 
-        public List<BookList> BookLists { get; set; }
+        public List<BookListWm> BookLists { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Validate_ReturnsCantChangeStatusFromReadToReading_When_OldStatusIsReadAndNewStatusIsReading()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Status = BookItemStatus.Read
             };
@@ -23,7 +23,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Validate_ReturnsCantChangeStatusFromReadingToToReading_When_OldStatusIsReadingAndNewStatusIsToReading()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Status = BookItemStatus.Reading
             };
@@ -36,7 +36,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Validate_ReturnsCantChangeStatusFromStartedButPostponedToToReading_When_OldStatusIsStartedButPostponedAndNewStatusIsToReading()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Status = BookItemStatus.StartedButPostponed
             };

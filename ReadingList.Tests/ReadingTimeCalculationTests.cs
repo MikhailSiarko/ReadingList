@@ -10,7 +10,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns0_When_BookStatusChangedFromToReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Author = "Author",
                 Title = "Title",
@@ -31,7 +31,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns0_When_BookStatusChangedFromReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Author = "Author",
                 Title = "Title",
@@ -52,7 +52,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns135Minutes_When_BookStatusChangedFromReadingToRead_And_LastStatusUpdateDateIsNowMinus135Minutes()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Author = "Author",
                 Title = "Title",
@@ -75,7 +75,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns3Days_When_BookStatusChangedFromReadingToStartedButPostponed_And_LastStatusUpdateDateIsNowMinus3Days()
         {
-            var item = new PrivateBookListItem
+            var item = new PrivateBookListItemWm
             {
                 Author = "Author",
                 Title = "Title",

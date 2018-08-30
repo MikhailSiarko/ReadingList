@@ -2,7 +2,7 @@
 
 namespace ReadingList.WriteModel.Models
 {
-    public class Profile : Entity
+    public class ProfileWm : EntityWm
     {
         public string Email { get; set; }
 

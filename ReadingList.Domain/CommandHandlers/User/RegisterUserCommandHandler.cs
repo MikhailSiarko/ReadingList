@@ -5,8 +5,6 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
-using UserWm = ReadingList.WriteModel.Models.User;
-using ProfileWm = ReadingList.WriteModel.Models.Profile;
 
 namespace ReadingList.Domain.CommandHandlers
 {
@@ -25,7 +23,7 @@ namespace ReadingList.Domain.CommandHandlers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == command.Email);
             
             if(user != null)
-                throw new UserAlreadyExistsException(command.Email);
+                throw new ObjectAlreadyExistsException<UserWm>(new { email = command.Email });
             
             var userRm = new UserWm
             {
@@ -37,7 +35,7 @@ namespace ReadingList.Domain.CommandHandlers
             
             await _context.Users.AddAsync(userRm);
             
-            await _context.BookLists.AddAsync(new BookList
+            await _context.BookLists.AddAsync(new BookListWm
             {
                 Name = "Default",
                 Owner = userRm,

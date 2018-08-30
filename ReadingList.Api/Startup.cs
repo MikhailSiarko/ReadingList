@@ -53,7 +53,7 @@ namespace ReadingList.Api
                     new[]
                     {
                         typeof(WrongPasswordException),
-                        typeof(UserAlreadyExistsException),
+                        typeof(ObjectAlreadyExistsException),
                         typeof(CannotChangeStatusException),
                         typeof(ObjectNotExistException)
                     }

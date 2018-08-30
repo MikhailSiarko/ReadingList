@@ -17,7 +17,7 @@ namespace ReadingList.Tests
             const string jsonFields = "Fields";
             const int ownerId = 1;
 
-            var bookList = new BookList
+            var bookList = new BookListWm
             {
                 Id = id,
                 Name = name,
@@ -28,19 +28,19 @@ namespace ReadingList.Tests
 
             var source = new Dictionary<string, object>
             {
-                [nameof(BookList.Id)] = 2,
-                [nameof(BookList.Name)] = "Updated",
-                [nameof(BookList.Type)] = BookListType.Shared,
-                [nameof(BookList.JsonFields)] = "New Fields",
-                [nameof(BookList.OwnerId)] = 2
+                [nameof(BookListWm.Id)] = 2,
+                [nameof(BookListWm.Name)] = "Updated",
+                [nameof(BookListWm.Type)] = BookListType.Shared,
+                [nameof(BookListWm.JsonFields)] = "New Fields",
+                [nameof(BookListWm.OwnerId)] = 2
             };
 
             updateService.Update(bookList, source);
 
             Assert.True(bookList.Id == id);
-            Assert.True(bookList.Name == (string)source[nameof(BookList.Name)]);
+            Assert.True(bookList.Name == (string)source[nameof(BookListWm.Name)]);
             Assert.True(bookList.Type == type);
-            Assert.True(bookList.JsonFields == (string)source[nameof(BookList.JsonFields)]);
+            Assert.True(bookList.JsonFields == (string)source[nameof(BookListWm.JsonFields)]);
             Assert.True(bookList.OwnerId == ownerId);
         }
     }

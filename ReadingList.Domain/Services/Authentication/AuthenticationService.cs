@@ -6,7 +6,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Domain.DTO.User;
-using UserRm = ReadingList.ReadModel.Models.User;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.Services.Authentication
 {

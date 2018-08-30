@@ -5,7 +5,7 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
-using PrivateListItemRm = ReadingList.ReadModel.Models.PrivateBookListItem;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers.PrivateList
 {
@@ -22,20 +22,20 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
 
         protected override async Task<PrivateBookListItemDto> Handle(GetPrivateListItemQuery query)
         {
-            var item = await _dbConnection.QueryFirstAsync<PrivateListItemRm>(
+            var item = await _dbConnection.QueryFirstAsync<PrivateBookListItemRm>(
                            _bookListSqlService.GetBookListItemSqlQuery(), new
                            {
                                login = query.UserLogin,
                                title = query.Title,
                                author = query.Author
                            }) ??
-                       throw new ObjectNotExistException<PrivateListItemRm>(new
+                       throw new ObjectNotExistException<PrivateBookListItemRm>(new
                        {
                            author = query.Author,
                            title = query.Title
                        });
 
-            return Mapper.Map<PrivateListItemRm, PrivateBookListItemDto>(item);
+            return Mapper.Map<PrivateBookListItemRm, PrivateBookListItemDto>(item);
         }
     }
 }

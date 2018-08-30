@@ -1,6 +1,6 @@
 ﻿namespace ReadingList.ReadModel.Models
 {
-    public class SharedBookListItem : BookListItem
+    public class SharedBookListItemRm : BookListItemRm
     {
     }
 }

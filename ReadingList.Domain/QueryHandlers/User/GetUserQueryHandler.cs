@@ -3,11 +3,11 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
-using UserRM = ReadingList.ReadModel.Models.User;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
 {
-    public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRM>
+    public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRm>
     {
         private readonly IReadDbConnection _dbConnection;
         private readonly IUserSqlService _userSqlService;
@@ -18,11 +18,11 @@ namespace ReadingList.Domain.QueryHandlers
             _userSqlService = userSqlService;
         }
 
-        protected override async Task<UserRM> Handle(GetUserQuery query)
+        protected override async Task<UserRm> Handle(GetUserQuery query)
         {
-            var user = await _dbConnection.QueryFirstAsync<UserRM>(_userSqlService.GetUserByIdSqlQuery(),
+            var user = await _dbConnection.QueryFirstAsync<UserRm>(_userSqlService.GetUserByIdSqlQuery(),
                            new {id = query.UserId}) ??
-                       throw new ObjectNotExistException<UserRM>(new {id = query.UserId});
+                       throw new ObjectNotExistException<UserRm>(new {id = query.UserId});
             
             return user;
         }

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ReadingList.WriteModel.Models
 {
-    public class PrivateBookListItem : BookListItem
+    public class PrivateBookListItemWm : BookListItemWm
     {
         public BookItemStatus Status { get; set; }
 

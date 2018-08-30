@@ -2,7 +2,7 @@
 
 namespace ReadingList.WriteModel.Models
 {
-    public class Moderator : Entity
+    public class ModeratorWm : EntityWm
     {
         public int UserId { get; set; }
     }

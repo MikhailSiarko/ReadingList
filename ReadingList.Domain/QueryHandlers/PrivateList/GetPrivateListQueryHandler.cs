@@ -6,8 +6,7 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
-using ListRM = ReadingList.ReadModel.Models.PrivateBookList;
-using ItemRM = ReadingList.ReadModel.Models.PrivateBookListItem;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers.PrivateList
 {
@@ -24,17 +23,17 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
 
         protected override async Task<PrivateBookListDto> Handle(GetPrivateListQuery query)
         {
-            var listDictionary = new Dictionary<int, ListRM>();
+            var listDictionary = new Dictionary<int, PrivateBookListRm>();
 
             var privateList =
-                await _dbConnection.QueryFirstAsync<ListRM, ItemRM, ListRM>(
+                await _dbConnection.QueryFirstAsync<PrivateBookListRm, PrivateBookListItemRm, PrivateBookListRm>(
                     _bookListSqlService.GetBookListSqlQuery(),
                     (list, item) =>
                     {
                         if (!listDictionary.TryGetValue(list.Id, out var listEntry))
                         {
                             listEntry = list;
-                            listEntry.Items = new List<ItemRM>();
+                            listEntry.Items = new List<PrivateBookListItemRm>();
                             listDictionary.Add(listEntry.Id, list);
                         }
 
@@ -42,9 +41,9 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                             listEntry.Items.Add(item);
                         return listEntry;
                     }, new {login = query.UserLogin}) ??
-                throw new ObjectNotExistException<ListRM>(new {email = query.UserLogin});
+                throw new ObjectNotExistException<PrivateBookListRm>(new {email = query.UserLogin});
 
-            return Mapper.Map<ListRM, PrivateBookListDto>(privateList);
+            return Mapper.Map<PrivateBookListRm, PrivateBookListDto>(privateList);
         }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace ReadingList.ReadModel.Models
 {
-    public abstract class ReadEntity : IEquatable<ReadEntity>
+    public abstract class EntityRm : IEquatable<EntityRm>
     {
         public int Id { get; set; }
 
-        public bool Equals(ReadEntity other)
+        public bool Equals(EntityRm other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -18,7 +18,7 @@ namespace ReadingList.ReadModel.Models
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((ReadEntity) obj);
+            return Equals((EntityRm) obj);
         }
 
         public override int GetHashCode()

@@ -22,17 +22,17 @@ namespace ReadingList.Domain
         {
             services.AddMediatR(typeof(ICommand).Assembly);
             services.AddDbContext<WriteDbContext>((provider, builder) =>
-                builder.UseSqlServer(provider.GetDefaultConnectionString()));
+                builder.UseSqlServer(provider.GetConnectionString("Write")));
             services.AddScoped<IDbConnection, SqlConnection>(provider =>
-                new SqlConnection(provider.GetDefaultConnectionString()));
+                new SqlConnection(provider.GetConnectionString("Read")));
             services.AddScoped<IReadDbConnection, ReadDbConnection>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);
             Mapper.Initialize(conf =>
             {
-                conf.CreateMap<SharedBookList, SharedBookListDto>().ConvertUsing<SharedBookListConverter>();
-                conf.CreateMap<PrivateBookListItem, PrivateBookListItemDto>();
-                conf.CreateMap<SharedBookListItem, SharedBookListItemDto>();
+                conf.CreateMap<SharedBookListRm, SharedBookListDto>().ConvertUsing<SharedBookListConverter>();
+                conf.CreateMap<PrivateBookListItemRm, PrivateBookListItemDto>();
+                conf.CreateMap<SharedBookListItemRm, SharedBookListItemDto>();
                 conf.AddProfile<UserProfile>();
             });
             return services;

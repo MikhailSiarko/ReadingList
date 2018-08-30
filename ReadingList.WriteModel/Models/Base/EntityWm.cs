@@ -2,7 +2,7 @@
 
 namespace ReadingList.WriteModel.Models.Base
 {
-    public abstract class Entity
+    public abstract class EntityWm
     {
         [IgnoreUpdate]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

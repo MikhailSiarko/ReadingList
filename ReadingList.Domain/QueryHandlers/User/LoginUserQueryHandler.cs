@@ -5,7 +5,7 @@ using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
-using UserRm = ReadingList.ReadModel.Models.User;
+using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
 {   
