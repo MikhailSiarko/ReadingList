@@ -6,11 +6,11 @@ using ReadingList.Resources;
 
 namespace ReadingList.Api.Validators
 {
-    public class RegisterQueryValidator : AbstractValidator<RegisterData>
+    public class RegisterDataValidator : AbstractValidator<RegisterData>
     {
-        public RegisterQueryValidator()
+        public RegisterDataValidator()
         {
-            Include(new LoginQueryValidator());
+            Include(new LoginDataValidator());
             RuleFor(query => query.ConfirmPassword)
                 .NotEmptyWithMessage(m => ValidationMessages.CannotBeEmpty.F(nameof(m.ConfirmPassword)))
                 .Matches(query => query.Password).WithMessage(m => ValidationMessages.PasswordsNotConfirm);

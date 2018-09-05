@@ -25,7 +25,7 @@ namespace ReadingList.Tests
                               ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Reading);
 
-            Assert.True(readingTime == default(double));
+            Assert.True(readingTime == default(int));
         }
 
         [Fact]

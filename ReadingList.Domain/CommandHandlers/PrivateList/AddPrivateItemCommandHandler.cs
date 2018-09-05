@@ -19,7 +19,10 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             return await DbContext.BookLists.AsNoTracking()
                        .SingleOrDefaultAsync(p =>
                            p.Owner.Login == command.UserLogin && p.Type == BookListType.Private) ??
-                   throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
+                   throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                   {
+                       ["Email"] = command.UserLogin
+                   });
         }
 
         protected override PrivateBookListItemWm CreateItem(string title, string author, BookListWm list)

@@ -10,7 +10,7 @@ using ReadingList.Domain.Services;
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/list/private")]
     public class PrivateListController : Controller
     {
         private readonly IDomainService _domainService;
@@ -39,9 +39,8 @@ namespace ReadingList.Api.Controllers
 
         [HttpPost("items")]
         [ValidateModelState]
-        public async Task<IActionResult> Post([FromBody] AddItemToPrivateListData addItemToPrivateListData)
+        public async Task<IActionResult> AddItem([FromBody] AddItemToPrivateListData addItemToPrivateListData)
         {
-            //TODO Need to change current approach of saved item returning to executing commands which return value since there is issue with items which have the same title and author in one list
             await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
                 addItemToPrivateListData.Title, addItemToPrivateListData.Author));
 
@@ -53,7 +52,7 @@ namespace ReadingList.Api.Controllers
         
         [HttpPut("items/{id}")]
         [ValidateModelState]
-        public async Task<IActionResult> UpdateListItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updatePrivateListItemData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updatePrivateListItemData)
         {
             await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
                 updatePrivateListItemData.Title, updatePrivateListItemData.Author, updatePrivateListItemData.Status));
@@ -65,7 +64,7 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpDelete("items/{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> DeleteItem([FromRoute] int id)
         {
             await _domainService.ExecuteAsync(new RemovePrivateItemCommand(id, User.Identity.Name));
 

@@ -59,9 +59,9 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="ReadModelSuffix" xml:space="preserve">
-    <value>Rm</value>
-  </data>
-  <data name="WriteModelSuffix" xml:space="preserve">
-    <value>Wm</value>
-  </data>
+        <value>Rm</value>
+    </data>
+    <data name="WriteModelSuffix" xml:space="preserve">
+        <value>Wm</value>
+    </data>
 </root>

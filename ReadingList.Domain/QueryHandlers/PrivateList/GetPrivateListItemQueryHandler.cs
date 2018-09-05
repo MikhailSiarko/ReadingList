@@ -29,10 +29,10 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                                title = query.Title,
                                author = query.Author
                            }) ??
-                       throw new ObjectNotExistException<PrivateBookListItemRm>(new
+                       throw new ObjectNotExistException<PrivateBookListItemRm>(new OnExceptionObjectDescriptor
                        {
-                           author = query.Author,
-                           title = query.Title
+                           ["Author"] = query.Author,
+                           ["Title"] = query.Title
                        });
 
             return Mapper.Map<PrivateBookListItemRm, PrivateBookListItemDto>(item);

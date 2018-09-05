@@ -5,7 +5,7 @@ using ReadingList.WriteModel.Models;
 namespace ReadingList.Domain.Services.Sql
 {
     public class SharedBookListSqlService : ISharedBookListSqlService
-    {
+    {      
         public string GetBookListSqlQuery()
         {
             return new SqlBuilder()
@@ -30,7 +30,7 @@ namespace ReadingList.Domain.Services.Sql
             return new SqlBuilder()
                 .Select("Id", "Name", "OwnerId", "JsonFields")
                 .From("BookLists")
-                .Where($"Type = {BookListType.Shared:D} AND OwnerId = (SELECT Id FROM Users WHERE Login = @login)")
+                .Where($"Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlService.GetUserIdSql})")
                 .ToSql();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReadingList.Api.Filters;
 using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Queries.SharedList;
@@ -9,12 +10,12 @@ using ReadingList.Domain.Services;
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    public class SharedListsController : Controller
+    [Route("api/list/shared")]
+    public class SharedListController : Controller
     {
         private readonly IDomainService _domainService;
 
-        public SharedListsController(IDomainService domainService)
+        public SharedListController(IDomainService domainService)
         {
             _domainService = domainService;
         }
@@ -27,15 +28,24 @@ namespace ReadingList.Api.Controllers
             return Ok(bookList);
         }
 
-        [HttpGet("own")]
-        public async Task<IActionResult> GetUserSharedLists()
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var bookLists = await _domainService.AskAsync(new GetSharedListsQuery(User.Identity.Name));
+            await _domainService.ExecuteAsync(new DeleteSharedListCommand(User.Identity.Name, id));
+            
+            return Ok();
+        }
+
+        [HttpGet("own")]
+        public async Task<IActionResult> Get()
+        {
+            var bookLists = await _domainService.AskAsync(new GetUserSharedListsQuery(User.Identity.Name));
             
             return Ok(bookLists);
         }
 
-        [HttpPost("create")]
+        [HttpPost]
+        [ValidateModelState]
         public async Task<IActionResult> Post([FromBody] CreateSharedListData sharedListData)
         {
             await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name, sharedListData.Name));
@@ -43,12 +53,28 @@ namespace ReadingList.Api.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddItem([FromBody] AddItemToSharedListData itemToSharedListData)
+        [HttpPost("{listId}/items")]
+        [ValidateModelState]
+        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData itemToSharedListData)
         {
-            await _domainService.ExecuteAsync(new AddSharedListItemCommand(itemToSharedListData.ListId,
+            await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId,
                 User.Identity.Name, itemToSharedListData.Title, itemToSharedListData.Author));
 
+            return Ok();
+        }
+
+        [HttpDelete("{listId}/items/{itemId}")]
+        public async Task<IActionResult> DeleteItem([FromRoute] int listId, [FromRoute] int itemId)
+        {
+            await _domainService.ExecuteAsync(new DeleteSharedListItemCommand(User.Identity.Name, listId, itemId));
+            
+            return Ok();
+        }
+
+        [HttpPut("{listId}/items/{id}")]
+        [ValidateModelState]
+        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData itemData)
+        {
             return Ok();
         }
     }

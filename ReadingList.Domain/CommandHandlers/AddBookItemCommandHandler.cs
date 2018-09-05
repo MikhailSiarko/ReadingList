@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
@@ -23,7 +24,11 @@ namespace ReadingList.Domain.CommandHandlers
             var bookList = await GetBookList(command);
 
             if (await DoItemExist(command.Title, command.Author, bookList.Id))
-                throw new ObjectAlreadyExistsException<TItem>(new {title = command.Title, author = command.Author});
+                throw new ObjectAlreadyExistsException<TItem>(new OnExceptionObjectDescriptor
+                {
+                    ["Title"] = command.Title,
+                    ["Author"] = command.Author
+                });
             
             await FindOrAddBook(command.Title, command.Author);
             

@@ -139,7 +139,7 @@
     <value>{0} doesn't exist</value>
   </data>
   <data name="Object_PrivateBookList" xml:space="preserve">
-    <value>Private list for user with {0}</value>
+    <value>Private list with {0}</value>
   </data>
   <data name="Object_PrivateBookListItem" xml:space="preserve">
     <value>Item with {0}</value>
@@ -151,9 +151,12 @@
     <value>Shared list with {0}</value>
   </data>
   <data name="Object_BookList" xml:space="preserve">
-    <value>Shared list with {0}</value>
+    <value>Book list with {0}</value>
   </data>
   <data name="ObjectAlreadyExists" xml:space="preserve">
     <value>{0} already exists</value>
+  </data>
+  <data name="ForWith" xml:space="preserve">
+    <value>for {0} with {1}</value>
   </data>
 </root>

@@ -25,7 +25,10 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
         {
             var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
                            i.BookList.Owner.Login == command.UserLogin && i.Id == command.ItemId) ??
-                       throw new ObjectNotExistException<PrivateBookListItemWm>(new {id = command.ItemId});
+                       throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
+                       {
+                           ["Id"] = command.ItemId.ToString()
+                       });
             
             PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
             

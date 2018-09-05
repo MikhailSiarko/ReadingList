@@ -41,7 +41,10 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                             listEntry.Items.Add(item);
                         return listEntry;
                     }, new {login = query.UserLogin}) ??
-                throw new ObjectNotExistException<PrivateBookListRm>(new {email = query.UserLogin});
+                throw new ObjectNotExistException<PrivateBookListRm>(new OnExceptionObjectDescriptor
+                {
+                    ["Email"] = query.UserLogin
+                });
 
             return Mapper.Map<PrivateBookListRm, PrivateBookListDto>(privateList);
         }

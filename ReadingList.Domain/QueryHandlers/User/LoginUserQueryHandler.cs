@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;
@@ -29,7 +30,10 @@ namespace ReadingList.Domain.QueryHandlers
         {
             var user = await _dbConnection.QueryFirstAsync<UserRm>(_userSqlService.GetUserByLoginSqlQuery(),
                            new {login = query.Login}) ??
-                       throw new ObjectNotExistException<UserRm>(new {email = query.Login});
+                       throw new ObjectNotExistException<UserRm>(new OnExceptionObjectDescriptor
+                       {
+                           ["Email"] = query.Login
+                       });
             
             if(_encryptionService.Encrypt(query.Password) != user.Password)
                 throw new WrongPasswordException();

@@ -19,7 +19,7 @@ namespace ReadingList.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ValidationMessages {
@@ -61,7 +61,16 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} cannot be empty.
+        ///   Looks up a localized string similar to The {0} can&apos;t be {1}.
+        /// </summary>
+        public static string CannotBeDefault {
+            get {
+                return ResourceManager.GetString("CannotBeDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} can&apos;t be empty.
         /// </summary>
         public static string CannotBeEmpty {
             get {
@@ -79,7 +88,7 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Passwords do not confirm.
+        ///   Looks up a localized string similar to Passwords don&apos;t confirm.
         /// </summary>
         public static string PasswordsNotConfirm {
             get {

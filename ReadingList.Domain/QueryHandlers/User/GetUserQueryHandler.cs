@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
@@ -22,7 +23,10 @@ namespace ReadingList.Domain.QueryHandlers
         {
             var user = await _dbConnection.QueryFirstAsync<UserRm>(_userSqlService.GetUserByIdSqlQuery(),
                            new {id = query.UserId}) ??
-                       throw new ObjectNotExistException<UserRm>(new {id = query.UserId});
+                       throw new ObjectNotExistException<UserRm>(new OnExceptionObjectDescriptor
+                       {
+                           ["Id"] = query.UserId.ToString()
+                       });
             
             return user;
         }

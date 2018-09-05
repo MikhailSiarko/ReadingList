@@ -1,23 +1,25 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Internal;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Resources;
 
 namespace ReadingList.Domain.Exceptions
 {
-    public class ObjectStateException : ApplicationException
+    public abstract class ObjectStateException : ApplicationException
     {
         public override string Message { get; }
-
-        public ObjectStateException(string stateInfo, string entityTypeName, object entityInfo)
+        
+        // TODO Message is building from the end. Need to refactor for building message from the beginning
+        protected ObjectStateException(string stateInfo, string entityTypeName, OnExceptionObjectDescriptor entityInfo)
         {
             var paramsString = GetParams(entityInfo);
             Message = stateInfo.F(
                 TryGetNotExistExceptionMessageByTypeName(entityTypeName, out var message)
-                    ? message.F(paramsString)
+                    ? !string.IsNullOrEmpty(paramsString) ? message.F(paramsString) : message.RemoveWithData()
                     : ExceptionMessages.Object_Default.F(paramsString));
         }
         
@@ -30,12 +32,38 @@ namespace ReadingList.Domain.Exceptions
                 .TryGetValue($"Object_{objectTypeName.TrimModelSuffix()}", out value);
         }
         
-        private static string GetParams(object onExceptionMessageParams)
+        protected static string GetParams(OnExceptionObjectDescriptor onExceptionMessageParams)
         {
-            if(onExceptionMessageParams == null)
-                throw new ArgumentNullException(nameof(onExceptionMessageParams));
+            return onExceptionMessageParams == null
+                ? string.Empty
+                : onExceptionMessageParams.Select(x => $"{x.Key}:{x.Value}").Join();
+        }
+    }
 
-            return JsonConvert.SerializeObject(onExceptionMessageParams, Formatting.None);
+    public class OnExceptionObjectDescriptor : IEnumerable<KeyValuePair<string, string>>
+    {
+        private readonly IDictionary<string, string> _dictionary;
+
+        public OnExceptionObjectDescriptor()
+        {
+            _dictionary = new Dictionary<string, string>();
+        }
+
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        {
+            return _dictionary.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public string this[string key]
+        {
+            get => _dictionary[key];
+
+            set => _dictionary.Add(key, value);
         }
     }
 }

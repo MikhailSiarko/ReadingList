@@ -7,9 +7,9 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
-    public class AddSharedListItemCommandHandler : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItemWm>
+    public class AddSharedItemCommandHandler : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItemWm>
     {
-        public AddSharedListItemCommandHandler(WriteDbContext dbContext) : base(dbContext)
+        public AddSharedItemCommandHandler(WriteDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -18,7 +18,14 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
             return await DbContext.BookLists.AsNoTracking().SingleOrDefaultAsync(s =>
                        s.Owner.Login == command.UserLogin && s.Id == command.ListId &&
                        s.Type == BookListType.Shared) ??
-                   throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
+                   throw new ObjectNotExistForException<BookListWm, UserWm>(new OnExceptionObjectDescriptor
+                       {
+                           ["Id"] = command.ListId.ToString()
+                       },
+                       new OnExceptionObjectDescriptor
+                       {
+                           ["Email"] = command.UserLogin
+                       });
         }
 
         protected override SharedBookListItemWm CreateItem(string title, string author, BookListWm list)

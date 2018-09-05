@@ -18,5 +18,15 @@ namespace ReadingList.Domain.Infrastructure.Extensions
 
         private static string RemoveModelSuffix(string source, string suffix) =>
             source.Remove(source.Length - suffix.Length);
+
+        public static string RemoveWithData(this string source)
+        {
+            return source.Replace(" with {0}", string.Empty);
+        }
+        
+        public static string RemoveWith(this string source)
+        {
+            return source.Replace(" with ", string.Empty);
+        }
     }
 }

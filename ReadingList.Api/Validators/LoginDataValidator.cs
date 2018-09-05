@@ -6,9 +6,9 @@ using ReadingList.Resources;
 
 namespace ReadingList.Api.Validators
 {
-    public class LoginQueryValidator : AbstractValidator<LoginData>
+    public class LoginDataValidator : AbstractValidator<LoginData>
     {
-        public LoginQueryValidator()
+        public LoginDataValidator()
         {
             RuleFor(query => query.Email)
                 .NotEmptyWithMessage(m => nameof(m.Email))

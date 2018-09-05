@@ -4,7 +4,7 @@ namespace ReadingList.Domain.Exceptions
 {
     public class ObjectAlreadyExistsException : ObjectStateException
     {
-        public ObjectAlreadyExistsException(string entityTypeName, object entityInfo) 
+        protected ObjectAlreadyExistsException(string entityTypeName, OnExceptionObjectDescriptor entityInfo) 
             : base(ExceptionMessages.ObjectAlreadyExists, entityTypeName, entityInfo)
         {
         }
@@ -12,7 +12,7 @@ namespace ReadingList.Domain.Exceptions
     
     public class ObjectAlreadyExistsException<T> : ObjectAlreadyExistsException
     {
-        public ObjectAlreadyExistsException(object entityInfo) : base(typeof(T).Name, entityInfo)
+        public ObjectAlreadyExistsException(OnExceptionObjectDescriptor entityInfo) : base(typeof(T).Name, entityInfo)
         {
         }
     }

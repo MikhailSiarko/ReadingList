@@ -24,7 +24,10 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
         {
             var list = await _dbContext.BookLists.SingleAsync(
                            l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private) ??
-                       throw new ObjectNotExistException<BookListWm>(new {email = command.UserLogin});
+                       throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                       {
+                           ["Email"] = command.UserLogin
+                       });
             
             _entityUpdateService.Update(list, new Dictionary<string, object>
             {

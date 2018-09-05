@@ -20,7 +20,10 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
         {
             var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
                            i.BookList.Owner.Login == command.UserLogin && i.Id == command.Id) ??
-                       throw new ObjectNotExistException<PrivateBookListItemWm>(new {id = command.Id});
+                       throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
+                       {
+                           ["Id"] = command.Id.ToString()
+                       });
             
             _dbContext.PrivateBookListItems.Remove(item);
             

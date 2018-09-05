@@ -70,6 +70,15 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to for {0} with {1}.
+        /// </summary>
+        public static string ForWith {
+            get {
+                return ResourceManager.GetString("ForWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mediator is not initialized.
         /// </summary>
         public static string MediatorNotInitialized {
@@ -79,7 +88,7 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shared list with {0}.
+        ///   Looks up a localized string similar to Book list with {0}.
         /// </summary>
         public static string Object_BookList {
             get {
@@ -97,7 +106,7 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Private list for user with {0}.
+        ///   Looks up a localized string similar to Private list with {0}.
         /// </summary>
         public static string Object_PrivateBookList {
             get {

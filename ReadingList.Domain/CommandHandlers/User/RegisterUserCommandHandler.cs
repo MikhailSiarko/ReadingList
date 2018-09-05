@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
@@ -23,7 +24,10 @@ namespace ReadingList.Domain.CommandHandlers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == command.Email);
             
             if(user != null)
-                throw new ObjectAlreadyExistsException<UserWm>(new { email = command.Email });
+                throw new ObjectAlreadyExistsException<UserWm>(new OnExceptionObjectDescriptor
+                {
+                    ["Email"] = command.Email
+                });
             
             var userRm = new UserWm
             {

@@ -41,7 +41,10 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
                             listEntry.Items.Add(item);
                         return listEntry;
                     }, new {id = query.ListId}) ??
-                throw new ObjectNotExistException<SharedBookListRm>(new {id = query.ListId});
+                throw new ObjectNotExistException<SharedBookListRm>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = query.ListId.ToString()
+                });
 
             return Mapper.Map<SharedBookListRm, SharedBookListDto>(privateList);
         }

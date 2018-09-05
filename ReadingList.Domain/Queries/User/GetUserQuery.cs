@@ -4,9 +4,9 @@ namespace ReadingList.Domain.Queries
 {
     public class GetUserQuery : IQuery<UserRm>
     {
-        public readonly string UserId;
+        public readonly int UserId;
 
-        public GetUserQuery(string userId)
+        public GetUserQuery(int userId)
         {
             UserId = userId;
         }

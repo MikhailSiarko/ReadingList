@@ -9,7 +9,7 @@ using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers.SharedList
 {
-    public class GetSharedListsQueryHandler : QueryHandler<GetSharedListsQuery, IEnumerable<SharedBookListDto>>
+    public class GetSharedListsQueryHandler : QueryHandler<GetUserSharedListsQuery, IEnumerable<SharedBookListDto>>
     {
         private readonly IReadDbConnection _dbConnection;
         private readonly ISharedBookListSqlService _sharedBookListSqlService;
@@ -20,7 +20,7 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
             _sharedBookListSqlService = sharedBookListSqlService;
         }
         
-        protected override async Task<IEnumerable<SharedBookListDto>> Handle(GetSharedListsQuery query)
+        protected override async Task<IEnumerable<SharedBookListDto>> Handle(GetUserSharedListsQuery query)
         {
             var sharedLists = await _dbConnection.QueryAsync<SharedBookListRm>(_sharedBookListSqlService.GetListsSqlQuery(),
                 new {login = query.UserLogin}) ?? new List<SharedBookListRm>();
