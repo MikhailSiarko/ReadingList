@@ -7,7 +7,7 @@ namespace ReadingList.Api.Infrastructure.Attributes
     public class ListRouteAttribute : RouteAttribute
     {      
         public ListRouteAttribute(BookListType type) 
-            : base(new ApiRouteBuilder().AddSegment("list").AddSegment(type.ToString("G").ToLower()).ToString())
+            : base(new ApiRouteBuilder("list").AddSegment(type.ToString("G").ToLower()).ToString())
         {
         }
     }
