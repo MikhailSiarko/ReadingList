@@ -1,16 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Api.Filters;
+using ReadingList.Api.Infrastructure.Attributes;
+using ReadingList.Api.Infrastructure.Filters;
 using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Commands.PrivateList;
+using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [Route("api/list/private")]
+    [ListRoute(BookListType.Private)]
     public class PrivateListController : Controller
     {
         private readonly IDomainService _domainService;
@@ -39,26 +42,27 @@ namespace ReadingList.Api.Controllers
 
         [HttpPost("items")]
         [ValidateModelState]
-        public async Task<IActionResult> AddItem([FromBody] AddItemToPrivateListData addItemToPrivateListData)
+        public async Task<IActionResult> AddItem([FromBody] AddItemToPrivateListData addItemData)
         {
             await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
-                addItemToPrivateListData.Title, addItemToPrivateListData.Author));
+                new BookInfo(addItemData.Title, addItemData.Author)));
 
             var savedItem = await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,
-                addItemToPrivateListData.Title, addItemToPrivateListData.Author));
+                new BookInfo(addItemData.Title, addItemData.Author)));
             
             return Ok(savedItem);
         }
         
         [HttpPut("items/{id}")]
         [ValidateModelState]
-        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updatePrivateListItemData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updateItemData)
         {
             await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
-                updatePrivateListItemData.Title, updatePrivateListItemData.Author, updatePrivateListItemData.Status));
+                new BookInfo(updateItemData.Title, updateItemData.Author), updateItemData.Status));
 
-            var updatedItem = await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,
-                updatePrivateListItemData.Title, updatePrivateListItemData.Author));
+            var updatedItem =
+                await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,
+                    new BookInfo(updateItemData.Title, updateItemData.Author)));
             
             return Ok(updatedItem);
         }

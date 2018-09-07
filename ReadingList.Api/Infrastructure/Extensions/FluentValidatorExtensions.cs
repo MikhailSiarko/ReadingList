@@ -4,7 +4,7 @@ using FluentValidation.Internal;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Resources;
 
-namespace ReadingList.Api.Extensions
+namespace ReadingList.Api.Infrastructure.Extensions
 {
     public static class FluentValidatorExtensions
     {

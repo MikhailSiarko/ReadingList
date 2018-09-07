@@ -14,9 +14,9 @@ namespace ReadingList.Domain.Exceptions
         public override string Message { get; }
         
         // TODO Message is building from the end. Need to refactor for building message from the beginning
-        protected ObjectStateException(string stateInfo, string entityTypeName, OnExceptionObjectDescriptor entityInfo)
+        protected ObjectStateException(string stateInfo, string entityTypeName, OnExceptionObjectDescriptor objectDescriptor)
         {
-            var paramsString = GetParams(entityInfo);
+            var paramsString = GetParams(objectDescriptor);
             Message = stateInfo.F(
                 TryGetNotExistExceptionMessageByTypeName(entityTypeName, out var message)
                     ? !string.IsNullOrEmpty(paramsString) ? message.F(paramsString) : message.RemoveWithData()
@@ -32,11 +32,11 @@ namespace ReadingList.Domain.Exceptions
                 .TryGetValue($"Object_{objectTypeName.TrimModelSuffix()}", out value);
         }
         
-        protected static string GetParams(OnExceptionObjectDescriptor onExceptionMessageParams)
+        protected static string GetParams(OnExceptionObjectDescriptor objectDescriptor)
         {
-            return onExceptionMessageParams == null
+            return objectDescriptor == null
                 ? string.Empty
-                : onExceptionMessageParams.Select(x => $"{x.Key}:{x.Value}").Join();
+                : objectDescriptor.Select(x => $"{x.Key}:{x.Value}").Join();
         }
     }
 

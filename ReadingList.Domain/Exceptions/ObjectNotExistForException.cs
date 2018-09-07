@@ -5,24 +5,22 @@ namespace ReadingList.Domain.Exceptions
 {
     public class ObjectNotExistForException : ObjectStateException
     {
-        public ObjectNotExistForException(string entityTypeName, OnExceptionObjectDescriptor entityInfo, string forTypeName, OnExceptionObjectDescriptor forInfo) 
+        public ObjectNotExistForException(string entityTypeName, OnExceptionObjectDescriptor objectDescriptor, string forTypeName,
+            OnExceptionObjectDescriptor forDescriptor) 
             : base("{0} " + ExceptionMessages.ObjectNotExist.F(
-                       forInfo != null 
-                           ? ExceptionMessages.ForWith.F(forTypeName.ToLower(), GetParams(forInfo))
-                           : ExceptionMessages.ForWith.F(forTypeName.ToLower(), GetParams(forInfo)).RemoveWith()),
-                entityTypeName, entityInfo)
+                       ExceptionMessages.ForWith.F(forTypeName.ToLower(), 
+                           forDescriptor != null 
+                               ? GetParams(forDescriptor) 
+                               : GetParams(forDescriptor).RemoveWith())),
+                entityTypeName, objectDescriptor)
         {
         }
     }
     
-    public class ObjectNotExistForException<TObject, TFor> : ObjectStateException
+    public class ObjectNotExistForException<TObject, TFor> : ObjectNotExistForException
     {
-        public ObjectNotExistForException(OnExceptionObjectDescriptor entityInfo, OnExceptionObjectDescriptor forInfo) 
-            : base("{0} " + ExceptionMessages.ObjectNotExist.F(
-                       forInfo != null 
-                           ? ExceptionMessages.ForWith.F(typeof(TFor).Name.TrimModelSuffix().ToLower(), GetParams(forInfo))
-                           : ExceptionMessages.ForWith.F(typeof(TFor).Name.TrimModelSuffix().ToLower(), GetParams(forInfo)).RemoveWith()),
-                typeof(TObject).Name, entityInfo)
+        public ObjectNotExistForException(OnExceptionObjectDescriptor objectDescriptor, OnExceptionObjectDescriptor forDescriptor) 
+            : base(typeof(TObject).Name, objectDescriptor, typeof(TFor).Name, forDescriptor)
         {
         }
     }

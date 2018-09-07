@@ -1,14 +1,14 @@
-﻿namespace ReadingList.Domain.Commands.PrivateList
+﻿using ReadingList.Domain.Infrastructure;
+
+namespace ReadingList.Domain.Commands.PrivateList
 {
     public class AddPrivateItemCommand : SecuredCommand
     {
-        public readonly string Title;
-        public readonly string Author;
+        public readonly BookInfo BookInfo;
 
-        public AddPrivateItemCommand(string login, string title, string author) : base(login)
+        public AddPrivateItemCommand(string login, BookInfo bookInfo) : base(login)
         {
-            Title = title;
-            Author = author;
+            BookInfo = bookInfo;
         }
     }
 }

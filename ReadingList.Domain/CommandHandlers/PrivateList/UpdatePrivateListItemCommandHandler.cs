@@ -37,8 +37,8 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             
             _entityUpdateService.Update(item, new Dictionary<string, object>
             {
-                [nameof(PrivateBookListItemWm.Title)] = command.Title,
-                [nameof(PrivateBookListItemWm.Author)] = command.Author,
+                [nameof(PrivateBookListItemWm.Title)] = command.BookInfo.Title,
+                [nameof(PrivateBookListItemWm.Author)] = command.BookInfo.Author,
                 [nameof(PrivateBookListItemWm.Status)] = command.Status,
                 [nameof(PrivateBookListItemWm.ReadingTimeInSeconds)] = readingTime,
                 [nameof(PrivateBookListItemWm.LastStatusUpdateDate)] = DateTime.Now

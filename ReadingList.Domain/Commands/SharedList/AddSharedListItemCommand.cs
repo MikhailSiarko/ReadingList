@@ -1,4 +1,5 @@
 ﻿using ReadingList.Domain.Commands.PrivateList;
+using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Commands.SharedList
 {
@@ -6,7 +7,7 @@ namespace ReadingList.Domain.Commands.SharedList
     {
         public readonly int ListId;
         
-        public AddSharedListItemCommand(int listId, string login, string title, string author) : base(login, title, author)
+        public AddSharedListItemCommand(int listId, string login, BookInfo bookInfo) : base(login, bookInfo)
         {
             ListId = listId;
         }

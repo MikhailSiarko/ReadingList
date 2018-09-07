@@ -1,16 +1,15 @@
 ﻿using ReadingList.Domain.DTO.BookList;
+using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Queries
 {
     public class GetPrivateListItemQuery : SecuredQuery<PrivateBookListItemDto>
     {
-        public readonly string Title;
-        public readonly string Author;
+        public readonly BookInfo BookInfo;
 
-        public GetPrivateListItemQuery(string login, string title, string author) : base(login)
+        public GetPrivateListItemQuery(string login, BookInfo bookInfo) : base(login)
         {
-            Title = title;
-            Author = author;
+            BookInfo = bookInfo;
         }
     }
 }

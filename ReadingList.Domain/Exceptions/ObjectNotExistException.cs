@@ -4,15 +4,15 @@ namespace ReadingList.Domain.Exceptions
 {
     public class ObjectNotExistException : ObjectStateException
     {
-        public ObjectNotExistException(string entityTypeName, OnExceptionObjectDescriptor entityInfo) 
-            : base(ExceptionMessages.ObjectNotExist, entityTypeName, entityInfo)
+        public ObjectNotExistException(string entityTypeName, OnExceptionObjectDescriptor objectDescriptor) 
+            : base(ExceptionMessages.ObjectNotExist, entityTypeName, objectDescriptor)
         {
         }
     }
     
     public class ObjectNotExistException<T> : ObjectNotExistException
     {
-        public ObjectNotExistException(OnExceptionObjectDescriptor entityInfo) : base(typeof(T).Name, entityInfo)
+        public ObjectNotExistException(OnExceptionObjectDescriptor objectDescriptor) : base(typeof(T).Name, objectDescriptor)
         {
         }
     }

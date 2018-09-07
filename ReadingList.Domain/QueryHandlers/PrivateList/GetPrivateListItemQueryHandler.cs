@@ -26,13 +26,13 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                            _bookListSqlService.GetBookListItemSqlQuery(), new
                            {
                                login = query.UserLogin,
-                               title = query.Title,
-                               author = query.Author
+                               title = query.BookInfo.Title,
+                               author = query.BookInfo.Author
                            }) ??
                        throw new ObjectNotExistException<PrivateBookListItemRm>(new OnExceptionObjectDescriptor
                        {
-                           ["Author"] = query.Author,
-                           ["Title"] = query.Title
+                           ["Author"] = query.BookInfo.Author,
+                           ["Title"] = query.BookInfo.Title
                        });
 
             return Mapper.Map<PrivateBookListItemRm, PrivateBookListItemDto>(item);

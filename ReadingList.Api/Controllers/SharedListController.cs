@@ -1,16 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Api.Filters;
+using ReadingList.Api.Infrastructure.Attributes;
+using ReadingList.Api.Infrastructure.Filters;
 using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Commands.SharedList;
+using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Queries.SharedList;
 using ReadingList.Domain.Services;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [Route("api/list/shared")]
+    [ListRoute(BookListType.Shared)]
     public class SharedListController : Controller
     {
         private readonly IDomainService _domainService;
@@ -55,10 +58,10 @@ namespace ReadingList.Api.Controllers
 
         [HttpPost("{listId}/items")]
         [ValidateModelState]
-        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData itemToSharedListData)
+        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData addItemData)
         {
-            await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId,
-                User.Identity.Name, itemToSharedListData.Title, itemToSharedListData.Author));
+            await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name, 
+                new BookInfo(addItemData.Title, addItemData.Author)));
 
             return Ok();
         }
@@ -73,8 +76,11 @@ namespace ReadingList.Api.Controllers
 
         [HttpPut("{listId}/items/{id}")]
         [ValidateModelState]
-        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData itemData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData updateItemData)
         {
+            await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId, listId,
+                new BookInfo(updateItemData.Title, updateItemData.Author)));
+            
             return Ok();
         }
     }

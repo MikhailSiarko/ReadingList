@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace ReadingList.Api.Filters
+namespace ReadingList.Api.Infrastructure.Filters
 {
     public class ValidateModelStateAttribute : ActionFilterAttribute
     {

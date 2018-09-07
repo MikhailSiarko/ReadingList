@@ -14,21 +14,18 @@ namespace ReadingList.Domain.Services
                 case BookItemStatus.Read:
                     if (newStatus == BookItemStatus.Read)
                         break;
-                    throw new CannotChangeStatusException(itemStatus.ToStringFromDescription(),
-                        newStatus.ToStringFromDescription());
+                    throw new CannotChangeStatusException(itemStatus, newStatus);
                 case BookItemStatus.Reading:
                 case BookItemStatus.StartedButPostponed:
                     if (newStatus == BookItemStatus.ToReading)
-                        throw new CannotChangeStatusException(itemStatus.ToStringFromDescription(),
-                            newStatus.ToStringFromDescription());
+                        throw new CannotChangeStatusException(itemStatus, newStatus);
                     break;
                 case BookItemStatus.ToReading:
                     if (newStatus == BookItemStatus.Read || newStatus == BookItemStatus.StartedButPostponed)
-                        throw new CannotChangeStatusException(itemStatus.ToStringFromDescription(),
-                            newStatus.ToStringFromDescription());
+                        throw new CannotChangeStatusException(itemStatus, newStatus);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(itemStatus), itemStatus, null);
+                    throw new ArgumentOutOfRangeException(nameof(itemStatus), itemStatus.ToString("G"), null);
             }
         }
     }

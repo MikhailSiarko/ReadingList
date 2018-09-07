@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ReadingList.Api.Extensions;
+using ReadingList.Api.Infrastructure.Extensions;
 using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Resources;

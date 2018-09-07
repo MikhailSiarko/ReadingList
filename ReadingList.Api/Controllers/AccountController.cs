@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Api.Filters;
+using ReadingList.Api.Infrastructure.Attributes;
+using ReadingList.Api.Infrastructure.Filters;
 using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Queries;
@@ -8,7 +9,7 @@ using ReadingList.Domain.Services;
 
 namespace ReadingList.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiRoute("[controller]")]
     [ValidateModelState]
     public class AccountController : Controller
     {
@@ -19,15 +20,13 @@ namespace ReadingList.Api.Controllers
             _domainService = domainService;
         }
         
-        [HttpPost]
-        [Route("login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginData loginData)
         {
             return await AuthenticateUser(loginData.Email, loginData.Password);
         }
 
-        [HttpPost]
-        [Route("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterData registerData)
         {
             await _domainService.ExecuteAsync(new RegisterUserCommand(registerData.Email, registerData.Password));

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -28,12 +29,12 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                        });
         }
 
-        protected override SharedBookListItemWm CreateItem(string title, string author, BookListWm list)
+        protected override SharedBookListItemWm CreateItem(BookInfo bookInfo, BookListWm list)
         {
             return new SharedBookListItemWm
             {
-                Author = author,
-                Title = title,
+                Author = bookInfo.Author,
+                Title = bookInfo.Title,
                 BookList = list,
                 BookListId = list.Id
             };
