@@ -10,10 +10,13 @@ namespace ReadingList.WriteModel.Models
 
         public List<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
 
+        public List<SharedBookListTagWm> SharedBookListTags { get; set; }
+
         public TagWm()
         {
             BookTags = new List<BookTagWm>();
             SharedBookListItemTags = new List<SharedBookListItemTagWm>();
+            SharedBookListTags = new List<SharedBookListTagWm>();
         }
     }
 }

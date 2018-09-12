@@ -2,6 +2,7 @@
 {
     public interface ISharedBookListSqlService : IBookListSqlService
     {
-        string GetListsSqlQuery();
+        string GetBookListsSqlQuery();
+        string GetUserBookListsSqlQuery();
     }
 }

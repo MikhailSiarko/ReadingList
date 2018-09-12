@@ -10,7 +10,9 @@ namespace ReadingList.Domain.Infrastructure.Converters
     {
         public SharedBookListDto Convert(SharedBookListRm source, SharedBookListDto destination, ResolutionContext context)
         {
-            var deserialized = JsonConvert.DeserializeObject<SharedBookListDto>(source.JsonFields);
+            var deserialized = string.IsNullOrEmpty(source.JsonFields)
+                ? null
+                : JsonConvert.DeserializeObject<SharedBookListDto>(source.JsonFields);
             return new SharedBookListDto
             {
                 Id = source.Id,

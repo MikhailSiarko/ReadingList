@@ -70,7 +70,7 @@ namespace ReadingList.Api.Controllers
         [HttpDelete("items/{id}")]
         public async Task<IActionResult> DeleteItem([FromRoute] int id)
         {
-            await _domainService.ExecuteAsync(new RemovePrivateItemCommand(id, User.Identity.Name));
+            await _domainService.ExecuteAsync(new DeletePrivateItemCommand(id, User.Identity.Name));
 
             return Ok();
         }

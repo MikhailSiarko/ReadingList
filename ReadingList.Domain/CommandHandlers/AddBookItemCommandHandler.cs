@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.Commands.PrivateList;
+using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.WriteModel;
@@ -10,7 +9,7 @@ using ReadingList.WriteModel.Models;
 namespace ReadingList.Domain.CommandHandlers
 {
     public abstract class AddBookItemCommandHandler<TCommand, TItem> : CommandHandler<TCommand> 
-        where TCommand : AddPrivateItemCommand 
+        where TCommand : AddListItemCommand
         where TItem : BookListItemWm
     {
         protected readonly WriteDbContext DbContext;

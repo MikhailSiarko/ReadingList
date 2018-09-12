@@ -7,16 +7,16 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
-    public class RemovePrivateItemCommandHandler : CommandHandler<RemovePrivateItemCommand>
+    public class DeletePrivateItemCommandHandler : CommandHandler<DeletePrivateItemCommand>
     {
         private readonly WriteDbContext _dbContext;
 
-        public RemovePrivateItemCommandHandler(WriteDbContext dbContext)
+        public DeletePrivateItemCommandHandler(WriteDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        protected override async Task Handle(RemovePrivateItemCommand command)
+        protected override async Task Handle(DeletePrivateItemCommand command)
         {
             var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
                            i.BookList.Owner.Login == command.UserLogin && i.Id == command.Id) ??

@@ -13,7 +13,7 @@ namespace ReadingList.Domain.Services.Sql
                 .From("BookLists AS l")
                 .LeftJoin(
                     "(SELECT Id, Title, Author, BookListId, Status, ReadingTimeInSeconds FROM PrivateBookListItems) AS i ON i.BookListId = l.Id")
-                .Where($"l.OwnerId = ({UserSqlService.GetUserIdSql}) AND l.Type = {BookListType.Private:D}")
+                .Where($"l.OwnerId = ({UserSqlService.UserIdSql}) AND l.Type = {BookListType.Private:D}")
                 .ToSql();
         }
 
@@ -23,7 +23,7 @@ namespace ReadingList.Domain.Services.Sql
                 .Select("Id", "Title", "Author", "Status", "ReadingTimeInSeconds")
                 .From("PrivateBookListItems")
                 .Where(
-                    $"BookListId = (SELECT Id FROM BookLists WHERE OwnerId = ({UserSqlService.GetUserIdSql}) AND Type = {BookListType.Private:D}) AND Title = @title AND Author = @author")
+                    $"BookListId = (SELECT Id FROM BookLists WHERE OwnerId = ({UserSqlService.UserIdSql}) AND Type = {BookListType.Private:D}) AND Title = @title AND Author = @author")
                 .ToSql();
         }
     }

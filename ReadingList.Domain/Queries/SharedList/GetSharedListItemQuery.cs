@@ -1,11 +1,15 @@
-﻿using ReadingList.Domain.Infrastructure;
+﻿using ReadingList.Domain.DTO.BookList;
+using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Queries.SharedList
 {
-    public class GetSharedListItemQuery : GetPrivateListItemQuery
+    public class GetSharedListItemQuery : SecuredQuery<SharedBookListItemDto>
     {
-        public GetSharedListItemQuery(string login, BookInfo bookInfo) : base(login, bookInfo)
+        private readonly BookInfo BookInfo;
+        
+        public GetSharedListItemQuery(string login, BookInfo bookInfo) : base(login)
         {
+            BookInfo = bookInfo;
         }
     }
 }

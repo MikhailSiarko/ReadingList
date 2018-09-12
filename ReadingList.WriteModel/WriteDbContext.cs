@@ -18,6 +18,7 @@ namespace ReadingList.WriteModel
         public DbSet<RoleWm> Roles { get; set; }
         public DbSet<BookTagWm> BookTags { get; set; }
         public DbSet<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
+        public DbSet<SharedBookListTagWm> SharedBookListTags { get; set; }
 
         public WriteDbContext(DbContextOptions options) : base(options)
         {
@@ -48,6 +49,13 @@ namespace ReadingList.WriteModel
             modelBuilder.Entity<SharedBookListItemTagWm>().HasOne(st => st.SharedBookListItem)
                 .WithMany(si => si.SharedBookListItemTags).HasForeignKey(st => st.SharedBookListItemId);
             modelBuilder.Entity<SharedBookListItemTagWm>().HasOne(st => st.Tag).WithMany(t => t.SharedBookListItemTags)
+                .HasForeignKey(st => st.TagId);
+            
+            modelBuilder.Entity<SharedBookListTagWm>().ToTable(nameof(SharedBookListTags))
+                .HasKey(st => new {st.SharedBookListId, st.TagId});
+            modelBuilder.Entity<SharedBookListTagWm>().HasOne(st => st.SharedBookList)
+                .WithMany(x => x.SharedBookListTags).HasForeignKey(st => st.SharedBookListId);
+            modelBuilder.Entity<SharedBookListTagWm>().HasOne(st => st.Tag).WithMany(t => t.SharedBookListTags)
                 .HasForeignKey(st => st.TagId);
 
             base.OnModelCreating(modelBuilder);

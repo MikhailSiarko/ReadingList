@@ -25,12 +25,21 @@ namespace ReadingList.Domain.Services.Sql
                 .ToSql();
         }
 
-        public string GetListsSqlQuery()
+        public string GetBookListsSqlQuery()
         {
             return new SqlBuilder()
                 .Select("Id", "Name", "OwnerId", "JsonFields")
                 .From("BookLists")
-                .Where($"Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlService.GetUserIdSql})")
+                .Where($"Type = {BookListType.Shared:D}")
+                .ToSql();
+        }
+        
+        public string GetUserBookListsSqlQuery()
+        {
+            return new SqlBuilder()
+                .Select("Id", "Name", "OwnerId", "JsonFields")
+                .From("BookLists")
+                .Where($"Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlService.UserIdSql})")
                 .ToSql();
         }
     }

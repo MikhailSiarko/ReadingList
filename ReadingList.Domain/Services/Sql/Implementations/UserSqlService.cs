@@ -5,7 +5,7 @@ namespace ReadingList.Domain.Services.Sql
 {
     public class UserSqlService : IUserSqlService
     {
-        public const string GetUserIdSql = "SELECT Id FROM Users WHERE Login = @login";
+        public const string UserIdSql = "SELECT Id FROM Users WHERE Login = @login";
 
         private static ISqlBuilder CreateSqlBuilder() => new SqlBuilder()
             .Select("Id", "Login", "Password", "ProfileId", "(SELECT Name FROM Roles WHERE Id = RoleId) AS Role")

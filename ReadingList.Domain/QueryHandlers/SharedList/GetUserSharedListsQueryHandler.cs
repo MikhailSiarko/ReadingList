@@ -9,12 +9,12 @@ using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers.SharedList
 {
-    public class GetSharedListsQueryHandler : QueryHandler<GetUserSharedListsQuery, IEnumerable<SharedBookListDto>>
+    public class GetUserSharedListsQueryHandler : QueryHandler<GetUserSharedListsQuery, IEnumerable<SharedBookListDto>>
     {
         private readonly IReadDbConnection _dbConnection;
         private readonly ISharedBookListSqlService _sharedBookListSqlService;
 
-        public GetSharedListsQueryHandler(IReadDbConnection dbConnection, ISharedBookListSqlService sharedBookListSqlService)
+        public GetUserSharedListsQueryHandler(IReadDbConnection dbConnection, ISharedBookListSqlService sharedBookListSqlService)
         {
             _dbConnection = dbConnection;
             _sharedBookListSqlService = sharedBookListSqlService;
@@ -22,8 +22,10 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
         
         protected override async Task<IEnumerable<SharedBookListDto>> Handle(GetUserSharedListsQuery query)
         {
-            var sharedLists = await _dbConnection.QueryAsync<SharedBookListRm>(_sharedBookListSqlService.GetListsSqlQuery(),
-                new {login = query.UserLogin}) ?? new List<SharedBookListRm>();
+            var sharedLists =
+                await _dbConnection.QueryAsync<SharedBookListRm>(_sharedBookListSqlService.GetUserBookListsSqlQuery(),
+                    new {login = query.UserLogin}) ??
+                new List<SharedBookListRm>();
 
             return Mapper.Map<IEnumerable<SharedBookListRm>, IEnumerable<SharedBookListDto>>(sharedLists);
         }

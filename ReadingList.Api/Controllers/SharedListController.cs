@@ -51,7 +51,18 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Post([FromBody] CreateSharedListData sharedListData)
         {
-            await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name, sharedListData.Name));
+            await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name, sharedListData.Name,
+                sharedListData.Tags, sharedListData.Category));
+
+            return Ok();
+        }
+        
+        [HttpPut("{id}")]
+        [ValidateModelState]
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateSharedListData updateData)
+        {
+            await _domainService.ExecuteAsync(new UpdateSharedListCommand(User.Identity.Name, id, updateData.Name,
+                updateData.Tags, updateData.Category));
 
             return Ok();
         }

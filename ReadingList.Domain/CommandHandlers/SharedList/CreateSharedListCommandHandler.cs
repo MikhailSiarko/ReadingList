@@ -1,8 +1,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -37,10 +39,18 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                 Name = command.Name,
                 Owner = user,
                 OwnerId = user.Id,
-                Type = BookListType.Shared
+                Type = BookListType.Shared,
+                JsonFields = JsonConvert.SerializeObject(new {command.Tags, command.Category})
             };
 
             await _context.BookLists.AddAsync(list);
+
+            await _context.UpdateOrAddSharedListTags(command.Tags, list);
+
+            if (!await _context.Categories.AnyAsync(c => c.Name == command.Category))
+            {
+                await _context.AddCategory(command.Category);
+            }
 
             await _context.SaveChangesAsync();
         }
