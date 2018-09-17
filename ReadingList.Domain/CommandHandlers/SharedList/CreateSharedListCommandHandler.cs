@@ -40,17 +40,12 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                 Owner = user,
                 OwnerId = user.Id,
                 Type = BookListType.Shared,
-                JsonFields = JsonConvert.SerializeObject(new {command.Tags, command.Category})
+                JsonFields = JsonConvert.SerializeObject(command.Tags)
             };
 
             await _context.BookLists.AddAsync(list);
 
             await _context.UpdateOrAddSharedListTags(command.Tags, list);
-
-            if (!await _context.Categories.AnyAsync(c => c.Name == command.Category))
-            {
-                await _context.AddCategory(command.Category);
-            }
 
             await _context.SaveChangesAsync();
         }

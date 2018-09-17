@@ -52,7 +52,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Post([FromBody] CreateSharedListData sharedListData)
         {
             await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name, sharedListData.Name,
-                sharedListData.Tags, sharedListData.Category));
+                sharedListData.Tags));
 
             return Ok();
         }
@@ -66,6 +66,14 @@ namespace ReadingList.Api.Controllers
 
             return Ok();
         }
+        
+        [HttpGet("{listId}/items")]
+        public async Task<IActionResult> GetItems([FromRoute] int listId)
+        {
+            var items = await _domainService.AskAsync(new GetSharedListItemsQuery(listId));
+
+            return Ok(items);
+        }
 
         [HttpPost("{listId}/items")]
         [ValidateModelState]
@@ -75,6 +83,14 @@ namespace ReadingList.Api.Controllers
                 new BookInfo(addItemData.Title, addItemData.Author)));
 
             return Ok();
+        }
+        
+        [HttpGet("{listId}/items/{itemId}")]
+        public async Task<IActionResult> GetItem([FromRoute] int listId, [FromRoute] int itemId)
+        {
+            var item = await _domainService.AskAsync(new GetSharedListItemQuery(listId, itemId));
+            
+            return Ok(item);
         }
 
         [HttpDelete("{listId}/items/{itemId}")]

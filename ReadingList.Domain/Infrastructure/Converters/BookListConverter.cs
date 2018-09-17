@@ -18,8 +18,7 @@ namespace ReadingList.Domain.Infrastructure.Converters
                 Id = source.Id,
                 Name = source.Name,
                 OwnerId = source.OwnerId,
-                Tags = deserialized?.Tags ?? new List<string>(),
-                Category = deserialized?.Category
+                Tags = deserialized?.Tags ?? new List<string>()
             };
         }
     }

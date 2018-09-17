@@ -7,6 +7,10 @@ namespace ReadingList.WriteModel.Models
     {
         public List<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
 
+        public CategoryWm Category { get; set; }
+
+        public int? CategoryId { get; set; }
+
         public SharedBookListItemWm()
         {
             SharedBookListItemTags = new List<SharedBookListItemTagWm>();

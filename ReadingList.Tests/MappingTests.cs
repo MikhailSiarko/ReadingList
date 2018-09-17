@@ -73,7 +73,6 @@ namespace ReadingList.Tests
             Assert.Equal(sharedList.Id, mapped.Id);
             Assert.Equal(sharedList.Name, mapped.Name);
             Assert.Equal(sharedList.OwnerId, mapped.OwnerId);
-            Assert.Equal(testObj.Category, mapped.Category);
             Assert.False(mapped.Tags.Except(testObj.Tags).Any());
         }
         
@@ -84,13 +83,15 @@ namespace ReadingList.Tests
             {
                 Id = 54,
                 Author = "Author",
-                Title = "Title"
+                Title = "Title",
+                ListId = 5
             };
             var mapped = Mapper.Map<SharedBookListItemRm, SharedBookListItemDto>(sharedBookListItem);
 
             Assert.Equal(sharedBookListItem.Id, mapped.Id);
             Assert.Equal(sharedBookListItem.Title, mapped.Title);
             Assert.Equal(sharedBookListItem.Author, mapped.Author);
+            Assert.Equal(sharedBookListItem.ListId, mapped.ListId);
         }
     }
 }

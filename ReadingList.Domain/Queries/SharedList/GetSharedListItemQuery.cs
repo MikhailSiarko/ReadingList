@@ -3,13 +3,16 @@ using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Queries.SharedList
 {
-    public class GetSharedListItemQuery : SecuredQuery<SharedBookListItemDto>
+    public class GetSharedListItemQuery : IQuery<SharedBookListItemDto>
     {
-        private readonly BookInfo BookInfo;
-        
-        public GetSharedListItemQuery(string login, BookInfo bookInfo) : base(login)
+        public readonly int ListId;
+
+        public readonly int ItemId;
+
+        public GetSharedListItemQuery(int listId, int itemId)
         {
-            BookInfo = bookInfo;
+            ListId = listId;
+            ItemId = itemId;
         }
     }
 }

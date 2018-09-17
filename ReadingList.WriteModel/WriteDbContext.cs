@@ -27,34 +27,47 @@ namespace ReadingList.WriteModel
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {        
             modelBuilder.Entity<UserWm>().ToTable(nameof(Users)).HasIndex(u => u.Login).IsUnique();
+            
             modelBuilder.Entity<ProfileWm>().ToTable(nameof(Profiles)).HasIndex(p => p.Email).IsUnique();
+            
             modelBuilder.Entity<BookListWm>().ToTable(nameof(BookLists)).HasOne(b => b.Owner).WithMany(u => u.BookLists)
                 .HasForeignKey(b => b.OwnerId);
-            modelBuilder.Entity<BookWm>().ToTable(nameof(Books)).HasIndex(b => b.Title).IsUnique();
+            
+            modelBuilder.Entity<BookWm>().ToTable(nameof(Books)).HasIndex(b => new {b.Title, b.Author}).IsUnique();
+            
             modelBuilder.Entity<RoleWm>().ToTable(nameof(Roles)).HasIndex(r => r.Name).IsUnique();
+            
             modelBuilder.Entity<TagWm>().ToTable(nameof(Tags)).HasIndex(t => t.Name).IsUnique();
+            
             modelBuilder.Entity<CategoryWm>().ToTable(nameof(Categories)).HasIndex(c => c.Name).IsUnique();
 
             modelBuilder.Entity<PrivateBookListItemWm>().ToTable(nameof(PrivateBookListItems));
+            
             modelBuilder.Entity<SharedBookListItemWm>().ToTable(nameof(SharedBookListItems));
 
             modelBuilder.Entity<BookTagWm>().ToTable(nameof(BookTags)).HasKey(bt => new {bt.TagId, bt.BookId});
+            
             modelBuilder.Entity<BookTagWm>().HasOne(bt => bt.Tag).WithMany(t => t.BookTags)
                 .HasForeignKey(bt => bt.TagId);
+            
             modelBuilder.Entity<BookTagWm>().HasOne(bt => bt.Book).WithMany(b => b.BookTags)
                 .HasForeignKey(bt => bt.BookId);
 
             modelBuilder.Entity<SharedBookListItemTagWm>().ToTable(nameof(SharedBookListItemTags))
                 .HasKey(st => new {st.SharedBookListItemId, st.TagId});
+            
             modelBuilder.Entity<SharedBookListItemTagWm>().HasOne(st => st.SharedBookListItem)
                 .WithMany(si => si.SharedBookListItemTags).HasForeignKey(st => st.SharedBookListItemId);
+            
             modelBuilder.Entity<SharedBookListItemTagWm>().HasOne(st => st.Tag).WithMany(t => t.SharedBookListItemTags)
                 .HasForeignKey(st => st.TagId);
             
             modelBuilder.Entity<SharedBookListTagWm>().ToTable(nameof(SharedBookListTags))
                 .HasKey(st => new {st.SharedBookListId, st.TagId});
+            
             modelBuilder.Entity<SharedBookListTagWm>().HasOne(st => st.SharedBookList)
                 .WithMany(x => x.SharedBookListTags).HasForeignKey(st => st.SharedBookListId);
+            
             modelBuilder.Entity<SharedBookListTagWm>().HasOne(st => st.Tag).WithMany(t => t.SharedBookListTags)
                 .HasForeignKey(st => st.TagId);
 

@@ -4,5 +4,6 @@
     {
         string GetBookListsSqlQuery();
         string GetUserBookListsSqlQuery();
+        string GetSharedListItemsSqlQuery();
     }
 }

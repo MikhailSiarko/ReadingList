@@ -8,10 +8,9 @@ namespace ReadingList.Domain.Exceptions
         public ObjectNotExistForException(string entityTypeName, OnExceptionObjectDescriptor objectDescriptor, string forTypeName,
             OnExceptionObjectDescriptor forDescriptor) 
             : base("{0} " + ExceptionMessages.ObjectNotExist.F(
-                       ExceptionMessages.ForWith.F(forTypeName.ToLower(), 
-                           forDescriptor != null 
-                               ? GetParams(forDescriptor) 
-                               : GetParams(forDescriptor).RemoveWith())),
+                       forDescriptor == null 
+                           ? ExceptionMessages.ForWith.F(forTypeName.TrimModelSuffix().ToLower(), GetParams(forDescriptor)).RemoveWith()
+                           : ExceptionMessages.ForWith.F(forTypeName.TrimModelSuffix().ToLower(), GetParams(forDescriptor))),
                 entityTypeName, objectDescriptor)
         {
         }

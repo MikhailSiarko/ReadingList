@@ -12,9 +12,10 @@ using System;
 namespace ReadingList.WriteModel.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    partial class WriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180912141210_FixedIndexInBooksTable")]
+    partial class FixedIndexInBooksTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,15 +187,11 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.Property<int>("BookListId");
 
-                    b.Property<int?>("CategoryId");
-
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookListId");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("SharedBookListItems");
                 });
@@ -307,10 +304,6 @@ namespace ReadingList.WriteModel.Migrations
                         .WithMany()
                         .HasForeignKey("BookListId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ReadingList.WriteModel.Models.CategoryWm", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.UserWm", b =>
