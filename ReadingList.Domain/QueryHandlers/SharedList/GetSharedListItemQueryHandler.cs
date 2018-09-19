@@ -31,9 +31,12 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
                                {
                                    var item = (await reader.ReadAsync<SharedBookListItemRm>()).SingleOrDefault();
 
+                                   if (item == null)
+                                       return null;
+                                   
                                    var tags = await reader.ReadAsync<string>();
 
-                                   item?.Tags.AddRange(tags);
+                                   item.Tags = tags;
 
                                    return item;
                                },

@@ -10,9 +10,9 @@ namespace ReadingList.WriteModel.Models
 
         public string Author { get; set; }
 
-        public CategoryWm Category { get; set; }
+        public GenreWm Genre { get; set; }
 
-        public int?  CategoryId { get; set; }
+        public string  GenreId { get; set; }
 
         public List<BookTagWm> BookTags { get; set; }
 

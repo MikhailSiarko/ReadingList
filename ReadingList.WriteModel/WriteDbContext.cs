@@ -14,7 +14,7 @@ namespace ReadingList.WriteModel
         public DbSet<ProfileWm> Profiles { get; set; }
         public DbSet<BookWm> Books { get; set; }
         public DbSet<TagWm> Tags { get; set; }
-        public DbSet<CategoryWm> Categories { get; set; }
+        public DbSet<GenreWm> Genres { get; set; }
         public DbSet<RoleWm> Roles { get; set; }
         public DbSet<BookTagWm> BookTags { get; set; }
         public DbSet<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
@@ -39,7 +39,10 @@ namespace ReadingList.WriteModel
             
             modelBuilder.Entity<TagWm>().ToTable(nameof(Tags)).HasIndex(t => t.Name).IsUnique();
             
-            modelBuilder.Entity<CategoryWm>().ToTable(nameof(Categories)).HasIndex(c => c.Name).IsUnique();
+            modelBuilder.Entity<GenreWm>().ToTable(nameof(Genres)).HasIndex(c => c.Id).IsUnique();
+
+            modelBuilder.Entity<GenreWm>().HasOne(x => x.Parent).WithMany(x => x.Children)
+                .HasForeignKey(x => x.ParentId);
 
             modelBuilder.Entity<PrivateBookListItemWm>().ToTable(nameof(PrivateBookListItems));
             

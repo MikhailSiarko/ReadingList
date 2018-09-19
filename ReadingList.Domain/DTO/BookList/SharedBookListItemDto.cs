@@ -1,4 +1,6 @@
-﻿namespace ReadingList.Domain.DTO.BookList
+﻿using System.Collections.Generic;
+
+namespace ReadingList.Domain.DTO.BookList
 {
     public class SharedBookListItemDto
     {
@@ -10,8 +12,8 @@
 
         public string Author { get; set; }
 
-        public string Category { get; set; }
+        public string Genre { get; set; }
 
-        public string[] Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }

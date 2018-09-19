@@ -15,10 +15,7 @@ namespace ReadingList.WriteModel.Models
 
         [IgnoreUpdate]
         public BookListType Type { get; set; }
-
-        public string JsonFields { get; set; }
         
-        [IgnoreUpdate]
         public List<SharedBookListTagWm> SharedBookListTags { get; set; }
     }
 }

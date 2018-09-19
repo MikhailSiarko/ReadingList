@@ -10,7 +10,7 @@ namespace ReadingList.Domain.Infrastructure.Extensions
 {
     public static class WriteDbContextExtensions
     {
-        public static async Task UpdateOrAddSharedListTags(this WriteDbContext dbContext, string[] tags, BookListWm list)
+        public static async Task UpdateOrAddSharedListTags(this WriteDbContext dbContext, IEnumerable<string> tags, BookListWm list)
         {
             await dbContext.Tags.Where(x => tags.Contains(x.Name)).ForEachAsync(x =>
             {
@@ -40,13 +40,36 @@ namespace ReadingList.Domain.Infrastructure.Extensions
 
             await dbContext.Tags.AddRangeAsync(newTags);
         }
-
-        public static async Task AddCategory(this WriteDbContext dbContext, string category)
+        
+        public static async Task UpdateOrAddSharedListItemTags(this WriteDbContext dbContext, IEnumerable<string> tags, SharedBookListItemWm item)
         {
-            await dbContext.Categories.AddAsync(new CategoryWm
+            await dbContext.Tags.Where(x => tags.Contains(x.Name)).ForEachAsync(x =>
             {
-                Name = category
+                x.SharedBookListItemTags.Add(new SharedBookListItemTagWm
+                {
+                    Tag = x,
+                    SharedBookListItem = item
+                });
             });
+
+            var newTags = tags.Where(x => !dbContext.Tags.Any(y => y.Name == x)).Select(x => new TagWm
+            {
+                Name = x
+            }).ToList();
+
+            foreach (var newTag in newTags)
+            {
+                newTag.SharedBookListItemTags = new List<SharedBookListItemTagWm>(new[]
+                {
+                    new SharedBookListItemTagWm
+                    {
+                        Tag = newTag,
+                        SharedBookListItem = item
+                    }
+                });
+            }
+
+            await dbContext.Tags.AddRangeAsync(newTags);
         }
     }
 }

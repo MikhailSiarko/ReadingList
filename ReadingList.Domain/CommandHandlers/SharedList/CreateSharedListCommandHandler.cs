@@ -39,8 +39,7 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                 Name = command.Name,
                 Owner = user,
                 OwnerId = user.Id,
-                Type = BookListType.Shared,
-                JsonFields = JsonConvert.SerializeObject(command.Tags)
+                Type = BookListType.Shared
             };
 
             await _context.BookLists.AddAsync(list);

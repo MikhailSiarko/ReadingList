@@ -36,13 +36,13 @@ namespace ReadingList.ReadModel.DbConnection
             return (await _dbConnection.QueryAsync(query, map, param)).FirstOrDefault();
         }
         
-        public async Task<T> QuerySingleAsync<T>(string query, Func<SqlMapper.GridReader, Task<T>> action, object param = null) 
+        public async Task<T> QuerySingleAsync<T>(string query, Func<SqlMapper.GridReader, Task<T>> func, object param = null) 
         {
             T item;
             
             using (var reader = await _dbConnection.QueryMultipleAsync(query, param))
             {
-                item = await action(reader);
+                item = await func(reader);
             }
 
             return item;
@@ -53,13 +53,13 @@ namespace ReadingList.ReadModel.DbConnection
             return await _dbConnection.QueryAsync<T>(query, param);
         }
         
-        public async Task<IEnumerable<T>> QueryMultipleAsync<T>(string query, Func<SqlMapper.GridReader, Task<List<T>>> action, object param = null)
+        public async Task<IEnumerable<T>> QueryAsync<T>(string query, Func<SqlMapper.GridReader, Task<List<T>>> func, object param = null)
         {
             List<T> list;
             
             using (var reader = await _dbConnection.QueryMultipleAsync(query, param))
             {
-                list = await action(reader);
+                list = await func(reader);
             }
 
             return list;

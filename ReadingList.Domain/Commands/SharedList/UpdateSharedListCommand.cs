@@ -7,15 +7,12 @@ namespace ReadingList.Domain.Commands.SharedList
         public readonly string Name;
 
         public readonly string[] Tags;
-
-        public readonly string Category;
         
-        public UpdateSharedListCommand(string userLogin, int listId, string name, string[] tags, string category) : base(userLogin)
+        public UpdateSharedListCommand(string userLogin, int listId, string name, string[] tags) : base(userLogin)
         {
             ListId = listId;
             Name = name;
             Tags = tags;
-            Category = category;
         }
     }
 }

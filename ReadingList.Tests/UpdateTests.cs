@@ -22,7 +22,6 @@ namespace ReadingList.Tests
                 Id = id,
                 Name = name,
                 Type = type,
-                JsonFields = jsonFields,
                 OwnerId = ownerId
             };
 
@@ -31,7 +30,6 @@ namespace ReadingList.Tests
                 [nameof(BookListWm.Id)] = 2,
                 [nameof(BookListWm.Name)] = "Updated",
                 [nameof(BookListWm.Type)] = BookListType.Shared,
-                [nameof(BookListWm.JsonFields)] = "New Fields",
                 [nameof(BookListWm.OwnerId)] = 2
             };
 
@@ -40,7 +38,6 @@ namespace ReadingList.Tests
             Assert.True(bookList.Id == id);
             Assert.True(bookList.Name == (string)source[nameof(BookListWm.Name)]);
             Assert.True(bookList.Type == type);
-            Assert.True(bookList.JsonFields == (string)source[nameof(BookListWm.JsonFields)]);
             Assert.True(bookList.OwnerId == ownerId);
         }
     }

@@ -1,4 +1,5 @@
-﻿using ReadingList.Domain.Infrastructure;
+﻿using System.Collections.Generic;
+using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Commands.SharedList
 {
@@ -6,9 +7,15 @@ namespace ReadingList.Domain.Commands.SharedList
     {
         public readonly int ListId;
 
-        public AddSharedListItemCommand(int listId, string login, BookInfo bookInfo) : base(login, bookInfo)
+        public readonly string GenreId;
+
+        public readonly IEnumerable<string> Tags;
+
+        public AddSharedListItemCommand(int listId, string login, BookInfo bookInfo, string genreId, IEnumerable<string> tags) : base(login, bookInfo)
         {
             ListId = listId;
+            GenreId = genreId;
+            Tags = tags;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
@@ -6,6 +7,7 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
+using ReadingList.WriteModel.Models.HelpEntities;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
@@ -30,10 +32,18 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                            ["Id"] = command.ItemId.ToString()
                        });
             
+            var tags = await _dbContext.Tags.Where(t => command.Tags.Contains(t.Name)).ToListAsync();
+            
             _entityUpdateService.Update(item, new Dictionary<string, object>
             {
                 [nameof(SharedBookListItemWm.Title)] = command.BookInfo.Title,
-                [nameof(SharedBookListItemWm.Author)] = command.BookInfo.Author
+                [nameof(SharedBookListItemWm.Author)] = command.BookInfo.Author,
+                [nameof(SharedBookListItemWm.GenreId)] = command.GenreId,
+                [nameof(SharedBookListItemWm.SharedBookListItemTags)] = tags.Select(t => new SharedBookListItemTagWm
+                {
+                    TagId = t.Id,
+                    SharedBookListItemId = item.Id
+                })
             });
             
             await _dbContext.SaveChangesAsync();

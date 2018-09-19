@@ -19,7 +19,7 @@ namespace ReadingList.ReadModel.DbConnection
 
         Task<IEnumerable<T>> QueryAsync<T>(string query, object param = null);
 
-        Task<IEnumerable<T>> QueryMultipleAsync<T>(string query, Func<SqlMapper.GridReader, Task<List<T>>> action,
+        Task<IEnumerable<T>> QueryAsync<T>(string query, Func<SqlMapper.GridReader, Task<List<T>>> action,
             object param = null);
     }
 }

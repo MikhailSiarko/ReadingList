@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using ReadingList.Domain.Exceptions;
 using ReadingList.WriteModel.Models;
 using Xunit;

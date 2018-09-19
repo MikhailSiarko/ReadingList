@@ -9,8 +9,8 @@ namespace ReadingList.ReadModel.Models
             Tags = new List<string>();
         }
         
-        public string Category { get; set; }
+        public string Genre { get; set; }
 
-        public List<string> Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; }
     }
 }

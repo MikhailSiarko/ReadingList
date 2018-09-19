@@ -6,11 +6,9 @@ namespace ReadingList.ReadModel.Models
     {
         public SharedBookListRm()
         {
-            Items = new List<SharedBookListItemRm>();
+            Tags = new List<string>();
         }
-
-        public string JsonFields { get; set; }
-
-        public List<SharedBookListItemRm> Items { get; set; }
+        
+        public IEnumerable<string> Tags { get; set; }
     }
 }

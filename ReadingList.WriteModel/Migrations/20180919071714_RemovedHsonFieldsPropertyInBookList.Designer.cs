@@ -12,9 +12,10 @@ using System;
 namespace ReadingList.WriteModel.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    partial class WriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180919071714_RemovedHsonFieldsPropertyInBookList")]
+    partial class RemovedHsonFieldsPropertyInBookList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,13 +47,13 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.Property<string>("Author");
 
-                    b.Property<string>("GenreId");
+                    b.Property<int?>("CategoryId");
 
                     b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("Title", "Author")
                         .IsUnique()
@@ -61,23 +62,20 @@ namespace ReadingList.WriteModel.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("ReadingList.WriteModel.Models.GenreWm", b =>
+            modelBuilder.Entity("ReadingList.WriteModel.Models.CategoryWm", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("ParentId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Id")
-                        .IsUnique();
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("Genres");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.HelpEntities.BookTagWm", b =>
@@ -187,7 +185,7 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.Property<int>("BookListId");
 
-                    b.Property<string>("GenreId");
+                    b.Property<int?>("CategoryId");
 
                     b.Property<string>("Title");
 
@@ -195,7 +193,7 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.HasIndex("BookListId");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("SharedBookListItems");
                 });
@@ -250,16 +248,9 @@ namespace ReadingList.WriteModel.Migrations
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.BookWm", b =>
                 {
-                    b.HasOne("ReadingList.WriteModel.Models.GenreWm", "Genre")
+                    b.HasOne("ReadingList.WriteModel.Models.CategoryWm", "Category")
                         .WithMany()
-                        .HasForeignKey("GenreId");
-                });
-
-            modelBuilder.Entity("ReadingList.WriteModel.Models.GenreWm", b =>
-                {
-                    b.HasOne("ReadingList.WriteModel.Models.GenreWm", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.HelpEntities.BookTagWm", b =>
@@ -316,9 +307,9 @@ namespace ReadingList.WriteModel.Migrations
                         .HasForeignKey("BookListId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ReadingList.WriteModel.Models.GenreWm", "Genre")
+                    b.HasOne("ReadingList.WriteModel.Models.CategoryWm", "Category")
                         .WithMany()
-                        .HasForeignKey("GenreId");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.UserWm", b =>

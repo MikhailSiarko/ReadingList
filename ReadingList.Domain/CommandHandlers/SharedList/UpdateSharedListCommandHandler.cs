@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
+using ReadingList.WriteModel.Models.HelpEntities;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
@@ -28,11 +29,17 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                        {
                            ["Email"] = command.UserLogin
                        });
+
+            var tags = await _dbContext.Tags.Where(t => command.Tags.Contains(t.Name)).ToListAsync();
             
             _updateService.Update(list, new Dictionary<string, object>
             {
                 [nameof(BookListWm.Name)] = command.Name,
-                [nameof(BookListWm.JsonFields)] = JsonConvert.SerializeObject(new {command.Tags, command.Category})
+                [nameof(BookListWm.SharedBookListTags)] = tags.Select(t => new SharedBookListTagWm
+                {
+                    TagId = t.Id,
+                    SharedBookListId = list.Id
+                })
             });
             
             await _dbContext.SaveChangesAsync();

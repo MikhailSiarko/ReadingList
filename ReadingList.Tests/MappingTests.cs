@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ReadingList.Domain.DTO.BookList;
-using ReadingList.Domain.Infrastructure.Converters;
 using ReadingList.ReadModel.Models;
 using ReadingList.WriteModel.Models;
 using Xunit;
@@ -16,7 +13,7 @@ namespace ReadingList.Tests
         static MappingTests()
         {
             Mapper.Initialize(conf =>
-                conf.CreateMap<SharedBookListRm, SharedBookListDto>().ConvertUsing<SharedBookListConverter>());
+                conf.CreateMap<SharedBookListRm, SharedBookListDto>());
         }
 
         [Fact]
@@ -63,11 +60,7 @@ namespace ReadingList.Tests
                 Id = 54,
                 Name = "My private list",
                 OwnerId = 895,
-                JsonFields = JObject.FromObject(testObj,
-                    JsonSerializer.Create(new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented
-                    })).ToString()
+                Tags = testObj.Tags
             };
             var mapped = Mapper.Map<SharedBookListRm, SharedBookListDto>(sharedList);
             Assert.Equal(sharedList.Id, mapped.Id);

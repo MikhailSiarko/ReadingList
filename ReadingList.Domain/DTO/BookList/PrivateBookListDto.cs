@@ -15,6 +15,8 @@ namespace ReadingList.Domain.DTO.BookList
 
         public int OwnerId { get; set; }
 
+        public int Type { get; set; }
+
         public IEnumerable<PrivateBookListItemDto> Items { get; set; }
     }
 }

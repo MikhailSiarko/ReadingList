@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
@@ -23,30 +24,28 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
         
         protected override async Task<SharedBookListDto> Handle(GetSharedListQuery query)
         {
-            var listDictionary = new Dictionary<int, SharedBookListRm>();
-
-            var privateList =
-                await _dbConnection.QueryFirstAsync<SharedBookListRm, SharedBookListItemRm, SharedBookListRm>(
+            var sharedList =
+                await _dbConnection.QuerySingleAsync<SharedBookListRm>(
                     _sharedBookListSqlService.GetBookListSqlQuery(),
-                    (list, item) =>
+                    async reader =>
                     {
-                        if (!listDictionary.TryGetValue(list.Id, out var listEntry))
-                        {
-                            listEntry = list;
-                            listEntry.Items = new List<SharedBookListItemRm>();
-                            listDictionary.Add(listEntry.Id, list);
-                        }
+                        var list = (await reader.ReadAsync<SharedBookListRm>()).SingleOrDefault();
 
-                        if (item != null)
-                            listEntry.Items.Add(item);
-                        return listEntry;
+                        if (list == null) 
+                            return null;
+                        
+                        var tags = (await reader.ReadAsync<string>()).ToList();
+
+                        list.Tags = tags;
+
+                        return list;
                     }, new {id = query.ListId}) ??
                 throw new ObjectNotExistException<SharedBookListRm>(new OnExceptionObjectDescriptor
                 {
                     ["Id"] = query.ListId.ToString()
                 });
 
-            return Mapper.Map<SharedBookListRm, SharedBookListDto>(privateList);
+            return Mapper.Map<SharedBookListRm, SharedBookListDto>(sharedList);
         }
     }
 }

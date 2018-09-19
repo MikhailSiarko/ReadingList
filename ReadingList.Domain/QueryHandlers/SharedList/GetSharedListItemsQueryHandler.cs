@@ -23,12 +23,10 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
 
         protected override async Task<IEnumerable<SharedBookListItemDto>> Handle(GetSharedListItemsQuery query)
         {
-            var listItems = await _dbConnection.QueryMultipleAsync(_listSqlService.GetSharedListItemsSqlQuery(),
+            var listItems = await _dbConnection.QueryAsync(_listSqlService.GetSharedListItemsSqlQuery(),
                 async reader =>
                 {
-                    var list = new List<SharedBookListItemRm>();
-
-                    list.AddRange(await reader.ReadAsync<SharedBookListItemRm>());
+                    var list = new List<SharedBookListItemRm>(await reader.ReadAsync<SharedBookListItemRm>());
 
                     var tags = (await reader.ReadAsync<(string TagName, int? ItemId)>()).ToList();
 

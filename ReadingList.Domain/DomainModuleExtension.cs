@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.DTO.BookList;
-using ReadingList.Domain.Infrastructure.Converters;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.MapperProfiles;
 using ReadingList.ReadModel.DbConnection;
@@ -30,7 +29,7 @@ namespace ReadingList.Domain
                 .AddJwtBearer(JwtBearerConfigurator.Configure);
             Mapper.Initialize(conf =>
             {
-                conf.CreateMap<SharedBookListRm, SharedBookListDto>().ConvertUsing<SharedBookListConverter>();
+                conf.CreateMap<SharedBookListRm, SharedBookListDto>();
                 conf.CreateMap<PrivateBookListItemRm, PrivateBookListItemDto>();
                 conf.CreateMap<SharedBookListItemRm, SharedBookListItemDto>();
                 conf.AddProfile<UserProfile>();

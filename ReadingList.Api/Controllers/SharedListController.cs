@@ -62,7 +62,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] UpdateSharedListData updateData)
         {
             await _domainService.ExecuteAsync(new UpdateSharedListCommand(User.Identity.Name, id, updateData.Name,
-                updateData.Tags, updateData.Category));
+                updateData.Tags));
 
             return Ok();
         }
@@ -80,7 +80,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData addItemData)
         {
             await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name, 
-                new BookInfo(addItemData.Title, addItemData.Author)));
+                new BookInfo(addItemData.Title, addItemData.Author), addItemData.GenreId, addItemData.Tags));
 
             return Ok();
         }
@@ -106,7 +106,8 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData updateItemData)
         {
             await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId, listId,
-                new BookInfo(updateItemData.Title, updateItemData.Author)));
+                new BookInfo(updateItemData.Title, updateItemData.Author), updateItemData.Tags,
+                updateItemData.GenreId));
             
             return Ok();
         }
