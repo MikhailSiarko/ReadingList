@@ -1,4 +1,3 @@
-
 using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Services;
