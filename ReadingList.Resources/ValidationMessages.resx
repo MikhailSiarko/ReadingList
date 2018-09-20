@@ -129,4 +129,7 @@
   <data name="CannotBeDefault" xml:space="preserve">
     <value>The {0} can't be {1}</value>
   </data>
+  <data name="NoValidationNeeded" xml:space="preserve">
+    <value>No validation needed</value>
+  </data>
 </root>

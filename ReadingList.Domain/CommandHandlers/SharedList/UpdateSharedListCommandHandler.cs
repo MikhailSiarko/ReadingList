@@ -4,45 +4,54 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
-using ReadingList.WriteModel.Models.HelpEntities;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
-    public class UpdateSharedListCommandHandler : CommandHandler<UpdateSharedListCommand>
+    public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookListWm>,
+        IValidatable<UpdateSharedListCommand, BookListWm>
     {
-        private readonly WriteDbContext _dbContext;
-        private readonly IEntityUpdateService _updateService;
-
-        public UpdateSharedListCommandHandler(WriteDbContext dbContext, IEntityUpdateService updateService)
+        public UpdateSharedListCommandHandler(WriteDbContext dbContext, IEntityUpdateService updateService) 
+            : base(dbContext, updateService)
         {
-            _dbContext = dbContext;
-            _updateService = updateService;
         }
 
-        protected override async Task Handle(UpdateSharedListCommand command)
+        protected override void Update(BookListWm entity, UpdateSharedListCommand command)
         {
-            var list = await _dbContext.BookLists.SingleAsync(l => l.Id == command.ListId && l.Type == BookListType.Shared) ??
-                       throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
-                       {
-                           ["Email"] = command.UserLogin
-                       });
-
-            var tags = await _dbContext.Tags.Where(t => command.Tags.Contains(t.Name)).ToListAsync();
-            
-            _updateService.Update(list, new Dictionary<string, object>
+            EntityUpdateService.Update(entity, new Dictionary<string, object>
             {
                 [nameof(BookListWm.Name)] = command.Name,
-                [nameof(BookListWm.SharedBookListTags)] = tags.Select(t => new SharedBookListTagWm
-                {
-                    TagId = t.Id,
-                    SharedBookListId = list.Id
-                })
+                [nameof(BookListWm.SharedBookListTags)] = DbContext.UpdateOrAddSharedListTags(command.Tags, entity).RunSync().ToList()
             });
+        }
+
+        public void Validate(BookListWm entity, UpdateSharedListCommand command)
+        {
+            BookListAccessValidator.Validate(command.UserLogin, entity);
+        }
+
+        protected override async Task<BookListWm> GetEntity(UpdateSharedListCommand command)
+        {
+            var list = await DbContext.BookLists
+                    .Include(l => l.SharedBookListTags)
+                    .Include(s => s.Owner)
+                    .Include(s => s.BookListModerators)
+                    .ThenInclude(m => m.User)
+                    .SingleAsync(l =>
+                        l.Owner.Login == command.UserLogin && l.Id == command.ListId &&
+                        l.Type == BookListType.Shared) ??
+                throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                {
+                    ["Email"] = command.UserLogin
+                });
             
-            await _dbContext.SaveChangesAsync();
+            Validate(list, command);
+
+            return list;
         }
     }
 }

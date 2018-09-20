@@ -14,7 +14,6 @@ namespace ReadingList.Tests
             const int id = 1;
             const string name = "Default";
             const BookListType type = BookListType.Private;
-            const string jsonFields = "Fields";
             const int ownerId = 1;
 
             var bookList = new BookListWm

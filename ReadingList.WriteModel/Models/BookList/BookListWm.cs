@@ -16,6 +16,8 @@ namespace ReadingList.WriteModel.Models
         [IgnoreUpdate]
         public BookListType Type { get; set; }
         
-        public List<SharedBookListTagWm> SharedBookListTags { get; set; }
+        public IEnumerable<SharedBookListTagWm> SharedBookListTags { get; set; }
+
+        public IEnumerable<BookListModeratorWm> BookListModerators { get; set; }
     }
 }

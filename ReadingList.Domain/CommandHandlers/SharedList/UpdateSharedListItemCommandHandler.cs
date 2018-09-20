@@ -4,49 +4,56 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using ReadingList.WriteModel.Models.HelpEntities;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
-    public class UpdateSharedListItemCommandHandler : CommandHandler<UpdateSharedListItemCommand>
+    public class UpdateSharedListItemCommandHandler : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItemWm>,
+        IValidatable<UpdateSharedListItemCommand, SharedBookListItemWm>
     {
-        private readonly WriteDbContext _dbContext;
-        private readonly IEntityUpdateService _entityUpdateService;
-
-        public UpdateSharedListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService)
+        public UpdateSharedListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService) 
+            : base(dbContext, entityUpdateService)
         {
-            _dbContext = dbContext;
-            _entityUpdateService = entityUpdateService;
         }
 
-        protected override async Task Handle(UpdateSharedListItemCommand command)
+        protected override void Update(SharedBookListItemWm entity, UpdateSharedListItemCommand command)
         {
-            var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
-                           i.BookList.Owner.Login == command.UserLogin && i.Id == command.ItemId &&
-                           i.BookListId == command.ListId) ??
-                       throw new ObjectNotExistException<SharedBookListItemWm>(new OnExceptionObjectDescriptor
-                       {
-                           ["Id"] = command.ItemId.ToString()
-                       });
-            
-            var tags = await _dbContext.Tags.Where(t => command.Tags.Contains(t.Name)).ToListAsync();
-            
-            _entityUpdateService.Update(item, new Dictionary<string, object>
+            EntityUpdateService.Update(entity, new Dictionary<string, object>
             {
                 [nameof(SharedBookListItemWm.Title)] = command.BookInfo.Title,
                 [nameof(SharedBookListItemWm.Author)] = command.BookInfo.Author,
-                [nameof(SharedBookListItemWm.GenreId)] = command.GenreId,
-                [nameof(SharedBookListItemWm.SharedBookListItemTags)] = tags.Select(t => new SharedBookListItemTagWm
-                {
-                    TagId = t.Id,
-                    SharedBookListItemId = item.Id
-                })
+                [nameof(SharedBookListItemWm.GenreId)] = command.BookInfo.GenreId,
+                [nameof(SharedBookListItemWm.SharedBookListItemTags)] = DbContext.UpdateOrAddSharedListItemTags(command.Tags, entity).RunSync().ToList()
             });
+        }
+
+        public void Validate(SharedBookListItemWm entity, UpdateSharedListItemCommand command)
+        {
+            BookListAccessValidator.Validate(command.UserLogin, entity.BookList);
+        }
+
+        protected override async Task<SharedBookListItemWm> GetEntity(UpdateSharedListItemCommand command)
+        {
+            var item = await DbContext.SharedBookListItems
+                    .Include(i => i.SharedBookListItemTags)
+                    .Include(s => s.BookList)
+                    .ThenInclude(b => b.BookListModerators)
+                    .ThenInclude(m => m.User)
+                    .Include(s => s.BookList.Owner).FirstOrDefaultAsync(
+                        i => i.Id == command.ItemId && i.BookListId == command.ListId) ??
+                throw new ObjectNotExistException<SharedBookListItemWm>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = command.ItemId.ToString()
+                });
             
-            await _dbContext.SaveChangesAsync();
+            Validate(item, command);
+
+            return item;
         }
     }
 }

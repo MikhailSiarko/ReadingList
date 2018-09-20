@@ -88,6 +88,15 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No validation needed.
+        /// </summary>
+        public static string NoValidationNeeded {
+            get {
+                return ResourceManager.GetString("NoValidationNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passwords don&apos;t confirm.
         /// </summary>
         public static string PasswordsNotConfirm {

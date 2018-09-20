@@ -9,32 +9,29 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
-    public class UpdatePrivateListCommandHandler : CommandHandler<UpdatePrivateListCommand>
+    public class UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateListCommand, BookListWm>
     {
-        private readonly WriteDbContext _dbContext;
-        private readonly IEntityUpdateService _entityUpdateService;
-
-        public UpdatePrivateListCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService)
+        public UpdatePrivateListCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService) 
+            : base(dbContext, entityUpdateService)
         {
-            _dbContext = dbContext;
-            _entityUpdateService = entityUpdateService;
         }
 
-        protected override async Task Handle(UpdatePrivateListCommand command)
+        protected override void Update(BookListWm entity, UpdatePrivateListCommand command)
         {
-            var list = await _dbContext.BookLists.SingleAsync(
-                           l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private) ??
-                       throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
-                       {
-                           ["Email"] = command.UserLogin
-                       });
-            
-            _entityUpdateService.Update(list, new Dictionary<string, object>
+            EntityUpdateService.Update(entity, new Dictionary<string, object>
             {
                 [nameof(BookListWm.Name)] = command.Name
             });
-            
-            await _dbContext.SaveChangesAsync();
+        }
+
+        protected override async Task<BookListWm> GetEntity(UpdatePrivateListCommand command)
+        {
+            return await DbContext.BookLists.SingleOrDefaultAsync(
+                    l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private) ??
+                throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                {
+                    ["Email"] = command.UserLogin
+                });
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.WriteModel.Models;
 
-namespace ReadingList.Domain.Services
+namespace ReadingList.Domain.Services.Validation
 {
-    public class PrivateBookListItemStatusValidator
+    public static class PrivateBookListItemStatusValidator
     {
         public static void Validate(BookItemStatus itemStatus, BookItemStatus newStatus)
         {

@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -32,10 +34,9 @@ namespace ReadingList.Domain.CommandHandlers
             
             await FindOrAddBook(command.BookInfo);
             
-            var item = CreateItem(command.BookInfo, bookList);
-            
-            await DbContext.AddAsync(item);
-            await DbContext.SaveChangesAsync();
+            var item = CreateItem(command, bookList.Id);
+
+            await SaveAsync(item);
         }
 
         private async Task FindOrAddBook(BookInfo bookInfo)
@@ -55,6 +56,8 @@ namespace ReadingList.Domain.CommandHandlers
         
         protected abstract Task<BookListWm> GetBookList(TCommand command);
 
-        protected abstract TItem CreateItem(BookInfo bookInfo, BookListWm list);
+        protected abstract TItem CreateItem(TCommand command, int listId);
+        
+        protected abstract Task SaveAsync(TItem item);
     }
 }

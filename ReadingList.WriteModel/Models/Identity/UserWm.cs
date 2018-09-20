@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ReadingList.WriteModel.Models.Base;
+using ReadingList.WriteModel.Models.HelpEntities;
 
 namespace ReadingList.WriteModel.Models
 {
@@ -19,6 +20,8 @@ namespace ReadingList.WriteModel.Models
 
         public int ProfileId { get; set; }
 
-        public List<BookListWm> BookLists { get; set; }
+        public IEnumerable<BookListWm> BookLists { get; set; }
+
+        public IEnumerable<BookListModeratorWm> BookListModerators { get; set; }
     }
 }

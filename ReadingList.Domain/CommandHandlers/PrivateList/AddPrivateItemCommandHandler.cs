@@ -26,16 +26,23 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                    });
         }
 
-        protected override PrivateBookListItemWm CreateItem(BookInfo bookInfo, BookListWm list)
+        protected override PrivateBookListItemWm CreateItem(AddPrivateItemCommand command, int listId)
         {
             return new PrivateBookListItemWm
             {
                 Status = BookItemStatus.ToReading,
                 LastStatusUpdateDate = DateTime.Now,
-                BookListId = list.Id,
-                Title = bookInfo.Title,
-                Author = bookInfo.Author
+                BookListId = listId,
+                Title = command.BookInfo.Title,
+                Author = command.BookInfo.Author
             };
+        }
+
+        protected override async Task SaveAsync(PrivateBookListItemWm item)
+        {
+            await DbContext.PrivateBookListItems.AddAsync(item);
+
+            await DbContext.SaveChangesAsync();
         }
     }
 }

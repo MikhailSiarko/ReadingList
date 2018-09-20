@@ -1,86 +1,60 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Extensions;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
-    public class AddSharedItemCommandHandler : CommandHandler<AddSharedListItemCommand>
+    public class AddSharedItemCommandHandler : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItemWm>
     {
-        private readonly WriteDbContext _dbContext;
-        
-        public AddSharedItemCommandHandler(WriteDbContext dbContext)
+        public AddSharedItemCommandHandler(WriteDbContext dbContext) 
+            : base(dbContext)
         {
-            _dbContext = dbContext;
-        }
-        
-        protected override async Task Handle(AddSharedListItemCommand command)
-        {
-            var list = await GetBookList(command);
-            
-            if (await DoItemExist(command.BookInfo, list.Id))
-                throw new ObjectAlreadyExistsException<SharedBookListItemWm>(new OnExceptionObjectDescriptor
-                {
-                    ["Title"] = command.BookInfo.Title,
-                    ["Author"] = command.BookInfo.Author
-                });
-            
-            await FindOrAddBook(command.BookInfo);
-            
-            var item = CreateItem(command, list);
-            
-            await _dbContext.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
         }
 
-        private async Task<BookListWm> GetBookList(AddSharedListItemCommand command)
+        protected override async Task<BookListWm> GetBookList(AddSharedListItemCommand command)
         {
-            return await _dbContext.BookLists.AsNoTracking().SingleOrDefaultAsync(s =>
-                       s.Owner.Login == command.UserLogin && s.Id == command.ListId &&
-                       s.Type == BookListType.Shared) ??
-                   throw new ObjectNotExistForException<BookListWm, UserWm>(new OnExceptionObjectDescriptor
+            var list = await DbContext.BookLists.AsNoTracking().Include(s => s.Owner).Include(s => s.BookListModerators)
+                           .ThenInclude(m => m.User).SingleOrDefaultAsync(s =>
+                               s.Id == command.ListId && s.Type == BookListType.Shared) ??
+                       throw new ObjectNotExistException<BookListWm>(new OnExceptionObjectDescriptor
                        {
                            ["Id"] = command.ListId.ToString()
-                       },
-                       new OnExceptionObjectDescriptor
-                       {
-                           ["Email"] = command.UserLogin
                        });
-        }
-        
-        private async Task<bool> DoItemExist(BookInfo bookInfo, int bookListId)
-        {
-            return await _dbContext.SharedBookListItems.AnyAsync(x =>
-                x.BookListId == bookListId && x.Title == bookInfo.Title && x.Author == bookInfo.Author);
-        }
-        
-        private async Task FindOrAddBook(BookInfo bookInfo)
-        {
-            var book = await _dbContext.Books.SingleOrDefaultAsync(b =>
-                b.Author == bookInfo.Author && b.Title == bookInfo.Title);
-            
-            if (book == null)
-                await _dbContext.Books.AddAsync(new BookWm {Author = bookInfo.Author, Title = bookInfo.Title});
+
+            BookListAccessValidator.Validate(command.UserLogin, list);
+
+            return list;
         }
 
-        private async Task<SharedBookListItemWm> CreateItem(AddSharedListItemCommand command, BookListWm list)
+        protected override SharedBookListItemWm CreateItem(AddSharedListItemCommand command, int listId)
         {           
             var item = new SharedBookListItemWm
             {
                 Author = command.BookInfo.Author,
                 Title = command.BookInfo.Title,
-                BookList = list,
-                BookListId = list.Id,
-                GenreId = command.GenreId
+                BookListId = listId,
+                GenreId = command.BookInfo.GenreId
             };
 
-            await _dbContext.UpdateOrAddSharedListItemTags(command.Tags, item);
+            var itemTags = DbContext.UpdateOrAddSharedListItemTags(command.Tags, item).RunSync();
 
+            item.SharedBookListItemTags = itemTags.ToList();
+            
             return item;
+        }
+
+        protected override async Task SaveAsync(SharedBookListItemWm item)
+        {
+            await DbContext.SharedBookListItems.AddAsync(item);
+
+            await DbContext.SaveChangesAsync();
         }
     }
 }

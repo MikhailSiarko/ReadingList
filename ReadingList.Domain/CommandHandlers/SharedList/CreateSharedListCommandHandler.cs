@@ -44,7 +44,9 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
 
             await _context.BookLists.AddAsync(list);
 
-            await _context.UpdateOrAddSharedListTags(command.Tags, list);
+            var listTags = await _context.UpdateOrAddSharedListTags(command.Tags, list);
+
+            list.SharedBookListTags = listTags.ToList();
 
             await _context.SaveChangesAsync();
         }

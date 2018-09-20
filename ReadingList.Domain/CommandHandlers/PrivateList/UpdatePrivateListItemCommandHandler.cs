@@ -5,37 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
-    public class UpdatePrivateListItemCommandHandler : CommandHandler<UpdatePrivateListItemCommand>
+    public class UpdatePrivateListItemCommandHandler : UpdateCommandHandler<UpdatePrivateListItemCommand, PrivateBookListItemWm>,
+        IValidatable<UpdatePrivateListItemCommand, PrivateBookListItemWm>
     {
-        private readonly WriteDbContext _dbContext;
-        private readonly IEntityUpdateService _entityUpdateService;
-
-        public UpdatePrivateListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService)
+        public UpdatePrivateListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService) 
+            : base(dbContext, entityUpdateService)
         {
-            _dbContext = dbContext;
-            _entityUpdateService = entityUpdateService;
         }
 
-        protected override async Task Handle(UpdatePrivateListItemCommand command)
+        protected override void Update(PrivateBookListItemWm entity, UpdatePrivateListItemCommand command)
         {
-            var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
-                           i.BookList.Owner.Login == command.UserLogin && i.Id == command.ItemId) ??
-                       throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
-                       {
-                           ["Id"] = command.ItemId.ToString()
-                       });
+            var readingTime = entity.ReadingTimeInSeconds +
+                              ReadingTimeCalculator.Calculate(entity.Status, entity.LastStatusUpdateDate,
+                                  (BookItemStatus) command.Status);
             
-            PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
-            
-            var readingTime = item.ReadingTimeInSeconds +
-                ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate, (BookItemStatus) command.Status);
-            
-            _entityUpdateService.Update(item, new Dictionary<string, object>
+            EntityUpdateService.Update(entity, new Dictionary<string, object>
             {
                 [nameof(PrivateBookListItemWm.Title)] = command.BookInfo.Title,
                 [nameof(PrivateBookListItemWm.Author)] = command.BookInfo.Author,
@@ -43,8 +33,25 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                 [nameof(PrivateBookListItemWm.ReadingTimeInSeconds)] = readingTime,
                 [nameof(PrivateBookListItemWm.LastStatusUpdateDate)] = DateTime.Now
             });
+        }
+
+        public void Validate(PrivateBookListItemWm entity, UpdatePrivateListItemCommand command)
+        {
+            PrivateBookListItemStatusValidator.Validate(entity.Status, (BookItemStatus) command.Status);
+        }
+
+        protected override async Task<PrivateBookListItemWm> GetEntity(UpdatePrivateListItemCommand command)
+        {
+            var item = await DbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
+                    i.BookList.Owner.Login == command.UserLogin && i.Id == command.ItemId) ??
+                throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = command.ItemId.ToString()
+                });
             
-            await _dbContext.SaveChangesAsync();
+            Validate(item, command);
+
+            return item;
         }
     }
 }

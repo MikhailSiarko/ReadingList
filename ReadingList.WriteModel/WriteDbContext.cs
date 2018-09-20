@@ -19,13 +19,23 @@ namespace ReadingList.WriteModel
         public DbSet<BookTagWm> BookTags { get; set; }
         public DbSet<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
         public DbSet<SharedBookListTagWm> SharedBookListTags { get; set; }
+        public DbSet<BookListModeratorWm> BookListModerators { get; set; }
 
         public WriteDbContext(DbContextOptions options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {        
+        {
+            modelBuilder.Entity<BookListModeratorWm>().ToTable(nameof(BookListModerators))
+                .HasKey(m => new {m.UserId, m.BookListId});
+            
+            modelBuilder.Entity<BookListModeratorWm>().ToTable(nameof(BookListModerators)).HasOne(m => m.User)
+                .WithMany(m => m.BookListModerators).HasForeignKey(m => m.UserId).OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<BookListModeratorWm>().ToTable(nameof(BookListModerators)).HasOne(m => m.BookList)
+                .WithMany(m => m.BookListModerators).HasForeignKey(m => m.BookListId).OnDelete(DeleteBehavior.Restrict);
+            
             modelBuilder.Entity<UserWm>().ToTable(nameof(Users)).HasIndex(u => u.Login).IsUnique();
             
             modelBuilder.Entity<ProfileWm>().ToTable(nameof(Profiles)).HasIndex(p => p.Email).IsUnique();

@@ -80,7 +80,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData addItemData)
         {
             await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name, 
-                new BookInfo(addItemData.Title, addItemData.Author), addItemData.GenreId, addItemData.Tags));
+                new BookInfo(addItemData.Title, addItemData.Author, addItemData.GenreId), addItemData.Tags));
 
             return Ok();
         }
@@ -101,13 +101,13 @@ namespace ReadingList.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("{listId}/items/{id}")]
+        [HttpPut("{listId}/items/{itemId}")]
         [ValidateModelState]
         public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData updateItemData)
         {
             await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId, listId,
-                new BookInfo(updateItemData.Title, updateItemData.Author), updateItemData.Tags,
-                updateItemData.GenreId));
+                new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId),
+                updateItemData.Tags));
             
             return Ok();
         }

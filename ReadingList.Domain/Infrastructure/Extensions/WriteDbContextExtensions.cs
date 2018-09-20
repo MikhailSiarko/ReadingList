@@ -10,66 +10,50 @@ namespace ReadingList.Domain.Infrastructure.Extensions
 {
     public static class WriteDbContextExtensions
     {
-        public static async Task UpdateOrAddSharedListTags(this WriteDbContext dbContext, IEnumerable<string> tags, BookListWm list)
+        public static async Task<IEnumerable<SharedBookListTagWm>> UpdateOrAddSharedListTags(this WriteDbContext dbContext,
+            IEnumerable<string> tags, BookListWm list)
         {
-            await dbContext.Tags.Where(x => tags.Contains(x.Name)).ForEachAsync(x =>
-            {
-                x.SharedBookListTags.Add(new SharedBookListTagWm
-                {
-                    Tag = x,
-                    SharedBookList = list
-                });
-            });
+            dbContext.SharedBookListTags.RemoveRange(list.SharedBookListTags);
+            
+            await dbContext.SaveChangesAsync();
+            
+            var existingTags = await dbContext.Tags.Where(x => tags.Contains(x.Name)).ToListAsync();
 
             var newTags = tags.Where(x => !dbContext.Tags.Any(y => y.Name == x)).Select(x => new TagWm
             {
                 Name = x
             }).ToList();
 
-            foreach (var newTag in newTags)
-            {
-                newTag.SharedBookListTags = new List<SharedBookListTagWm>(new[]
-                {
-                    new SharedBookListTagWm
-                    {
-                        Tag = newTag,
-                        SharedBookList = list
-                    }
-                });
-            }
-
             await dbContext.Tags.AddRangeAsync(newTags);
+            
+            return existingTags.Concat(newTags).Select(t => new SharedBookListTagWm
+            {
+                TagId = t.Id,
+                SharedBookListId = list.Id
+            });
         }
         
-        public static async Task UpdateOrAddSharedListItemTags(this WriteDbContext dbContext, IEnumerable<string> tags, SharedBookListItemWm item)
-        {
-            await dbContext.Tags.Where(x => tags.Contains(x.Name)).ForEachAsync(x =>
-            {
-                x.SharedBookListItemTags.Add(new SharedBookListItemTagWm
-                {
-                    Tag = x,
-                    SharedBookListItem = item
-                });
-            });
+        public static async Task<IEnumerable<SharedBookListItemTagWm>> UpdateOrAddSharedListItemTags(this WriteDbContext dbContext,
+            IEnumerable<string> tags, SharedBookListItemWm item)
+        {          
+            dbContext.SharedBookListItemTags.RemoveRange(item.SharedBookListItemTags);
+
+            await dbContext.SaveChangesAsync();
+            
+            var existingTags = await dbContext.Tags.Where(x => tags.Contains(x.Name)).ToListAsync();
 
             var newTags = tags.Where(x => !dbContext.Tags.Any(y => y.Name == x)).Select(x => new TagWm
             {
                 Name = x
             }).ToList();
 
-            foreach (var newTag in newTags)
-            {
-                newTag.SharedBookListItemTags = new List<SharedBookListItemTagWm>(new[]
-                {
-                    new SharedBookListItemTagWm
-                    {
-                        Tag = newTag,
-                        SharedBookListItem = item
-                    }
-                });
-            }
-
             await dbContext.Tags.AddRangeAsync(newTags);
+
+            return existingTags.Concat(newTags).Select(t => new SharedBookListItemTagWm
+            {
+                TagId = t.Id,
+                SharedBookListItemId = item.Id
+            });
         }
     }
 }
