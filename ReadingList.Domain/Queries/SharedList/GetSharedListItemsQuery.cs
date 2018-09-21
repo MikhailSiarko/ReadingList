@@ -5,7 +5,7 @@ namespace ReadingList.Domain.Queries.SharedList
 {
     public class GetSharedListItemsQuery : IQuery<IEnumerable<SharedBookListItemDto>>
     {
-        public int ListId { get; set; }
+        public readonly int ListId;
         
         public GetSharedListItemsQuery(int listId)
         {

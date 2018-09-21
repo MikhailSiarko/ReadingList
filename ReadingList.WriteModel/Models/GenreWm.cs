@@ -12,6 +12,6 @@ namespace ReadingList.WriteModel.Models
 
         public GenreWm Parent { get; set; }
 
-        public List<GenreWm> Children { get; set; }
+        public IEnumerable<GenreWm> Children { get; set; }
     }
 }

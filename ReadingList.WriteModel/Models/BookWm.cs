@@ -14,11 +14,6 @@ namespace ReadingList.WriteModel.Models
 
         public string  GenreId { get; set; }
 
-        public List<BookTagWm> BookTags { get; set; }
-
-        public BookWm()
-        {
-            BookTags = new List<BookTagWm>();
-        }
+        public IEnumerable<BookTagWm> BookTags { get; set; }
     }
 }

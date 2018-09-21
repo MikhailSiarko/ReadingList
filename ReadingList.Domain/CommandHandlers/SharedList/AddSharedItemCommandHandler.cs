@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;

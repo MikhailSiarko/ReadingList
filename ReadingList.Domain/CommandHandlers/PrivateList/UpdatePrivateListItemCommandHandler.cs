@@ -11,8 +11,7 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.PrivateList
 {
-    public class UpdatePrivateListItemCommandHandler : UpdateCommandHandler<UpdatePrivateListItemCommand, PrivateBookListItemWm>,
-        IValidatable<UpdatePrivateListItemCommand, PrivateBookListItemWm>
+    public class UpdatePrivateListItemCommandHandler : UpdateCommandHandler<UpdatePrivateListItemCommand, PrivateBookListItemWm>
     {
         public UpdatePrivateListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService) 
             : base(dbContext, entityUpdateService)
@@ -35,11 +34,6 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
             });
         }
 
-        public void Validate(PrivateBookListItemWm entity, UpdatePrivateListItemCommand command)
-        {
-            PrivateBookListItemStatusValidator.Validate(entity.Status, (BookItemStatus) command.Status);
-        }
-
         protected override async Task<PrivateBookListItemWm> GetEntity(UpdatePrivateListItemCommand command)
         {
             var item = await DbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
@@ -49,7 +43,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
                     ["Id"] = command.ItemId.ToString()
                 });
             
-            Validate(item, command);
+            PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
 
             return item;
         }

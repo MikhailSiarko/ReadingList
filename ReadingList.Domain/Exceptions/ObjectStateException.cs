@@ -13,7 +13,6 @@ namespace ReadingList.Domain.Exceptions
     {
         public override string Message { get; }
         
-        // TODO Message is building from the end. Need to refactor for building message from the beginning
         protected ObjectStateException(string stateInfo, string entityTypeName, OnExceptionObjectDescriptor objectDescriptor)
         {
             var paramsString = GetParams(objectDescriptor);

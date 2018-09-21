@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.MapperProfiles;
 using ReadingList.ReadModel.DbConnection;
-using ReadingList.ReadModel.Models;
 using ReadingList.WriteModel;
 
 namespace ReadingList.Domain
@@ -29,9 +27,8 @@ namespace ReadingList.Domain
                 .AddJwtBearer(JwtBearerConfigurator.Configure);
             Mapper.Initialize(conf =>
             {
-                conf.CreateMap<SharedBookListRm, SharedBookListDto>();
-                conf.CreateMap<PrivateBookListItemRm, PrivateBookListItemDto>();
-                conf.CreateMap<SharedBookListItemRm, SharedBookListItemDto>();
+                conf.AddProfile<PrivateBookListProfile>();
+                conf.AddProfile<SharedBookListProfile>();
                 conf.AddProfile<UserProfile>();
             });
             return services;

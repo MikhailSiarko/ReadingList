@@ -38,7 +38,7 @@ namespace ReadingList.Domain.QueryHandlers.PrivateList
                         }
 
                         if (item != null)
-                            listEntry.Items.Add(item);
+                            ((List<PrivateBookListItemRm>)listEntry.Items).Add(item);
                         return listEntry;
                     }, new {login = query.UserLogin}) ??
                 throw new ObjectNotExistException<PrivateBookListRm>(new OnExceptionObjectDescriptor

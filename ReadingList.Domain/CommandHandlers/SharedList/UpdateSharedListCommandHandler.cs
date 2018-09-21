@@ -12,8 +12,7 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
-    public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookListWm>,
-        IValidatable<UpdateSharedListCommand, BookListWm>
+    public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookListWm>
     {
         public UpdateSharedListCommandHandler(WriteDbContext dbContext, IEntityUpdateService updateService) 
             : base(dbContext, updateService)
@@ -27,11 +26,6 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                 [nameof(BookListWm.Name)] = command.Name,
                 [nameof(BookListWm.SharedBookListTags)] = DbContext.UpdateOrAddSharedListTags(command.Tags, entity).RunSync().ToList()
             });
-        }
-
-        public void Validate(BookListWm entity, UpdateSharedListCommand command)
-        {
-            BookListAccessValidator.Validate(command.UserLogin, entity);
         }
 
         protected override async Task<BookListWm> GetEntity(UpdateSharedListCommand command)
@@ -49,7 +43,7 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                     ["Email"] = command.UserLogin
                 });
             
-            Validate(list, command);
+            BookListAccessValidator.Validate(command.UserLogin, list);
 
             return list;
         }

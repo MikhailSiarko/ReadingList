@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace ReadingList.Domain.DTO.BookList
 {
-    [JsonObject(MemberSerialization.OptOut)]
     public class SharedBookListDto
     {
 

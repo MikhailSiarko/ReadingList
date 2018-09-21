@@ -6,10 +6,6 @@ namespace ReadingList.WriteModel.Models
 {
     public class UserWm : EntityWm
     {
-        public UserWm()
-        {
-            BookLists = new List<BookListWm>();
-        }
         public string Login { get; set; }
 
         public string Password { get; set; }

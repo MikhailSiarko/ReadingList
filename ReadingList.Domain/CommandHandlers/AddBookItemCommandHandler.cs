@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
-using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -45,7 +43,7 @@ namespace ReadingList.Domain.CommandHandlers
                 b.Author == bookInfo.Author && b.Title == bookInfo.Title);
             
             if (book == null)
-                await DbContext.Books.AddAsync(new BookWm {Author = bookInfo.Author, Title = bookInfo.Title});
+                await DbContext.Books.AddAsync(new BookWm {Author = bookInfo.Author, Title = bookInfo.Title, GenreId = bookInfo.GenreId});
         }
 
         private async Task<bool> DoItemExist(BookInfo bookInfo, int bookListId)

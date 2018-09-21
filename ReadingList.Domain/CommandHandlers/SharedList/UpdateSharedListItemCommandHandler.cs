@@ -13,8 +13,7 @@ using ReadingList.WriteModel.Models.HelpEntities;
 
 namespace ReadingList.Domain.CommandHandlers.SharedList
 {
-    public class UpdateSharedListItemCommandHandler : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItemWm>,
-        IValidatable<UpdateSharedListItemCommand, SharedBookListItemWm>
+    public class UpdateSharedListItemCommandHandler : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItemWm>
     {
         public UpdateSharedListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService) 
             : base(dbContext, entityUpdateService)
@@ -32,11 +31,6 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
             });
         }
 
-        public void Validate(SharedBookListItemWm entity, UpdateSharedListItemCommand command)
-        {
-            BookListAccessValidator.Validate(command.UserLogin, entity.BookList);
-        }
-
         protected override async Task<SharedBookListItemWm> GetEntity(UpdateSharedListItemCommand command)
         {
             var item = await DbContext.SharedBookListItems
@@ -51,7 +45,7 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
                     ["Id"] = command.ItemId.ToString()
                 });
             
-            Validate(item, command);
+            BookListAccessValidator.Validate(command.UserLogin, item.BookList);
 
             return item;
         }

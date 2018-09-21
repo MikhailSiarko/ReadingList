@@ -6,17 +6,10 @@ namespace ReadingList.WriteModel.Models
 {
     public class TagWm : NamedEntityWm
     {
-        public List<BookTagWm> BookTags { get; set; }
+        public IEnumerable<BookTagWm> BookTags { get; set; }
 
-        public List<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
+        public IEnumerable<SharedBookListItemTagWm> SharedBookListItemTags { get; set; }
 
-        public List<SharedBookListTagWm> SharedBookListTags { get; set; }
-
-        public TagWm()
-        {
-            BookTags = new List<BookTagWm>();
-            SharedBookListItemTags = new List<SharedBookListItemTagWm>();
-            SharedBookListTags = new List<SharedBookListTagWm>();
-        }
+        public IEnumerable<SharedBookListTagWm> SharedBookListTags { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Authentication;
@@ -9,7 +8,7 @@ using ReadingList.ReadModel.DbConnection;
 using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
-{   
+{
     public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationData>
     {
         private readonly IReadDbConnection _dbConnection;

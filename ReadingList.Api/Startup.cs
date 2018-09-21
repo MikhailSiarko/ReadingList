@@ -14,7 +14,6 @@ using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
 using ReadingList.Domain.Services.Sql;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.Domain.Services.Validation;
 
 namespace ReadingList.Api
 {
