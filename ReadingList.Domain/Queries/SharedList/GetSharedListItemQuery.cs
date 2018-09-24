@@ -1,6 +1,6 @@
 ﻿using ReadingList.Domain.DTO.BookList;
 
-namespace ReadingList.Domain.Queries.SharedList
+namespace ReadingList.Domain.Queries
 {
     public class GetSharedListItemQuery : IQuery<SharedBookListItemDto>
     {

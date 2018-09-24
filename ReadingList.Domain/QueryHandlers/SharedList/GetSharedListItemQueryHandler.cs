@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Queries.SharedList;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.ReadModel.Models;
 
-namespace ReadingList.Domain.QueryHandlers.SharedList
+namespace ReadingList.Domain.QueryHandlers
 {
     public class GetSharedListItemQueryHandler : QueryHandler<GetSharedListItemQuery, SharedBookListItemDto>
     {

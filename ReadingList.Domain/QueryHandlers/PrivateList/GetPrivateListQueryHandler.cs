@@ -8,7 +8,7 @@ using ReadingList.Domain.Services.Sql.Interfaces;
 using ReadingList.ReadModel.DbConnection;
 using ReadingList.ReadModel.Models;
 
-namespace ReadingList.Domain.QueryHandlers.PrivateList
+namespace ReadingList.Domain.QueryHandlers
 {
     public class GetPrivateListQueryHandler : QueryHandler<GetPrivateListQuery, PrivateBookListDto>
     {

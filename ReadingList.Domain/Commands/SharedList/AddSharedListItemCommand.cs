@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ReadingList.Domain.Infrastructure;
 
-namespace ReadingList.Domain.Commands.SharedList
+namespace ReadingList.Domain.Commands
 {
     public class AddSharedListItemCommand : AddListItemCommand
     {

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.Infrastructure.Filters;
 using ReadingList.Api.QueriesData;
-using ReadingList.Domain.Commands.SharedList;
+using ReadingList.Domain.Commands;
 using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Queries.SharedList;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel.Models;
 

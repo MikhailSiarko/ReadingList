@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.Commands.PrivateList;
+using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Filters;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
-namespace ReadingList.Domain.CommandHandlers.PrivateList
+namespace ReadingList.Domain.CommandHandlers
 {
     public class UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateListCommand, BookListWm>
     {

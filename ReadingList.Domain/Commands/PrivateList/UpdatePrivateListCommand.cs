@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Domain.Commands.PrivateList
+﻿namespace ReadingList.Domain.Commands
 {
     public class UpdatePrivateListCommand : SecuredCommand
     {

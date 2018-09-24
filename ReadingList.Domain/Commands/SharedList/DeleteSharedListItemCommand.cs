@@ -1,4 +1,4 @@
-namespace ReadingList.Domain.Commands.SharedList
+namespace ReadingList.Domain.Commands
 {
     public class DeleteSharedListItemCommand : SecuredCommand
     {
