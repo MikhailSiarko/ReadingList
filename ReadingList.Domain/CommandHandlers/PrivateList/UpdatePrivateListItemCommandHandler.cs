@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Filters;
+using ReadingList.Domain.Infrastructure.Filters.ValidationFilters;
 using ReadingList.Domain.Services;
 using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
@@ -36,12 +39,20 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
 
         protected override async Task<PrivateBookListItemWm> GetEntity(UpdatePrivateListItemCommand command)
         {
-            var item = await DbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
-                    i.BookList.Owner.Login == command.UserLogin && i.Id == command.ItemId) ??
-                throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
-                {
-                    ["Id"] = command.ItemId.ToString()
-                });
+            var itemQuery =
+                DbContext.PrivateBookListItems.Where(
+                    EntityFilterExpressions.FindEntity<PrivateBookListItemWm>(command.ItemId));
+
+            var item = await itemQuery.SingleOrDefaultAsync() ??
+                       throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
+                       {
+                           ["Id"] = command.ItemId.ToString()
+                       });
+
+            if (!await itemQuery.AnyAsync(BookListAccessValidationFilterExpression.UserIsOwnerOfItem<PrivateBookListItemWm>(command.UserLogin)))
+            {
+                throw new AccessDeniedException();
+            }
             
             PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
 

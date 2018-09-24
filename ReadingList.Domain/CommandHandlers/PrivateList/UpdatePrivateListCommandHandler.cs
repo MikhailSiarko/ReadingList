@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Filters;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
@@ -26,8 +27,7 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
 
         protected override async Task<BookListWm> GetEntity(UpdatePrivateListCommand command)
         {
-            return await DbContext.BookLists.SingleOrDefaultAsync(
-                    l => l.Owner.Login == command.UserLogin && l.Type == BookListType.Private) ??
+            return await DbContext.BookLists.SingleOrDefaultAsync(BookListFilterExpressions.FindPrivateBookList(command.UserLogin)) ??
                 throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
                 {
                     ["Email"] = command.UserLogin

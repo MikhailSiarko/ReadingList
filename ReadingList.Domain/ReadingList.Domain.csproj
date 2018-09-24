@@ -17,6 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="MapperProfiles\PrivateBookListItemProfile.cs" />
-    <Compile Remove="Services\Validation\EntitiesValidator.cs" />
+    <Compile Remove="Infrastructure\Filters\ValidationFilters\EntitiesValidator.cs" />
   </ItemGroup>
 </Project>

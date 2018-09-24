@@ -45,7 +45,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> AddItem([FromBody] AddItemToPrivateListData addItemData)
         {
             await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
-                new BookInfo(addItemData.Title, addItemData.Author)));
+                new BookInfo(addItemData.Title, addItemData.Author, addItemData.GenreId)));
 
             var savedItem = await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,
                 new BookInfo(addItemData.Title, addItemData.Author)));
@@ -58,7 +58,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updateItemData)
         {
             await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
-                new BookInfo(updateItemData.Title, updateItemData.Author), updateItemData.Status));
+                new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId), updateItemData.Status));
 
             var updatedItem =
                 await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,

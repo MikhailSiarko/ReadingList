@@ -24,7 +24,7 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
         protected override async Task<SharedBookListDto> Handle(GetSharedListQuery query)
         {
             var sharedList =
-                await _dbConnection.QuerySingleAsync<SharedBookListRm>(
+                await _dbConnection.QuerySingleAsync(
                     _sharedBookListSqlService.GetBookListSqlQuery(),
                     async reader =>
                     {

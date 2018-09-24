@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
-using ReadingList.Domain.Services.Validation;
+using ReadingList.Domain.Infrastructure.Filters;
+using ReadingList.Domain.Infrastructure.Filters.ValidationFilters;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -19,26 +20,31 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
 
         protected override async Task<BookListWm> GetBookList(AddSharedListItemCommand command)
         {
-            var list = await DbContext.BookLists.AsNoTracking().Include(s => s.Owner).Include(s => s.BookListModerators)
-                           .ThenInclude(m => m.User).SingleOrDefaultAsync(s =>
-                               s.Id == command.ListId && s.Type == BookListType.Shared) ??
-                       throw new ObjectNotExistException<BookListWm>(new OnExceptionObjectDescriptor
-                       {
-                           ["Id"] = command.ListId.ToString()
-                       });
+            var listQuery = DbContext.BookLists.Where(BookListFilterExpressions.FindSharedBookList(command.ListId));
 
-            BookListAccessValidator.Validate(command.UserLogin, list);
+            var list = await listQuery.SingleOrDefaultAsync() ??
+                       throw new ObjectNotExistException<BookListWm>(
+                           new OnExceptionObjectDescriptor
+                           {
+                               ["Id"] = command.ListId.ToString()
+                           });
+
+            if (!await listQuery.AnyAsync(BookListAccessValidationFilterExpression.UserIsOwnerOrModerator(command.UserLogin)))
+            {
+                throw new AccessDeniedException();
+            }
 
             return list;
         }
 
-        protected override SharedBookListItemWm CreateItem(AddSharedListItemCommand command, int listId)
+        protected override SharedBookListItemWm CreateItem(AddSharedListItemCommand command, BookListWm list)
         {           
             var item = new SharedBookListItemWm
             {
                 Author = command.BookInfo.Author,
                 Title = command.BookInfo.Title,
-                BookListId = listId,
+                BookListId = list.Id,
+                BookList = list,
                 GenreId = command.BookInfo.GenreId
             };
 

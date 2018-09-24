@@ -11,8 +11,8 @@ namespace ReadingList.Domain.Commands.SharedList
 
         public AddSharedListItemCommand(int listId, string login, BookInfo bookInfo, IEnumerable<string> tags) : base(login, bookInfo)
         {
-            ListId = listId;
             Tags = tags;
+            ListId = listId;
         }
     }
 }

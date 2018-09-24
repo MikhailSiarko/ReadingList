@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
+using ReadingList.Domain.Infrastructure.Filters;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -20,23 +21,24 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
 
         protected override async Task Handle(CreateSharedListCommand command)
         {
-            var user = await _context.Users.Include(x => x.BookLists)
-                           .SingleOrDefaultAsync(x => x.Login == command.UserLogin) ??
+            var user = await _context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Login == command.UserLogin) ??
                        throw new ObjectNotExistException<UserWm>(new OnExceptionObjectDescriptor
                        {
                            ["Username"] = command.UserLogin
                        });
 
-            if (user.BookLists.Where(b => b.Type == BookListType.Shared).Any(b => b.Name == command.Name))
+            if (await _context.BookLists.Where(BookListFilterExpressions.FindSharedBookListsForUser(user.Id))
+                .AnyAsync(b => b.Name == command.Name))
+            {
                 throw new ObjectAlreadyExistsException<BookListWm>(new OnExceptionObjectDescriptor
                 {
                     ["Name"] = command.Name
                 });
-            
+            }
+
             var list = new BookListWm
             {
                 Name = command.Name,
-                Owner = user,
                 OwnerId = user.Id,
                 Type = BookListType.Shared
             };

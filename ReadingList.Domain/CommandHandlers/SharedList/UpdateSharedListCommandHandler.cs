@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
+using ReadingList.Domain.Infrastructure.Filters;
+using ReadingList.Domain.Infrastructure.Filters.ValidationFilters;
 using ReadingList.Domain.Services;
-using ReadingList.Domain.Services.Validation;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -30,20 +31,18 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
 
         protected override async Task<BookListWm> GetEntity(UpdateSharedListCommand command)
         {
-            var list = await DbContext.BookLists
-                    .Include(l => l.SharedBookListTags)
-                    .Include(s => s.Owner)
-                    .Include(s => s.BookListModerators)
-                    .ThenInclude(m => m.User)
-                    .SingleAsync(l =>
-                        l.Owner.Login == command.UserLogin && l.Id == command.ListId &&
-                        l.Type == BookListType.Shared) ??
-                throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
-                {
-                    ["Email"] = command.UserLogin
-                });
-            
-            BookListAccessValidator.Validate(command.UserLogin, list);
+            var listQuery = DbContext.BookLists.Where(BookListFilterExpressions.FindSharedBookList(command.ListId));
+
+            var list = await listQuery.Include(l => l.SharedBookListTags).SingleOrDefaultAsync() ??
+                       throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                       {
+                           ["Email"] = command.UserLogin
+                       });
+
+            if (!await listQuery.AnyAsync(BookListAccessValidationFilterExpression.UserIsOwnerOrModerator(command.UserLogin)))
+            {
+                throw new AccessDeniedException();
+            }        
 
             return list;
         }

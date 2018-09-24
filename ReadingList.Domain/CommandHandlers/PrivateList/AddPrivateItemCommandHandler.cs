@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Filters;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -16,24 +17,24 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
 
         protected override async Task<BookListWm> GetBookList(AddPrivateItemCommand command)
         {
-            return await DbContext.BookLists.AsNoTracking()
-                       .SingleOrDefaultAsync(p =>
-                           p.Owner.Login == command.UserLogin && p.Type == BookListType.Private) ??
-                   throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
-                   {
-                       ["Email"] = command.UserLogin
-                   });
+           return await DbContext.BookLists.SingleOrDefaultAsync(BookListFilterExpressions.FindPrivateBookList(command.UserLogin)) ??
+                       throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                       {
+                           ["Email"] = command.UserLogin
+                       });
         }
 
-        protected override PrivateBookListItemWm CreateItem(AddPrivateItemCommand command, int listId)
+        protected override PrivateBookListItemWm CreateItem(AddPrivateItemCommand command, BookListWm list)
         {
             return new PrivateBookListItemWm
             {
                 Status = BookItemStatus.ToReading,
                 LastStatusUpdateDate = DateTime.Now,
-                BookListId = listId,
+                BookListId = list.Id,
+                BookList = list,
                 Title = command.BookInfo.Title,
-                Author = command.BookInfo.Author
+                Author = command.BookInfo.Author,
+                GenreId = command.BookInfo.GenreId
             };
         }
 

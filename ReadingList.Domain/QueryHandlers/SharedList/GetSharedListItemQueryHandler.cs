@@ -32,7 +32,7 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
 
                                    if (item == null)
                                        return null;
-                                   
+
                                    var tags = await reader.ReadAsync<string>();
 
                                    item.Tags = tags;

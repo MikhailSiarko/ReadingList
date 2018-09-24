@@ -63,6 +63,13 @@ namespace ReadingList.Api
                     {
                         typeof(ObjectNotFoundException)
                     }
+                },
+                {
+                    HttpStatusCode.Forbidden,
+                    new []
+                    {
+                        typeof(AccessDeniedException)
+                    }
                 }
             };
         }

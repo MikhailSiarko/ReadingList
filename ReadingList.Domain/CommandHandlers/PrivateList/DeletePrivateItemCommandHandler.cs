@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.PrivateList;
 using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Filters;
+using ReadingList.Domain.Infrastructure.Filters.ValidationFilters;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -18,13 +21,20 @@ namespace ReadingList.Domain.CommandHandlers.PrivateList
 
         protected override async Task Handle(DeletePrivateItemCommand command)
         {
-            var item = await _dbContext.PrivateBookListItems.FirstOrDefaultAsync(i =>
-                           i.BookList.Owner.Login == command.UserLogin && i.Id == command.Id) ??
+            var itemQuery =
+                _dbContext.PrivateBookListItems.Where(EntityFilterExpressions.FindEntity<PrivateBookListItemWm>(command.Id));
+
+            var item = await itemQuery.SingleOrDefaultAsync() ??
                        throw new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
                        {
                            ["Id"] = command.Id.ToString()
                        });
-            
+
+            if (!await itemQuery.AnyAsync(BookListAccessValidationFilterExpression.UserIsOwnerOfItem<PrivateBookListItemWm>(command.UserLogin)))
+            {
+                throw new AccessDeniedException();
+            }
+
             _dbContext.PrivateBookListItems.Remove(item);
             
             await _dbContext.SaveChangesAsync();

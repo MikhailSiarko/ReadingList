@@ -24,7 +24,7 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
         protected override async Task<IEnumerable<SharedBookListDto>> Handle(GetUserSharedListsQuery query)
         {
             var sharedLists =
-                await _dbConnection.QueryAsync<SharedBookListRm>(_sharedBookListSqlService.GetUserBookListsSqlQuery(),
+                await _dbConnection.QueryAsync(_sharedBookListSqlService.GetUserBookListsSqlQuery(),
                     async reader =>
                     {
                         var lists = (await reader.ReadAsync<SharedBookListRm>()).ToList();

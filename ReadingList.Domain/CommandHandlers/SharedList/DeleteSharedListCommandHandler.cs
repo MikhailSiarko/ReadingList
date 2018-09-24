@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Services.Validation;
+using ReadingList.Domain.Infrastructure.Filters;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -21,20 +21,18 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
         protected override async Task Handle(DeleteSharedListCommand command)
         {
             var list =
-                await _context.BookLists.Include(s => s.Owner).SingleOrDefaultAsync(x =>
-                    x.Id == command.ListId && x.Type == BookListType.Shared) ??
-                throw new ObjectNotExistForException<BookListWm, UserWm>(new OnExceptionObjectDescriptor
+                await _context.BookLists.Include(s => s.Owner)
+                    .SingleOrDefaultAsync(BookListFilterExpressions.FindSharedBookList(command.ListId)) ??
+                throw new ObjectNotExistException<BookListWm>(new OnExceptionObjectDescriptor
                     {
                         ["Id"] = command.ListId.ToString()
-                    },
-                    new OnExceptionObjectDescriptor
-                    {
-                        ["Email"] = command.UserLogin
                     });
             
-            BookListAccessValidator.Validate(command.UserLogin, list);
+            if(list.Owner.Login != command.UserLogin)
+                throw new AccessDeniedException();
 
-            var items = await _context.SharedBookListItems.Where(x => x.BookListId == command.ListId).ToListAsync();
+            var items = await _context.SharedBookListItems
+                .Where(BookListItemFilterExpressions.ItemBelongsToList<SharedBookListItemWm>(command.ListId)).ToListAsync();
             
             _context.SharedBookListItems.RemoveRange(items);
             

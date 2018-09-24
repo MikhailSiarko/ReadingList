@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands.SharedList;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Services.Validation;
+using ReadingList.Domain.Infrastructure.Filters;
+using ReadingList.Domain.Infrastructure.Filters.ValidationFilters;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 
@@ -19,21 +21,20 @@ namespace ReadingList.Domain.CommandHandlers.SharedList
 
         protected override async Task Handle(DeleteSharedListItemCommand command)
         {
-            var item = await _context.SharedBookListItems
-                           .Include(i => i.BookList.Owner)
-                           .Include(b => b.BookList.BookListModerators)
-                           .ThenInclude(b => b.User).SingleOrDefaultAsync(x =>
-                           x.Id == command.ItemId && x.BookListId == command.ListId) ??
-                       throw new ObjectNotExistForException<SharedBookListItemWm, BookListWm>(new OnExceptionObjectDescriptor
-                           {
-                               ["Id"] = command.ItemId.ToString()
-                           },
+            var item = await _context.SharedBookListItems.SingleOrDefaultAsync(
+                           EntityFilterExpressions.FindEntity<SharedBookListItemWm>(command.ItemId) &&
+                           BookListItemFilterExpressions.ItemBelongsToList<SharedBookListItemWm>(command.ListId)) ??
+                       throw new ObjectNotExistException<SharedBookListItemWm>(
                            new OnExceptionObjectDescriptor
                            {
-                               ["Id"] = command.ListId.ToString()
+                               ["Id"] = command.ItemId.ToString()
                            });
 
-            BookListAccessValidator.Validate(command.UserLogin, item.BookList);
+            if (!await _context.BookLists.Where(BookListFilterExpressions.FindSharedBookList(command.ListId))
+                .AnyAsync(BookListAccessValidationFilterExpression.UserIsOwnerOrModerator(command.UserLogin)))
+            {
+                throw new AccessDeniedException();
+            }
 
             _context.SharedBookListItems.Remove(item);
 
