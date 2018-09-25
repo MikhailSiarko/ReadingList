@@ -9,5 +9,8 @@ export default {
         user: JSON.parse(sessionStorage.getItem('reading_list_user') as string)
     },
     loading: false,
-    privateList: null
+    private: {
+        list: null,
+        bookStatuses: null
+    }
 };

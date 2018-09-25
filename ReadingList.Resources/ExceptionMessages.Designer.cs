@@ -124,7 +124,7 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item with {0}.
+        ///   Looks up a localized string similar to Private book list item with {0}.
         /// </summary>
         public static string Object_PrivateBookListItem {
             get {
@@ -138,6 +138,15 @@ namespace ReadingList.Resources {
         public static string Object_SharedBookList {
             get {
                 return ResourceManager.GetString("Object_SharedBookList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shared book list item with {0}.
+        /// </summary>
+        public static string Object_SharedBookListItem {
+            get {
+                return ResourceManager.GetString("Object_SharedBookListItem", resourceCulture);
             }
         }
         

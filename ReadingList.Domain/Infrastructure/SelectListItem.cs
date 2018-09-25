@@ -1,8 +1,8 @@
 namespace ReadingList.Domain.Infrastructure
 {
-    public class NameValuePair
+    public class SelectListItem
     {
-        public string Name { get; set; }
+        public string Text { get; set; }
 
         public object Value { get; set; }
     }

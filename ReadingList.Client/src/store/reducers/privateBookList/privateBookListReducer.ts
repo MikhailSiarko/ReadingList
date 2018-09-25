@@ -2,49 +2,60 @@ import { RootState } from '../index';
 import initialState from '../initialState';
 import { getType } from 'typesafe-actions';
 import { PrivateBookListAction, privateBookListAction } from '../../actions/privateBookList';
-import { PrivateBookListItemModel, PrivateBookListModel } from '../../../models';
+import { PrivateBookListItemModel } from '../../../models';
 import { cloneDeep } from 'lodash';
 
-export function privateBookListReducer(state: RootState.PrivateList = initialState.privateList,
+export function privateBookListReducer(state: RootState.Private = initialState.private,
                                       action: PrivateBookListAction) {
+    const copy = cloneDeep(state);
     switch (action.type) {
-        case getType(privateBookListAction.setPrivateList):
-            return action.list;
-        case getType(privateBookListAction.unsetPrivateList):
-            return initialState.privateList;
+        case getType(privateBookListAction.setPrivate):
+            copy.list = action.list;
+            return copy;
+        case getType(privateBookListAction.unsetPrivate):
+            return initialState.private;
         case getType(privateBookListAction.switchEditModeForList):
-            const dc = cloneDeep(state as PrivateBookListModel);
-            dc.isInEditMode = !dc.isInEditMode;
-            return dc;
+            if(copy.list) {
+                copy.list.isInEditMode = !copy.list.isInEditMode;
+            }
+            return copy;
         case getType(privateBookListAction.updateListName):
-            const cd = cloneDeep(state as PrivateBookListModel);
-            cd.name = action.newName;
-            cd.isInEditMode = false;
-            return cd;
+            if(copy.list) {
+                copy.list.name = action.newName;
+                copy.list.isInEditMode = false;
+            }
+            return copy;
         case getType(privateBookListAction.addItem):
-            const copy = cloneDeep(state as PrivateBookListModel);
-            copy.items.push(action.listItem);
+            if(copy.list) {
+                copy.list.items.push(action.listItem);
+            }
             return copy;
         case getType(privateBookListAction.removeItem):
-            let deepCopy = cloneDeep(state as PrivateBookListModel);
-            const itemIndex = deepCopy.items
+            if(copy.list) {
+                const itemIndex = copy.list.items
                 .findIndex((listItem: PrivateBookListItemModel) => listItem.id === action.itemId);
-            deepCopy.items.splice(itemIndex, 1);
-            return deepCopy;
+                copy.list.items.splice(itemIndex, 1);
+            }
+            return copy;
         case getType(privateBookListAction.updateItem):
-            const clone = cloneDeep(state as PrivateBookListModel);
-            const index = clone.items.findIndex(
-                ((listItem: PrivateBookListItemModel) => listItem.id === action.item.id));
-            clone.items[index] = action.item;
-            return clone;
+            if(copy.list) {
+                const index = copy.list.items.findIndex(
+                    ((listItem: PrivateBookListItemModel) => listItem.id === action.item.id));
+                    copy.list.items[index] = action.item;
+            }
+            return copy;
         case getType(privateBookListAction.switchEditModeForItem):
-            const deepClone = cloneDeep(state as PrivateBookListModel);
-            deepClone.items.forEach((listItem: PrivateBookListItemModel) => {
-                if(listItem.id === action.itemId) {
-                    listItem.isOnEditMode = !listItem.isOnEditMode;
-                }
-            });
-            return deepClone;
+            if(copy.list) {
+                copy.list.items.forEach((listItem: PrivateBookListItemModel) => {
+                    if(listItem.id === action.itemId) {
+                        listItem.isOnEditMode = !listItem.isOnEditMode;
+                    }
+                });
+            }
+            return copy;
+        case getType(privateBookListAction.setBookStatuses):
+            copy.bookStatuses = action.statuses;
+            return copy;
         default:
             return state;
     }

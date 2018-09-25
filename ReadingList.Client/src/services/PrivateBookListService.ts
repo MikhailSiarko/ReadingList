@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import ApiConfiguration from '../config/ApiConfiguration';
 import { AxiosResponse } from 'axios';
 import { privateBookListAction } from '../store/actions/privateBookList';
-import { PrivateBookListModel, PrivateBookListItemModel, RequestResult } from '../models';
+import { PrivateBookListModel, PrivateBookListItemModel, RequestResult, SelectListItem } from '../models';
 import ApiService from './ApiService';
 import { onError } from '../utils';
 
@@ -18,6 +18,13 @@ export class PrivateBookListService extends ApiService {
             .catch(onError);
     }
 
+    getBookStatuses() {
+        const requestPromise = this.configureRequest(ApiConfiguration.BOOK_STATUSES, 'GET');
+        return requestPromise
+            .then(this.onGetBookStatusesSuccess())
+            .catch(onError);
+    }
+
     public addItem(item: PrivateBookListItemModel) {
         const requestPromise = this.configureRequest(`${ApiConfiguration.PRIVATE_LIST_ITEMS}`,
             'POST', {title: item.title, author: item.author});
@@ -28,7 +35,7 @@ export class PrivateBookListService extends ApiService {
 
     public updateItem(item: PrivateBookListItemModel) {
         const requestPromise = this.configureRequest(
-            `${ApiConfiguration.PRIVATE_LIST_ITEMS}/${item.id}`,
+            ApiConfiguration.getPrivateListItemUrl(item.id),
             'PUT', {
                 title: item.title,
                 author: item.author,
@@ -41,7 +48,7 @@ export class PrivateBookListService extends ApiService {
 
     public removeItem(id: number) {
         const requestPromise = this.configureRequest(
-            `${ApiConfiguration.PRIVATE_LIST_ITEMS}/${id}`,
+            ApiConfiguration.getPrivateListItemUrl(id),
             'DELETE');
         return requestPromise
             .then(this.onDeleteItemSuccess(id))
@@ -67,7 +74,7 @@ export class PrivateBookListService extends ApiService {
         const that = this;
         return function(response: AxiosResponse) {
             const result = new RequestResult<PrivateBookListModel>(true, response.data);
-            that.dispatch(privateBookListAction.setPrivateList(result.data as PrivateBookListModel));
+            that.dispatch(privateBookListAction.setPrivate(result.data as PrivateBookListModel));
             return result;
         };
     }
@@ -94,6 +101,15 @@ export class PrivateBookListService extends ApiService {
         const that = this;
         return function() {
             that.dispatch(privateBookListAction.removeItem(id));
+        };
+    }
+
+    private onGetBookStatusesSuccess() {
+        const that = this;
+        return function(response: AxiosResponse) {
+            const result = new RequestResult<SelectListItem[]>(true, response.data);
+            that.dispatch(privateBookListAction.setBookStatuses(result.data as SelectListItem[]));
+            return result;
         };
     }
 }

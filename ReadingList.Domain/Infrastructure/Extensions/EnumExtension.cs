@@ -14,24 +14,24 @@ namespace ReadingList.Domain.Infrastructure.Extensions
             return attribute != null ? attribute.Description : @enum.ToString();
         }
 
-        public static IEnumerable<NameValuePair> ToNameValuePairs(this Enum @enum)
+        public static IEnumerable<SelectListItem> ToSelectListItems(this Enum @enum)
         {
             var enumType = @enum.GetType();
 
             var values = Enum.GetValues(enumType);
 
-            var statuses = new List<NameValuePair>();
+            var items = new List<SelectListItem>();
 
             foreach (var value in values)
             {
-                statuses.Add(new NameValuePair
+                items.Add(new SelectListItem
                 {
-                    Value = value,
-                    Name = Enum.GetName(enumType, value)
+                    Value = (int)Convert.ChangeType(value, enumType),
+                    Text = ((Enum)value).ToStringFromDescription()
                 });
             }
 
-            return statuses;
+            return items;
         }
     }
 }

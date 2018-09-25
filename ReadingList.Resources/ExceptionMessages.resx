@@ -142,7 +142,7 @@
     <value>Private list with {0}</value>
   </data>
   <data name="Object_PrivateBookListItem" xml:space="preserve">
-    <value>Item with {0}</value>
+    <value>Private book list item with {0}</value>
   </data>
   <data name="Object_Default" xml:space="preserve">
     <value>Object with {0}</value>
@@ -161,5 +161,8 @@
   </data>
   <data name="AccessDenied" xml:space="preserve">
     <value>You have no permissions to modify this element</value>
+  </data>
+  <data name="Object_SharedBookListItem" xml:space="preserve">
+    <value>Shared book list item with {0}</value>
   </data>
 </root>

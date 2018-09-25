@@ -64,7 +64,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
         signOut: () => {
-            dispatch(privateBookListAction.unsetPrivateList());
+            dispatch(privateBookListAction.unsetPrivate());
             dispatch(authenticationActions.signOut());
         }
     };

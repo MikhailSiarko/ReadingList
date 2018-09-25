@@ -6,5 +6,6 @@ export class PrivateBookListItemModel implements ListItem {
     isOnEditMode: boolean = false;
     author: string;
     title: string;
+    genreId: string;
     readingTimeInSeconds: number;
 }

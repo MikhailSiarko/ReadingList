@@ -1,4 +1,5 @@
 {
     "todo-tree.flat": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "npm-scripts.showStartNotification": false
 }

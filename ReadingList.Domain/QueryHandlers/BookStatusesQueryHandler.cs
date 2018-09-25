@@ -8,7 +8,7 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
 {
-    public class BookStatusesQueryHandler : QueryHandler<BookStatusesQuery, IEnumerable<NameValuePair>>
+    public class BookStatusesQueryHandler : QueryHandler<BookStatusesQuery, IEnumerable<SelectListItem>>
     {
         private readonly IReadDbConnection _readDbConnection;
 
@@ -17,9 +17,9 @@ namespace ReadingList.Domain.QueryHandlers
             _readDbConnection = readDbConnection;
         }
 
-        protected override async Task<IEnumerable<NameValuePair>> Handle(BookStatusesQuery query)
+        protected override async Task<IEnumerable<SelectListItem>> Handle(BookStatusesQuery query)
         {
-            return await Task.Run(() => BookItemStatus.Read.ToNameValuePairs());
+            return await Task.Run(() => BookItemStatus.Read.ToSelectListItems());
         }
     }
 }

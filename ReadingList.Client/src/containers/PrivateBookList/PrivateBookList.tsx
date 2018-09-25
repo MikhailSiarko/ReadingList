@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItemModel, generateStatusSelectItems, RequestResult } from '../../models';
+import { PrivateBookListItemModel, RequestResult, SelectListItem, PrivateBookListModel } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
@@ -11,7 +11,8 @@ import ItemForm from '../../components/ItemForm';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 
 interface Props {
-    bookList: RootState.PrivateList;
+    bookList: PrivateBookListModel;
+    statuses: SelectListItem[];
     addItem: (listItem: PrivateBookListItemModel) => Promise<void>;
     updateListName: (name: string) => Promise<void>;
     removeItem: (itemId: number) => Promise<void>;
@@ -19,6 +20,7 @@ interface Props {
     switchItemEditMode: (itemId: number) => void;
     switchListEditMode: () => void;
     getPrivateList: () => Promise<void>;
+    getBookStatuses: () => Promise<void>;
 }
 
 class PrivateBookList extends React.Component<Props> {
@@ -26,14 +28,13 @@ class PrivateBookList extends React.Component<Props> {
         if(!this.props.bookList) {
             await this.props.getPrivateList();
         }
+
+        if(!this.props.statuses) {
+            await this.props.getBookStatuses();
+         }
     }
 
     render() {
-        const statusOptions = generateStatusSelectItems();
-        const options = statusOptions.map(item =>
-            <option key={item.value} value={item.value}>{item.text}</option>
-        );
-
         let list;
         if(this.props.bookList) {
             let listItems;
@@ -44,6 +45,19 @@ class PrivateBookList extends React.Component<Props> {
                         {onClick: () => this.props.removeItem(listItem.id), text: 'Remove'}
                     ];
                     const Contexed = withContextMenu(actions, PrivateBookLI);
+
+                    let options;
+
+                    if(this.props.statuses) {
+                        options = this.props.statuses.map(item =>
+                            <option key={item.value} value={item.value}>{item.text}</option>
+                        );
+                    } else {
+                        options = [
+                            <option key={0} value={0} />
+                        ];
+                    }
+
                     return (
                         <Contexed
                             key={listItem.id}
@@ -89,7 +103,8 @@ function postRequestProcess(result: RequestResult<any>) {
 
 function mapStateToProps(state: RootState) {
     return {
-        bookList: state.privateList
+        bookList: state.private.list,
+        statuses: state.private.bookStatuses
     };
 }
 
@@ -127,6 +142,10 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
             if(castedResult) {
                 postRequestProcess(castedResult);
             }
+        },
+        getBookStatuses: async () => {
+            const result = await bookService.getBookStatuses();
+            postRequestProcess(result);
         }
     };
 }

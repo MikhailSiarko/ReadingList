@@ -78,5 +78,39 @@ namespace ReadingList.Tests
 
             Assert.Equal(result, exception.Message);
         }
+
+        [Fact]
+        public void ObjectNotExistException_GeneratesMessage_SharedBookListItemWith_SharedBookListItemData_DoesNotExist()
+        {            
+            const int id = 2;
+
+            var result =
+                $"Shared book list item with Id:{id.ToString()} doesn't exist";
+
+            var exception =
+                new ObjectNotExistException<SharedBookListItemWm>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = id.ToString()
+                });
+
+            Assert.Equal(result, exception.Message);
+        }
+
+        [Fact]
+        public void ObjectNotExistException_GeneratesMessage_PrivateBookListItemWith_PrivateBookListItemData_DoesNotExist()
+        {            
+            const int id = 2;
+
+            var result =
+                $"Private book list item with Id:{id.ToString()} doesn't exist";
+
+            var exception =
+                new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = id.ToString()
+                });
+
+            Assert.Equal(result, exception.Message);
+        }
     }
 }

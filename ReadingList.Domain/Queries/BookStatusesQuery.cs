@@ -3,7 +3,7 @@ using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Queries
 {
-    public class BookStatusesQuery : IQuery<IEnumerable<NameValuePair>>
+    public class BookStatusesQuery : IQuery<IEnumerable<SelectListItem>>
     {
     }
 }
