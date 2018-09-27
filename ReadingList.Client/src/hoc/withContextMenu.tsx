@@ -6,12 +6,17 @@ interface MenuItem {
     text: string;
 }
 
+export function closeContextMenues() {
+    let menues = document.getElementsByClassName('context-menu');
+    Array.from(menues).forEach(item => item.remove());
+}
+
 export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menuItems: MenuItem[],
         Child: React.ComponentType<P>) {
 
     function createMenu(items: MenuItem[]) {
         const contextMenu = document.createElement('div');
-        contextMenu.className = styles['context-menu'];
+        contextMenu.className = 'context-menu ' + styles['context-menu'];
 
         items.map(item => {
             const button = document.createElement('button');
@@ -20,11 +25,6 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
             contextMenu.appendChild(button);
         });
         return contextMenu;
-    }
-
-    function closeOtherMenues() {
-        let menues = document.getElementsByClassName(styles['context-menu']);
-        Array.from(menues).forEach(item => item.remove());
     }
 
     function setMenuPosition(eventClientX: number, eventClientY: number, contextMenu: HTMLElement) {
@@ -70,7 +70,7 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
             event.preventDefault();
             event.stopPropagation();
 
-            closeOtherMenues();
+            closeContextMenues();
 
             let contextMenu = createMenu(menuItems);
 

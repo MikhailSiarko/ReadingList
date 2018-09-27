@@ -2,10 +2,10 @@ import * as React from 'react';
 import style from './ItemForm.css';
 import Fieldset from '../Fieldset';
 import PrimaryButton from '../PrimaryButton';
-import { PrivateBookListItemModel } from '../../models';
+import { PrivateBookListItem } from '../../models';
 
 interface ItemFormProps {
-    onSubmit: (item: PrivateBookListItemModel) => void;
+    onSubmit: (item: PrivateBookListItem) => void;
 }
 
 class ItemForm extends React.Component<ItemFormProps> {
@@ -14,7 +14,7 @@ class ItemForm extends React.Component<ItemFormProps> {
         const target = event.target as HTMLFormElement;
         const title = target.elements['title'];
         const author = target.elements['author'];
-        const item = {title: title.value, author: author.value} as PrivateBookListItemModel;
+        const item = {title: title.value, author: author.value} as PrivateBookListItem;
         this.props.onSubmit(item);
         title.value = '';
         author.value = '';

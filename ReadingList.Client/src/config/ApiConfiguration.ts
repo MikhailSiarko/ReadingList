@@ -6,6 +6,7 @@ export class ApiConfiguration {
     public static PRIVATE_LIST = `${ApiConfiguration.LIST}/private`;
     public static PRIVATE_LIST_ITEMS = `${ApiConfiguration.LIST}/private/items`;
     public static SHARED_LISTS = `${ApiConfiguration.LIST}/shared`;
+    public static SHARED_LISTS_OWN = `${ApiConfiguration.SHARED_LISTS}/own`;
     public static BOOK_STATUSES = '/bookstatuses';
 
     public static getPrivateListItemUrl(itemId: number) {
@@ -18,6 +19,10 @@ export class ApiConfiguration {
 
     public static getSharedListItemUrl(listId: number, itemId: number) {
         return `${ApiConfiguration.LIST}/shared/${listId}/items/${itemId}`;
+    }
+
+    public static getFindSharedListsUrl(query: string) {
+        return `${ApiConfiguration.SHARED_LISTS}/${query}`;
     }
 }
 

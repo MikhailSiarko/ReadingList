@@ -11,7 +11,9 @@ import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import PrivateBookList from '../PrivateBookList';
-import Spinner from '../../components/Spinner';
+// import Spinner from '../../components/Spinner';
+import SharedBookLists from '../SharedBookLists';
+import DefaultRoute from '../DefaultRoute';
 
 interface AppProps extends RouteComponentProps<any> {
     loading: RootState.LoadingState;
@@ -27,7 +29,8 @@ class App extends React.Component<AppProps> {
     render() {
         const navLinks = this.props.identity.isAuthenticated
             ? [
-                {text: 'Private List', href: '/'},
+                {text: 'Private List', href: '/private'},
+                {text: 'Shared Lists', href: '/shared'},
                 {text: 'Logout', href: '', action: this.signOutHandler}
             ]
             : [
@@ -37,16 +40,24 @@ class App extends React.Component<AppProps> {
 
         return (
             <div>
-                <Spinner loading={this.props.loading} />
+                {/* <Spinner loading={this.props.loading} /> */}
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>
                         <PrivateRoute
                             exact={true}
-                            path="/"
+                            path="/private"
                             component={PrivateBookList}
                         />
+
+                        <PrivateRoute
+                            exact={true}
+                            path="/shared/:query?"
+                            component={SharedBookLists}
+                        />
+
                         <Route path="/account" component={Account} />
+                        <DefaultRoute defaultPath="/private" />
                     </Switch>
                 </Main>
             </div>

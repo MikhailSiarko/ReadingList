@@ -1,14 +1,24 @@
 import * as React from 'react';
 import GridItem, { GridItemProps } from './GridItem';
+import styles from './Grid.css';
 
 interface Props {
-    items: GridItemProps[];
+    items?: GridItemProps[];
+    children?: GridItemProps[];
 }
 
 const Grid: React.SFC<Props> = props => {
-    var items = props.items.map((item, index) => <GridItem header={item.header} content={item.content} key={index} />);
+    let items;
+    if(props.children) {
+        items = (props.children as GridItemProps[]).map(
+            (value, index) => <GridItem header={value.header} content={value.content} key={index} />);
+    }
+    if(props.items) {
+        items = props.items.map(
+            (value, index) => <GridItem header={value.header} content={value.content} key={index} />);
+    }
     return (
-        <div>
+        <div className={styles.grid}>
             {items}
         </div>
     );

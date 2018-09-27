@@ -49,7 +49,7 @@ class Account extends React.Component<AccountProps> {
 
 function postRequestProcess(result: RequestResult<any>, ownProps: AccountProps) {
     if(result.isSucceed) {
-        ownProps.history.push('/');
+        ownProps.history.push('/private');
     } else {
         alert(result.errorMessage);
     }

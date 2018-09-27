@@ -7,6 +7,7 @@ using ReadingList.Api.QueriesData;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Queries;
+using ReadingList.Domain.Queries.SharedList;
 using ReadingList.Domain.Services;
 using ReadingList.WriteModel.Models;
 
@@ -22,14 +23,6 @@ namespace ReadingList.Api.Controllers
         {
             _domainService = domainService;
         }
-        
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] int id)
-        {
-            var bookList = await _domainService.AskAsync(new GetSharedListQuery(id));
-
-            return Ok(bookList);
-        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
@@ -37,6 +30,14 @@ namespace ReadingList.Api.Controllers
             await _domainService.ExecuteAsync(new DeleteSharedListCommand(User.Identity.Name, id));
             
             return Ok();
+        }
+
+        [HttpGet("{query?}")]
+        public async Task<IActionResult> Get([FromRoute] string query)
+        {
+            var bookLists = await _domainService.AskAsync(new FindSharedListsQuery(query));
+            
+            return Ok(bookLists);
         }
 
         [HttpGet("own")]

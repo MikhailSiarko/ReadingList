@@ -1,11 +1,10 @@
 import { ListItem } from '../Abstractions/ListItem';
 
-export class PrivateBookListItem implements ListItem {
+export class SharedBookListItem implements ListItem {
     id: number;
-    status: number;
     isOnEditMode: boolean = false;
     author: string;
     title: string;
     genreId: string;
-    readingTimeInSeconds: number;
+    tags: string[];
 }

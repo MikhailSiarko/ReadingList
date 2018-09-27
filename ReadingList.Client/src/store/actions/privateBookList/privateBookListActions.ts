@@ -1,6 +1,6 @@
 import { createAction, getReturnOfExpression } from 'typesafe-actions';
 import { PrivateBookListActionType } from './PrivateBookListActionType';
-import { PrivateBookListItemModel, PrivateBookListModel, SelectListItem } from '../../../models';
+import { PrivateBookListItem, PrivateBookListModel, SelectListItem } from '../../../models';
 
 export const privateBookListAction = {
     setPrivate: createAction(PrivateBookListActionType.SET_PRIVATE_LIST, (list: PrivateBookListModel) => {
@@ -25,7 +25,7 @@ export const privateBookListAction = {
             newName
         };
     }),
-    addItem: createAction(PrivateBookListActionType.ADD_ITEM, (listItem: PrivateBookListItemModel) => {
+    addItem: createAction(PrivateBookListActionType.ADD_ITEM, (listItem: PrivateBookListItem) => {
         return {
             type: PrivateBookListActionType.ADD_ITEM,
             listItem
@@ -37,7 +37,7 @@ export const privateBookListAction = {
             itemId
         };
     }),
-    updateItem: createAction(PrivateBookListActionType.UPDATE_ITEM, (item: PrivateBookListItemModel) => {
+    updateItem: createAction(PrivateBookListActionType.UPDATE_ITEM, (item: PrivateBookListItem) => {
         return {
             type: PrivateBookListActionType.UPDATE_ITEM,
             item

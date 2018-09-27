@@ -1,15 +1,15 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.css';
-import { PrivateBookListItemModel, BookStatus as BookStatusEnum } from '../../models';
+import { PrivateBookListItem, SelectListItem } from '../../models';
 import PrimaryButton from '../PrimaryButton';
 import RedButton from '../RedButton';
 import { convertSecondsToReadingTime, createDOMAttributeProps } from '../../utils';
 
 export interface PrivateBookLIProps extends React.DOMAttributes<HTMLLIElement> {
-    listItem: PrivateBookListItemModel;
-    onSave: (item: PrivateBookListItemModel) => void;
+    listItem: PrivateBookListItem;
+    onSave: (item: PrivateBookListItem) => void;
     onCancel: (itemId: number) => void;
-    options: JSX.Element[];
+    statuses: SelectListItem[];
 }
 
 const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
@@ -41,22 +41,37 @@ const BookInfoEditor: React.SFC<{title: string, author: string}> = ({title, auth
     </div>
 );
 
-const BookStatusEditor: React.SFC<{status: string, options: JSX.Element[]}> = ({status, options}) => (
+const BookStatusEditor: React.SFC<{status: number, options: SelectListItem[]}> = ({status, options}) => (
     <div className={styles['edited-status']}>
         <p>Status:</p>
-        <select name="status" defaultValue={status}>
-            {options}
+        <select name="status" defaultValue={status.toString()}>
+            {
+                options
+                    ? options.map(item =>
+                        <option key={item.value} value={item.value}>{item.text}</option>
+                    )
+                    : <option key={0} value={0} />
+            }
         </select>
     </div>
 );
 
-const BookStatus = ({status}: {status: string}) => (
-    <div className={styles['status']}>
-        <p>Status:</p>
-        <br />
-        <p>{BookStatusEnum[status]}</p>
-    </div>
-);
+const BookStatus: React.SFC<{status: number, statuses: SelectListItem[]}> = ({status, statuses}) => {
+    let statusValue = null;
+    if(statuses != null) {
+        let filtered = statuses.filter(item => item.value === status);
+        if(filtered.length > 0) {
+            statusValue = filtered[0].text;
+        }
+    }
+    return (
+        <div className={styles['status']}>
+            <p>Status:</p>
+            <br />
+            <p>{statusValue}</p>
+        </div>
+    );
+};
 
 const ReadingTime = ({readingTimeInSeconds}: {readingTimeInSeconds: number}) => (
     <div className={styles['reading-time']}>
@@ -98,23 +113,24 @@ class PrivateBookLI extends React.Component<PrivateBookLIProps> {
     }
 
     render() {
-        const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options');
+        const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options', 'statuses');
         if(this.props.listItem.isOnEditMode) {
             return (
                 <li className={styles['editing-book-li']} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoEditor title={this.props.listItem.title} author={this.props.listItem.author} />
-                        <BookStatusEditor status={this.props.listItem.status} options={this.props.options} />
+                        <BookStatusEditor status={this.props.listItem.status} options={this.props.statuses} />
                         <Footer onCancel={this.cancelHandler} />
                     </form>
                 </li>
             );
         }
+
         return (
             <li className={styles['book-li']} {...liProps}>
                 <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
                 <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
-                <BookStatus status={this.props.listItem.status} />
+                <BookStatus status={this.props.listItem.status} statuses={this.props.statuses} />
             </li>
         );
     }

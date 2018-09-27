@@ -1,4 +1,4 @@
 export interface SelectListItem {
     text: string;
-    value: string;
+    value: any;
 }

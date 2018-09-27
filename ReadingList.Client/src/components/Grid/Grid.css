@@ -1,0 +1,7 @@
+.grid {
+    width: 98rem;
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}

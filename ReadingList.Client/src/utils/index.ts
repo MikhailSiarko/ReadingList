@@ -43,3 +43,9 @@ export function convertSecondsToReadingTime(seconds: number): string {
   }
   return `days: ${days} | hours: ${hours} | minutes: ${minutes}`;
 }
+
+export function postRequestProcess(result: RequestResult<any>) {
+  if(!result.isSucceed) {
+      alert(result.errorMessage);
+  }
+}

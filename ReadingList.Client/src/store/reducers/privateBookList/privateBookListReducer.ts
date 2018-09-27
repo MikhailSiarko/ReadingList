@@ -2,7 +2,7 @@ import { RootState } from '../index';
 import initialState from '../initialState';
 import { getType } from 'typesafe-actions';
 import { PrivateBookListAction, privateBookListAction } from '../../actions/privateBookList';
-import { PrivateBookListItemModel } from '../../../models';
+import { PrivateBookListItem } from '../../../models';
 import { cloneDeep } from 'lodash';
 
 export function privateBookListReducer(state: RootState.Private = initialState.private,
@@ -33,20 +33,20 @@ export function privateBookListReducer(state: RootState.Private = initialState.p
         case getType(privateBookListAction.removeItem):
             if(copy.list) {
                 const itemIndex = copy.list.items
-                .findIndex((listItem: PrivateBookListItemModel) => listItem.id === action.itemId);
+                .findIndex((listItem: PrivateBookListItem) => listItem.id === action.itemId);
                 copy.list.items.splice(itemIndex, 1);
             }
             return copy;
         case getType(privateBookListAction.updateItem):
             if(copy.list) {
                 const index = copy.list.items.findIndex(
-                    ((listItem: PrivateBookListItemModel) => listItem.id === action.item.id));
+                    ((listItem: PrivateBookListItem) => listItem.id === action.item.id));
                     copy.list.items[index] = action.item;
             }
             return copy;
         case getType(privateBookListAction.switchEditModeForItem):
             if(copy.list) {
-                copy.list.items.forEach((listItem: PrivateBookListItemModel) => {
+                copy.list.items.forEach((listItem: PrivateBookListItem) => {
                     if(listItem.id === action.itemId) {
                         listItem.isOnEditMode = !listItem.isOnEditMode;
                     }

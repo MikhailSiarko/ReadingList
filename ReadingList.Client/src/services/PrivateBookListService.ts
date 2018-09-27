@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import ApiConfiguration from '../config/ApiConfiguration';
 import { AxiosResponse } from 'axios';
 import { privateBookListAction } from '../store/actions/privateBookList';
-import { PrivateBookListModel, PrivateBookListItemModel, RequestResult, SelectListItem } from '../models';
+import { PrivateBookListModel, PrivateBookListItem, RequestResult, SelectListItem } from '../models';
 import ApiService from './ApiService';
 import { onError } from '../utils';
 
@@ -25,7 +25,7 @@ export class PrivateBookListService extends ApiService {
             .catch(onError);
     }
 
-    public addItem(item: PrivateBookListItemModel) {
+    public addItem(item: PrivateBookListItem) {
         const requestPromise = this.configureRequest(`${ApiConfiguration.PRIVATE_LIST_ITEMS}`,
             'POST', {title: item.title, author: item.author});
         return requestPromise
@@ -33,7 +33,7 @@ export class PrivateBookListService extends ApiService {
             .catch(onError);
     }
 
-    public updateItem(item: PrivateBookListItemModel) {
+    public updateItem(item: PrivateBookListItem) {
         const requestPromise = this.configureRequest(
             ApiConfiguration.getPrivateListItemUrl(item.id),
             'PUT', {
@@ -82,8 +82,8 @@ export class PrivateBookListService extends ApiService {
     private onAddItemSuccess() {
         const that = this;
         return function(response: AxiosResponse) {
-            const result = new RequestResult<PrivateBookListItemModel>(true, response.data);
-            that.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItemModel));
+            const result = new RequestResult<PrivateBookListItem>(true, response.data);
+            that.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItem));
             return result;
         };
     }
@@ -91,8 +91,8 @@ export class PrivateBookListService extends ApiService {
     private onUpdateItemSuccess() {
         const that = this;
         return function(response: AxiosResponse) {
-            const result = new RequestResult<PrivateBookListItemModel>(true, response.data);
-            that.dispatch(privateBookListAction.updateItem(result.data as PrivateBookListItemModel));
+            const result = new RequestResult<PrivateBookListItem>(true, response.data);
+            that.dispatch(privateBookListAction.updateItem(result.data as PrivateBookListItem));
             return result;
         };
     }
