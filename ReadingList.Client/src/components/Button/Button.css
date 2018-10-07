@@ -1,21 +1,14 @@
-.primary-btn {
+.button {
     font-size: 2.2rem;
     border: none;
     color: white;
     cursor: pointer;
-    padding: 0.3rem 2rem;
+    padding: 0.8rem 2rem;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     margin: 1rem 1.5rem;;
     transition: all 0.3s;
     border-radius: 0.2rem;
-    background-color: #1565c0;
-    box-shadow: 0 0.1rem 0.2rem #a5a9af;
     transition: all 0.1s;
-}
-
-.primary-btn:hover {
-    box-shadow: 0 0.2rem 0.4rem #a5a9af;
-    background-color: #1259a9;
 }

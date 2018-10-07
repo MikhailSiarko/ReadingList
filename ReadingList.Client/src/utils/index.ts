@@ -49,3 +49,7 @@ export function postRequestProcess(result: RequestResult<any>) {
       alert(result.errorMessage);
   }
 }
+
+export function applyClasses(...classes: string[]) {
+  return classes.join(' ');
+}

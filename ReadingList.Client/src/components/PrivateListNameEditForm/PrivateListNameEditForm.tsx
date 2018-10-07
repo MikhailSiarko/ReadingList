@@ -1,6 +1,7 @@
 import * as React from 'react';
-import PrimaryButton from '../PrimaryButton';
-import RedButton from '../RedButton';
+import Button from '../Button';
+import Colors from '../../styles/colors';
+import globalStyles from '../../styles/global.css';
 
 interface Props {
     name: string;
@@ -24,9 +25,15 @@ class PrivateListNameEditForm extends React.Component<Props> {
     render() {
         return (
             <form onSubmit={this.submitHandler}>
-                <input name={'list-name'} type={'text'} required={true} defaultValue={this.props.name} />
-                <PrimaryButton type={'submit'}>Save</PrimaryButton>
-                <RedButton onClick={this.cancelHandler}>Cancel</RedButton>
+                <input 
+                    name={'list-name'} 
+                    type={'text'} 
+                    className={globalStyles.shadowed} 
+                    required={true} 
+                    defaultValue={this.props.name} 
+                />
+                <Button type={'submit'}>Save</Button>
+                <Button onClick={this.cancelHandler} color={Colors.Red}>Cancel</Button>
             </form>
         );
     }

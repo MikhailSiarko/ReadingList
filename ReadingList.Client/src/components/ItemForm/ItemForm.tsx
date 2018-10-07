@@ -1,8 +1,9 @@
 import * as React from 'react';
 import style from './ItemForm.css';
 import Fieldset from '../Fieldset';
-import PrimaryButton from '../PrimaryButton';
+import Button from '../Button';
 import { PrivateBookListItem } from '../../models';
+import globalStyles from '../../styles/global.css';
 
 interface ItemFormProps {
     onSubmit: (item: PrivateBookListItem) => void;
@@ -25,12 +26,24 @@ class ItemForm extends React.Component<ItemFormProps> {
             <Fieldset className={style['form-fieldset']} legend={'Add book'}>
                 <form onSubmit={this.submitHandler} className={style['add-item-form']}>
                     <div>
-                        <input type="text" required={true} name={'title'} placeholder={'Title'} />
+                        <input 
+                            className={globalStyles.shadowed}
+                            type="text"
+                            required={true} 
+                            name={'title'} 
+                            placeholder={'Enter a title...'} 
+                        />
                     </div>
                     <div>
-                        <input type="text" required={true} name={'author'} placeholder={'Author'} />
+                        <input 
+                            className={globalStyles.shadowed} 
+                            type="text" 
+                            required={true} 
+                            name={'author'} 
+                            placeholder={'Enter an author...'}
+                        />
                     </div>
-                    <PrimaryButton type={'submit'}>Add</PrimaryButton>
+                    <Button type={'submit'}>+</Button>
                 </form>
             </Fieldset>
         );

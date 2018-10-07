@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.css';
 import { PrivateBookListItem, SelectListItem } from '../../models';
-import PrimaryButton from '../PrimaryButton';
-import RedButton from '../RedButton';
-import { convertSecondsToReadingTime, createDOMAttributeProps } from '../../utils';
+import Button from '../Button';
+import { convertSecondsToReadingTime, createDOMAttributeProps, applyClasses } from '../../utils';
+import Colors from '../../styles/colors';
+import globalStyles from '../../styles/global.css';
 
 export interface PrivateBookLIProps extends React.DOMAttributes<HTMLLIElement> {
     listItem: PrivateBookListItem;
@@ -15,8 +16,8 @@ export interface PrivateBookLIProps extends React.DOMAttributes<HTMLLIElement> {
 const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
     <div>
         <div>
-            <PrimaryButton type="submit">Save</PrimaryButton>
-            <RedButton onClick={onCancel}>Cancel</RedButton>
+            <Button type="submit">Save</Button>
+            <Button onClick={onCancel} color={Colors.Red}>Cancel</Button>
         </div>
     </div>
 );
@@ -24,6 +25,7 @@ const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) 
 const Input: React.SFC<{value: string, name: string}> = ({value, name}) => (
     <div>
         <input
+            className={globalStyles.shadowed}
             type="text"
             required={true}
             name={name}
@@ -44,7 +46,7 @@ const BookInfoEditor: React.SFC<{title: string, author: string}> = ({title, auth
 const BookStatusEditor: React.SFC<{status: number, options: SelectListItem[]}> = ({status, options}) => (
     <div className={styles['edited-status']}>
         <p>Status:</p>
-        <select name="status" defaultValue={status.toString()}>
+        <select className={globalStyles.shadowed} name="status" defaultValue={status.toString()}>
             {
                 options
                     ? options.map(item =>
@@ -116,7 +118,7 @@ class PrivateBookLI extends React.Component<PrivateBookLIProps> {
         const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options', 'statuses');
         if(this.props.listItem.isOnEditMode) {
             return (
-                <li className={styles['editing-book-li']} {...liProps}>
+                <li className={applyClasses(styles['editing-book-li'], globalStyles.shadowed)} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoEditor title={this.props.listItem.title} author={this.props.listItem.author} />
                         <BookStatusEditor status={this.props.listItem.status} options={this.props.statuses} />
@@ -127,7 +129,7 @@ class PrivateBookLI extends React.Component<PrivateBookLIProps> {
         }
 
         return (
-            <li className={styles['book-li']} {...liProps}>
+            <li className={applyClasses(styles['book-li'], globalStyles.shadowed)} {...liProps}>
                 <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
                 <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
                 <BookStatus status={this.props.listItem.status} statuses={this.props.statuses} />

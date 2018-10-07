@@ -1,5 +1,6 @@
 import * as React from 'react';
-import PrimaryButton from '../PrimaryButton';
+import Button from '../Button';
+import globalStyles from '../../styles/global.css';
 
 interface LoginProps {
 }
@@ -7,13 +8,25 @@ interface LoginProps {
 const Login: React.SFC<LoginProps> = () => (
     <div>
         <div>
-            <input type="email" name="email" placeholder="Email" required={true} />
+            <input 
+                className={globalStyles.shadowed} 
+                type="email" 
+                name="email" 
+                placeholder="Email" 
+                required={true} 
+            />
         </div>
         <div>
-            <input type="password" name="password" placeholder="Password" required={true} />
+            <input 
+                className={globalStyles.shadowed} 
+                type="password" 
+                name="password" 
+                placeholder="Password" 
+                required={true} 
+            />
         </div>
         <div>
-            <PrimaryButton type="submit">Login</PrimaryButton>
+            <Button type={'submit'}>Login</Button>
         </div>
     </div>
 );

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.css';
-import PrimaryButton from '../PrimaryButton';
+import Button from '../Button';
+import { applyClasses } from '../../utils';
 
 interface RegisterProps {
     onConfirmPasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -9,13 +10,26 @@ interface RegisterProps {
 const Register: React.SFC<RegisterProps> = props => (
     <div>
         <div>
-            <input type="email" name="email" placeholder="Email" required={true} />
+            <input
+                className={globalStyles.shadowed} 
+                type="email" 
+                name="email" 
+                placeholder="Email" 
+                required={true} 
+            />
         </div>
         <div>
-            <input type="password" name="password" placeholder="Password" required={true} />
+            <input
+                className={globalStyles.shadowed} 
+                type="password" 
+                name="password" 
+                placeholder="Password" 
+                required={true} 
+            />
         </div>
         <div>
-            <input 
+            <input
+                className={globalStyles.shadowed}
                 type="password"
                 name="confirmPassword"
                 placeholder="Confirm Password"
@@ -25,12 +39,14 @@ const Register: React.SFC<RegisterProps> = props => (
             <span hidden={true} id={'validation-message'}>Passwords don't confirm</span>
         </div>
         <div>
-            <PrimaryButton 
+            <Button
                 id={'submit-button'}
                 disabled={true}
-                className={globalStyles.disabled}
-                type="submit"
-            >Register</PrimaryButton>
+                className={applyClasses(globalStyles.disabled, globalStyles.shadowed)}
+                type={'submit'}
+            >
+                Register
+            </Button>
         </div>
     </div>
 );

@@ -11,7 +11,7 @@ import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import PrivateBookList from '../PrivateBookList';
-// import Spinner from '../../components/Spinner';
+import Spinner from '../../components/Spinner';
 import SharedBookLists from '../SharedBookLists';
 import DefaultRoute from '../DefaultRoute';
 
@@ -40,7 +40,7 @@ class App extends React.Component<AppProps> {
 
         return (
             <div>
-                {/* <Spinner loading={this.props.loading} /> */}
+                <Spinner loading={this.props.loading} />
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>

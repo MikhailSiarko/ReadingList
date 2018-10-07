@@ -3,6 +3,7 @@ import NavBarLink, { NavBarLinkData } from './NavBarLink';
 import styles from './NavBar.css';
 import { cloneDeep } from 'lodash';
 import { createDOMAttributeProps } from '../../utils';
+import Colors from '../../styles/colors';
 
 interface NavBarProps extends React.HTMLProps<HTMLElement> {
     links: NavBarLinkData[];
@@ -14,7 +15,7 @@ const NavBar: React.SFC<NavBarProps> = props => {
     delete propsCopy.links;
     const propsWithoutLinks = createDOMAttributeProps(props, 'links');
     return (
-        <nav className={styles['nav-bar']} {...propsWithoutLinks}>
+        <nav className={styles['nav-bar']} style={{backgroundColor: Colors.Primary}} {...propsWithoutLinks}>
             {navLinks}
         </nav>
     );
