@@ -4,7 +4,7 @@ namespace ReadingList.ReadModel.Models
 {
     public class SharedBookListItemRm : BookListItemRm
     { 
-        public string Genre { get; set; }
+        public string GenreId { get; set; }
 
         public IEnumerable<string> Tags { get; set; }
     }

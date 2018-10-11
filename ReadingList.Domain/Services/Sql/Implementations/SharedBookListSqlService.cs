@@ -27,7 +27,7 @@ namespace ReadingList.Domain.Services.Sql
         public string GetBookListItemSqlQuery()
         {
             var getItemsSql = new SqlBuilder()
-                .Select("Id", "Author", "Title", "BookListId AS ListId", "(SELECT Name FROM Genres WHERE Id = GenreId) AS Genre")
+                .Select("Id", "Author", "Title", "BookListId AS ListId", "(SELECT Name FROM Genres WHERE Id = GenreId) AS GenreId")
                 .From("SharedBookListItems")
                 .Where("BookListId = @listId")
                 .Where("Id = @itemId")
@@ -79,7 +79,7 @@ namespace ReadingList.Domain.Services.Sql
         public string GetSharedListItemsSqlQuery()
         {
             var getItemsSql = new SqlBuilder()
-                .Select("Id", "Author", "Title", "BookListId AS ListId", "(SELECT Name FROM Genres WHERE Id = GenreId) AS Genre")
+                .Select("Id", "Author", "Title", "BookListId AS ListId", "(SELECT Name FROM Genres WHERE Id = GenreId) AS GenreId")
                 .From("SharedBookListItems")
                 .Where("BookListId = @listId")
                 .ToSql();

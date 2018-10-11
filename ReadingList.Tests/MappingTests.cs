@@ -77,7 +77,8 @@ namespace ReadingList.Tests
                 Id = 54,
                 Author = "Author",
                 Title = "Title",
-                ListId = 5
+                ListId = 5,
+                GenreId = "stories"
             };
             var mapped = Mapper.Map<SharedBookListItemRm, SharedBookListItemDto>(sharedBookListItem);
 
@@ -85,6 +86,7 @@ namespace ReadingList.Tests
             Assert.Equal(sharedBookListItem.Title, mapped.Title);
             Assert.Equal(sharedBookListItem.Author, mapped.Author);
             Assert.Equal(sharedBookListItem.ListId, mapped.ListId);
+            Assert.Equal(sharedBookListItem.GenreId, mapped.GenreId);
         }
     }
 }
