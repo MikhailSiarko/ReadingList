@@ -5,11 +5,11 @@ namespace ReadingList.Domain.Infrastructure.Filters
 {
     internal class ParameterRebinder : ExpressionVisitor
     {
-        readonly Dictionary<ParameterExpression, ParameterExpression> map;
+        private readonly Dictionary<ParameterExpression, ParameterExpression> _map;
 
         private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
         {
-            this.map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+            _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
         }
 
         public static Expression ReplaceParameters(Dictionary<ParameterExpression, ParameterExpression> map, Expression exp)
@@ -20,7 +20,7 @@ namespace ReadingList.Domain.Infrastructure.Filters
         protected override Expression VisitParameter(ParameterExpression p)
         {
 
-            if (map.TryGetValue(p, out var replacement))
+            if (_map.TryGetValue(p, out var replacement))
             {
                 p = replacement;
             }

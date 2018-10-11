@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using ReadingList.WriteModel.Infrastructure;
 
 namespace ReadingList.WriteModel
 {
@@ -18,7 +17,7 @@ namespace ReadingList.WriteModel
                     "appsettings.json"));
             var configuration = builder.Build();
             var optionsBuilder = new DbContextOptionsBuilder<WriteDbContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Write"));
+            optionsBuilder.UseSqlite(configuration.GetConnectionString("Write"));
             return new WriteDbContext(optionsBuilder.Options);
         }
     }

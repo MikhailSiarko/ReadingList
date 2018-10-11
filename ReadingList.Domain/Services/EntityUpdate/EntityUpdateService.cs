@@ -1,12 +1,11 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using ReadingList.WriteModel;
- using ReadingList.WriteModel.Infrastructure;
- using ReadingList.WriteModel.Models.Base;
+using ReadingList.WriteModel.Infrastructure;
+using ReadingList.WriteModel.Models.Base;
 
 namespace ReadingList.Domain.Services
 {

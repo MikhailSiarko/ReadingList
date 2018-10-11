@@ -21,7 +21,7 @@ namespace ReadingList.Domain.Services.Sql
                 .Where("Id IN (SELECT TagId FROM SharedBookListTags WHERE SharedBookListId = @id)")
                 .ToSql();
 
-            return $"{getListsSql} {getTagsSql}";
+            return $"{getListsSql}; {getTagsSql}";
         }
 
         public string GetBookListItemSqlQuery()
@@ -39,7 +39,7 @@ namespace ReadingList.Domain.Services.Sql
                 .Where("Id IN (SELECT TagId FROM SharedBookListItemTags WHERE SharedBookListItemId = @itemId)")
                 .ToSql();
 
-            return $"{getItemsSql} {getTagsSql}";
+            return $"{getItemsSql}; {getTagsSql}";
         }
 
         public string GetBookListsSqlQuery()
@@ -56,7 +56,7 @@ namespace ReadingList.Domain.Services.Sql
                 .LeftJoin($"(SELECT TagId, SharedBookListId FROM SharedBookListTags WHERE SharedBookListId IN (SELECT Id FROM BookLists WHERE Type = {BookListType.Shared:D})) AS it ON it.TagId = Id")
                 .ToSql();
 
-            return $"{getListsSql} {getTagsSql}";
+            return $"{getListsSql}; {getTagsSql}";
         }
 
         public string GetUserBookListsSqlQuery()
@@ -73,7 +73,7 @@ namespace ReadingList.Domain.Services.Sql
                 .LeftJoin($"(SELECT TagId, SharedBookListId FROM SharedBookListTags WHERE SharedBookListId IN (SELECT Id FROM BookLists WHERE Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlService.UserIdSql}))) AS it ON it.TagId = Id")
                 .ToSql();
 
-            return $"{getListsSql} {getTagsSql}";
+            return $"{getListsSql}; {getTagsSql}";
         }
 
         public string GetSharedListItemsSqlQuery()
@@ -90,7 +90,7 @@ namespace ReadingList.Domain.Services.Sql
                 .LeftJoin("(SELECT TagId, SharedBookListItemId FROM SharedBookListItemTags WHERE SharedBookListItemId IN (SELECT Id FROM SharedBookListItems WHERE BookListId = @listId)) AS it ON it.TagId = Id")
                 .ToSql();
 
-            return $"{getItemsSql} {getTagsSql}";
+            return $"{getItemsSql}; {getTagsSql}";
         }
     }
 }

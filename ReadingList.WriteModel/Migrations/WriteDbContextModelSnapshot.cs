@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using System;
-using ReadingList.WriteModel.Infrastructure;
 
 namespace ReadingList.WriteModel.Migrations
 {
@@ -19,8 +18,7 @@ namespace ReadingList.WriteModel.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026");
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.BookListWm", b =>
                 {
@@ -56,8 +54,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasIndex("GenreId");
 
                     b.HasIndex("Title", "Author")
-                        .IsUnique()
-                        .HasFilter("[Title] IS NOT NULL AND [Author] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Books");
                 });
@@ -175,8 +172,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Profiles");
                 });
@@ -190,8 +186,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Roles");
                 });
@@ -228,8 +223,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Tags");
                 });
@@ -250,8 +244,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Login")
-                        .IsUnique()
-                        .HasFilter("[Login] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("ProfileId");
 

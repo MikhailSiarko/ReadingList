@@ -1,5 +1,4 @@
 ﻿using ReadingList.Domain.DTO.BookList;
-using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Queries
 {

@@ -8,20 +8,18 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using System;
-using ReadingList.WriteModel.Infrastructure;
 
 namespace ReadingList.WriteModel.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20180920102132_AddedModerators")]
-    partial class AddedModerators
+    [Migration("20181011215728_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026");
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.BookListWm", b =>
                 {
@@ -57,8 +55,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasIndex("GenreId");
 
                     b.HasIndex("Title", "Author")
-                        .IsUnique()
-                        .HasFilter("[Title] IS NOT NULL AND [Author] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Books");
                 });
@@ -143,6 +140,8 @@ namespace ReadingList.WriteModel.Migrations
 
                     b.Property<int>("BookListId");
 
+                    b.Property<string>("GenreId");
+
                     b.Property<DateTime>("LastStatusUpdateDate");
 
                     b.Property<int>("ReadingTimeInSeconds");
@@ -154,6 +153,8 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookListId");
+
+                    b.HasIndex("GenreId");
 
                     b.ToTable("PrivateBookListItems");
                 });
@@ -172,8 +173,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Profiles");
                 });
@@ -187,8 +187,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Roles");
                 });
@@ -225,8 +224,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Tags");
                 });
@@ -247,8 +245,7 @@ namespace ReadingList.WriteModel.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Login")
-                        .IsUnique()
-                        .HasFilter("[Login] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("ProfileId");
 
@@ -335,6 +332,10 @@ namespace ReadingList.WriteModel.Migrations
                         .WithMany()
                         .HasForeignKey("BookListId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ReadingList.WriteModel.Models.GenreWm", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId");
                 });
 
             modelBuilder.Entity("ReadingList.WriteModel.Models.SharedBookListItemWm", b =>

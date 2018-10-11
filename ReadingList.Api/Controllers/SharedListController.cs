@@ -62,10 +62,10 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateSharedListData updateData)
         {
-            await _domainService.ExecuteAsync(new UpdateSharedListCommand(User.Identity.Name, id, updateData.Name,
+            var list = await _domainService.ExecuteAsync(new UpdateSharedListCommand(User.Identity.Name, id, updateData.Name,
                 updateData.Tags));
 
-            return Ok();
+            return Ok(list);
         }
         
         [HttpGet("{listId}/items")]
@@ -80,10 +80,10 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData addItemData)
         {
-            var itemId = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name, 
+            var item = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name, 
                 new BookInfo(addItemData.Title, addItemData.Author, addItemData.GenreId), addItemData.Tags));
 
-            return Ok(new { url = Url.Link(null, new { Action = nameof(GetItem), listId, itemId }) });
+            return Ok(item);
         }
         
         [HttpGet("{listId}/items/{itemId}")]
@@ -110,7 +110,7 @@ namespace ReadingList.Api.Controllers
                 new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId),
                 updateItemData.Tags));
             
-            return Ok(new { url = Url.Link(null, new { Action = nameof(GetItem), listId, itemId }) });
+            return Ok();
         }
     }
 }

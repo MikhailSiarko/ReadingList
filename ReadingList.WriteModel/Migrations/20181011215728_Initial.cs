@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
@@ -10,16 +9,22 @@ namespace ReadingList.WriteModel.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Genres",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    ParentId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Genres_Genres_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -27,7 +32,7 @@ namespace ReadingList.WriteModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Email = table.Column<string>(nullable: true),
                     Firstname = table.Column<string>(nullable: true),
                     Lastname = table.Column<string>(nullable: true)
@@ -54,7 +59,7 @@ namespace ReadingList.WriteModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -67,20 +72,20 @@ namespace ReadingList.WriteModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Author = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: false),
+                    GenreId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Books_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,7 +93,7 @@ namespace ReadingList.WriteModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Login = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     ProfileId = table.Column<int>(nullable: false),
@@ -134,8 +139,7 @@ namespace ReadingList.WriteModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    JsonFields = table.Column<string>(nullable: true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     OwnerId = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false)
@@ -152,14 +156,40 @@ namespace ReadingList.WriteModel.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookListModerators",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    BookListId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookListModerators", x => new { x.UserId, x.BookListId });
+                    table.ForeignKey(
+                        name: "FK_BookListModerators_BookLists_BookListId",
+                        column: x => x.BookListId,
+                        principalTable: "BookLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BookListModerators_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PrivateBookListItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Author = table.Column<string>(nullable: true),
                     BookListId = table.Column<int>(nullable: false),
-                    ReadingTimeInTicks = table.Column<long>(nullable: false),
+                    GenreId = table.Column<string>(nullable: true),
+                    LastStatusUpdateDate = table.Column<DateTime>(nullable: false),
+                    ReadingTimeInSeconds = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: true)
                 },
@@ -172,6 +202,12 @@ namespace ReadingList.WriteModel.Migrations
                         principalTable: "BookLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PrivateBookListItems_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,9 +215,10 @@ namespace ReadingList.WriteModel.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Author = table.Column<string>(nullable: true),
                     BookListId = table.Column<int>(nullable: false),
+                    GenreId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -191,6 +228,36 @@ namespace ReadingList.WriteModel.Migrations
                         name: "FK_SharedBookListItems_BookLists_BookListId",
                         column: x => x.BookListId,
                         principalTable: "BookLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SharedBookListItems_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SharedBookListTags",
+                columns: table => new
+                {
+                    SharedBookListId = table.Column<int>(nullable: false),
+                    TagId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SharedBookListTags", x => new { x.SharedBookListId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_SharedBookListTags_BookLists_SharedBookListId",
+                        column: x => x.SharedBookListId,
+                        principalTable: "BookLists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SharedBookListTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -220,21 +287,25 @@ namespace ReadingList.WriteModel.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookListModerators_BookListId",
+                table: "BookListModerators",
+                column: "BookListId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BookLists_OwnerId",
                 table: "BookLists",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_CategoryId",
+                name: "IX_Books_GenreId",
                 table: "Books",
-                column: "CategoryId");
+                column: "GenreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_Title",
+                name: "IX_Books_Title_Author",
                 table: "Books",
-                column: "Title",
-                unique: true,
-                filter: "[Title] IS NOT NULL");
+                columns: new[] { "Title", "Author" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookTags_BookId",
@@ -242,11 +313,15 @@ namespace ReadingList.WriteModel.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_Name",
-                table: "Categories",
-                column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                name: "IX_Genres_Id",
+                table: "Genres",
+                column: "Id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Genres_ParentId",
+                table: "Genres",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PrivateBookListItems_BookListId",
@@ -254,18 +329,21 @@ namespace ReadingList.WriteModel.Migrations
                 column: "BookListId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PrivateBookListItems_GenreId",
+                table: "PrivateBookListItems",
+                column: "GenreId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Profiles_Email",
                 table: "Profiles",
                 column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Roles_Name",
                 table: "Roles",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SharedBookListItems_BookListId",
@@ -273,23 +351,31 @@ namespace ReadingList.WriteModel.Migrations
                 column: "BookListId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SharedBookListItems_GenreId",
+                table: "SharedBookListItems",
+                column: "GenreId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SharedBookListItemTags_TagId",
                 table: "SharedBookListItemTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SharedBookListTags_TagId",
+                table: "SharedBookListTags",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tags_Name",
                 table: "Tags",
                 column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Login",
                 table: "Users",
                 column: "Login",
-                unique: true,
-                filter: "[Login] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ProfileId",
@@ -299,6 +385,9 @@ namespace ReadingList.WriteModel.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BookListModerators");
+
             migrationBuilder.DropTable(
                 name: "BookTags");
 
@@ -312,6 +401,9 @@ namespace ReadingList.WriteModel.Migrations
                 name: "SharedBookListItemTags");
 
             migrationBuilder.DropTable(
+                name: "SharedBookListTags");
+
+            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
@@ -321,10 +413,10 @@ namespace ReadingList.WriteModel.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "BookLists");
 
             migrationBuilder.DropTable(
-                name: "BookLists");
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -1,8 +1,8 @@
 ﻿using System.Data;
-using System.Data.SqlClient;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain.Commands;
@@ -19,9 +19,9 @@ namespace ReadingList.Domain
         {
             services.AddMediatR(typeof(ICommand).Assembly);
             services.AddDbContext<WriteDbContext>((provider, builder) =>
-                builder.UseSqlServer(provider.GetConnectionString("Write")));
-            services.AddScoped<IDbConnection, SqlConnection>(provider =>
-                new SqlConnection(provider.GetConnectionString("Read")));
+                builder.UseSqlite(provider.GetConnectionString("Write")));
+            services.AddScoped<IDbConnection, SqliteConnection>(provider =>
+                new SqliteConnection(provider.GetConnectionString("Read")));
             services.AddScoped<IDbReader, DbReader>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);

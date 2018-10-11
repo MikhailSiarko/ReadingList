@@ -28,7 +28,7 @@ namespace ReadingList.Domain.CommandHandlers
                     ["Email"] = command.Email
                 });
             
-            var userRm = new UserWm
+            var userWm = new UserWm
             {
                 Login = command.Email,
                 Password = _encryptionService.Encrypt(command.Password),
@@ -36,12 +36,12 @@ namespace ReadingList.Domain.CommandHandlers
                 Profile = new ProfileWm {Email = command.Email}
             };
             
-            await _context.Users.AddAsync(userRm);
+            await _context.Users.AddAsync(userWm);
             
             await _context.BookLists.AddAsync(new BookListWm
             {
                 Name = "Default",
-                Owner = userRm,
+                Owner = userWm,
                 Type = BookListType.Private
             });
             

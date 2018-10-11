@@ -16,7 +16,8 @@ namespace ReadingList.Domain.MapperProfiles
                     expression => expression.MapFrom(wm => wm.SharedBookListTags.Select(t => t.Tag.Name)))
                 .ForMember(dto => dto.Type, expression => expression.MapFrom(wm => (int) wm.Type));
             CreateMap<SharedBookListItemWm, SharedBookListItemDto>().ForMember(dto => dto.Tags,
-                expression => expression.MapFrom(wm => wm.SharedBookListItemTags.Select(t => t.Tag.Name)));
+                    expression => expression.MapFrom(wm => wm.SharedBookListItemTags.Select(t => t.Tag.Name)))
+                .ForMember(dto => dto.ListId, expression => expression.MapFrom(wm => wm.BookListId));
         }
     }
 }

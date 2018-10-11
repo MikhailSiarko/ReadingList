@@ -21,39 +21,38 @@ namespace ReadingList.Domain.CommandHandlers
         {
         }
 
-        protected override async Task<BookListWm> GetBookList(AddSharedListItemCommand command)
+        protected override async Task<int> GetBookListId(AddSharedListItemCommand command)
         {
             var listQuery = DbContext.BookLists.Where(BookListFilterExpressions.FindSharedBookList(command.ListId));
 
-            var list = await listQuery.SingleOrDefaultAsync() ??
-                       throw new ObjectNotExistException<BookListWm>(
-                           new OnExceptionObjectDescriptor
-                           {
-                               ["Id"] = command.ListId.ToString()
-                           });
+            if (!await listQuery.AnyAsync())
+            {
+                throw new ObjectNotExistException<BookListWm>(
+                    new OnExceptionObjectDescriptor
+                    {
+                        ["Id"] = command.ListId.ToString()
+                    });
+            }
 
             if (!await listQuery.AnyAsync(BookListAccessValidationFilterExpression.UserIsOwnerOrModerator(command.UserLogin)))
             {
                 throw new AccessDeniedException();
             }
 
-            return list;
+            return command.ListId;
         }
 
-        protected override SharedBookListItemWm CreateItem(AddSharedListItemCommand command, BookListWm list)
+        protected override SharedBookListItemWm CreateItem(AddSharedListItemCommand command, int listId)
         {           
             var item = new SharedBookListItemWm
             {
                 Author = command.BookInfo.Author,
                 Title = command.BookInfo.Title,
-                BookListId = list.Id,
-                BookList = list,
+                BookListId = listId,
                 GenreId = command.BookInfo.GenreId
             };
 
-            var itemTags = DbContext.UpdateOrAddSharedListItemTags(command.Tags, item).RunSync();
-
-            item.SharedBookListItemTags = itemTags.ToList();
+            item.SharedBookListItemTags = DbContext.UpdateOrAddSharedListItemTags(command.Tags, item).RunSync().ToList();
             
             return item;
         }

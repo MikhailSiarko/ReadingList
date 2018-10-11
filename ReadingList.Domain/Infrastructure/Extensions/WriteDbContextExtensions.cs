@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.WriteModel;
-using ReadingList.WriteModel.Infrastructure;
 using ReadingList.WriteModel.Models;
 using ReadingList.WriteModel.Models.HelpEntities;
 
@@ -36,10 +35,13 @@ namespace ReadingList.Domain.Infrastructure.Extensions
         
         public static async Task<IEnumerable<SharedBookListItemTagWm>> UpdateOrAddSharedListItemTags(this WriteDbContext dbContext,
             IEnumerable<string> tags, SharedBookListItemWm item)
-        {          
-            dbContext.SharedBookListItemTags.RemoveRange(item.SharedBookListItemTags);
+        {
+            if (item.SharedBookListItemTags != null)
+            {
+                dbContext.SharedBookListItemTags.RemoveRange(item.SharedBookListItemTags);
 
-            await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
+            }
             
             var existingTags = await dbContext.Tags.Where(x => tags.Contains(x.Name)).ToListAsync();
 

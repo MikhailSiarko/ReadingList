@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -18,23 +19,23 @@ namespace ReadingList.Domain.CommandHandlers
         {
         }
 
-        protected override async Task<BookListWm> GetBookList(AddPrivateItemCommand command)
+        protected override async Task<int> GetBookListId(AddPrivateItemCommand command)
         {
-           return await DbContext.BookLists.SingleOrDefaultAsync(BookListFilterExpressions.FindPrivateBookList(command.UserLogin)) ??
-                       throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
-                       {
-                           ["Email"] = command.UserLogin
-                       });
+            return await DbContext.BookLists.Where(BookListFilterExpressions.FindPrivateBookList(command.UserLogin))
+                       .Select(x => (int?)x.Id).SingleOrDefaultAsync() ??
+                   throw new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                   {
+                       ["Email"] = command.UserLogin
+                   });
         }
 
-        protected override PrivateBookListItemWm CreateItem(AddPrivateItemCommand command, BookListWm list)
+        protected override PrivateBookListItemWm CreateItem(AddPrivateItemCommand command, int listId)
         {
             return new PrivateBookListItemWm
             {
                 Status = BookItemStatus.ToReading,
                 LastStatusUpdateDate = DateTime.Now,
-                BookListId = list.Id,
-                BookList = list,
+                BookListId = listId,
                 Title = command.BookInfo.Title,
                 Author = command.BookInfo.Author,
                 GenreId = command.BookInfo.GenreId

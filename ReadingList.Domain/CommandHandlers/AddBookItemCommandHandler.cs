@@ -21,9 +21,9 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected sealed override async Task<TDto> Handle(TCommand command)
         {
-            var list = await GetBookList(command);
+            var listId = await GetBookListId(command);
 
-            if (await DoItemExist(command.BookInfo, list.Id))
+            if (await DoItemExist(command.BookInfo, listId))
                 throw new ObjectAlreadyExistsException<TItem>(new OnExceptionObjectDescriptor
                 {
                     ["Title"] = command.BookInfo.Title,
@@ -32,13 +32,11 @@ namespace ReadingList.Domain.CommandHandlers
             
             await FindOrAddBook(command.BookInfo);
             
-            var item = CreateItem(command, list);
+            var item = CreateItem(command, listId);
 
             await SaveAsync(item);
 
-            var dto = Convert(item);
-
-            return dto;
+            return Convert(item);
         }
 
         private async Task FindOrAddBook(BookInfo bookInfo)
@@ -56,9 +54,9 @@ namespace ReadingList.Domain.CommandHandlers
                 x.BookListId == bookListId && x.Title == bookInfo.Title && x.Author == bookInfo.Author);
         }
         
-        protected abstract Task<BookListWm> GetBookList(TCommand command);
+        protected abstract Task<int> GetBookListId(TCommand command);
 
-        protected abstract TItem CreateItem(TCommand command, BookListWm list);
+        protected abstract TItem CreateItem(TCommand command, int listId);
         
         protected abstract Task SaveAsync(TItem item);
 
