@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Button from '../Button';
 import globalStyles from '../../styles/global.css';
+import styles from '../AccountForm/AccountForm.css';
 
 interface LoginProps {
 }
 
 const Login: React.SFC<LoginProps> = () => (
     <div>
+        <h1 className={styles['account-header']}>Login</h1>
         <div>
             <input 
                 className={globalStyles.shadowed} 

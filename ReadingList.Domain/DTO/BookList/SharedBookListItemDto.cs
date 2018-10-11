@@ -12,7 +12,7 @@ namespace ReadingList.Domain.DTO.BookList
 
         public string Author { get; set; }
 
-        public string Genre { get; set; }
+        public string GenreId { get; set; }
 
         public IEnumerable<string> Tags { get; set; }
     }

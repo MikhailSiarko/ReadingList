@@ -2,7 +2,7 @@ using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Commands
 {
-    public class AddListItemCommand : SecuredCommand
+    public abstract class AddListItemCommand<TListItemDto> : SecuredCommand<TListItemDto>
     {
         public readonly BookInfo BookInfo;
 

@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.MapperProfiles;
-using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel;
 using ReadingList.WriteModel;
 
 namespace ReadingList.Domain
@@ -22,7 +22,7 @@ namespace ReadingList.Domain
                 builder.UseSqlServer(provider.GetConnectionString("Write")));
             services.AddScoped<IDbConnection, SqlConnection>(provider =>
                 new SqlConnection(provider.GetConnectionString("Read")));
-            services.AddScoped<IReadDbConnection, ReadDbConnection>();
+            services.AddScoped<IDbReader, DbReader>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);
             Mapper.Initialize(conf =>

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.Internal;
 using ReadingList.WriteModel;
 using ReadingList.WriteModel.Models;
 using System;
+using ReadingList.WriteModel.Infrastructure;
 
 namespace ReadingList.WriteModel.Migrations
 {

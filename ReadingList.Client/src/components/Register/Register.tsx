@@ -1,5 +1,6 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.css';
+import styles from '../AccountForm/AccountForm.css';
 import Button from '../Button';
 import { applyClasses } from '../../utils';
 
@@ -9,6 +10,7 @@ interface RegisterProps {
 
 const Register: React.SFC<RegisterProps> = props => (
     <div>
+        <h1 className={styles['account-header']}>Register</h1>
         <div>
             <input
                 className={globalStyles.shadowed} 

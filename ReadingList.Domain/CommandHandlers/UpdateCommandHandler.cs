@@ -5,7 +5,8 @@ using ReadingList.WriteModel;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public abstract class UpdateCommandHandler<TCommand, TEntity> : CommandHandler<TCommand> where TCommand : ICommand
+    public abstract class UpdateCommandHandler<TCommand, TEntity, TDto> : CommandHandler<TCommand, TDto>
+        where TCommand : UpdateCommand<TDto>
     {
         protected readonly WriteDbContext DbContext;
         
@@ -17,14 +18,18 @@ namespace ReadingList.Domain.CommandHandlers
             EntityUpdateService = entityUpdateService;
         }
 
-        protected sealed override async Task Handle(TCommand command)
+        protected sealed override async Task<TDto> Handle(TCommand command)
         {
             var entity = await GetEntity(command);
 
             Update(entity, command);
 
             await DbContext.SaveChangesAsync();
+
+            return Convert(entity);
         }
+
+        protected abstract TDto Convert(TEntity entity);
 
         protected abstract void Update(TEntity entity, TCommand command);
 

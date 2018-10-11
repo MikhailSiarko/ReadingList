@@ -2,17 +2,17 @@
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel;
 using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
 {
     public class GetUserQueryHandler : QueryHandler<GetUserQuery, UserRm>
     {
-        private readonly IReadDbConnection _dbConnection;
+        private readonly IDbReader _dbConnection;
         private readonly IUserSqlService _userSqlService;
 
-        public GetUserQueryHandler(IReadDbConnection dbConnection, IUserSqlService userSqlService)
+        public GetUserQueryHandler(IDbReader dbConnection, IUserSqlService userSqlService)
         {
             _dbConnection = dbConnection;
             _userSqlService = userSqlService;

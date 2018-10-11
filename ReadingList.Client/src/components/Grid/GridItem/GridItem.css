@@ -1,6 +1,6 @@
 .grid-item {
     width: 20rem;
-    background: #f7f7f7;
+    background: white;
     margin: 2rem;
     border-radius: 0.4rem;
     transition: all 0.2s ease-in-out;

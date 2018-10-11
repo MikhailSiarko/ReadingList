@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Filters;
 using ReadingList.WriteModel;
@@ -9,7 +11,8 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class AddPrivateItemCommandHandler : AddBookItemCommandHandler<AddPrivateItemCommand, PrivateBookListItemWm>
+    public class AddPrivateItemCommandHandler 
+        : AddBookItemCommandHandler<AddPrivateItemCommand, PrivateBookListItemWm, PrivateBookListItemDto>
     {
         public AddPrivateItemCommandHandler(WriteDbContext dbContext) : base(dbContext)
         {
@@ -43,6 +46,11 @@ namespace ReadingList.Domain.CommandHandlers
             await DbContext.PrivateBookListItems.AddAsync(item);
 
             await DbContext.SaveChangesAsync();
+        }
+
+        protected override PrivateBookListItemDto Convert(PrivateBookListItemWm item)
+        {
+            return Mapper.Map<PrivateBookListItemWm, PrivateBookListItemDto>(item);
         }
     }
 }

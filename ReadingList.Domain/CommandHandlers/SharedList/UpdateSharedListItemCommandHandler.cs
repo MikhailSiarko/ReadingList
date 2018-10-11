@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Infrastructure.Filters;
@@ -13,11 +15,17 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class UpdateSharedListItemCommandHandler : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItemWm>
+    public class UpdateSharedListItemCommandHandler 
+        : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItemWm, SharedBookListItemDto>
     {
         public UpdateSharedListItemCommandHandler(WriteDbContext dbContext, IEntityUpdateService entityUpdateService) 
             : base(dbContext, entityUpdateService)
         {
+        }
+
+        protected override SharedBookListItemDto Convert(SharedBookListItemWm entity)
+        {
+            return Mapper.Map<SharedBookListItemWm, SharedBookListItemDto>(entity);
         }
 
         protected override void Update(SharedBookListItemWm entity, UpdateSharedListItemCommand command)
@@ -27,7 +35,8 @@ namespace ReadingList.Domain.CommandHandlers
                 [nameof(SharedBookListItemWm.Title)] = command.BookInfo.Title,
                 [nameof(SharedBookListItemWm.Author)] = command.BookInfo.Author,
                 [nameof(SharedBookListItemWm.GenreId)] = command.BookInfo.GenreId,
-                [nameof(SharedBookListItemWm.SharedBookListItemTags)] = DbContext.UpdateOrAddSharedListItemTags(command.Tags, entity).RunSync().ToList()
+                [nameof(SharedBookListItemWm.SharedBookListItemTags)] =
+                    DbContext.UpdateOrAddSharedListItemTags(command.Tags, entity).RunSync().ToList()
             });
         }
 
@@ -35,6 +44,7 @@ namespace ReadingList.Domain.CommandHandlers
         {
             var item = await DbContext.SharedBookListItems
                            .Include(i => i.SharedBookListItemTags)
+                           .ThenInclude(t => t.Tag)
                            .SingleOrDefaultAsync(
                                EntityFilterExpressions.FindEntity<SharedBookListItemWm>(command.ItemId) &&
                                BookListItemFilterExpressions.ItemBelongsToList<SharedBookListItemWm>(command.ListId)) ??

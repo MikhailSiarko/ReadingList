@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Commands
 {
-    public class AddSharedListItemCommand : AddListItemCommand
+    public class AddSharedListItemCommand : AddListItemCommand<SharedBookListItemDto>
     {
         public readonly int ListId;
 

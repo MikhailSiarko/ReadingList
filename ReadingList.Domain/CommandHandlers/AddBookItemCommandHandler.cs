@@ -8,8 +8,8 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public abstract class AddBookItemCommandHandler<TCommand, TItem> : CommandHandler<TCommand> 
-        where TCommand : AddListItemCommand
+    public abstract class AddBookItemCommandHandler<TCommand, TItem, TDto> : CommandHandler<TCommand, TDto> 
+        where TCommand : AddListItemCommand<TDto>
         where TItem : BookListItemWm
     {
         protected readonly WriteDbContext DbContext;
@@ -19,7 +19,7 @@ namespace ReadingList.Domain.CommandHandlers
             DbContext = dbContext;
         }
 
-        protected sealed override async Task Handle(TCommand command)
+        protected sealed override async Task<TDto> Handle(TCommand command)
         {
             var list = await GetBookList(command);
 
@@ -35,6 +35,10 @@ namespace ReadingList.Domain.CommandHandlers
             var item = CreateItem(command, list);
 
             await SaveAsync(item);
+
+            var dto = Convert(item);
+
+            return dto;
         }
 
         private async Task FindOrAddBook(BookInfo bookInfo)
@@ -57,5 +61,7 @@ namespace ReadingList.Domain.CommandHandlers
         protected abstract TItem CreateItem(TCommand command, BookListWm list);
         
         protected abstract Task SaveAsync(TItem item);
+
+        protected abstract TDto Convert(TItem item);
     }
 }

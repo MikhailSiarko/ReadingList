@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Json;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.WriteModel.Models;
 
-namespace ReadingList.WriteModel
+namespace ReadingList.WriteModel.Infrastructure
 {
     public static class SeedData
     {

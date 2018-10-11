@@ -5,11 +5,11 @@ namespace ReadingList.Domain.Queries
 {
     public class GetPrivateListItemQuery : SecuredQuery<PrivateBookListItemDto>
     {
-        public readonly BookInfo BookInfo;
+        public readonly int ItemId;
 
-        public GetPrivateListItemQuery(string login, BookInfo bookInfo) : base(login)
+        public GetPrivateListItemQuery(int itemId, string login) : base(login)
         {
-            BookInfo = bookInfo;
+            ItemId = itemId;
         }
     }
 }

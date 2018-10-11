@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItem, RequestResult, SelectListItem, PrivateBookListModel } from '../../models';
+import { PrivateBookListItem, RequestResult, SelectListItem, PrivateBookList as PrivateList } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
@@ -12,15 +12,15 @@ import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { postRequestProcess } from '../../utils';
 
 interface Props {
-    bookList: PrivateBookListModel;
+    bookList: PrivateList;
     statuses: SelectListItem[];
     addItem: (listItem: PrivateBookListItem) => Promise<void>;
-    updateListName: (name: string) => Promise<void>;
+    updateList: (list: PrivateList) => Promise<void>;
     deleteItem: (itemId: number) => Promise<void>;
     updateItem: (item: PrivateBookListItem) => Promise<void>;
     switchItemEditMode: (itemId: number) => void;
     switchListEditMode: () => void;
-    getPrivateList: () => Promise<void>;
+    getList: () => Promise<void>;
     getBookStatuses: () => Promise<void>;
 }
 
@@ -41,7 +41,7 @@ function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number)
 class PrivateBookList extends React.Component<Props> {
     async componentDidMount() {
         if(!this.props.bookList) {
-            await this.props.getPrivateList();
+            await this.props.getList();
         }
 
         if(!this.props.statuses) {
@@ -81,7 +81,7 @@ class PrivateBookList extends React.Component<Props> {
                 (
                     <PrivateListNameEditor
                         name={this.props.bookList.name}
-                        onSave={this.props.updateListName}
+                        onSave={(newName: string) => this.props.updateList({name: newName} as PrivateList)}
                         onCancel={this.props.switchListEditMode}
                     />
                 ) : this.props.bookList.name
@@ -129,20 +129,23 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         updateItem: async (item: PrivateBookListItem) => {
             const result = await bookService.updateItem(item);
-            postRequestProcess(result);
+            const castedResult = result as RequestResult<any>;
+            if(castedResult) {
+                postRequestProcess(castedResult);
+            }
         },
         switchItemEditMode: (itemId: number) => {
             dispatch(privateBookListAction.switchEditModeForItem(itemId));
         },
-        getPrivateList: async () => {
+        getList: async () => {
             const result = await bookService.getList();
             postRequestProcess(result);
         },
         switchListEditMode: () => {
             dispatch(privateBookListAction.switchEditModeForList());
         },
-        updateListName: async (newName: string) => {
-            const result = await bookService.updateListName(newName);
+        updateList: async (list: PrivateList) => {
+            const result = await bookService.updateList(list);
             const castedResult = result as RequestResult<any>;
             if(castedResult) {
                 postRequestProcess(castedResult);

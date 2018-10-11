@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './Search.css';
+import globalStyles from '../../styles/global.css';
 
 interface Props {
     query?: string;
@@ -17,7 +18,13 @@ const Search: React.SFC<Props> = props => (
     <div className={styles['search-wrapper']}>
         <form
             onSubmit={(event: React.FormEvent<HTMLFormElement>) => onSubmitHandler(event, props.onSubmit)}>
-            <input type="search" placeholder="Search..." name="searchInput" value={props.query} />
+            <input
+                className={globalStyles.shadowed}
+                type="search" 
+                placeholder="Search..." 
+                name="searchInput" 
+                value={props.query} 
+            />
         </form>
     </div>
 );

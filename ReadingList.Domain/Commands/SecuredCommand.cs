@@ -14,4 +14,17 @@ namespace ReadingList.Domain.Commands
             UserLogin = userLogin;
         }
     }
+
+    public abstract class SecuredCommand<TEntity> : ICommand<TEntity>
+    {
+        public readonly string UserLogin;
+
+        protected SecuredCommand(string userLogin)
+        {
+            if (string.IsNullOrEmpty(userLogin))
+                throw new ArgumentNullException(nameof(userLogin));
+
+            UserLogin = userLogin;
+        }
+    }
 }

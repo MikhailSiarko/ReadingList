@@ -1,11 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Monoton');
 .account-form {
-    padding: 10rem;
+    padding: 8rem;
     text-align: center;
 }
 .account-header {
-    font-family: 'Dosis', sans-serif;
     font-size: 6.4rem;
-    font-weight: 600;
+    font-family: 'Monoton', cursive;
     text-shadow: 0 0.2rem 0.2rem #a5a9af;
-    color: #7c828b;
+    color: #1565c0;
 }

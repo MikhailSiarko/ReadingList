@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Infrastructure.Filters;
@@ -11,7 +13,8 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class AddSharedItemCommandHandler : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItemWm>
+    public class AddSharedItemCommandHandler 
+        : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItemWm, SharedBookListItemDto>
     {
         public AddSharedItemCommandHandler(WriteDbContext dbContext) 
             : base(dbContext)
@@ -60,6 +63,11 @@ namespace ReadingList.Domain.CommandHandlers
             await DbContext.SharedBookListItems.AddAsync(item);
 
             await DbContext.SaveChangesAsync();
+        }
+
+        protected override SharedBookListItemDto Convert(SharedBookListItemWm item)
+        {
+            return Mapper.Map<SharedBookListItemWm, SharedBookListItemDto>(item);
         }
     }
 }

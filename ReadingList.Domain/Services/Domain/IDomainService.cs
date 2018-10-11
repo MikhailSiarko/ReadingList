@@ -8,9 +8,13 @@ namespace ReadingList.Domain.Services
     {
         Task ExecuteAsync(ICommand command);
 
+        Task<TResult> ExecuteAsync<TResult>(ICommand<TResult> command);
+
         Task<TResult> AskAsync<TResult>(IQuery<TResult> query);
 
         void Execute(ICommand command);
+
+        TResult Execute<TResult>(ICommand<TResult> command);
 
         TResult Ask<TResult>(IQuery<TResult> query);
     }

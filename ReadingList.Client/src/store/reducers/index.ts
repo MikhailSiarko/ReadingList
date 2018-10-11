@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { RouterState } from 'connected-react-router';
 import { routerReducer } from 'react-router-redux';
 import { authenticationReducer } from './authentication/authenticationReducer';
-import { PrivateBookListModel, UserModel, SelectListItem } from '../../models';
+import { PrivateBookList, UserModel, SelectListItem } from '../../models';
 import { privateBookListReducer } from './privateBookList/privateBookListReducer';
 import { loadingReducer } from './loading/loadingReducer';
 
@@ -22,7 +22,7 @@ export namespace RootState {
         user: UserState;
     };
     export type Private = {
-        list: PrivateBookListModel | null,
+        list: PrivateBookList | null,
         bookStatuses: SelectListItem[] | null
     };
 }

@@ -35,36 +35,37 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Put([FromBody] UpdatePrivateListData listData)
         {
-            await _domainService.ExecuteAsync(new UpdatePrivateListCommand(User.Identity.Name, listData.Name));
+            var list = await _domainService.ExecuteAsync(new UpdatePrivateListCommand(User.Identity.Name, listData.Name));
 
-            return Ok();
+            return Ok(list);
         }
 
         [HttpPost("items")]
         [ValidateModelState]
         public async Task<IActionResult> AddItem([FromBody] AddItemToPrivateListData addItemData)
         {
-            await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
+            var item = await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
                 new BookInfo(addItemData.Title, addItemData.Author, addItemData.GenreId)));
-
-            var savedItem = await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,
-                new BookInfo(addItemData.Title, addItemData.Author)));
             
+            return Ok(item);
+        }
+
+        [HttpGet("items/{id}")]
+        public async Task<IActionResult> GetItem([FromRoute] int id)
+        {
+            var savedItem = await _domainService.AskAsync(new GetPrivateListItemQuery(id, User.Identity.Name));
+
             return Ok(savedItem);
         }
-        
+
         [HttpPut("items/{id}")]
         [ValidateModelState]
         public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updateItemData)
         {
-            await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
+            var item = await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
                 new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId), updateItemData.Status));
-
-            var updatedItem =
-                await _domainService.AskAsync(new GetPrivateListItemQuery(User.Identity.Name,
-                    new BookInfo(updateItemData.Title, updateItemData.Author)));
             
-            return Ok(updatedItem);
+            return Ok(item);
         }
 
         [HttpDelete("items/{id}")]

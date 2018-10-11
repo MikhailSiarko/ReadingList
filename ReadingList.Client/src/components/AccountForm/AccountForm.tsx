@@ -50,8 +50,7 @@ class AccountForm extends React.Component<Props> {
 
     render() {
         return (
-            <form className={styles['account-form']} onSubmit={this.submitHandler}>
-                <h1 className={styles['account-header']}>Welcome to Reading List!</h1>
+            <form className={styles['account-form']} onSubmit={this.submitHandler}>              
                 <Route
                     path="/account/register"
                     component={() => <Register onConfirmPasswordChange={this.confirmPasswordChangeHandler} />}

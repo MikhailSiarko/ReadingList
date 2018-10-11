@@ -1,6 +1,8 @@
-﻿namespace ReadingList.Domain.Commands
+﻿using ReadingList.Domain.DTO.BookList;
+
+namespace ReadingList.Domain.Commands
 {
-    public class UpdatePrivateListCommand : SecuredCommand
+    public class UpdatePrivateListCommand : UpdateCommand<PrivateBookListDto>
     {
         public readonly string Name;
 

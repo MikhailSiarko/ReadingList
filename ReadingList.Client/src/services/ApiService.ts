@@ -8,9 +8,11 @@ import { authenticationActions } from '../store/actions/authentication';
 
 abstract class ApiService {
     protected dispatch: Dispatch<RootState>;
+    
     protected constructor(dispatch: Dispatch<RootState>) {
         this.dispatch = dispatch;
     }
+    
     protected configureRequest<T>(url: string, method: string, data?: T) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
 

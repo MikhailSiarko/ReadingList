@@ -14,4 +14,15 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected abstract Task Handle(TCommand command);
     }
+
+    public abstract class CommandHandler<TCommand, TResult> : AsyncRequestHandler<TCommand, TResult>
+        where TCommand : ICommand<TResult>
+    {
+        protected sealed override async Task<TResult> HandleCore(TCommand request)
+        {
+            return await Handle(request);
+        }
+
+        protected abstract Task<TResult> Handle(TCommand command);
+    }
 }

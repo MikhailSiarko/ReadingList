@@ -1,7 +1,7 @@
 import { List } from '../Abstractions/List';
 import { PrivateBookListItem } from './PrivateBookListItem';
 
-export class PrivateBookListModel implements List<PrivateBookListItem> {
+export class PrivateBookList implements List<PrivateBookListItem> {
     isInEditMode: boolean = false;
     name: string;
     id: number;

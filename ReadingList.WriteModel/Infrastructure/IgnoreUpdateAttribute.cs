@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ReadingList.WriteModel
+namespace ReadingList.WriteModel.Infrastructure
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class IgnoreUpdateAttribute : Attribute

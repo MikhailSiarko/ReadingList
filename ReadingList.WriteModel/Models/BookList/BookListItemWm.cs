@@ -1,4 +1,5 @@
-﻿using ReadingList.WriteModel.Models.Base;
+﻿using ReadingList.WriteModel.Infrastructure;
+using ReadingList.WriteModel.Models.Base;
 
 namespace ReadingList.WriteModel.Models
 {

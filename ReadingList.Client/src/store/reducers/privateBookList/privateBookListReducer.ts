@@ -9,9 +9,6 @@ export function privateBookListReducer(state: RootState.Private = initialState.p
                                       action: PrivateBookListAction) {
     const copy = cloneDeep(state);
     switch (action.type) {
-        case getType(privateBookListAction.setPrivate):
-            copy.list = action.list;
-            return copy;
         case getType(privateBookListAction.unsetPrivate):
             return initialState.private;
         case getType(privateBookListAction.switchEditModeForList):
@@ -19,11 +16,8 @@ export function privateBookListReducer(state: RootState.Private = initialState.p
                 copy.list.isInEditMode = !copy.list.isInEditMode;
             }
             return copy;
-        case getType(privateBookListAction.updateListName):
-            if(copy.list) {
-                copy.list.name = action.newName;
-                copy.list.isInEditMode = false;
-            }
+        case getType(privateBookListAction.updateList):
+            copy.list = action.list;
             return copy;
         case getType(privateBookListAction.addItem):
             if(copy.list) {

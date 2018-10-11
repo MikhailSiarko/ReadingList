@@ -1,6 +1,8 @@
+using ReadingList.Domain.DTO.BookList;
+
 namespace ReadingList.Domain.Commands
 {
-    public class UpdateSharedListCommand : SecuredCommand
+    public class UpdateSharedListCommand : UpdateCommand<SharedBookListDto>
     {
         public readonly int ListId;
 

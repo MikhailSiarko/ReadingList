@@ -1,6 +1,8 @@
+using System.Linq;
 using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.ReadModel.Models;
+using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.MapperProfiles
 {
@@ -10,6 +12,11 @@ namespace ReadingList.Domain.MapperProfiles
         {
             CreateMap<SharedBookListRm, SharedBookListDto>();
             CreateMap<SharedBookListItemRm, SharedBookListItemDto>();
+            CreateMap<BookListWm, SharedBookListDto>(MemberList.None).ForMember(dto => dto.Tags,
+                    expression => expression.MapFrom(wm => wm.SharedBookListTags.Select(t => t.Tag.Name)))
+                .ForMember(dto => dto.Type, expression => expression.MapFrom(wm => (int) wm.Type));
+            CreateMap<SharedBookListItemWm, SharedBookListItemDto>().ForMember(dto => dto.Tags,
+                expression => expression.MapFrom(wm => wm.SharedBookListItemTags.Select(t => t.Tag.Name)));
         }
     }
 }

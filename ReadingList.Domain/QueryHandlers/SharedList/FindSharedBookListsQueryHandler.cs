@@ -5,17 +5,17 @@ using AutoMapper;
 using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Queries.SharedList;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel;
 using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers.SharedList
 {
     public class FindSharedBookListsQueryHandler : QueryHandler<FindSharedListsQuery, IEnumerable<SharedBookListDto>>
     {
-        private readonly IReadDbConnection _dbConnection;
+        private readonly IDbReader _dbConnection;
         private readonly ISharedBookListSqlService _sharedBookListSqlService;
 
-        public FindSharedBookListsQueryHandler(IReadDbConnection dbConnection, ISharedBookListSqlService sharedBookListSqlService)
+        public FindSharedBookListsQueryHandler(IDbReader dbConnection, ISharedBookListSqlService sharedBookListSqlService)
         {
             _dbConnection = dbConnection;
             _sharedBookListSqlService = sharedBookListSqlService;

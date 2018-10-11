@@ -12,16 +12,14 @@ export class SharedBookListService extends ApiService {
         super(dispatch);
     }
 
-    public getOwnLists() {
-        const requestPromise = this.configureRequest(ApiConfiguration.SHARED_LISTS_OWN, 'GET');
-        return requestPromise
+    getOwnLists() {
+        return this.configureRequest(ApiConfiguration.SHARED_LISTS_OWN, 'GET')
             .then(this.onGetOwnListsSuccess)
             .catch(onError);
     }
 
-    public getLists(query: string) {
-        const requestPromise = this.configureRequest(ApiConfiguration.getFindSharedListsUrl(query), 'GET');
-        return requestPromise
+    getLists(query: string) {
+        return this.configureRequest(ApiConfiguration.getFindSharedListsUrl(query), 'GET')
             .then(this.onGetOwnListsSuccess)
             .catch(onError);
     }

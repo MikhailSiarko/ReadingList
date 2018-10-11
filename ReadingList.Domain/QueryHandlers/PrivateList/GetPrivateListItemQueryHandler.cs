@@ -4,17 +4,17 @@ using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel;
 using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
 {
     public class GetPrivateListItemQueryHandler : QueryHandler<GetPrivateListItemQuery, PrivateBookListItemDto>
     {
-        private readonly IReadDbConnection _dbConnection;
+        private readonly IDbReader _dbConnection;
         private readonly IBookListSqlService _bookListSqlService;
 
-        public GetPrivateListItemQueryHandler(IReadDbConnection dbConnection, IBookListSqlService bookListSqlService)
+        public GetPrivateListItemQueryHandler(IDbReader dbConnection, IBookListSqlService bookListSqlService)
         {
             _dbConnection = dbConnection;
             _bookListSqlService = bookListSqlService;
@@ -26,13 +26,11 @@ namespace ReadingList.Domain.QueryHandlers
                            _bookListSqlService.GetBookListItemSqlQuery(), new
                            {
                                login = query.UserLogin,
-                               title = query.BookInfo.Title,
-                               author = query.BookInfo.Author
+                               id = query.ItemId
                            }) ??
                        throw new ObjectNotExistException<PrivateBookListItemRm>(new OnExceptionObjectDescriptor
                        {
-                           ["Author"] = query.BookInfo.Author,
-                           ["Title"] = query.BookInfo.Title
+                           ["Id"] = query.ItemId.ToString()
                        });
 
             return Mapper.Map<PrivateBookListItemRm, PrivateBookListItemDto>(item);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ReadingList.WriteModel.Infrastructure;
 using ReadingList.WriteModel.Models.Base;
 using ReadingList.WriteModel.Models.HelpEntities;
 

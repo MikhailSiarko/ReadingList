@@ -2,7 +2,7 @@ using ReadingList.Domain.Infrastructure;
 
 namespace ReadingList.Domain.Commands
 {
-    public abstract class UpdateListItemCommand : SecuredCommand
+    public abstract class UpdateListItemCommand<TItemDto> : UpdateCommand<TItemDto>
     {
         public readonly int ItemId;
         

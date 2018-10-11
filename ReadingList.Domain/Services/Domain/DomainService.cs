@@ -20,6 +20,11 @@ namespace ReadingList.Domain.Services
             await _mediator.Send(command);
         }
 
+        public async Task<TResult> ExecuteAsync<TResult>(ICommand<TResult> command)
+        {
+            return await _mediator.Send(command);
+        }
+
         public async Task<TResult> AskAsync<TResult>(IQuery<TResult> query)
         {
             return await _mediator.Send(query);
@@ -28,6 +33,11 @@ namespace ReadingList.Domain.Services
         public void Execute(ICommand command)
         {
             _mediator.Send(command).RunSync();
+        }
+
+        public TResult Execute<TResult>(ICommand<TResult> command)
+        {
+            return _mediator.Send(command).RunSync();
         }
 
         public TResult Ask<TResult>(IQuery<TResult> query)

@@ -13,25 +13,20 @@ export class AuthenticationService extends ApiService {
         super(dispatch);
     }
     login(credentials: Credentials) {
-        const requestPromise = this.configureRequest(ApiConfiguration.LOGIN, 'POST', credentials);
-        return requestPromise
-            .then(this.onSuccess())
+        return this.configureRequest(ApiConfiguration.LOGIN, 'POST', credentials)
+            .then(this.onSuccess)
             .catch(onError);
     }
 
     register(credentials: Credentials) {
-        const requestPromise = this.configureRequest(ApiConfiguration.REGISTER, 'POST', credentials);
-        return requestPromise
-            .then(this.onSuccess())
+        return this.configureRequest(ApiConfiguration.REGISTER, 'POST', credentials)
+            .then(this.onSuccess)
             .catch(onError);
     }
 
-    private onSuccess() {
-        const dispatch = this.dispatch;
-        return function(response: AxiosResponse) {
-            const result = new RequestResult<AuthenticationData>(true, response.data);
-            dispatch(authenticationActions.signIn(result.data as AuthenticationData));
-            return result;
-        };
+    private onSuccess = (response: AxiosResponse) => {
+        const result = new RequestResult<AuthenticationData>(true, response.data);
+        this.dispatch(authenticationActions.signIn(result.data as AuthenticationData));
+        return result;
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace ReadingList.ReadModel.DbConnection
+namespace ReadingList.ReadModel
 {
-    public interface IReadDbConnection : IDisposable
+    public interface IDbReader : IDisposable
     {
         Task<T> QuerySingleAsync<T>(string query, object param = null);
 

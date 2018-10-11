@@ -5,17 +5,17 @@ using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Sql.Interfaces;
-using ReadingList.ReadModel.DbConnection;
+using ReadingList.ReadModel;
 using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers
 {
     public class GetPrivateListQueryHandler : QueryHandler<GetPrivateListQuery, PrivateBookListDto>
     {
-        private readonly IReadDbConnection _dbConnection;
+        private readonly IDbReader _dbConnection;
         private readonly IBookListSqlService _bookListSqlService;
 
-        public GetPrivateListQueryHandler(IReadDbConnection dbConnection, IBookListSqlService bookListSqlService)
+        public GetPrivateListQueryHandler(IDbReader dbConnection, IBookListSqlService bookListSqlService)
         {
             _dbConnection = dbConnection;
             _bookListSqlService = bookListSqlService;

@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using ReadingList.WriteModel.Infrastructure;
 
 namespace ReadingList.WriteModel
 {

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace ReadingList.ReadModel.DbConnection
+namespace ReadingList.ReadModel
 {
-    public class ReadDbConnection : IReadDbConnection
+    public class DbReader : IDbReader
     {
         private readonly IDbConnection _dbConnection;
 
-        public ReadDbConnection(IDbConnection dbConnection)
+        public DbReader(IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }

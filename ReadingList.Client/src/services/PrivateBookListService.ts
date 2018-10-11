@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import ApiConfiguration from '../config/ApiConfiguration';
 import { AxiosResponse } from 'axios';
 import { privateBookListAction } from '../store/actions/privateBookList';
-import { PrivateBookListModel, PrivateBookListItem, RequestResult, SelectListItem } from '../models';
+import { PrivateBookList, PrivateBookListItem, RequestResult, SelectListItem } from '../models';
 import ApiService from './ApiService';
 import { onError } from '../utils';
 
@@ -11,105 +11,86 @@ export class PrivateBookListService extends ApiService {
     constructor(dispatch: Dispatch<RootState>) {
         super(dispatch);
     }
-    public getList() {
-        const requestPromise = this.configureRequest(ApiConfiguration.PRIVATE_LIST, 'GET');
-        return requestPromise
-            .then(this.onGetListSuccess())
+
+    getList() {
+        return this.configureRequest(ApiConfiguration.PRIVATE_LIST, 'GET')
+            .then(this.onGetListSuccess)
             .catch(onError);
     }
 
     getBookStatuses() {
-        const requestPromise = this.configureRequest(ApiConfiguration.BOOK_STATUSES, 'GET');
-        return requestPromise
-            .then(this.onGetBookStatusesSuccess())
+        return this.configureRequest(ApiConfiguration.BOOK_STATUSES, 'GET')
+            .then(this.onGetBookStatusesSuccess)
             .catch(onError);
     }
 
-    public addItem(item: PrivateBookListItem) {
-        const requestPromise = this.configureRequest(`${ApiConfiguration.PRIVATE_LIST_ITEMS}`,
-            'POST', {title: item.title, author: item.author});
-        return requestPromise
-            .then(this.onAddItemSuccess())
+    addItem(item: PrivateBookListItem) {
+        return this.configureRequest(`${ApiConfiguration.PRIVATE_LIST_ITEMS}`, 'POST',
+            {
+                title: item.title,
+                author: item.author
+            })
+            .then(this.onAddItemSuccess)
             .catch(onError);
     }
 
-    public updateItem(item: PrivateBookListItem) {
-        const requestPromise = this.configureRequest(
+    updateItem(item: PrivateBookListItem) {
+        return this.configureRequest(
             ApiConfiguration.getPrivateListItemUrl(item.id),
             'PUT', {
                 title: item.title,
                 author: item.author,
                 status: item.status
-            });
-        return requestPromise
-            .then(this.onUpdateItemSuccess())
+            })
+            .then(this.onUpdateItemSuccess)
             .catch(onError);
     }
 
-    public removeItem(id: number) {
-        const requestPromise = this.configureRequest(
-            ApiConfiguration.getPrivateListItemUrl(id),
-            'DELETE');
-        return requestPromise
+    removeItem(id: number) {
+        return this.configureRequest(ApiConfiguration.getPrivateListItemUrl(id), 'DELETE')
             .then(this.onDeleteItemSuccess(id))
             .catch(onError);
     }
 
-    public updateListName(name: string) {
-        const requestPromise = this.configureRequest(
-            `${ApiConfiguration.PRIVATE_LIST}`, 'PUT', {name});
-        return requestPromise
-            .then(this.onListNameUpdate(name))
+    updateList(list: PrivateBookList) {
+        return this.configureRequest(`${ApiConfiguration.PRIVATE_LIST}`, 'PUT', {name: list.name})
+            .then(this.onListUpdate)
             .catch(onError);
     }
 
-    private onListNameUpdate(name: string) {
-        const that = this;
-        return function() {
-            that.dispatch(privateBookListAction.updateListName(name));
-        };
+    private onListUpdate = (response: AxiosResponse) => {
+        const result = new RequestResult<PrivateBookList>(true, response.data);
+        this.dispatch(privateBookListAction.updateList(result.data as PrivateBookList));
+        return result;
     }
 
-    private onGetListSuccess() {
-        const that = this;
-        return function(response: AxiosResponse) {
-            const result = new RequestResult<PrivateBookListModel>(true, response.data);
-            that.dispatch(privateBookListAction.setPrivate(result.data as PrivateBookListModel));
-            return result;
-        };
+    private onGetListSuccess = (response: AxiosResponse) => {
+        const result = new RequestResult<PrivateBookList>(true, response.data);
+        this.dispatch(privateBookListAction.updateList(result.data as PrivateBookList));
+        return result;
     }
 
-    private onAddItemSuccess() {
-        const that = this;
-        return function(response: AxiosResponse) {
-            const result = new RequestResult<PrivateBookListItem>(true, response.data);
-            that.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItem));
-            return result;
-        };
+    private onAddItemSuccess = (response: AxiosResponse) => {
+        const result = new RequestResult<PrivateBookListItem>(true, response.data);
+        this.dispatch(privateBookListAction.addItem(result.data as PrivateBookListItem));
+        return result;
     }
 
-    private onUpdateItemSuccess() {
-        const that = this;
-        return function(response: AxiosResponse) {
-            const result = new RequestResult<PrivateBookListItem>(true, response.data);
-            that.dispatch(privateBookListAction.updateItem(result.data as PrivateBookListItem));
-            return result;
-        };
+    private onUpdateItemSuccess = (response: AxiosResponse) => {
+        const result = new RequestResult<PrivateBookListItem>(true, response.data);
+        this.dispatch(privateBookListAction.updateItem(result.data as PrivateBookListItem));
+        return result;
     }
 
     private onDeleteItemSuccess(id: number) {
-        const that = this;
-        return function() {
-            that.dispatch(privateBookListAction.removeItem(id));
+        return () => {
+            this.dispatch(privateBookListAction.removeItem(id));
         };
     }
 
-    private onGetBookStatusesSuccess() {
-        const that = this;
-        return function(response: AxiosResponse) {
-            const result = new RequestResult<SelectListItem[]>(true, response.data);
-            that.dispatch(privateBookListAction.setBookStatuses(result.data as SelectListItem[]));
-            return result;
-        };
+    private onGetBookStatusesSuccess = (response: AxiosResponse) => {
+        const result = new RequestResult<SelectListItem[]>(true, response.data);
+        this.dispatch(privateBookListAction.setBookStatuses(result.data as SelectListItem[]));
+        return result;
     }
 }
