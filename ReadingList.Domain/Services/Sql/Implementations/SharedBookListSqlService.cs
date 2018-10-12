@@ -12,22 +12,24 @@ namespace ReadingList.Domain.Services.Sql
                 .Select("Id", "Name", "OwnerId", "Type")
                 .From("BookLists")
                 .Where($"Type = {BookListType.Shared:D}")
-                .Where("Id = @id")
+                .Where("Id = @listId")
                 .ToSql();
             
             var getTagsSql = new SqlBuilder()
                 .Select("Name")
                 .From("Tags")
-                .Where("Id IN (SELECT TagId FROM SharedBookListTags WHERE SharedBookListId = @id)")
+                .Where("Id IN (SELECT TagId FROM SharedBookListTags WHERE SharedBookListId = @listId)")
                 .ToSql();
 
-            return $"{getListsSql}; {getTagsSql}";
+            var getItemsSql = GetSharedListItemsSqlQuery();
+
+            return $"{getListsSql}; {getTagsSql}; {getItemsSql}";
         }
 
         public string GetBookListItemSqlQuery()
         {
             var getItemsSql = new SqlBuilder()
-                .Select("Id", "Author", "Title", "BookListId AS ListId", "(SELECT Name FROM Genres WHERE Id = GenreId) AS GenreId")
+                .Select("Id", "Author", "Title", "BookListId AS ListId", "GenreId")
                 .From("SharedBookListItems")
                 .Where("BookListId = @listId")
                 .Where("Id = @itemId")
@@ -79,7 +81,7 @@ namespace ReadingList.Domain.Services.Sql
         public string GetSharedListItemsSqlQuery()
         {
             var getItemsSql = new SqlBuilder()
-                .Select("Id", "Author", "Title", "BookListId AS ListId", "(SELECT Name FROM Genres WHERE Id = GenreId) AS GenreId")
+                .Select("Id", "Author", "Title", "BookListId AS ListId", "GenreId")
                 .From("SharedBookListItems")
                 .Where("BookListId = @listId")
                 .ToSql();

@@ -13,10 +13,13 @@ namespace ReadingList.Domain.Infrastructure.Extensions
         public static async Task<IEnumerable<SharedBookListTagWm>> UpdateOrAddSharedListTags(this WriteDbContext dbContext,
             IEnumerable<string> tags, BookListWm list)
         {
-            dbContext.SharedBookListTags.RemoveRange(list.SharedBookListTags);
+            if (list.SharedBookListTags != null)
+            {
+                dbContext.SharedBookListTags.RemoveRange(list.SharedBookListTags);
             
-            await dbContext.SaveChangesAsync();
-            
+                await dbContext.SaveChangesAsync();
+            }
+
             var existingTags = await dbContext.Tags.Where(x => tags.Contains(x.Name)).ToListAsync();
 
             var newTags = tags.Where(x => !dbContext.Tags.Any(y => y.Name == x)).Select(x => new TagWm

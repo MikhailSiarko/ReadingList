@@ -2,7 +2,7 @@
 
 namespace ReadingList.Domain.Queries
 {
-    public class GetSharedListQuery : IQuery<SharedBookListDto>
+    public class GetSharedListQuery : IQuery<SharedListDto>
     {
         public readonly int ListId;
         

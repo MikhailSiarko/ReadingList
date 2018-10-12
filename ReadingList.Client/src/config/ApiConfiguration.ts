@@ -22,7 +22,7 @@ export class ApiConfiguration {
     }
 
     public static getFindSharedListsUrl(query: string) {
-        return `${ApiConfiguration.SHARED_LISTS}/${query}`;
+        return `${ApiConfiguration.SHARED_LISTS}?query=${query}`;
     }
 }
 

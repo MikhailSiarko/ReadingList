@@ -1,6 +1,8 @@
-﻿namespace ReadingList.Domain.Commands
+﻿using ReadingList.Domain.DTO.BookList;
+
+namespace ReadingList.Domain.Commands
 {
-    public class CreateSharedListCommand : SecuredCommand
+    public class CreateSharedListCommand : SecuredCommand<SimplifiedSharedBookListDto>
     {
         public readonly string Name;
 

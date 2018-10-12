@@ -40,7 +40,7 @@ namespace ReadingList.Domain.QueryHandlers
                                    return item;
                                },
                                new {itemId = query.ItemId, listId = query.ListId}) ??
-                           throw new ObjectNotExistException<SharedBookListRm>(new OnExceptionObjectDescriptor
+                           throw new ObjectNotExistException<SimplifiedSharedBookListRm>(new OnExceptionObjectDescriptor
                            {
                                ["Item Id"] = query.ItemId.ToString()
                            });

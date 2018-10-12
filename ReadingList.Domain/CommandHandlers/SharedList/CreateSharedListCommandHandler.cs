@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.DTO.BookList;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Infrastructure.Filters;
@@ -10,7 +12,7 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class CreateSharedListCommandHandler : CommandHandler<CreateSharedListCommand>
+    public class CreateSharedListCommandHandler : CommandHandler<CreateSharedListCommand, SimplifiedSharedBookListDto>
     {
         private readonly WriteDbContext _context;
 
@@ -19,7 +21,7 @@ namespace ReadingList.Domain.CommandHandlers
             _context = context;
         }
 
-        protected override async Task Handle(CreateSharedListCommand command)
+        protected override async Task<SimplifiedSharedBookListDto> Handle(CreateSharedListCommand command)
         {
             var user = await _context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Login == command.UserLogin) ??
                        throw new ObjectNotExistException<UserWm>(new OnExceptionObjectDescriptor
@@ -50,6 +52,8 @@ namespace ReadingList.Domain.CommandHandlers
             list.SharedBookListTags = listTags.ToList();
 
             await _context.SaveChangesAsync();
+
+            return Mapper.Map<BookListWm, SimplifiedSharedBookListDto>(list);
         }
     }
 }

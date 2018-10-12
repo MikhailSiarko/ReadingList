@@ -13,7 +13,7 @@ namespace ReadingList.Tests
         static MappingTests()
         {
             Mapper.Initialize(conf =>
-                conf.CreateMap<SharedBookListRm, SharedBookListDto>());
+                conf.CreateMap<SimplifiedSharedBookListRm, SimplifiedSharedBookListDto>());
         }
 
         [Fact]
@@ -55,14 +55,14 @@ namespace ReadingList.Tests
         public void Map_ReturnsSharedBookListDto_When_SharedBookListIsMapped()
         {
             var testObj = new {Category = "Stories", Tags = new[] {"story"}};
-            var sharedList = new SharedBookListRm
+            var sharedList = new SimplifiedSharedBookListRm
             {
                 Id = 54,
                 Name = "My private list",
                 OwnerId = 895,
                 Tags = testObj.Tags
             };
-            var mapped = Mapper.Map<SharedBookListRm, SharedBookListDto>(sharedList);
+            var mapped = Mapper.Map<SimplifiedSharedBookListRm, SimplifiedSharedBookListDto>(sharedList);
             Assert.Equal(sharedList.Id, mapped.Id);
             Assert.Equal(sharedList.Name, mapped.Name);
             Assert.Equal(sharedList.OwnerId, mapped.OwnerId);

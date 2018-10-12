@@ -2,7 +2,7 @@ using ReadingList.Domain.DTO.BookList;
 
 namespace ReadingList.Domain.Commands
 {
-    public class UpdateSharedListCommand : UpdateCommand<SharedBookListDto>
+    public class UpdateSharedListCommand : UpdateCommand<SimplifiedSharedBookListDto>
     {
         public readonly int ListId;
 

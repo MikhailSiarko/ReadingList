@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace ReadingList.ReadModel.Models
 {
-    public class SharedBookListRm : BookListRm
-    {   
-        public IEnumerable<string> Tags { get; set; }
+    public class SharedBookListRm : SimplifiedSharedBookListRm
+    {
+        public IEnumerable<SharedBookListItemRm> Items { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using ReadingList.Domain.DTO.BookList;
 
 namespace ReadingList.Domain.Queries.SharedList
 {
-    public class FindSharedListsQuery : IQuery<IEnumerable<SharedBookListDto>>
+    public class FindSharedListsQuery : IQuery<IEnumerable<SimplifiedSharedBookListDto>>
     {
         public string Query { get; set; }
 

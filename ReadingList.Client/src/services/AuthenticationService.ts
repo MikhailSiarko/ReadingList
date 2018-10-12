@@ -12,6 +12,7 @@ export class AuthenticationService extends ApiService {
     constructor(dispatch: Dispatch<RootState>) {
         super(dispatch);
     }
+    
     login(credentials: Credentials) {
         return this.configureRequest(ApiConfiguration.LOGIN, 'POST', credentials)
             .then(this.onSuccess)

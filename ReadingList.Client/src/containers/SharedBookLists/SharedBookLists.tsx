@@ -27,7 +27,7 @@ class SharedBookLists extends React.Component<Props, State> {
     searchHandler = async (query: string) => {
         let lists = await this.props.getSharedLists(query);
         this.setState({sharedLists: lists});
-        this.props.history.replace(`/shared/${query}`);
+        this.props.history.replace(`/shared?query=${query}`);
     }
 
     async componentDidMount() {

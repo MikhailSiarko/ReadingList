@@ -15,16 +15,16 @@ using ReadingList.WriteModel.Models;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookListWm, SharedBookListDto>
+    public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookListWm, SimplifiedSharedBookListDto>
     {
         public UpdateSharedListCommandHandler(WriteDbContext dbContext, IEntityUpdateService updateService) 
             : base(dbContext, updateService)
         {
         }
 
-        protected override SharedBookListDto Convert(BookListWm entity)
+        protected override SimplifiedSharedBookListDto Convert(BookListWm entity)
         {
-            return Mapper.Map<BookListWm, SharedBookListDto>(entity);
+            return Mapper.Map<BookListWm, SimplifiedSharedBookListDto>(entity);
         }
 
         protected override void Update(BookListWm entity, UpdateSharedListCommand command)

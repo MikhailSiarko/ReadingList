@@ -10,7 +10,7 @@ using ReadingList.ReadModel.Models;
 
 namespace ReadingList.Domain.QueryHandlers.SharedList
 {
-    public class FindSharedBookListsQueryHandler : QueryHandler<FindSharedListsQuery, IEnumerable<SharedBookListDto>>
+    public class FindSharedBookListsQueryHandler : QueryHandler<FindSharedListsQuery, IEnumerable<SimplifiedSharedBookListDto>>
     {
         private readonly IDbReader _dbConnection;
         private readonly ISharedBookListSqlService _sharedBookListSqlService;
@@ -21,13 +21,13 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
             _sharedBookListSqlService = sharedBookListSqlService;
         }
 
-        protected override async Task<IEnumerable<SharedBookListDto>> Handle(FindSharedListsQuery query)
+        protected override async Task<IEnumerable<SimplifiedSharedBookListDto>> Handle(FindSharedListsQuery query)
         {
             var sharedLists =
                 await _dbConnection.QueryAsync(_sharedBookListSqlService.GetBookListsSqlQuery(),
                     async reader =>
                     {
-                        var lists = (await reader.ReadAsync<SharedBookListRm>()).ToList();
+                        var lists = (await reader.ReadAsync<SimplifiedSharedBookListRm>()).ToList();
 
                         var tags = (await reader.ReadAsync<(string TagName, int ListId)>()).ToList();
 
@@ -38,9 +38,9 @@ namespace ReadingList.Domain.QueryHandlers.SharedList
 
                         return lists;
                     }) ??
-                new List<SharedBookListRm>();
+                new List<SimplifiedSharedBookListRm>();
 
-            return Mapper.Map<IEnumerable<SharedBookListRm>, IEnumerable<SharedBookListDto>>(sharedLists);
+            return Mapper.Map<IEnumerable<SimplifiedSharedBookListRm>, IEnumerable<SimplifiedSharedBookListDto>>(sharedLists);
         }
     }
 }

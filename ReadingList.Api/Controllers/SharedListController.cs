@@ -32,12 +32,20 @@ namespace ReadingList.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("{query?}")]
-        public async Task<IActionResult> Get([FromRoute] string query)
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] string query)
         {
             var bookLists = await _domainService.AskAsync(new FindSharedListsQuery(query));
             
             return Ok(bookLists);
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            var list = await _domainService.AskAsync(new GetSharedListQuery(id));
+                
+            return Ok(list);
         }
 
         [HttpGet("own")]
@@ -52,10 +60,11 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> Post([FromBody] CreateSharedListData sharedListData)
         {
-            await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name, sharedListData.Name,
+            var list = await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name,
+                sharedListData.Name,
                 sharedListData.Tags));
 
-            return Ok();
+            return Ok(list);
         }
         
         [HttpPut("{id}")]
@@ -106,11 +115,12 @@ namespace ReadingList.Api.Controllers
         [ValidateModelState]
         public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData updateItemData)
         {
-            await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId, listId,
+            var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId,
+                listId,
                 new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId),
                 updateItemData.Tags));
             
-            return Ok();
+            return Ok(item);
         }
     }
 }

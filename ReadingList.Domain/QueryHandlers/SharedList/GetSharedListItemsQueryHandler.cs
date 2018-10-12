@@ -26,18 +26,18 @@ namespace ReadingList.Domain.QueryHandlers
             var listItems = await _dbConnection.QueryAsync(_listSqlService.GetSharedListItemsSqlQuery(),
                 async reader =>
                 {
-                    var list = new List<SharedBookListItemRm>(await reader.ReadAsync<SharedBookListItemRm>());
+                    var items = new List<SharedBookListItemRm>(await reader.ReadAsync<SharedBookListItemRm>());
 
                     var tags = (await reader.ReadAsync<(string TagName, int? ItemId)>()).ToList();
 
-                    foreach (var itemRm in list)
+                    foreach (var itemRm in items)
                     {
                         itemRm.Tags =
                             tags.Where(t => t.ItemId.HasValue && t.ItemId.Value == itemRm.Id)
                                 .Select(x => x.TagName).ToList();
                     }
 
-                    return list;
+                    return items;
                 },
                 new {listId = query.ListId});
 
