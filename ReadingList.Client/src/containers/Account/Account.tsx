@@ -2,12 +2,13 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { AuthenticationService, PrivateBookListService } from '../../services';
-import { Credentials, AuthenticationData } from '../../store/actions/authentication';
+import { Credentials, AuthenticationData, authenticationActions } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { RequestResult } from '../../models';
 import AccountForm from '../../components/AccountForm';
 import { isNullOrEmpty } from '../../utils';
+import { loadingActions } from '../../store/actions/loading';
 
 interface AccountProps extends RouteComponentProps<any> {
     login: (credentials: Credentials) => Promise<void>;
@@ -57,8 +58,9 @@ function postRequestProcess(result: RequestResult<any>, ownProps: AccountProps) 
 
 async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
         ownProps: AccountProps) {
-    if(result.isSucceed) {
-        const bookService = new PrivateBookListService(dispatch);
+    if(result.isSucceed && result.data) {
+        const bookService = new PrivateBookListService();
+        dispatch(authenticationActions.signIn(result.data));
         const bookResult = await bookService.getList();
         postRequestProcess(bookResult, ownProps);
     } else {
@@ -67,14 +69,18 @@ async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestRes
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProps) {
-    const authService = new AuthenticationService(dispatch);
+    const authService = new AuthenticationService();
     return {
         login: async (credentials: Credentials) => {
+            dispatch(loadingActions.start());
             const result = await authService.login(credentials);
+            dispatch(loadingActions.end());
             await postAuthProcess(dispatch, result, ownProps);
         },
         register: async (credentials: Credentials) => {
+            dispatch(loadingActions.start());
             const result = await authService.register(credentials);
+            dispatch(loadingActions.end());
             await postAuthProcess(dispatch, result, ownProps);
         }
     };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItem, RequestResult, SelectListItem, PrivateBookList as PrivateList } from '../../models';
+import { PrivateBookListItem, SelectListItem, PrivateBookList as PrivateList } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
@@ -9,7 +9,8 @@ import { withContextMenu, closeContextMenues } from '../../hoc/withContextMenu';
 import PrivateBookUL from '../../components/PrivateBookUL';
 import ItemForm from '../../components/ItemForm';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
-import { postRequestProcess } from '../../utils';
+import { createPropAction } from '../../utils';
+import { loadingActions } from '../../store/actions/loading';
 
 interface Props {
     bookList: PrivateList;
@@ -22,6 +23,8 @@ interface Props {
     switchListEditMode: () => void;
     getList: () => Promise<void>;
     getBookStatuses: () => Promise<void>;
+    loadingStart: () => void;
+    loadingEnd: () => void;
 }
 
 function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number) => Promise<void>) {
@@ -40,15 +43,18 @@ function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number)
 
 class PrivateBookList extends React.Component<Props> {
     async componentDidMount() {
-        if(!this.props.bookList) {
-            await this.props.getList();
+        if(!this.props.bookList || !this.props.statuses) {
+            this.props.loadingStart();
+            if(!this.props.bookList) {
+                await this.props.getList();
+            }
+            if(!this.props.statuses) {
+                await this.props.getBookStatuses();
+            }
+            this.props.loadingEnd();
         }
-
-        if(!this.props.statuses) {
-            await this.props.getBookStatuses();
-         }
     }
-
+    
     shouldComponentUpdate(nextProps: Props) {
         return nextProps.bookList != null && nextProps.statuses != null;
     }
@@ -61,7 +67,11 @@ class PrivateBookList extends React.Component<Props> {
                 listItems = this.props.bookList.items.map(listItem => {
                     const actions = [
                         {onClick: () => this.props.switchItemEditMode(listItem.id), text: 'Edit'},
-                        {onClick: deleteItem(listItem, this.props.deleteItem), text: 'Delete'}
+                        {onClick: deleteItem(listItem, async itemId => {
+                                this.props.loadingStart();
+                                await this.props.deleteItem(itemId);
+                                this.props.loadingEnd();
+                            }), text: 'Delete'}
                     ];
                     const Contexed = withContextMenu(actions, PrivateBookLI);
 
@@ -69,7 +79,11 @@ class PrivateBookList extends React.Component<Props> {
                         <Contexed
                             key={listItem.id}
                             listItem={listItem}
-                            onSave={this.props.updateItem}
+                            onSave={async item => {
+                                this.props.loadingStart();
+                                await this.props.updateItem(item);
+                                this.props.loadingEnd();
+                            }}
                             onCancel={this.props.switchItemEditMode}
                             statuses={this.props.statuses}
                         />
@@ -81,7 +95,11 @@ class PrivateBookList extends React.Component<Props> {
                 (
                     <PrivateListNameEditor
                         name={this.props.bookList.name}
-                        onSave={(newName: string) => this.props.updateList({name: newName} as PrivateList)}
+                        onSave={async newName => {
+                            this.props.loadingStart();
+                            await this.props.updateList({name: newName} as PrivateList);
+                            this.props.loadingEnd();
+                        }}
                         onCancel={this.props.switchListEditMode}
                     />
                 ) : this.props.bookList.name
@@ -94,7 +112,11 @@ class PrivateBookList extends React.Component<Props> {
             <div>
                 {
                     this.props.bookList && !this.props.bookList.isInEditMode
-                        ? <ItemForm onSubmit={this.props.addItem} /> : null
+                        ? <ItemForm onSubmit={async item => {
+                            this.props.loadingStart();
+                            await this.props.addItem(item);
+                            this.props.loadingEnd();
+                        }} /> : null
                 }
                 {list}
             </div>
@@ -114,46 +136,26 @@ function mapStateToProps(state: RootState) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const bookService = new PrivateBookListService(dispatch);
+    const bookService = new PrivateBookListService();
     return {
-        addItem: async (listItem: PrivateBookListItem) => {
-            const result = await bookService.addItem(listItem);
-            postRequestProcess(result);
-        },
-        deleteItem: async (itemId: number) => {
-            const result = await bookService.removeItem(itemId);
-            const castedResult = result as RequestResult<any>;
-            if(castedResult) {
-                postRequestProcess(castedResult);
-            }
-        },
-        updateItem: async (item: PrivateBookListItem) => {
-            const result = await bookService.updateItem(item);
-            const castedResult = result as RequestResult<any>;
-            if(castedResult) {
-                postRequestProcess(castedResult);
-            }
-        },
+        addItem: createPropAction(bookService.addItem, dispatch, privateBookListAction.addItem),
+        deleteItem: createPropAction(bookService.removeItem, dispatch, privateBookListAction.removeItem),
+        updateItem: createPropAction(bookService.updateItem, dispatch, privateBookListAction.updateItem),
         switchItemEditMode: (itemId: number) => {
             dispatch(privateBookListAction.switchEditModeForItem(itemId));
         },
-        getList: async () => {
-            const result = await bookService.getList();
-            postRequestProcess(result);
-        },
+        getList: createPropAction(bookService.getList, dispatch, privateBookListAction.updateList),
         switchListEditMode: () => {
             dispatch(privateBookListAction.switchEditModeForList());
         },
-        updateList: async (list: PrivateList) => {
-            const result = await bookService.updateList(list);
-            const castedResult = result as RequestResult<any>;
-            if(castedResult) {
-                postRequestProcess(castedResult);
-            }
+        updateList: createPropAction(bookService.updateList, dispatch, privateBookListAction.updateList),
+        getBookStatuses: createPropAction(bookService.getBookStatuses, dispatch, 
+            privateBookListAction.setBookStatuses),
+        loadingStart: () => {
+            dispatch(loadingActions.start());
         },
-        getBookStatuses: async () => {
-            const result = await bookService.getBookStatuses();
-            postRequestProcess(result);
+        loadingEnd: () => {
+            dispatch(loadingActions.end());
         }
     };
 }

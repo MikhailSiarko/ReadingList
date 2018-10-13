@@ -1,5 +1,8 @@
 import { RequestResult } from '../models';
 import { cloneDeep } from 'lodash';
+import { Dispatch } from 'react-redux';
+import { RootState } from '../store/reducers';
+import { authenticationActions } from '../store/actions/authentication';
 
 export function onError(error: RequestResult<never>) {
   return error;
@@ -21,7 +24,7 @@ export function deleteProperties(object: Object, properties: string[]) {
 }
 
 export function createDOMAttributeProps(props: Object, ...propertiesToDelete: string[]) {
-  var copy = cloneDeep(props) as any;
+  let copy = cloneDeep(props) as any;
   deleteProperties(copy, propertiesToDelete);
   return copy;
 }
@@ -44,12 +47,39 @@ export function convertSecondsToReadingTime(seconds: number): string {
   return `days: ${days} | hours: ${hours} | minutes: ${minutes}`;
 }
 
-export function postRequestProcess(result: RequestResult<any>) {
-  if(!result.isSucceed) {
+export function postRequestProcess(result: RequestResult<any>, dispatch: Dispatch<RootState>) {
+  if(!result.isSucceed && result.status && result.status === 401) {
+    dispatch(authenticationActions.signOut());
+  } else if(!result.isSucceed) {
       alert(result.errorMessage);
   }
 }
 
 export function applyClasses(...classes: string[]) {
   return classes.join(' ');
+}
+
+export function createPropAction<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>, 
+                dispatch: Dispatch<RootState>, action?: (out: TOut) => any) {
+    return async function(inner: TIn) {
+        const result = await func(inner);
+        if(result.isSucceed && result.data && action) {
+            dispatch(action(result.data));
+        } else {
+            postRequestProcess(result, dispatch);
+        }
+    };
+}
+
+export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>, 
+                dispatch: Dispatch<RootState>, action?: (out: TOut) => any) {
+    return async function(inner: TIn) {
+        const result = await func(inner);
+        if(result.isSucceed && result.data && action) {
+            dispatch(action(result.data));
+        } else {
+            postRequestProcess(result, dispatch);
+        }
+        return result.data as TOut;
+    };
 }

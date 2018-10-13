@@ -5,13 +5,16 @@ import { SharedBookList } from '../../models/BookList/Implementations/SharedBook
 import { SharedBookListService } from '../../services/SharedBookListService';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import { postRequestProcess } from '../../utils';
+import { createPropActionWithResult } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
+import { loadingActions } from '../../store/actions/loading';
 
 interface Props extends RouteComponentProps<any> {
     getSharedLists: (query: string) => Promise<SharedBookList[]>;
     getOwnSharedLists: () => Promise<SharedBookList[]>;
+    loadingStart: () => void;
+    loadingEnd: () => void;
 }
 
 interface State {
@@ -66,17 +69,15 @@ class SharedBookLists extends React.Component<Props, State> {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const bookService = new SharedBookListService(dispatch);
+    const bookService = new SharedBookListService();
     return {
-        getSharedLists: async (query: string) => {
-            const result = await bookService.getLists(query);
-            postRequestProcess(result);
-            return result.data as SharedBookList[];
+        getSharedLists: createPropActionWithResult(bookService.getLists, dispatch),
+        getOwnSharedLists: createPropActionWithResult(bookService.getOwnLists, dispatch),
+        loadingStart: () => {
+            dispatch(loadingActions.start());
         },
-        getOwnSharedLists: async () => {
-            const result = await bookService.getOwnLists();
-            postRequestProcess(result);
-            return result.data as SharedBookList[];
+        loadingEnd: () => {
+            dispatch(loadingActions.end());
         }
     };
 }

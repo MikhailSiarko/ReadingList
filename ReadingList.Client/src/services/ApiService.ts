@@ -1,42 +1,30 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { createAxiosDefaultConfiguration } from '../config/AxiosDefaultConfiguration';
-import { Dispatch } from 'react-redux';
-import { RootState } from '../store/reducers';
-import { loadingActions } from '../store/actions/loading';
 import { RequestResult } from '../models';
-import { authenticationActions } from '../store/actions/authentication';
 
 abstract class ApiService {
-    protected dispatch: Dispatch<RootState>;
-    
-    protected constructor(dispatch: Dispatch<RootState>) {
-        this.dispatch = dispatch;
+    protected onSuccess<TOut>() {
+        return (response: AxiosResponse) => new RequestResult<TOut>(true, response.data);
     }
     
-    protected configureRequest<T>(url: string, method: string, data?: T) {
+    protected configureRequest<TData>(url: string, method: string, data?: TData) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
-
-        axiosInstance.interceptors.request.use(config => {
-            this.dispatch(loadingActions.start());
-            return config;
-        }, error => {
-            this.dispatch(loadingActions.end());
+        
+        axiosInstance.interceptors.request.use(config => config, error => {
             let result = new RequestResult<never>(false, undefined,
                 error.response ? error.response.data.errorMessage : error.message);
             return Promise.reject(result);
         });
 
-        axiosInstance.interceptors.response.use(response => {
-            this.dispatch(loadingActions.end());
-            return response;
-        }, error => {
-            this.dispatch(loadingActions.end());
+        axiosInstance.interceptors.response.use(response => response, error => {
+            let result;
             if(error.response && error.response.status === 401) {
-                error.response.data = new RequestResult<never>(false, undefined, 'You are not authenticated');
-                this.dispatch(authenticationActions.signOut());
+                result = new RequestResult<never>(false, undefined, 'You are not authenticated', 401);
+            } else {
+                result = new RequestResult<never>(false, undefined,
+                    error.response ? error.response.data.errorMessage : error.message);
             }
-            let result = new RequestResult<never>(false, undefined,
-                error.response ? error.response.data.errorMessage : error.message);
+            
             return Promise.reject(result);
         });
 
