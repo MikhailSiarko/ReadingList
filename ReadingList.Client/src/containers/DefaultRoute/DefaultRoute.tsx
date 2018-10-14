@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 
 interface DefaultRouteProps {
     defaultPath: string;
+    forPath: string;
     isAuthenticated: boolean;
 }
 
 class DefaultRoute extends React.Component<DefaultRouteProps> {
     render() {
         return (
-            <Route exact={true} path="/" render={props => (
+            <Route exact={true} path={this.props.forPath} render={props => (
                 this.props.isAuthenticated
                     ? <Redirect to={{pathname: this.props.defaultPath, state: {from: props.location}}} />
                     : <Redirect to={{pathname: '/account/login', state: {from: props.location}}} />

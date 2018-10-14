@@ -15,4 +15,10 @@ export class SharedBookListService extends ApiService {
             .then(this.onSuccess<SharedBookList[]>())
             .catch(onError);
     }
+
+    getList = (id: number) => {
+        return this.configureRequest(ApiConfiguration.getSharedListUrl(id), 'GET')
+            .then(this.onSuccess<SharedBookList>())
+            .catch(onError);
+    }
 }

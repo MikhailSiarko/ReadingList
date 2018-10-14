@@ -14,6 +14,7 @@ import PrivateBookList from '../PrivateBookList';
 import Spinner from '../../components/Spinner';
 import SharedBookLists from '../SharedBookLists';
 import DefaultRoute from '../DefaultRoute';
+import SharedBookList from '../SharedBookList';
 
 interface AppProps extends RouteComponentProps<any> {
     loading: RootState.LoadingState;
@@ -30,7 +31,7 @@ class App extends React.Component<AppProps> {
         const navLinks = this.props.identity.isAuthenticated
             ? [
                 {text: 'Private List', href: '/private'},
-                {text: 'Shared Lists', href: '/shared'},
+                {text: 'Shared Lists', href: '/shared/search'},
                 {text: 'Logout', href: '', action: this.signOutHandler}
             ]
             : [
@@ -51,13 +52,29 @@ class App extends React.Component<AppProps> {
                         />
 
                         <PrivateRoute
-                            exact={true}
-                            path="/shared/:query?"
-                            component={SharedBookLists}
+                            exact={false}
+                            path="/shared"
+                            component={() => 
+                                <div>
+                                    <Switch>
+                                        <PrivateRoute
+                                            exact={true}
+                                            path="/shared/search/:query?" 
+                                            component={SharedBookLists} 
+                                        />
+                                        <PrivateRoute
+                                            exact={true}
+                                            path="/shared/:id"
+                                            component={SharedBookList}
+                                        />
+                                        <DefaultRoute defaultPath="/shared/search" forPath="/shared" />
+                                    </Switch>
+                                </div>
+                            }
                         />
 
                         <Route path="/account" component={Account} />
-                        <DefaultRoute defaultPath="/private" />
+                        <DefaultRoute defaultPath="/private" forPath="/" />
                     </Switch>
                 </Main>
             </div>

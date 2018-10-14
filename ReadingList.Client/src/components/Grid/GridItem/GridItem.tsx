@@ -6,7 +6,7 @@ import { applyClasses } from '../../../utils';
 export interface GridItemProps {
     header: string;
     content: string | JSX.Element;
-    onClick?: () => Promise<void>;
+    onClick?: () => void;
 }
 
 const GridItem: React.SFC<GridItemProps> = props => (
