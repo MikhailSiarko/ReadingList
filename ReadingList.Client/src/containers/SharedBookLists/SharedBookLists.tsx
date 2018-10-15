@@ -71,7 +71,7 @@ class SharedBookLists extends React.Component<Props, State> {
         }
         return (
             <div>
-                <Search onSubmit={this.searchHandler} />
+                <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
                 <Grid items={items} />
             </div>
         );

@@ -66,9 +66,11 @@ namespace ReadingList.Domain.Services.Sql
         public string GetUserBookListsSqlQuery()
         {
             var getListsSql = new SqlBuilder()
-                .Select("Id", "Name", "OwnerId", "Type")
-                .From("BookLists")
+                .Select("l.Id", "l.Name", "l.OwnerId", "l.Type", "COUNT(i.Id) AS BooksCount")
+                .From("BookLists AS l")
+                .LeftJoin("SharedBookListItems AS i ON i.BookListId = l.Id")
                 .Where($"Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlService.UserIdSql})")
+                .GroupBy("l.Id")
                 .ToSql();
 
             var getTagsSql = new SqlBuilder()

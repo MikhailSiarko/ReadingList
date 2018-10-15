@@ -19,11 +19,12 @@ const Search: React.SFC<Props> = props => (
         <form
             onSubmit={(event: React.FormEvent<HTMLFormElement>) => onSubmitHandler(event, props.onSubmit)}>
             <input
+                autoFocus={true}
                 className={globalStyles.shadowed}
                 type="search" 
                 placeholder="Search..." 
-                name="searchInput" 
-                value={props.query} 
+                name="searchInput"
+                defaultValue={props.query} 
             />
         </form>
     </div>
