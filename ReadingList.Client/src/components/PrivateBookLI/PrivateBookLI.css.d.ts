@@ -1,4 +1,4 @@
-interface BookLIStyle {
+interface BookItemStyle {
     ['book-li']: string;
     ['book-info']: string;
     ['book-title']: string;
@@ -8,5 +8,5 @@ interface BookLIStyle {
     ['edited-status']: string;
 }
 
-declare const bookLIStyle: BookLIStyle;
-export default bookLIStyle;
+declare const bookItemStyle: BookItemStyle;
+export default bookItemStyle;

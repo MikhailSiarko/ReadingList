@@ -8,4 +8,5 @@ export class SharedBookList implements List<SharedBookListItem> {
     items: SharedBookListItem[];
     type: number;
     tags: string[];
+    booksCount: number;
 }

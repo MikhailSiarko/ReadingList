@@ -5,6 +5,8 @@ namespace ReadingList.Domain.DTO.BookList
 {
     public class SimplifiedSharedBookListDto : BookListDto
     {
+        public int BooksCount { get; set; }
+        
         public IEnumerable<string> Tags { get; set; }
     }
 }

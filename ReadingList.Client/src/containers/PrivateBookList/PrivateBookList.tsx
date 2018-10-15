@@ -6,7 +6,7 @@ import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
 import { withContextMenu, closeContextMenues } from '../../hoc/withContextMenu';
-import PrivateBookUL from '../../components/PrivateBookUL';
+import BookList from '../../components/BookList';
 import ItemForm from '../../components/ItemForm';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
@@ -105,7 +105,7 @@ class PrivateBookList extends React.Component<Props> {
                 ) : this.props.bookList.name
             );
             const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
-            const ContexedList = withContextMenu(bookListActions, PrivateBookUL);
+            const ContexedList = withContextMenu(bookListActions, BookList);
             list = <ContexedList items={listItems} legend={legend} />;
         }
         return (

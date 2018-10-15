@@ -28,7 +28,9 @@ class SharedBookLists extends React.Component<Props, State> {
     }
 
     searchHandler = async (query: string) => {
+        this.props.loadingStart();
         let lists = await this.props.getSharedLists(query);
+        this.props.loadingEnd();
         this.setState({sharedLists: lists});
         this.props.history.replace(`/shared/search/${query}`, {from: this.props.location});
     }
@@ -44,6 +46,7 @@ class SharedBookLists extends React.Component<Props, State> {
                         ? this.props.match.params.query
                         : '');
             }
+            
             this.setState({sharedLists: lists});
         }
     }
@@ -55,8 +58,13 @@ class SharedBookLists extends React.Component<Props, State> {
                 list => {
                     return {
                         header: list.name,
-                        content: list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1),
-                        onClick: () => this.props.history.replace('/shared/' + list.id,
+                        content: (
+                            <div>
+                                <p>{list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)}</p>
+                                <h4>{list.booksCount} book(s)</h4>
+                            </div>
+                        ),
+                        onClick: () => this.props.history.push('/shared/' + list.id,
                             {from: this.props.location})
                     };
                 });

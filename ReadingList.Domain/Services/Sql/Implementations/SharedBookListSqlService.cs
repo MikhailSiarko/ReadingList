@@ -14,7 +14,7 @@ namespace ReadingList.Domain.Services.Sql
                 .Where($"Type = {BookListType.Shared:D}")
                 .Where("Id = @listId")
                 .ToSql();
-            
+
             var getTagsSql = new SqlBuilder()
                 .Select("Name")
                 .From("Tags")
@@ -47,11 +47,13 @@ namespace ReadingList.Domain.Services.Sql
         public string GetBookListsSqlQuery()
         {
             var getListsSql = new SqlBuilder()
-                .Select("Id", "Name", "OwnerId", "Type")
-                .From("BookLists")
+                .Select("l.Id", "l.Name", "l.OwnerId", "l.Type", "COUNT(i.Id) AS BooksCount")
+                .From("BookLists AS l")
+                .LeftJoin("SharedBookListItems AS i ON i.BookListId = l.Id")
                 .Where($"Type = {BookListType.Shared:D}")
+                .GroupBy("l.Id")
                 .ToSql();
-            
+
             var getTagsSql = new SqlBuilder()
                 .Select("Name AS TagName", "SharedBookListId AS ListId")
                 .From("Tags")
@@ -68,7 +70,7 @@ namespace ReadingList.Domain.Services.Sql
                 .From("BookLists")
                 .Where($"Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlService.UserIdSql})")
                 .ToSql();
-            
+
             var getTagsSql = new SqlBuilder()
                 .Select("Name AS TagName", "SharedBookListId AS ListId")
                 .From("Tags")

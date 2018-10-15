@@ -6,7 +6,7 @@ import { convertSecondsToReadingTime, createDOMAttributeProps, applyClasses } fr
 import Colors from '../../styles/colors';
 import globalStyles from '../../styles/global.css';
 
-export interface PrivateBookLIProps extends React.DOMAttributes<HTMLLIElement> {
+export interface BookListItemProps extends React.DOMAttributes<HTMLLIElement> {
     listItem: PrivateBookListItem;
     onSave: (item: PrivateBookListItem) => void;
     onCancel: (itemId: number) => void;
@@ -34,7 +34,7 @@ const Input: React.SFC<{value: string, name: string}> = ({value, name}) => (
     </div>
 );
 
-const BookInfoEditor: React.SFC<{title: string, author: string}> = ({title, author}) => (
+export const BookInfoEditor: React.SFC<{title: string, author: string}> = ({title, author}) => (
     <div className={styles['editable-book-info']}>
         <div className={styles['editing-book-title']}>
             <Input value={title} name={'title'} />by
@@ -85,7 +85,7 @@ const ReadingTime = ({readingTimeInSeconds}: {readingTimeInSeconds: number}) => 
     </div>
 );
 
-const BookInfo = ({title, author}: {title: string, author: string}) => (
+export const BookInfo = ({title, author}: {title: string, author: string}) => (
     <div className={styles['book-info']}>
         <h5 className={styles['book-title']}>
             <q>{title}</q> by {author}
@@ -93,7 +93,7 @@ const BookInfo = ({title, author}: {title: string, author: string}) => (
     </div>
 );
 
-class PrivateBookLI extends React.Component<PrivateBookLIProps> {
+class PrivateBookLI extends React.Component<BookListItemProps> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;

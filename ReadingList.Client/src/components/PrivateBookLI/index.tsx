@@ -1,2 +1,2 @@
-import PrivateBookListItem from './PrivateBookLI';
-export default PrivateBookListItem;
+import PrivateBookLI from './PrivateBookLI';
+export default PrivateBookLI;
