@@ -54,12 +54,16 @@ namespace ReadingList.Api
                 StartInfo = new ProcessStartInfo
                 {
                     UseShellExecute = true,
-                    FileName = "cmd.exe",
+                    FileName = Environment.OSVersion.Platform == PlatformID.Win32NT
+                        ? Constants.CommandLine.Windows
+                        : Constants.CommandLine.Unix,
                     WorkingDirectory = Path.Combine(
                         Directory.GetParent(Directory.GetCurrentDirectory())
                             .GetDirectories()
                             .Single(x => x.Name == "ReadingList.Client").FullName),
-                    Arguments = "/c npm run start"
+                    Arguments = (Environment.OSVersion.Platform == PlatformID.Win32NT
+                        ? Constants.CommandFlag.Windows
+                        : Constants.CommandFlag.Unix) + " npm run start"
                 }
             };
         }
@@ -75,6 +79,23 @@ namespace ReadingList.Api
         {
             _process.CloseMainWindow();
             _process.Close();
+        }
+    }
+    
+    public static class Constants
+    {
+        public static class CommandLine
+        {
+            public const string Windows = "cmd";
+
+            public const string Unix = "#!/usr/bin/env bash";
+        }
+        
+        public static class CommandFlag
+        {
+            public const string Windows = "/c";
+
+            public const string Unix = "-c";
         }
     }
 }
