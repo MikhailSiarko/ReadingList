@@ -44,7 +44,7 @@ namespace ReadingList.Api
 
         private static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>().UseShutdownTimeout(TimeSpan.FromSeconds(50))
+                .UseStartup<Startup>()
                 .Build();
 
         private static void ConfigureClientProcess()
