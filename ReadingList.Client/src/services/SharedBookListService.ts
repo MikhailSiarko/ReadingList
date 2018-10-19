@@ -21,4 +21,10 @@ export class SharedBookListService extends ApiService {
             .then(this.onSuccess<SharedBookList>())
             .catch(onError);
     }
+
+    createList = (data: {name: string, tags: string[]}) => {
+        return this.configureRequest(ApiConfiguration.SHARED_LISTS, 'POST', {name: data.name, tags: data.tags})
+            .then(this.onSuccess<SharedBookList>())
+            .catch(onError);
+    }
 }

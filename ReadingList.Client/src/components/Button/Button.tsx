@@ -9,9 +9,9 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: React.SFC<Props> = props => (
-    <button 
+    <button
         {...props}
-        className={applyClasses(styles.button, globalStyles.shadowed)} 
+        className={applyClasses(styles.button, globalStyles['inner-shadowed'])}
         style={{backgroundColor: props.color ? props.color : Colors.Primary}}
     >
         {props.children}

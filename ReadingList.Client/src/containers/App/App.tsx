@@ -53,21 +53,19 @@ class App extends React.Component<AppProps> {
                             exact={false}
                             path="/shared"
                             component={() =>
-                                <div>
-                                    <Switch>
-                                        <Route
-                                            exact={true}
-                                            path="/shared/search/:query?"
-                                            component={SharedBookLists}
-                                        />
-                                        <Route
-                                            exact={true}
-                                            path="/shared/:id"
-                                            component={SharedBookList}
-                                        />
-                                        <DefaultRoute defaultPath="/shared/search" forPath="/shared" />
-                                    </Switch>
-                                </div>
+                                <Switch>
+                                    <Route
+                                        exact={true}
+                                        path="/shared/search/:query?"
+                                        component={SharedBookLists}
+                                    />
+                                    <Route
+                                        exact={true}
+                                        path="/shared/:id"
+                                        component={SharedBookList}
+                                    />
+                                    <DefaultRoute defaultPath="/shared/search" forPath="/shared" />
+                                </Switch>
                             }
                         />
 

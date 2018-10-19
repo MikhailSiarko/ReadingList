@@ -9,8 +9,10 @@ import { RequestResult } from '../../models';
 import AccountForm from '../../components/AccountForm';
 import { isNullOrEmpty } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
+import { withSpinner } from 'src/hoc';
 
 interface AccountProps extends RouteComponentProps<any> {
+    loading: boolean;
     login: (credentials: Credentials) => Promise<void>;
     register: (credentials: Credentials) => Promise<void>;
 }
@@ -29,11 +31,12 @@ class Account extends React.Component<AccountProps> {
     }
 
     render() {
-        return (
+        const Spinnered = withSpinner(!this.props.loading, () => (
             <div>
                 <AccountForm onSubmit={this.submitHandler} />
             </div>
-        );
+        ));
+        return <Spinnered />;
     }
 
     private async submitLogin(email: string, password: string) {
@@ -58,6 +61,12 @@ async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestRes
     }
 }
 
+function mapStatetoProps(state: RootState) {
+    return {
+        loading: state.loading
+    };
+}
+
 function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProps) {
     const authService = new AuthenticationService();
     return {
@@ -76,4 +85,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProp
     };
 }
 
-export default connect(null, mapDispatchToProps)(Account);
+export default connect(mapStatetoProps, mapDispatchToProps)(Account);

@@ -5,14 +5,13 @@ import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
-import { withContextMenu, closeContextMenues } from '../../hoc';
+import { withContextMenu, closeContextMenues, withSpinner } from '../../hoc';
 import BookList from '../../components/BookList';
 import ItemForm from '../../components/ItemForm';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
-import Spinner from '../../components/Spinner';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -63,7 +62,7 @@ class PrivateBookList extends React.Component<Props> {
     }
 
     render() {
-        if(!this.props.loading && this.isDataLoaded()) {
+        const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), () => {
             let list;
             let listItems;
             if(this.props.bookList.items.length > 0) {
@@ -124,9 +123,9 @@ class PrivateBookList extends React.Component<Props> {
                     {list}
                 </div>
             );
-        }
+        });
 
-        return <Spinner />;
+        return <Spinnered />;
     }
 
     private isDataLoaded() {

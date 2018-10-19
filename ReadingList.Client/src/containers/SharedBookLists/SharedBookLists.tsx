@@ -10,23 +10,28 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import { withSpinner } from '../../hoc';
+import RoundButton from 'src/components/RoundButton';
+import SharedListForm from 'src/components/SharedListForm';
+import { cloneDeep } from 'lodash';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
     getSharedLists: (query: string) => Promise<SharedBookList[]>;
     getOwnSharedLists: () => Promise<SharedBookList[]>;
+    createList: (data: {name: string, tags: string[]}) => Promise<SharedBookList>;
     loadingStart: () => void;
     loadingEnd: () => void;
 }
 
 interface State {
     sharedLists: SharedBookList[] | null;
+    isFormHidden: boolean;
 }
 
 class SharedBookLists extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = {sharedLists: null};
+        this.state = {sharedLists: null, isFormHidden: true};
     }
 
     searchHandler = async (query: string) => {
@@ -51,8 +56,27 @@ class SharedBookLists extends React.Component<Props, State> {
         }
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State) {
+    shouldComponentUpdate(_: Props, nextState: State) {
         return nextState.sharedLists !== null;
+    }
+
+    handleButtonClick = () => {
+        this.setState({isFormHidden: false});
+    }
+
+    handleCancel = () => {
+        this.setState({isFormHidden: true});
+    }
+
+    handleListFormSubmit = async (name: string, tags: string[]) => {
+        this.props.loadingStart();
+        const list = await this.props.createList({name, tags});
+        this.props.loadingEnd();
+        const copies = cloneDeep(this.state.sharedLists);
+        if(copies) {
+            copies.push(list);
+            this.setState({sharedLists: copies, isFormHidden: true});
+        }
     }
 
     componentDidUpdate() {
@@ -80,6 +104,12 @@ class SharedBookLists extends React.Component<Props, State> {
                     <div>
                         <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
                         <Grid items={items} />
+                        <RoundButton radius={3} onClick={this.handleButtonClick} />
+                        <SharedListForm
+                            isHidden={this.state.isFormHidden}
+                            onSubmit={this.handleListFormSubmit}
+                            onCancel={this.handleCancel}
+                         />
                     </div>
                 );
             }
@@ -101,6 +131,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
         getSharedLists: createPropActionWithResult(bookService.getLists, dispatch),
         getOwnSharedLists: createPropActionWithResult(bookService.getOwnLists, dispatch),
+        createList: createPropActionWithResult(bookService.createList, dispatch),
         loadingStart: () => {
             dispatch(loadingActions.start());
         },

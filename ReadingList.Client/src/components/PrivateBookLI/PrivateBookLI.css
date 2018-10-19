@@ -3,7 +3,7 @@
     border-left: #1565c0 solid 0.5rem;
     background-color: white;
     border-radius: 0.4rem;
-    margin: 0.8rem 1rem;
+    margin: 1rem 1rem;
     padding: 0 1rem;
 }
 
@@ -46,7 +46,6 @@
 .editing-book-li {
     text-align: center;
     transition: all 0.1s;
-    border: solid 0.1rem #a5a9af;
     border-left: #1565c0 solid 0.5rem;
     background-color: 929292;
     border-radius: 0.4rem;

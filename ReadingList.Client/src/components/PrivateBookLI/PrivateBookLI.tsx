@@ -15,10 +15,8 @@ export interface BookListItemProps extends React.DOMAttributes<HTMLLIElement> {
 
 const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
     <div>
-        <div>
-            <Button type="submit">Save</Button>
-            <Button onClick={onCancel} color={Colors.Red}>Cancel</Button>
-        </div>
+        <Button type="submit">Save</Button>
+        <Button onClick={onCancel} color={Colors.Red}>Cancel</Button>
     </div>
 );
 
@@ -118,7 +116,7 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
         const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options', 'statuses');
         if(this.props.listItem.isOnEditMode) {
             return (
-                <li className={applyClasses(styles['editing-book-li'], globalStyles.shadowed)} {...liProps}>
+                <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoEditor title={this.props.listItem.title} author={this.props.listItem.author} />
                         <BookStatusEditor status={this.props.listItem.status} options={this.props.statuses} />
@@ -129,7 +127,7 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
         }
 
         return (
-            <li className={applyClasses(styles['book-li'], globalStyles.shadowed)} {...liProps}>
+            <li className={applyClasses(styles['book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                 <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
                 <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
                 <BookStatus status={this.props.listItem.status} statuses={this.props.statuses} />

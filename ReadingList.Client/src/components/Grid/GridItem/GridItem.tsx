@@ -10,7 +10,7 @@ export interface GridItemProps {
 }
 
 const GridItem: React.SFC<GridItemProps> = props => (
-    <div className={applyClasses(styles['grid-item'], globalStyles.shadowed)} onClick={props.onClick}>
+    <div className={applyClasses(styles['grid-item'], globalStyles['inner-shadowed'])} onClick={props.onClick}>
         <h3>{props.header}</h3>
         <div>{props.content}</div>
     </div>

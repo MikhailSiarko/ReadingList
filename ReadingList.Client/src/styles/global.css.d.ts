@@ -6,6 +6,7 @@ export interface GlobalStyles {
     ['context-menu-wrapper']: string;
     ['context-menu']: string;
     ['shadowed']: string;
+    ['inner-shadowed']: string;
 }
 
 declare const globalStyles: GlobalStyles;
