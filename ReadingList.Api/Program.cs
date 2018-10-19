@@ -29,6 +29,8 @@ namespace ReadingList.Api
                     logger.LogError(ex, "An error occurred while seeding the database.");
                 }
             }
+
+            host.Run();
         }
 
         private static IWebHost BuildWebHost(string[] args) =>
