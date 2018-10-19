@@ -12,8 +12,6 @@ namespace ReadingList.Api
 {
     public class Program
     {
-        private static Process _process;
-
         public static void Main(string[] args)
         {
             var host = BuildWebHost(args);
