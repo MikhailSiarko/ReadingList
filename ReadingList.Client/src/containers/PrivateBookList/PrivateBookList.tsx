@@ -5,14 +5,17 @@ import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
-import { withContextMenu, closeContextMenues } from '../../hoc/withContextMenu';
+import { withContextMenu, closeContextMenues } from '../../hoc';
 import BookList from '../../components/BookList';
 import ItemForm from '../../components/ItemForm';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
+import { RouteComponentProps } from 'react-router';
+import Spinner from '../../components/Spinner';
 
-interface Props {
+interface Props extends RouteComponentProps<any> {
+    loading: boolean;
     bookList: PrivateList;
     statuses: SelectListItem[];
     addItem: (listItem: PrivateBookListItem) => Promise<void>;
@@ -54,14 +57,14 @@ class PrivateBookList extends React.Component<Props> {
             this.props.loadingEnd();
         }
     }
-    
+
     shouldComponentUpdate(nextProps: Props) {
         return nextProps.bookList != null && nextProps.statuses != null;
     }
 
     render() {
-        let list;
-        if(this.isDataLoaded()) {
+        if(!this.props.loading && this.isDataLoaded()) {
+            let list;
             let listItems;
             if(this.props.bookList.items.length > 0) {
                 listItems = this.props.bookList.items.map(listItem => {
@@ -107,20 +110,23 @@ class PrivateBookList extends React.Component<Props> {
             const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
             const ContexedList = withContextMenu(bookListActions, BookList);
             list = <ContexedList items={listItems} legend={legend} />;
+
+            return (
+                <div>
+                    {
+                        this.props.bookList && !this.props.bookList.isInEditMode
+                            ? <ItemForm onSubmit={async item => {
+                                this.props.loadingStart();
+                                await this.props.addItem(item);
+                                this.props.loadingEnd();
+                            }} /> : null
+                    }
+                    {list}
+                </div>
+            );
         }
-        return (
-            <div>
-                {
-                    this.props.bookList && !this.props.bookList.isInEditMode
-                        ? <ItemForm onSubmit={async item => {
-                            this.props.loadingStart();
-                            await this.props.addItem(item);
-                            this.props.loadingEnd();
-                        }} /> : null
-                }
-                {list}
-            </div>
-        );
+
+        return <Spinner />;
     }
 
     private isDataLoaded() {
@@ -131,7 +137,8 @@ class PrivateBookList extends React.Component<Props> {
 function mapStateToProps(state: RootState) {
     return {
         bookList: state.private.list,
-        statuses: state.private.bookStatuses
+        statuses: state.private.bookStatuses,
+        loading: state.loading
     };
 }
 
@@ -149,7 +156,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
             dispatch(privateBookListAction.switchEditModeForList());
         },
         updateList: createPropAction(bookService.updateList, dispatch, privateBookListAction.updateList),
-        getBookStatuses: createPropAction(bookService.getBookStatuses, dispatch, 
+        getBookStatuses: createPropAction(bookService.getBookStatuses, dispatch,
             privateBookListAction.setBookStatuses),
         loadingStart: () => {
             dispatch(loadingActions.start());

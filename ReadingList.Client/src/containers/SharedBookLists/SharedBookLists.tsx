@@ -9,8 +9,10 @@ import { createPropActionWithResult } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
+import { withSpinner } from '../../hoc';
 
 interface Props extends RouteComponentProps<any> {
+    loading: boolean;
     getSharedLists: (query: string) => Promise<SharedBookList[]>;
     getOwnSharedLists: () => Promise<SharedBookList[]>;
     loadingStart: () => void;
@@ -29,14 +31,12 @@ class SharedBookLists extends React.Component<Props, State> {
 
     searchHandler = async (query: string) => {
         this.props.loadingStart();
-        let lists = await this.props.getSharedLists(query);
-        this.props.loadingEnd();
-        this.setState({sharedLists: lists});
-        this.props.history.replace(`/shared/search/${query}`, {from: this.props.location});
+        this.props.history.push(`/shared/search/${query}`, {from: this.props.location});
     }
 
     async componentDidMount() {
-        if(this.state.sharedLists == null) {
+        this.props.loadingStart();
+        if(this.state.sharedLists === null) {
             let lists;
             if(this.props.match.params.query === 'own') {
                 lists = await this.props.getOwnSharedLists();
@@ -46,36 +46,54 @@ class SharedBookLists extends React.Component<Props, State> {
                         ? this.props.match.params.query
                         : '');
             }
-            
+            this.props.loadingEnd();
             this.setState({sharedLists: lists});
         }
     }
 
-    render() {
-        let items;
-        if(this.state.sharedLists) {
-            items = this.state.sharedLists.map(
-                list => {
-                    return {
-                        header: list.name,
-                        content: (
-                            <div>
-                                <p>{list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)}</p>
-                                <h4>{list.booksCount} book(s)</h4>
-                            </div>
-                        ),
-                        onClick: () => this.props.history.push('/shared/' + list.id,
-                            {from: this.props.location})
-                    };
-                });
-        }
-        return (
-            <div>
-                <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
-                <Grid items={items} />
-            </div>
-        );
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return nextState.sharedLists !== null;
     }
+
+    componentDidUpdate() {
+        this.props.loadingEnd();
+    }
+
+    render() {
+        const Spinnered = withSpinner(this.state.sharedLists && !this.props.loading, () => {
+            if(this.state.sharedLists) {
+                const items = this.state.sharedLists.map(
+                    list => {
+                        return {
+                            header: list.name,
+                            content: (
+                                <div>
+                                    <p>{list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)}</p>
+                                    <h4>{list.booksCount} book(s)</h4>
+                                </div>
+                            ),
+                            onClick: () => this.props.history.push('/shared/' + list.id,
+                                {from: this.props.location})
+                        };
+                    });
+                return (
+                    <div>
+                        <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
+                        <Grid items={items} />
+                    </div>
+                );
+            }
+            return null;
+        });
+
+        return <Spinnered />;
+    }
+}
+
+function mapStateToProps(state: RootState) {
+    return {
+        loading: state.loading
+    };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
@@ -92,4 +110,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     };
 }
 
-export default connect(null, mapDispatchToProps)(SharedBookLists);
+export default connect(mapStateToProps, mapDispatchToProps)(SharedBookLists);

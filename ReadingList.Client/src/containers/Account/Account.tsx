@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-import { AuthenticationService, PrivateBookListService } from '../../services';
+import { AuthenticationService } from '../../services';
 import { Credentials, AuthenticationData, authenticationActions } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
@@ -48,23 +48,13 @@ class Account extends React.Component<AccountProps> {
     }
 }
 
-function postRequestProcess(result: RequestResult<any>, ownProps: AccountProps) {
-    if(result.isSucceed) {
-        ownProps.history.push('/private');
-    } else {
-        alert(result.errorMessage);
-    }
-}
-
 async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
         ownProps: AccountProps) {
     if(result.isSucceed && result.data) {
-        const bookService = new PrivateBookListService();
         dispatch(authenticationActions.signIn(result.data));
-        const bookResult = await bookService.getList();
-        postRequestProcess(bookResult, ownProps);
+        ownProps.history.push('/private');
     } else {
-        postRequestProcess(result, ownProps);
+        alert(result.errorMessage);
     }
 }
 

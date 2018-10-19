@@ -11,13 +11,11 @@ import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import PrivateBookList from '../PrivateBookList';
-import Spinner from '../../components/Spinner';
 import SharedBookLists from '../SharedBookLists';
 import DefaultRoute from '../DefaultRoute';
 import SharedBookList from '../SharedBookList';
 
 interface AppProps extends RouteComponentProps<any> {
-    loading: RootState.LoadingState;
     identity: RootState.IdentityState;
     signOut: () => void;
 }
@@ -27,6 +25,7 @@ class App extends React.Component<AppProps> {
         event.preventDefault();
         this.props.signOut();
     }
+
     render() {
         const navLinks = this.props.identity.isAuthenticated
             ? [
@@ -41,7 +40,6 @@ class App extends React.Component<AppProps> {
 
         return (
             <div>
-                <Spinner loading={this.props.loading} />
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>
@@ -54,13 +52,13 @@ class App extends React.Component<AppProps> {
                         <PrivateRoute
                             exact={false}
                             path="/shared"
-                            component={() => 
+                            component={() =>
                                 <div>
                                     <Switch>
                                         <Route
                                             exact={true}
-                                            path="/shared/search/:query?" 
-                                            component={SharedBookLists} 
+                                            path="/shared/search/:query?"
+                                            component={SharedBookLists}
                                         />
                                         <Route
                                             exact={true}
@@ -84,7 +82,6 @@ class App extends React.Component<AppProps> {
 
 function mapStateToProps(state: RootState) {
     return {
-        loading: state.loading,
         identity: state.identity
     };
 }

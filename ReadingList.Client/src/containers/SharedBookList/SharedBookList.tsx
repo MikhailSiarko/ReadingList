@@ -8,8 +8,10 @@ import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI/SharedBookLI';
+import { withSpinner } from '../../hoc';
 
 interface Props extends RouteComponentProps<any> {
+    loading: boolean;
     getList: (id: number) => Promise<SharedList>;
     loadingStart: () => void;
     loadingEnd: () => void;
@@ -28,39 +30,50 @@ class SharedBookList extends React.Component<Props, State> {
     async componentDidMount() {
         if(this.state.list == null) {
             const id = parseInt(this.props.match.params.id, 10);
+            this.props.loadingStart();
             const list = await this.props.getList(id);
+            this.props.loadingEnd();
             this.setState({list});
         }
     }
 
     render() {
-        let listItems;
-        if(this.state.list && this.state.list.items.length > 0) {
-            listItems = this.state.list.items.map(
-                listItem => <SharedBookLI key={listItem.id} item={listItem} />);
-        }
-        if(this.state.list) {
-            const legend = (
-                <div>
-                    <h4 style={{margin: 0}}>{this.state.list.name}</h4>
-                    <p style={{margin: 0}}>
-                        {
-                            this.state.list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)
-                        }
-                    </p>
-                </div>
-            );
-            return <BookList items={listItems} legend={legend}/>;
-        }
-        return null;
+        const Spinnered = withSpinner(this.state.list && !this.props.loading, () => {
+            let listItems;
+            if(this.state.list && this.state.list.items.length > 0) {
+                listItems = this.state.list.items.map(
+                    listItem => <SharedBookLI key={listItem.id} item={listItem} />);
+            }
+            if(this.state.list) {
+                const legend = (
+                    <div>
+                        <h4 style={{margin: 0}}>{this.state.list.name}</h4>
+                        <p style={{margin: 0}}>
+                            {
+                                this.state.list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)
+                            }
+                        </p>
+                    </div>
+                );
+                return <BookList items={listItems} legend={legend}/>;
+            }
+            return null;
+        });
+        return <Spinnered />;
     }
+}
+
+function mapStateToProps(state: RootState) {
+    return {
+        loading: state.loading
+    };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     const bookService = new SharedBookListService();
     return {
         getList: async (id: number) => {
-            const result = await bookService.getList(id); 
+            const result = await bookService.getList(id);
             return result.data as SharedList;
         },
         loadingStart: () => {
@@ -72,4 +85,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     };
 }
 
-export default connect(null, mapDispatchToProps)(SharedBookList);
+export default connect(mapStateToProps, mapDispatchToProps)(SharedBookList);
