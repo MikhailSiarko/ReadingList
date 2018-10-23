@@ -51,7 +51,7 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
         const liProps = createDOMAttributeProps(this.props, 'item', 'onSave', 'onCancel');
         if(this.props.item.isOnEditMode) {
             return (
-                <li className={applyClasses(styles['editing-book-li'], globalStyles.shadowed)} {...liProps}>
+                <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoEditor title={this.props.item.title} author={this.props.item.author} />
                         <Footer onCancel={this.cancelHandler} />
@@ -61,7 +61,7 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
         }
 
         return (
-            <li className={applyClasses(styles['book-li'], globalStyles.shadowed)} {...liProps}>
+            <li className={applyClasses(styles['book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                 <BookInfo title={this.props.item.title} author={this.props.item.author} />
             </li>
         );

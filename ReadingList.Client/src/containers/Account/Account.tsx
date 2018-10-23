@@ -15,6 +15,8 @@ interface AccountProps extends RouteComponentProps<any> {
     loading: boolean;
     login: (credentials: Credentials) => Promise<void>;
     register: (credentials: Credentials) => Promise<void>;
+    loadingStart: () => void;
+    loadingEnd: () => void;
 }
 
 class Account extends React.Component<AccountProps> {
@@ -23,11 +25,13 @@ class Account extends React.Component<AccountProps> {
     }
 
     public submitHandler = async (email: string, password: string, confirmPassword?: string) => {
+        this.props.loadingStart();
         if(confirmPassword) {
             await this.submitRegister(email, password, confirmPassword as string);
         } else {
             await this.submitLogin(email, password);
         }
+        this.props.loadingEnd();
     }
 
     render() {
@@ -71,16 +75,18 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProp
     const authService = new AuthenticationService();
     return {
         login: async (credentials: Credentials) => {
-            dispatch(loadingActions.start());
             const result = await authService.login(credentials);
-            dispatch(loadingActions.end());
             await postAuthProcess(dispatch, result, ownProps);
         },
         register: async (credentials: Credentials) => {
-            dispatch(loadingActions.start());
             const result = await authService.register(credentials);
-            dispatch(loadingActions.end());
             await postAuthProcess(dispatch, result, ownProps);
+        },
+        loadingStart: () => {
+            dispatch(loadingActions.start());
+        },
+        loadingEnd: () => {
+            dispatch(loadingActions.end());
         }
     };
 }

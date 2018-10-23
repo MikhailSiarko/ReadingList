@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
 import { connect } from 'react-redux';
-import { Route, RouteComponentProps, Switch } from 'react-router';
+import { Route, RouteComponentProps, Switch, Redirect } from 'react-router';
 import PrivateRoute from '../PrivateRoute';
 import { withRouter } from 'react-router';
 import Account from '../Account';
@@ -68,8 +68,11 @@ class App extends React.Component<AppProps> {
                                 </Switch>
                             }
                         />
-
-                        <Route path="/account" component={Account} />
+                        {
+                            !this.props.identity.isAuthenticated
+                                ? <Route path="/account" component={Account} />
+                                : <Redirect to="/private" />
+                        }
                         <DefaultRoute defaultPath="/private" forPath="/" />
                     </Switch>
                 </Main>
