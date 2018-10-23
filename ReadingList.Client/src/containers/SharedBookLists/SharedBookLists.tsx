@@ -11,8 +11,9 @@ import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import { withSpinner } from '../../hoc';
 import RoundButton from 'src/components/RoundButton';
-import SharedListForm from 'src/components/SharedListForm';
 import { cloneDeep } from 'lodash';
+import AddForm from '../../components/AddForm';
+import { NamedValue } from '../../components/AddForm/AddFrom';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -64,12 +65,14 @@ class SharedBookLists extends React.Component<Props, State> {
         this.setState({isFormHidden: false});
     }
 
-    handleCancel = () => {
+    handleCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
         this.setState({isFormHidden: true});
     }
 
-    handleListFormSubmit = async (name: string, tags: string[]) => {
+    handleListFormSubmit = async (values: NamedValue[]) => {
         this.props.loadingStart();
+        const name = values.filter(item => item.name === 'name')[0].value;
+        const tags = values.filter(item => item.name === 'tags')[0].value.replace(' ', '').split(',');
         const list = await this.props.createList({name, tags});
         this.props.loadingEnd();
         const copies = cloneDeep(this.state.sharedLists);
@@ -105,11 +108,16 @@ class SharedBookLists extends React.Component<Props, State> {
                         <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
                         <Grid items={items} />
                         <RoundButton radius={3} onClick={this.handleButtonClick} />
-                        <SharedListForm
+                        <AddForm
+                            header={'Add new list'}
+                            inputs={[
+                                {name: 'name', type: 'text', required: true, placeholder: 'Enter the name...' },
+                                {name: 'tags', type: 'text', required: true, placeholder: 'Enter the tags...' }
+                            ]}
                             isHidden={this.state.isFormHidden}
                             onSubmit={this.handleListFormSubmit}
                             onCancel={this.handleCancel}
-                         />
+                        />
                     </div>
                 );
             }
