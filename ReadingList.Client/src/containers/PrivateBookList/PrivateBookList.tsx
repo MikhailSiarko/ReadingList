@@ -7,11 +7,13 @@ import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
 import { withContextMenu, closeContextMenues, withSpinner } from '../../hoc';
 import BookList from '../../components/BookList';
-import ItemForm from '../../components/ItemForm';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
+import RoundButton from '../../components/RoundButton';
+import AddForm from '../../components/AddForm';
+import { NamedValue } from '../../components/AddForm/AddFrom';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -29,6 +31,10 @@ interface Props extends RouteComponentProps<any> {
     loadingEnd: () => void;
 }
 
+interface State {
+    isFormHidden: boolean;
+}
+
 function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number) => Promise<void>) {
     return async function() {
         closeContextMenues();
@@ -43,7 +49,11 @@ function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number)
     };
 }
 
-class PrivateBookList extends React.Component<Props> {
+class PrivateBookList extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {isFormHidden: true};
+    }
     async componentDidMount() {
         if(!this.props.bookList || !this.props.statuses) {
             this.props.loadingStart();
@@ -61,9 +71,25 @@ class PrivateBookList extends React.Component<Props> {
         return nextProps.bookList != null && nextProps.statuses != null;
     }
 
+    handleFormSubmit = async (values: NamedValue[]) => {
+        const title = values.filter(item => item.name === 'title')[0].value;
+        const author = values.filter(item => item.name === 'author')[0].value;
+        this.props.loadingStart();
+        await this.props.addItem({title, author} as PrivateBookListItem);
+        this.props.loadingEnd();
+        this.setState({isFormHidden: true});
+    }
+
+    handleFormCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
+        this.setState({isFormHidden: true});
+    }
+
+    handleButtonClick = () => {
+        this.setState({isFormHidden: false});
+    }
+
     render() {
         const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), () => {
-            let list;
             let listItems;
             if(this.props.bookList.items.length > 0) {
                 listItems = this.props.bookList.items.map(listItem => {
@@ -108,19 +134,21 @@ class PrivateBookList extends React.Component<Props> {
             );
             const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
             const ContexedList = withContextMenu(bookListActions, BookList);
-            list = <ContexedList items={listItems} legend={legend} />;
 
             return (
                 <div>
-                    {
-                        this.props.bookList && !this.props.bookList.isInEditMode
-                            ? <ItemForm onSubmit={async item => {
-                                this.props.loadingStart();
-                                await this.props.addItem(item);
-                                this.props.loadingEnd();
-                            }} /> : null
-                    }
-                    {list}
+                    <RoundButton radius={3} onClick={this.handleButtonClick} />
+                    <AddForm
+                        onSubmit={this.handleFormSubmit}
+                        header={'Add book'}
+                        inputs={[
+                            {name: 'title', type: 'text', placeholder: 'Enter the title...', required: true},
+                            {name: 'author', type: 'text', placeholder: 'Enter the author...', required: true}
+                        ]}
+                        isHidden={this.state.isFormHidden}
+                        onCancel={this.handleFormCancel}
+                    />
+                    <ContexedList items={listItems} legend={legend} />
                 </div>
             );
         });
