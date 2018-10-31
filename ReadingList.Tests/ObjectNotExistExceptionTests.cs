@@ -1,5 +1,6 @@
-using ReadingList.Domain.Exceptions;
-using ReadingList.WriteModel.Models;
+using ReadingList.Domain.Entities;
+using ReadingList.Domain.Entities.Identity;
+using ReadingList.Application.Exceptions;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -16,7 +17,7 @@ namespace ReadingList.Tests
                 $"Book list with Id:{listId.ToString()} for user with Email:{username} doesn't exist";
 
             var exception =
-                new ObjectNotExistForException<BookListWm, UserWm>(new OnExceptionObjectDescriptor
+                new ObjectNotExistForException<BookList, User>(new OnExceptionObjectDescriptor
                     {
                         ["Id"] = listId.ToString()
                     },
@@ -37,7 +38,7 @@ namespace ReadingList.Tests
                 $"Book list with Id:{listId.ToString()} doesn't exist";
 
             var exception =
-                new ObjectNotExistException<BookListWm>(new OnExceptionObjectDescriptor
+                new ObjectNotExistException<BookList>(new OnExceptionObjectDescriptor
                 {
                     ["Id"] = listId.ToString()
                 });
@@ -54,7 +55,7 @@ namespace ReadingList.Tests
                 $"Book list for user with Email:{email} doesn't exist";
 
             var exception =
-                new ObjectNotExistForException<BookListWm, UserWm>(null, new OnExceptionObjectDescriptor
+                new ObjectNotExistForException<BookList, User>(null, new OnExceptionObjectDescriptor
                 {
                     ["Email"] = email
                 });
@@ -71,7 +72,7 @@ namespace ReadingList.Tests
                 $"Book list with Id:{id.ToString()} for user doesn't exist";
 
             var exception =
-                new ObjectNotExistForException<BookListWm, UserWm>(new OnExceptionObjectDescriptor
+                new ObjectNotExistForException<BookList, User>(new OnExceptionObjectDescriptor
                 {
                     ["Id"] = id.ToString()
                 }, null);
@@ -88,7 +89,7 @@ namespace ReadingList.Tests
                 $"Shared book list item with Id:{id.ToString()} doesn't exist";
 
             var exception =
-                new ObjectNotExistException<SharedBookListItemWm>(new OnExceptionObjectDescriptor
+                new ObjectNotExistException<SharedBookListItem>(new OnExceptionObjectDescriptor
                 {
                     ["Id"] = id.ToString()
                 });
@@ -105,7 +106,7 @@ namespace ReadingList.Tests
                 $"Private book list item with Id:{id.ToString()} doesn't exist";
 
             var exception =
-                new ObjectNotExistException<PrivateBookListItemWm>(new OnExceptionObjectDescriptor
+                new ObjectNotExistException<PrivateBookListItem>(new OnExceptionObjectDescriptor
                 {
                     ["Id"] = id.ToString()
                 });

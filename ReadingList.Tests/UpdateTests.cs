@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using ReadingList.Domain.Services;
-using ReadingList.WriteModel.Models;
+using ReadingList.Domain.Entities;
+using ReadingList.Domain.Enumerations;
+using ReadingList.Application.Services;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -16,7 +17,7 @@ namespace ReadingList.Tests
             const BookListType type = BookListType.Private;
             const int ownerId = 1;
 
-            var bookList = new BookListWm
+            var bookList = new BookList
             {
                 Id = id,
                 Name = name,
@@ -26,16 +27,16 @@ namespace ReadingList.Tests
 
             var source = new Dictionary<string, object>
             {
-                [nameof(BookListWm.Id)] = 2,
-                [nameof(BookListWm.Name)] = "Updated",
-                [nameof(BookListWm.Type)] = BookListType.Shared,
-                [nameof(BookListWm.OwnerId)] = 2
+                [nameof(BookList.Id)] = 2,
+                [nameof(BookList.Name)] = "Updated",
+                [nameof(BookList.Type)] = BookListType.Shared,
+                [nameof(BookList.OwnerId)] = 2
             };
 
             updateService.Update(bookList, source);
 
             Assert.True(bookList.Id == id);
-            Assert.True(bookList.Name == (string)source[nameof(BookListWm.Name)]);
+            Assert.True(bookList.Name == (string)source[nameof(BookList.Name)]);
             Assert.True(bookList.Type == type);
             Assert.True(bookList.OwnerId == ownerId);
         }

@@ -19,7 +19,7 @@ namespace ReadingList.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ExceptionMessages {
@@ -192,6 +192,24 @@ namespace ReadingList.Resources {
         public static string ObjectNotFoundWithData {
             get {
                 return ResourceManager.GetString("ObjectNotFoundWithData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User login is not specified.
+        /// </summary>
+        public static string UsernameValidationMessage {
+            get {
+                return ResourceManager.GetString("UsernameValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more validation failures have occurred:.
+        /// </summary>
+        public static string ValidationExceptionMessage {
+            get {
+                return ResourceManager.GetString("ValidationExceptionMessage", resourceCulture);
             }
         }
         

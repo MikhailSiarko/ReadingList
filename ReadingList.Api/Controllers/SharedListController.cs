@@ -2,24 +2,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
-using ReadingList.Api.Infrastructure.Filters;
-using ReadingList.Api.QueriesData;
-using ReadingList.Domain.Commands;
-using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Queries;
-using ReadingList.Domain.Queries.SharedList;
-using ReadingList.Domain.Services;
-using ReadingList.WriteModel.Models;
+using ReadingList.Api.RequestData;
+using ReadingList.Application.Commands;
+using ReadingList.Application.Infrastructure;
+using ReadingList.Application.Queries;
+using ReadingList.Application.Queries.SharedList;
+using ReadingList.Application.Services;
 
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [ListRoute(BookListType.Shared)]
+    [ListRoute("Shared")]
     public class SharedListController : Controller
     {
-        private readonly IDomainService _domainService;
+        private readonly IApplicationService _domainService;
 
-        public SharedListController(IDomainService domainService)
+        public SharedListController(IApplicationService domainService)
         {
             _domainService = domainService;
         }
@@ -57,22 +55,18 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPost]
-        [ValidateModelState]
-        public async Task<IActionResult> Post([FromBody] CreateSharedListData sharedListData)
+        public async Task<IActionResult> Post([FromBody] SharedListRequestData requestData)
         {
             var list = await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name,
-                sharedListData.Name,
-                sharedListData.Tags));
-
+                requestData.Name, requestData.Tags));
             return Ok(list);
         }
-        
+
         [HttpPut("{id}")]
-        [ValidateModelState]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateSharedListData updateData)
+        public async Task<IActionResult> Put(int id, [FromBody] SharedListRequestData requestData)
         {
-            var list = await _domainService.ExecuteAsync(new UpdateSharedListCommand(User.Identity.Name, id, updateData.Name,
-                updateData.Tags));
+            var list = await _domainService.ExecuteAsync(
+                new UpdateSharedListCommand(User.Identity.Name, id, requestData.Name, requestData.Tags));
 
             return Ok(list);
         }
@@ -86,11 +80,14 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPost("{listId}/items")]
-        [ValidateModelState]
-        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemToSharedListData addItemData)
+        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] SharedItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name, 
-                new BookInfo(addItemData.Title, addItemData.Author, addItemData.GenreId), addItemData.Tags));
+            var item = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name,
+                new BookInfo
+                {
+                    Author = requestData.Author,
+                    Title = requestData.Title
+                }, requestData.Tags));
 
             return Ok(item);
         }
@@ -112,13 +109,14 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPut("{listId}/items/{itemId}")]
-        [ValidateModelState]
-        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] UpdateSharedListItemData updateItemData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] SharedItemRequestData requestData)
         {
             var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId,
-                listId,
-                new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId),
-                updateItemData.Tags));
+                listId, new BookInfo
+                {
+                    Author = requestData.Author,
+                    Title = requestData.Title
+                }, requestData.Tags));
             
             return Ok(item);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
-using ReadingList.Domain.Services;
-using ReadingList.WriteModel.Models;
+using ReadingList.Domain.Entities;
+using ReadingList.Domain.Enumerations;
+using ReadingList.Application.Services;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -10,7 +11,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns0_When_BookStatusChangedFromToReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Author = "Author",
                 Title = "Title",
@@ -31,7 +32,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns0_When_BookStatusChangedFromReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Author = "Author",
                 Title = "Title",
@@ -52,7 +53,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns135Minutes_When_BookStatusChangedFromReadingToRead_And_LastStatusUpdateDateIsNowMinus135Minutes()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Author = "Author",
                 Title = "Title",
@@ -75,7 +76,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Calculate_Returns3Days_When_BookStatusChangedFromReadingToStartedButPostponed_And_LastStatusUpdateDateIsNowMinus3Days()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Author = "Author",
                 Title = "Title",

@@ -1,24 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>ReadingList.Domain</AssemblyName>
+    <RootNamespace>ReadingList.Domain</RootNamespace>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Cinch.SqlBuilder" Version="1.0.9" />
-    <PackageReference Include="MediatR" Version="4.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="4.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.109.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ReadingList.ReadModel\ReadingList.ReadModel.csproj" />
-    <ProjectReference Include="..\ReadingList.Resources\ReadingList.Resources.csproj" />
-    <ProjectReference Include="..\ReadingList.WriteModel\ReadingList.WriteModel.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="MapperProfiles\PrivateBookListItemProfile.cs" />
-    <Compile Remove="Infrastructure\Filters\ValidationFilters\EntitiesValidator.cs" />
-  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SharedBookList as SharedList } from '../../models/BookList/Implementations/SharedBookList';
-import { SharedBookListService } from '../../services/SharedBookListService';
+import { SharedBookListService } from '../../services';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { connect } from 'react-redux';

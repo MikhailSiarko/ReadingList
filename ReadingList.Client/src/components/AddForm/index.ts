@@ -1,2 +1,1 @@
-import AddForm from './AddFrom';
-export default AddForm;
+export * from './AddFrom';

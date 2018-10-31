@@ -165,4 +165,10 @@
   <data name="Object_SharedBookListItem" xml:space="preserve">
     <value>Shared book list item with {0}</value>
   </data>
+  <data name="ValidationExceptionMessage" xml:space="preserve">
+    <value>One or more validation failures have occurred:</value>
+  </data>
+  <data name="UsernameValidationMessage" xml:space="preserve">
+    <value>User login is not specified</value>
+  </data>
 </root>

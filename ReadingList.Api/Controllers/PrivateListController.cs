@@ -2,23 +2,21 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
-using ReadingList.Api.Infrastructure.Filters;
-using ReadingList.Api.QueriesData;
-using ReadingList.Domain.Commands;
-using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Queries;
-using ReadingList.Domain.Services;
-using ReadingList.WriteModel.Models;
+using ReadingList.Api.RequestData;
+using ReadingList.Application.Commands;
+using ReadingList.Application.Infrastructure;
+using ReadingList.Application.Queries;
+using ReadingList.Application.Services;
 
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [ListRoute(BookListType.Private)]
+    [ListRoute("Private")]
     public class PrivateListController : Controller
     {
-        private readonly IDomainService _domainService;
+        private readonly IApplicationService _domainService;
 
-        public PrivateListController(IDomainService domainService)
+        public PrivateListController(IApplicationService domainService)
         {
             _domainService = domainService;
         }
@@ -32,20 +30,18 @@ namespace ReadingList.Api.Controllers
         }
         
         [HttpPut]
-        [ValidateModelState]
-        public async Task<IActionResult> Put([FromBody] UpdatePrivateListData listData)
+        public async Task<IActionResult> Put([FromBody] UpdatePrivateListRequestData requestData)
         {
-            var list = await _domainService.ExecuteAsync(new UpdatePrivateListCommand(User.Identity.Name, listData.Name));
+            var list = await _domainService.ExecuteAsync(new UpdatePrivateListCommand(User.Identity.Name,
+                requestData.Name));
 
             return Ok(list);
         }
 
         [HttpPost("items")]
-        [ValidateModelState]
-        public async Task<IActionResult> AddItem([FromBody] AddItemToPrivateListData addItemData)
+        public async Task<IActionResult> AddItem([FromBody] BookInfo bookInfo)
         {
-            var item = await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name,
-                new BookInfo(addItemData.Title, addItemData.Author, addItemData.GenreId)));
+            var item = await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Identity.Name, bookInfo));
             
             return Ok(item);
         }
@@ -59,11 +55,14 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPut("items/{id}")]
-        [ValidateModelState]
-        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateListItemData updateItemData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateItemRequestData requestData)
         {
             var item = await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Identity.Name, id,
-                new BookInfo(updateItemData.Title, updateItemData.Author, updateItemData.GenreId), updateItemData.Status));
+                new BookInfo
+                {
+                    Title = requestData.Title,
+                    Author = requestData.Author
+                }, requestData.Status));
             
             return Ok(item);
         }

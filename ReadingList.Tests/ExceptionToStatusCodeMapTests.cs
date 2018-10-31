@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using ReadingList.Api;
-using ReadingList.Domain.Exceptions;
+using ReadingList.Application.Exceptions;
 using Xunit;
 
 namespace ReadingList.Tests

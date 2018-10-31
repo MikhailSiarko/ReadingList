@@ -12,8 +12,7 @@ import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
 import RoundButton from '../../components/RoundButton';
-import AddForm from '../../components/AddForm';
-import { NamedValue } from '../../components/AddForm/AddFrom';
+import { NamedValue, AddForm } from '../../components/AddForm';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -136,7 +135,7 @@ class PrivateBookList extends React.Component<Props, State> {
             const ContexedList = withContextMenu(bookListActions, BookList);
 
             return (
-                <div>
+                <>
                     <RoundButton radius={3} onClick={this.handleButtonClick} />
                     <AddForm
                         onSubmit={this.handleFormSubmit}
@@ -149,7 +148,7 @@ class PrivateBookList extends React.Component<Props, State> {
                         onCancel={this.handleFormCancel}
                     />
                     <ContexedList items={listItems} legend={legend} />
-                </div>
+                </>
             );
         });
 

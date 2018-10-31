@@ -17,7 +17,7 @@ interface Props {
     onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-class AddForm extends React.Component<Props> {
+export class AddForm extends React.Component<Props> {
     handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
@@ -76,5 +76,3 @@ class AddForm extends React.Component<Props> {
     }
 
 }
-
-export default AddForm;

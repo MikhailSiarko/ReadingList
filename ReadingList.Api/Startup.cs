@@ -5,15 +5,13 @@ using System.Reflection;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using ReadingList.Api.Authentication.AuthenticationOptions;
 using ReadingList.Api.Middlewares;
-using ReadingList.Domain;
-using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Services;
-using ReadingList.Domain.Services.Authentication;
-using ReadingList.Domain.Services.Encryption;
-using ReadingList.Domain.Services.Sql;
-using ReadingList.Domain.Services.Sql.Interfaces;
+using ReadingList.Application;
+using ReadingList.Application.Authentication.AuthenticationOptions;
+using ReadingList.Application.Exceptions;
+using ReadingList.Application.Services;
+using ReadingList.Application.Services.Authentication;
+using ReadingList.Application.Services.Encryption;
 
 namespace ReadingList.Api
 {
@@ -26,7 +24,7 @@ namespace ReadingList.Api
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                options.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(Startup)));
+                options.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(JwtBearerConfigurator)));
             });
         }
 
@@ -54,7 +52,8 @@ namespace ReadingList.Api
                         typeof(WrongPasswordException),
                         typeof(ObjectAlreadyExistsException),
                         typeof(CannotChangeStatusException),
-                        typeof(ObjectNotExistException)
+                        typeof(ObjectNotExistException),
+                        typeof(ValidationException)
                     }
                 },
                 {
@@ -78,13 +77,10 @@ namespace ReadingList.Api
         {
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEncryptionService, EncryptionService>();
-            services.AddTransient<IUserSqlService, UserSqlService>();
-            services.AddTransient<IBookListSqlService, PrivateBookListSqlService>();
-            services.AddTransient<ISharedBookListSqlService, SharedBookListSqlService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
             services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
-            services.AddScoped<IDomainService, DomainService>();
-            services.AddDomainModule();
+            services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddApplicationModule();
         }
     }
 }

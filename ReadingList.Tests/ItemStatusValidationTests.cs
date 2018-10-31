@@ -1,6 +1,7 @@
-﻿using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Services.Validation;
-using ReadingList.WriteModel.Models;
+﻿using ReadingList.Domain.Entities;
+using ReadingList.Domain.Enumerations;
+using ReadingList.Application.Exceptions;
+using ReadingList.Application.Services.Validation;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -10,7 +11,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Validate_ReturnsCantChangeStatusFromReadToReading_When_OldStatusIsReadAndNewStatusIsReading()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Status = BookItemStatus.Read
             };
@@ -23,7 +24,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Validate_ReturnsCantChangeStatusFromReadingToToReading_When_OldStatusIsReadingAndNewStatusIsToReading()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Status = BookItemStatus.Reading
             };
@@ -36,7 +37,7 @@ namespace ReadingList.Tests
         [Fact]
         public void Validate_ReturnsCantChangeStatusFromStartedButPostponedToToReading_When_OldStatusIsStartedButPostponedAndNewStatusIsToReading()
         {
-            var item = new PrivateBookListItemWm
+            var item = new PrivateBookListItem
             {
                 Status = BookItemStatus.StartedButPostponed
             };

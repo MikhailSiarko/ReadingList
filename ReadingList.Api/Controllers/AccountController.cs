@@ -1,44 +1,42 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
-using ReadingList.Api.Infrastructure.Filters;
-using ReadingList.Api.QueriesData;
-using ReadingList.Domain.Commands;
-using ReadingList.Domain.Queries;
-using ReadingList.Domain.Services;
+using ReadingList.Api.RequestData;
+using ReadingList.Application.Commands;
+using ReadingList.Application.Queries;
+using ReadingList.Application.Services;
 
 namespace ReadingList.Api.Controllers
 {
     [ApiRoute("[controller]")]
-    [ValidateModelState]
     public class AccountController : Controller
     {
-        private readonly IDomainService _domainService;
+        private readonly IApplicationService _domainService;
         
-        public AccountController(IDomainService domainService)
+        public AccountController(IApplicationService domainService)
         {
             _domainService = domainService;
         }
         
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginData loginData)
+        public async Task<IActionResult> Login([FromBody]LoginRequestData requestData)
         {
-            return await AuthenticateUser(loginData.Email, loginData.Password);
+            var authenticationData =
+                await _domainService.AskAsync(new LoginUserQuery(requestData.Email, requestData.Password));
+            
+            return Ok(authenticationData);
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterData registerData)
+        public async Task<IActionResult> Register([FromBody]RegisterRequestData requestData)
         {
-            await _domainService.ExecuteAsync(new RegisterUserCommand(registerData.Email, registerData.Password));
+            await _domainService.ExecuteAsync(new RegisterUserCommand(requestData.Email, requestData.Password,
+                requestData.ConfirmPassword));
 
-            return await AuthenticateUser(registerData.Email, registerData.Password);
-        }
-
-        private async Task<IActionResult> AuthenticateUser(string email, string password)
-        {
-            var authenticationData = await _domainService.AskAsync(new LoginUserQuery(email, password));
+            var authenticationData =
+                await _domainService.AskAsync(new LoginUserQuery(requestData.Email, requestData.Password));
             
             return Ok(authenticationData);
-        }        
+        }       
     }
 }

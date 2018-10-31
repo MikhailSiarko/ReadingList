@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Search from '../../components/Search';
 import Grid from '../../components/Grid';
-import { SharedBookList } from '../../models/BookList/Implementations/SharedBookList';
-import { SharedBookListService } from '../../services/SharedBookListService';
+import { SharedBookList } from '../../models';
+import { SharedBookListService } from '../../services';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { createPropActionWithResult } from '../../utils';
@@ -12,8 +12,7 @@ import { loadingActions } from '../../store/actions/loading';
 import { withSpinner } from '../../hoc';
 import RoundButton from 'src/components/RoundButton';
 import { cloneDeep } from 'lodash';
-import AddForm from '../../components/AddForm';
-import { NamedValue } from '../../components/AddForm/AddFrom';
+import { NamedValue, AddForm } from '../../components/AddForm';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
