@@ -9,7 +9,7 @@ using ReadingList.Domain.Enumerations;
 using ReadingList.Write;
 using System;
 
-namespace ReadingList.DataAccess.Migrations
+namespace ReadingList.Write.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20181031092021_Initial")]

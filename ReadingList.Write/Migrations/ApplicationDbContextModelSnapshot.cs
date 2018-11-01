@@ -9,7 +9,7 @@ using ReadingList.Domain.Enumerations;
 using ReadingList.Write;
 using System;
 
-namespace ReadingList.DataAccess.Migrations
+namespace ReadingList.Write.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

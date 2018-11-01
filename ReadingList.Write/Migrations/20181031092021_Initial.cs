@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ReadingList.DataAccess.Migrations
+namespace ReadingList.Write.Migrations
 {
     public partial class Initial : Migration
     {
