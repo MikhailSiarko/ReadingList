@@ -7,11 +7,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Middlewares;
 using ReadingList.Application;
-using ReadingList.Application.Authentication.AuthenticationOptions;
 using ReadingList.Application.Exceptions;
 using ReadingList.Application.Services;
-using ReadingList.Application.Services.Authentication;
-using ReadingList.Application.Services.Encryption;
 
 namespace ReadingList.Api
 {
@@ -20,7 +17,7 @@ namespace ReadingList.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            ConfigureDomain(services);
+            ConfigureApplication(services);
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
@@ -73,14 +70,10 @@ namespace ReadingList.Api
             };
         }
 
-        private static void ConfigureDomain(IServiceCollection services)
+        private static void ConfigureApplication(IServiceCollection services)
         {
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<IEncryptionService, EncryptionService>();
-            services.AddSingleton<IJwtOptions, JwtOptions>();
-            services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
             services.AddScoped<IApplicationService, ApplicationService>();
-            services.AddApplicationModule();
+            services.AddApplication();
         }
     }
 }

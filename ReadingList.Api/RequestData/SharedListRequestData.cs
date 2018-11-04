@@ -1,6 +1,6 @@
 namespace ReadingList.Api.RequestData
 {
-    public class SharedListRequestData
+    public struct SharedListRequestData
     {
         public string Name { get; set; }
 

@@ -19,7 +19,7 @@ namespace ReadingList.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ExceptionMessages {
@@ -115,29 +115,11 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Private list with {0}.
-        /// </summary>
-        public static string Object_PrivateBookList {
-            get {
-                return ResourceManager.GetString("Object_PrivateBookList", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Private book list item with {0}.
         /// </summary>
         public static string Object_PrivateBookListItem {
             get {
                 return ResourceManager.GetString("Object_PrivateBookListItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shared list with {0}.
-        /// </summary>
-        public static string Object_SharedBookList {
-            get {
-                return ResourceManager.GetString("Object_SharedBookList", resourceCulture);
             }
         }
         

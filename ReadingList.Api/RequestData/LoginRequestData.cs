@@ -1,6 +1,6 @@
 namespace ReadingList.Api.RequestData
 {
-    public class LoginRequestData
+    public struct LoginRequestData
     {
         public string Email { get; set; }
 

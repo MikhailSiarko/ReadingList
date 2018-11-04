@@ -138,17 +138,11 @@
   <data name="ObjectNotExist" xml:space="preserve">
     <value>{0} doesn't exist</value>
   </data>
-  <data name="Object_PrivateBookList" xml:space="preserve">
-    <value>Private list with {0}</value>
-  </data>
   <data name="Object_PrivateBookListItem" xml:space="preserve">
     <value>Private book list item with {0}</value>
   </data>
   <data name="Object_Default" xml:space="preserve">
     <value>Object with {0}</value>
-  </data>
-  <data name="Object_SharedBookList" xml:space="preserve">
-    <value>Shared list with {0}</value>
   </data>
   <data name="Object_BookList" xml:space="preserve">
     <value>Book list with {0}</value>

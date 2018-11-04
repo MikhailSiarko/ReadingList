@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ReadingList.Application.Queries;
-using ReadingList.Application.Queries.SharedList;
 using ReadingList.Read;
-using ReadingList.Read.SqlQueries;
 
 namespace ReadingList.Application
 {
@@ -11,28 +8,9 @@ namespace ReadingList.Application
     {
         private readonly IReadOnlyDictionary<Type, string> _map;
 
-        public ReadQueriesRegistry()
+        public ReadQueriesRegistry(IReadOnlyDictionary<Type, string> map)
         {
-            _map = InitializeMap();
-        }
-
-        private static IReadOnlyDictionary<Type, string> InitializeMap()
-        {
-            return new Dictionary<Type, string>
-            {
-                // User
-                [typeof(LoginUserQuery)] = UserSqlQueries.SelectByLogin,
-                [typeof(GetUserQuery)] = UserSqlQueries.SelectById,
-                // Shared
-                [typeof(FindSharedListsQuery)] = SharedListSqlQueries.SelectPreviews, // TODO change after search logic implementation
-                [typeof(GetSharedListQuery)] = SharedListSqlQueries.SelectById,
-                [typeof(GetSharedListItemsQuery)] = SharedItemSqlQueries.SelectByListId,
-                [typeof(GetSharedListItemQuery)] = SharedItemSqlQueries.SelectById,
-                [typeof(GetUserSharedListsQuery)] = SharedListSqlQueries.SelectOwn,
-                // Private
-                [typeof(GetPrivateListQuery)] = PrivateListSqlQueries.SelectByLogin,
-                [typeof(GetPrivateListItemQuery)] = PrivateItemSqlQueries.SelectById
-            };
+            _map = map;
         }
 
         public bool TryGetSql<T>(out string sql)

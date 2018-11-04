@@ -1,6 +1,6 @@
 namespace ReadingList.Api.RequestData
 {
-    public class UpdatePrivateItemRequestData
+    public struct UpdatePrivateItemRequestData
     {
         public string Author { get; set; }
         
