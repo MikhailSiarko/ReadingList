@@ -6,6 +6,7 @@ interface BookItemStyle {
     ['book-title']: string;
     ['reading-time']: string;
     ['edited-status']: string;
+    ['edited-footer']: string;
 }
 
 declare const bookItemStyle: BookItemStyle;

@@ -1,4 +1,4 @@
-import { List } from '../Abstractions/List';
+import { List } from '..';
 import { PrivateBookListItem } from './PrivateBookListItem';
 
 export class PrivateBookList implements List<PrivateBookListItem> {

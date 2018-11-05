@@ -1,7 +1,7 @@
 import ApiService from './ApiService';
 import { ApiConfiguration } from '../config/ApiConfiguration';
 import { onError } from '../utils';
-import { SharedBookList } from '../models/BookList/Implementations/SharedBookList';
+import { SharedBookList, SharedBookListItem } from '../models/BookList';
 
 export class SharedBookListService extends ApiService {
     getOwnLists = () => {
@@ -19,6 +19,12 @@ export class SharedBookListService extends ApiService {
     getList = (id: number) => {
         return this.configureRequest(ApiConfiguration.getSharedListUrl(id), 'GET')
             .then(this.onSuccess<SharedBookList>())
+            .catch(onError);
+    }
+
+    addItem =(listId: number, listItem: SharedBookListItem) => {
+        return this.configureRequest(ApiConfiguration.getAddItemToSharedListUrl(listId), 'POST', listItem)
+            .then(this.onSuccess<SharedBookListItem>())
             .catch(onError);
     }
 

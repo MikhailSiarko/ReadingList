@@ -9,3 +9,7 @@
     text-shadow: 0 0.2rem 0.2rem #a5a9af;
     color: #1565c0;
 }
+
+.form-button-wrapper {
+    margin: 2rem;
+}

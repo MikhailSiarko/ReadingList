@@ -1,5 +1,5 @@
 interface RoundButtonStyle {
-    ['round-button-wrapper']: string;
+    ['round-button']: string;
 }
 
 declare const style: RoundButtonStyle;

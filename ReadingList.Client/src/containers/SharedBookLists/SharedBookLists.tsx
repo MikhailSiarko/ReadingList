@@ -10,9 +10,9 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import { withSpinner } from '../../hoc';
-import RoundButton from 'src/components/RoundButton';
 import { cloneDeep } from 'lodash';
 import { NamedValue, AddForm } from '../../components/AddForm';
+import FixedButton from '../../components/FixedButton';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -106,7 +106,7 @@ class SharedBookLists extends React.Component<Props, State> {
                     <div>
                         <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
                         <Grid items={items} />
-                        <RoundButton radius={3} onClick={this.handleButtonClick} />
+                        <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
                         <AddForm
                             header={'Add new list'}
                             inputs={[

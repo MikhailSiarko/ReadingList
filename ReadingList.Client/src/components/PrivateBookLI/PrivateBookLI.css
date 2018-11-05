@@ -38,6 +38,11 @@
     font-size: 1.8rem;
 }
 
+.edited-footer > div {
+    display: inline-block;
+    margin: 0.8rem 2rem;
+}
+
 .status > select {
     border: none;
     text-align: left;

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.css';
 import { PrivateBookListItem, SelectListItem } from '../../models';
-import Button from '../Button';
 import { convertSecondsToReadingTime, createDOMAttributeProps, applyClasses } from '../../utils';
 import Colors from '../../styles/colors';
 import globalStyles from '../../styles/global.css';
+import RoundButton from '../RoundButton';
 
 export interface BookListItemProps extends React.DOMAttributes<HTMLLIElement> {
     listItem: PrivateBookListItem;
@@ -14,9 +14,9 @@ export interface BookListItemProps extends React.DOMAttributes<HTMLLIElement> {
 }
 
 const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
-    <div>
-        <Button type="submit">Save</Button>
-        <Button onClick={onCancel} color={Colors.Red}>Cancel</Button>
+    <div className={styles['edited-footer']}>
+        <RoundButton radius={2} type="submit">✓</RoundButton>
+        <RoundButton radius={2} onClick={onCancel} color={Colors.Red}>×</RoundButton>
     </div>
 );
 

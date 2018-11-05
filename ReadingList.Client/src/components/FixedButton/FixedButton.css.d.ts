@@ -1,5 +1,5 @@
 interface Style {
-    ['button']: string;
+    ['wrapper']: string;
 }
 
 declare const buttonStyle: Style;

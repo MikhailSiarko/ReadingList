@@ -1,4 +1,4 @@
-import { List } from '../Abstractions/List';
+import { List } from '..';
 import { SharedBookListItem } from './SharedBookListItem';
 
 export class SharedBookList implements List<SharedBookListItem> {

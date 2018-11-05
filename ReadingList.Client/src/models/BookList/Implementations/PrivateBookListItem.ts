@@ -1,4 +1,4 @@
-import { ListItem } from '../Abstractions/ListItem';
+import { ListItem } from '..';
 
 export class PrivateBookListItem implements ListItem {
     id: number;
@@ -8,4 +8,5 @@ export class PrivateBookListItem implements ListItem {
     title: string;
     genreId: string;
     readingTimeInSeconds: number;
+    listId: number;
 }

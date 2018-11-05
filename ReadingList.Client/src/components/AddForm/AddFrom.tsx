@@ -1,8 +1,8 @@
 import * as React from 'react';
 import globalStyles from 'src/styles/global.css';
-import Button from '../Button';
 import Colors from 'src/styles/colors';
 import styles from './AddForm.css';
+import RoundButton from '../RoundButton';
 
 export type NamedValue = {
     name: string;
@@ -66,9 +66,9 @@ export class AddForm extends React.Component<Props> {
                         <h2>{this.props.header}</h2>
                     </div>
                     {inputs}
-                    <div>
-                        <Button type="submit">Save</Button>
-                        <Button onClick={this.resetForm} color={Colors.Red}>Cancel</Button>
+                    <div className={styles['buttons-wrapper']}>
+                        <RoundButton radius={3} type="submit">✓</RoundButton>
+                        <RoundButton radius={3} onClick={this.resetForm} color={Colors.Red}>×</RoundButton>
                     </div>
                 </div>
             </form>

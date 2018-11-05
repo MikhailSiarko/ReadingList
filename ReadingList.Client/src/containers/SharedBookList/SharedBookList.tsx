@@ -9,22 +9,28 @@ import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI/SharedBookLI';
 import { withSpinner } from '../../hoc';
+import { AddForm, NamedValue } from '../../components/AddForm';
+import { cloneDeep } from 'lodash';
+import { SharedBookListItem } from '../../models/BookList';
+import FixedButton from '../../components/FixedButton';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
     getList: (id: number) => Promise<SharedList>;
+    addItem: (listId: number, item: SharedBookListItem) => Promise<SharedBookListItem>;
     loadingStart: () => void;
     loadingEnd: () => void;
 }
 
 interface State {
     list: SharedList | null;
+    isFormHidden: boolean;
 }
 
 class SharedBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = {list: null};
+        this.state = {list: null, isFormHidden: true};
     }
 
     async componentDidMount() {
@@ -34,6 +40,29 @@ class SharedBookList extends React.Component<Props, State> {
             const list = await this.props.getList(id);
             this.props.loadingEnd();
             this.setState({list});
+        }
+    }
+
+    handleButtonClick = () => {
+        this.setState({isFormHidden: false});
+    }
+
+    handleCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
+        this.setState({isFormHidden: true});
+    }
+
+    handleListFormSubmit = async (values: NamedValue[]) => {
+        this.props.loadingStart();
+        const title = values.filter(item => item.name === 'title')[0].value;
+        const author = values.filter(item => item.name === 'author')[0].value;
+        const tags = values.filter(item => item.name === 'tags')[0].value.replace(' ', '').split(',');
+        const listItem =
+            await this.props.addItem((this.state.list as SharedList).id, new SharedBookListItem(author, title, tags));
+        this.props.loadingEnd();
+        const copy = cloneDeep(this.state.list);
+        if(copy) {
+            copy.items.push(listItem);
+            this.setState({list: copy, isFormHidden: true});
         }
     }
 
@@ -55,7 +84,23 @@ class SharedBookList extends React.Component<Props, State> {
                         </p>
                     </div>
                 );
-                return <BookList items={listItems} legend={legend}/>;
+                return (
+                    <>
+                        <BookList items={listItems} legend={legend} />
+                        <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
+                        <AddForm
+                            header={'Add new item'}
+                            inputs={[
+                                {name: 'title', type: 'text', required: true, placeholder: 'Enter the title...' },
+                                {name: 'author', type: 'text', required: true, placeholder: 'Enter the author...' },
+                                {name: 'tags', type: 'text', required: true, placeholder: 'Enter the tags...' }
+                            ]}
+                            isHidden={this.state.isFormHidden}
+                            onSubmit={this.handleListFormSubmit}
+                            onCancel={this.handleCancel}
+                        />
+                    </>
+                );
             }
             return null;
         });
@@ -75,6 +120,10 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         getList: async (id: number) => {
             const result = await bookService.getList(id);
             return result.data as SharedList;
+        },
+        addItem: async (listId: number, listItem: SharedBookListItem) => {
+            const result = await bookService.addItem(listId, listItem);
+            return result.data as SharedBookListItem;
         },
         loadingStart: () => {
             dispatch(loadingActions.start());

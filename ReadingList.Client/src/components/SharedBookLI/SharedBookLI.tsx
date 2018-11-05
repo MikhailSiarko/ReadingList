@@ -1,9 +1,7 @@
 import * as React from 'react';
 import styles from '../PrivateBookLI/PrivateBookLI.css';
 import { SharedBookListItem } from '../../models';
-import Button from '../Button';
 import { createDOMAttributeProps, applyClasses } from '../../utils';
-import Colors from '../../styles/colors';
 import globalStyles from '../../styles/global.css';
 import { BookInfo, BookInfoEditor } from '../PrivateBookLI/PrivateBookLI';
 
@@ -12,15 +10,6 @@ export interface SharedBookListItemProps extends React.DOMAttributes<HTMLLIEleme
     onSave?: (item: SharedBookListItem) => void;
     onCancel?: (itemId: number) => void;
 }
-
-const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
-    <div>
-        <div>
-            <Button type="submit">Save</Button>
-            <Button onClick={onCancel} color={Colors.Red}>Cancel</Button>
-        </div>
-    </div>
-);
 
 class SharedBookLI extends React.Component<SharedBookListItemProps> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,7 +43,6 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoEditor title={this.props.item.title} author={this.props.item.author} />
-                        <Footer onCancel={this.cancelHandler} />
                     </form>
                 </li>
             );

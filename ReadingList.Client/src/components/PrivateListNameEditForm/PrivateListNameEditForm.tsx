@@ -1,7 +1,8 @@
 import * as React from 'react';
-import Button from '../Button';
 import Colors from '../../styles/colors';
 import globalStyles from '../../styles/global.css';
+import RoundButton from '../RoundButton';
+import style from './PrivateListNameEditor.css';
 
 interface Props {
     name: string;
@@ -24,16 +25,22 @@ class PrivateListNameEditForm extends React.Component<Props> {
 
     render() {
         return (
-            <form onSubmit={this.submitHandler}>
-                <input 
-                    name={'list-name'} 
-                    type={'text'} 
-                    className={globalStyles.shadowed} 
-                    required={true} 
-                    defaultValue={this.props.name} 
-                />
-                <Button type={'submit'}>Save</Button>
-                <Button onClick={this.cancelHandler} color={Colors.Red}>Cancel</Button>
+            <form onSubmit={this.submitHandler} className={style['name-form']}>
+                <div>
+                    <input
+                        name={'list-name'}
+                        type={'text'}
+                        className={globalStyles.shadowed}
+                        required={true}
+                        defaultValue={this.props.name}
+                    />
+                </div>
+                <div>
+                    <RoundButton radius={2} type={'submit'}>✓</RoundButton>
+                </div>
+                <div>
+                    <RoundButton radius={2} onClick={this.cancelHandler} color={Colors.Red}>×</RoundButton>
+                </div>
             </form>
         );
     }

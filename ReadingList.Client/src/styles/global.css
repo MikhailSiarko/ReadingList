@@ -48,7 +48,6 @@ input[type="password"],
 input[type="search"],
 select {
   font-weight: 100;
-  padding: 0.3rem 1rem;
   font-size: 2.2rem;
   border: none;
   border-radius: 0.2rem;

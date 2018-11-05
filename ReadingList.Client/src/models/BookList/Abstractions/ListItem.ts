@@ -3,4 +3,5 @@ export interface ListItem {
     title: string;
     author: string;
     genreId: string;
+    listId: number;
 }

@@ -11,8 +11,8 @@ import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
-import RoundButton from '../../components/RoundButton';
 import { NamedValue, AddForm } from '../../components/AddForm';
+import FixedButton from '../../components/FixedButton';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -136,7 +136,7 @@ class PrivateBookList extends React.Component<Props, State> {
 
             return (
                 <>
-                    <RoundButton radius={3} onClick={this.handleButtonClick} />
+                    <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
                     <AddForm
                         onSubmit={this.handleFormSubmit}
                         header={'Add book'}
