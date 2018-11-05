@@ -9,4 +9,5 @@ export class SharedBookList implements List<SharedBookListItem> {
     type: number;
     tags: string[];
     booksCount: number;
+    canEdit: boolean;
 }

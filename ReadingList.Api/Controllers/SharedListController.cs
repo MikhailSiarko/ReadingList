@@ -41,7 +41,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            var list = await _domainService.AskAsync(new GetSharedListQuery(id));
+            var list = await _domainService.AskAsync(new GetSharedListQuery(id, User.Identity.Name));
                 
             return Ok(list);
         }

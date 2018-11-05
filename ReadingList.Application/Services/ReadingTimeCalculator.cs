@@ -5,11 +5,11 @@ namespace ReadingList.Application.Services
 {
     public static class ReadingTimeCalculator
     {
-        public static int Calculate(BookItemStatus previousStatus, DateTime previousDate, BookItemStatus newStatus)
+        public static int Calculate(int previousTime, BookItemStatus previousStatus, DateTime previousDate, BookItemStatus newStatus)
         {
             var diff = default(int);
             if (previousStatus == newStatus)
-                return diff;
+                return previousTime + diff;
             switch (newStatus)
             {
                 case BookItemStatus.StartedButPostponed:
@@ -23,7 +23,7 @@ namespace ReadingList.Application.Services
                     throw new ArgumentOutOfRangeException(nameof(newStatus), newStatus, null);
             }
 
-            return diff;
+            return previousTime + diff;
         }
     }
 }

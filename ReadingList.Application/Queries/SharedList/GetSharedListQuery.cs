@@ -2,11 +2,11 @@
 
 namespace ReadingList.Application.Queries
 {
-    public class GetSharedListQuery : Query<SharedBookListDto>
+    public class GetSharedListQuery : SecuredQuery<SharedBookListDto>
     {
         public readonly int ListId;
         
-        public GetSharedListQuery(int listId)
+        public GetSharedListQuery(int listId, string login) : base(login)
         {
             ListId = listId;
         }

@@ -22,8 +22,7 @@ namespace ReadingList.Tests
                 Status = BookItemStatus.ToReading
             };
 
-            var readingTime = item.ReadingTimeInSeconds +
-                              ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Reading);
 
             Assert.True(readingTime == default(int));
@@ -43,8 +42,7 @@ namespace ReadingList.Tests
                 Status = BookItemStatus.Reading
             };
 
-            var readingTime = item.ReadingTimeInSeconds +
-                              ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Reading);
 
             Assert.True(item.ReadingTimeInSeconds == readingTime);
@@ -66,8 +64,7 @@ namespace ReadingList.Tests
 
             var oldReadingTime = item.ReadingTimeInSeconds;
 
-            var readingTime = item.ReadingTimeInSeconds +
-                              ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.Read);
 
             Assert.True(oldReadingTime + Convert.ToInt32(TimeSpan.FromMinutes(135).TotalSeconds) == readingTime);
@@ -87,8 +84,7 @@ namespace ReadingList.Tests
                 Status = BookItemStatus.Reading
             };
 
-            var readingTime = item.ReadingTimeInSeconds +
-                              ReadingTimeCalculator.Calculate(item.Status, item.LastStatusUpdateDate,
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
                                   BookItemStatus.StartedButPostponed);
 
             Assert.True(Convert.ToInt32(TimeSpan.FromDays(3).TotalSeconds) == readingTime);

@@ -10,7 +10,7 @@ namespace ReadingList.Read.SqlQueries
             get
             {
                 var getListsSql = new SqlBuilder()
-                    .Select("Id", "Name", "OwnerId", "Type")
+                    .Select("Id", "Name", "OwnerId", "Type", "(SELECT Login FROM Users WHERE Id = OwnerId) = @Login AS CanEdit")
                     .From("BookLists")
                     .Where($"Type = {BookListType.Shared:D}")
                     .Where("Id = @ListId")

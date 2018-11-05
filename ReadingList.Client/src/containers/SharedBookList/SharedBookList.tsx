@@ -87,18 +87,42 @@ class SharedBookList extends React.Component<Props, State> {
                 return (
                     <>
                         <BookList items={listItems} legend={legend} />
-                        <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
-                        <AddForm
-                            header={'Add new item'}
-                            inputs={[
-                                {name: 'title', type: 'text', required: true, placeholder: 'Enter the title...' },
-                                {name: 'author', type: 'text', required: true, placeholder: 'Enter the author...' },
-                                {name: 'tags', type: 'text', required: true, placeholder: 'Enter the tags...' }
-                            ]}
-                            isHidden={this.state.isFormHidden}
-                            onSubmit={this.handleListFormSubmit}
-                            onCancel={this.handleCancel}
-                        />
+                        {
+                            this.state.list && this.state.list.canEdit
+                                ? (
+                                    <>
+                                        <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
+                                        <AddForm
+                                            header={'Add new item'}
+                                            inputs={[
+                                                {
+                                                    name: 'title',
+                                                    type: 'text',
+                                                    required: true,
+                                                    placeholder: 'Enter the title...'
+                                                },
+                                                {
+                                                    name: 'author',
+                                                    type: 'text',
+                                                    required: true,
+                                                    placeholder: 'Enter the author...'
+                                                },
+                                                {
+                                                    name: 'tags',
+                                                    type: 'text',
+                                                    required: true,
+                                                    placeholder: 'Enter the tags...'
+                                                }
+                                            ]}
+                                            isHidden={this.state.isFormHidden}
+                                            onSubmit={this.handleListFormSubmit}
+                                            onCancel={this.handleCancel}
+                                        />
+                                    </>
+                                )
+                                : null
+                        }
+
                     </>
                 );
             }

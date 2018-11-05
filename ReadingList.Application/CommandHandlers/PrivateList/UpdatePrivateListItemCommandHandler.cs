@@ -32,9 +32,8 @@ namespace ReadingList.Application.CommandHandlers
 
         protected override void Update(PrivateBookListItem entity, UpdatePrivateListItemCommand command)
         {
-            var readingTime = entity.ReadingTimeInSeconds +
-                              ReadingTimeCalculator.Calculate(entity.Status, entity.LastStatusUpdateDate,
-                                  (BookItemStatus)command.Status);
+            var readingTime = ReadingTimeCalculator.Calculate(entity.ReadingTimeInSeconds, entity.Status, 
+                entity.LastStatusUpdateDate, (BookItemStatus)command.Status);
 
             EntityUpdateService.Update(entity, new Dictionary<string, object>
             {
