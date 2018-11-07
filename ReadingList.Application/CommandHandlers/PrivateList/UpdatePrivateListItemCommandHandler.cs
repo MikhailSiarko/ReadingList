@@ -13,6 +13,7 @@ using ReadingList.Application.Infrastructure.Filters;
 using ReadingList.Application.Infrastructure.Filters.ValidationFilters;
 using ReadingList.Application.Services;
 using ReadingList.Application.Services.Validation;
+using ReadingList.Domain.Infrastructure;
 using ReadingList.Write;
 
 namespace ReadingList.Application.CommandHandlers
@@ -20,8 +21,7 @@ namespace ReadingList.Application.CommandHandlers
     public class UpdatePrivateListItemCommandHandler
         : UpdateCommandHandler<UpdatePrivateListItemCommand, PrivateBookListItem, PrivateBookListItemDto>
     {
-        public UpdatePrivateListItemCommandHandler(ApplicationDbContext dbContext, IEntityUpdateService entityUpdateService)
-            : base(dbContext, entityUpdateService)
+        public UpdatePrivateListItemCommandHandler(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -32,15 +32,14 @@ namespace ReadingList.Application.CommandHandlers
 
         protected override void Update(PrivateBookListItem entity, UpdatePrivateListItemCommand command)
         {
-            var readingTime = ReadingTimeCalculator.Calculate(entity.ReadingTimeInSeconds, entity.Status, 
-                entity.LastStatusUpdateDate, (BookItemStatus)command.Status);
-
-            EntityUpdateService.Update(entity, new Dictionary<string, object>
+            entity.Update(new Dictionary<string, object>
             {
                 [nameof(PrivateBookListItem.Title)] = command.BookInfo.Title,
                 [nameof(PrivateBookListItem.Author)] = command.BookInfo.Author,
                 [nameof(PrivateBookListItem.Status)] = command.Status,
-                [nameof(PrivateBookListItem.ReadingTimeInSeconds)] = readingTime,
+                [nameof(PrivateBookListItem.ReadingTimeInSeconds)] = ReadingTimeCalculator.Calculate(
+                    entity.ReadingTimeInSeconds, entity.Status, entity.LastStatusUpdateDate,
+                    (BookItemStatus) command.Status),
                 [nameof(PrivateBookListItem.LastStatusUpdateDate)] = DateTime.Now
             });
         }

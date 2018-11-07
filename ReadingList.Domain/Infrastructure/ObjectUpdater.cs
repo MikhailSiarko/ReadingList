@@ -4,29 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using ReadingList.Domain.Entities.Base;
-using ReadingList.Domain.Infrastructure;
 
-namespace ReadingList.Application.Services
+namespace ReadingList.Domain.Infrastructure
 {
-    public class EntityUpdateService : IEntityUpdateService
+    public static class ObjectUpdater
     {
-        private readonly ConcurrentDictionary<Type, object> _cache;
-        private readonly MethodInfo _getValueOrDefaultMethodInfo;
-        private readonly MethodInfo _containsKeyMethodInfo;
+        private static readonly ConcurrentDictionary<Type, object> Cache;
+        private static readonly MethodInfo GetValueOrDefaultMethodInfo;
+        private static readonly MethodInfo ContainsKeyMethodInfo;
 
-        public EntityUpdateService()
+        static ObjectUpdater()
         {
-            _cache = new ConcurrentDictionary<Type, object>();
+            Cache = new ConcurrentDictionary<Type, object>();
 
-            _getValueOrDefaultMethodInfo = typeof(CollectionExtensions)
+            GetValueOrDefaultMethodInfo = typeof(CollectionExtensions)
                 .GetMethods().Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
                 .MakeGenericMethod(typeof(string), typeof(object));
 
-            _containsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
+            ContainsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
         }
 
-        public void Update<TEntity>(TEntity entity, Dictionary<string, object> source) where TEntity : Entity
+        public static void Update<TEntity>(TEntity entity, Dictionary<string, object> source)
         {
             if(source == null)
                 throw new ArgumentNullException(nameof(source));
@@ -38,13 +36,13 @@ namespace ReadingList.Application.Services
             updater(entity, source);
         }
 
-        private Action<TEntity, Dictionary<string, object>> GetUpdater<TEntity>() where TEntity : Entity
+        private static Action<TEntity, Dictionary<string, object>> GetUpdater<TEntity>()
         {
-            return (Action<TEntity, Dictionary<string, object>>) _cache.GetOrAdd(typeof(TEntity),
-                RegisterUpdater<TEntity>());
+            return (Action<TEntity, Dictionary<string, object>>) Cache.GetOrAdd(typeof(TEntity),
+                _ => RegisterUpdater<TEntity>());
         }
 
-        private Action<TEntity, Dictionary<string, object>> RegisterUpdater<TEntity>() where TEntity : Entity
+        private static Action<TEntity, Dictionary<string, object>> RegisterUpdater<TEntity>()
         {
             var entityType = typeof(TEntity);
 
@@ -59,17 +57,17 @@ namespace ReadingList.Application.Services
             return Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
         }
 
-        private IEnumerable<Expression> BuildExpressionSequence(IEnumerable<PropertyInfo> propertyInfos, Expression entityParameter, Expression sourceParameter)
+        private static IEnumerable<Expression> BuildExpressionSequence(IEnumerable<PropertyInfo> propertyInfos, Expression entityParameter, Expression sourceParameter)
         {
             foreach (var propertyInfo in propertyInfos)
             {
                 var propertyName = Expression.Constant(propertyInfo.Name);
                 var propertyExpression = Expression.PropertyOrField(entityParameter, propertyInfo.Name);
                 yield return Expression.IfThen(
-                    Expression.Call(sourceParameter, _containsKeyMethodInfo, propertyName),
+                    Expression.Call(sourceParameter, ContainsKeyMethodInfo, propertyName),
                     Expression.Assign(
                         propertyExpression,
-                        Expression.Convert(Expression.Call(_getValueOrDefaultMethodInfo, sourceParameter, propertyName), propertyInfo.PropertyType)));
+                        Expression.Convert(Expression.Call(GetValueOrDefaultMethodInfo, sourceParameter, propertyName), propertyInfo.PropertyType)));
             }
         }
     }

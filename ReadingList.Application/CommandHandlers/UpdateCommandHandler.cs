@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using ReadingList.Application.Commands;
-using ReadingList.Application.Services;
 using ReadingList.Write;
 
 namespace ReadingList.Application.CommandHandlers
@@ -8,11 +7,8 @@ namespace ReadingList.Application.CommandHandlers
     public abstract class UpdateCommandHandler<TCommand, TEntity, TDto> : CommandHandler<TCommand, TDto>
         where TCommand : UpdateCommand<TDto>
     {
-        protected readonly IEntityUpdateService EntityUpdateService;
-
-        protected UpdateCommandHandler(ApplicationDbContext dbContext, IEntityUpdateService entityUpdateService) : base(dbContext)
+        protected UpdateCommandHandler(ApplicationDbContext dbContext) : base(dbContext)
         {
-            EntityUpdateService = entityUpdateService;
         }
 
         protected sealed override async Task<TDto> Handle(TCommand command)

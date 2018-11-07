@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ReadingList.Domain.Entities;
 using ReadingList.Domain.Enumerations;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Infrastructure;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -11,7 +11,6 @@ namespace ReadingList.Tests
         [Fact]
         public void Update_UpdatesPropertiesOfEntityWhichNotMarkedWithIgnoreUpdateAttribute()
         {
-            var updateService = new EntityUpdateService();
             const int id = 1;
             const string name = "Default";
             const BookListType type = BookListType.Private;
@@ -33,7 +32,7 @@ namespace ReadingList.Tests
                 [nameof(BookList.OwnerId)] = 2
             };
 
-            updateService.Update(bookList, source);
+            bookList.Update(source);
 
             Assert.True(bookList.Id == id);
             Assert.True(bookList.Name == (string)source[nameof(BookList.Name)]);

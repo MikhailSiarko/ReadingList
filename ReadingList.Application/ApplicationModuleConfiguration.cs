@@ -15,7 +15,6 @@ using ReadingList.Application.Infrastructure.Extensions;
 using ReadingList.Application.MapperProfiles;
 using ReadingList.Application.Queries;
 using ReadingList.Application.Queries.SharedList;
-using ReadingList.Application.Services;
 using ReadingList.Application.Services.Authentication;
 using ReadingList.Application.Services.Encryption;
 using ReadingList.Read;
@@ -42,7 +41,6 @@ namespace ReadingList.Application
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();
-            services.AddSingleton<IEntityUpdateService, EntityUpdateService>();
             services.AddSingleton<IReadQueriesRegistry, ReadQueriesRegistry>(_ => new ReadQueriesRegistry(ReadQueriesMap));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerConfigurator.Configure);

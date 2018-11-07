@@ -11,15 +11,14 @@ using ReadingList.Application.Exceptions;
 using ReadingList.Application.Infrastructure.Extensions;
 using ReadingList.Application.Infrastructure.Filters;
 using ReadingList.Application.Infrastructure.Filters.ValidationFilters;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Infrastructure;
 using ReadingList.Write;
 
 namespace ReadingList.Application.CommandHandlers
 {
     public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookList, SharedBookListPreviewDto>
     {
-        public UpdateSharedListCommandHandler(ApplicationDbContext dbContext, IEntityUpdateService updateService) 
-            : base(dbContext, updateService)
+        public UpdateSharedListCommandHandler(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -30,7 +29,7 @@ namespace ReadingList.Application.CommandHandlers
 
         protected override void Update(BookList entity, UpdateSharedListCommand command)
         {
-            EntityUpdateService.Update(entity, new Dictionary<string, object>
+            entity.Update(new Dictionary<string, object>
             {
                 [nameof(BookList.Name)] = command.Name,
                 [nameof(BookList.SharedBookListTags)] = DbContext.UpdateOrAddSharedListTags(command.Tags, entity).RunSync().ToList()

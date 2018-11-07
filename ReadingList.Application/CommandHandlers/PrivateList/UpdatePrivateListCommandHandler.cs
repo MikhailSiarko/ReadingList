@@ -9,15 +9,14 @@ using ReadingList.Application.Commands;
 using ReadingList.Application.DTO.BookList;
 using ReadingList.Application.Exceptions;
 using ReadingList.Application.Infrastructure.Filters;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Infrastructure;
 using ReadingList.Write;
 
 namespace ReadingList.Application.CommandHandlers
 {
     public class UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateListCommand, BookList, PrivateBookListDto>
     {
-        public UpdatePrivateListCommandHandler(ApplicationDbContext dbContext, IEntityUpdateService entityUpdateService) 
-            : base(dbContext, entityUpdateService)
+        public UpdatePrivateListCommandHandler(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -33,7 +32,7 @@ namespace ReadingList.Application.CommandHandlers
 
         protected override void Update(BookList entity, UpdatePrivateListCommand command)
         {
-            EntityUpdateService.Update(entity, new Dictionary<string, object>
+            entity.Update(new Dictionary<string, object>
             {
                 [nameof(BookList.Name)] = command.Name
             });
