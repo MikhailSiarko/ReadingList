@@ -3,7 +3,7 @@ import styles from '../PrivateBookLI/PrivateBookLI.css';
 import { SharedBookListItem } from '../../models';
 import { createDOMAttributeProps, applyClasses } from '../../utils';
 import globalStyles from '../../styles/global.css';
-import { BookInfo, BookInfoEditor } from '../PrivateBookLI/PrivateBookLI';
+import { BookInfo, BookInfoInEditMode } from '../PrivateBookLI/PrivateBookLI';
 
 export interface SharedBookListItemProps extends React.DOMAttributes<HTMLLIElement> {
     item: SharedBookListItem;
@@ -42,7 +42,7 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
-                        <BookInfoEditor title={this.props.item.title} author={this.props.item.author} />
+                        <BookInfoInEditMode title={this.props.item.title} author={this.props.item.author} />
                     </form>
                 </li>
             );

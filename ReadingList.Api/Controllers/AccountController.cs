@@ -2,18 +2,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.RequestData;
-using ReadingList.Application.Commands;
-using ReadingList.Application.Queries;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Commands;
+using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Read.Queries;
 
 namespace ReadingList.Api.Controllers
 {
     [ApiRoute("[controller]")]
     public class AccountController : Controller
     {
-        private readonly IApplicationService _domainService;
+        private readonly IDomainService _domainService;
         
-        public AccountController(IApplicationService domainService)
+        public AccountController(IDomainService domainService)
         {
             _domainService = domainService;
         }

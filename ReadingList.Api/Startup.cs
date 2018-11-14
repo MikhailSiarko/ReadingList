@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using FluentValidation.AspNetCore;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.Middlewares;
-using ReadingList.Application;
-using ReadingList.Application.Exceptions;
-using ReadingList.Application.Services;
+using ReadingList.Domain;
+using ReadingList.Domain.Commands;
+using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Authentication;
+using ReadingList.Domain.Services.Encryption;
+using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Read;
+using ReadingList.Write;
 
 namespace ReadingList.Api
 {
@@ -21,7 +29,8 @@ namespace ReadingList.Api
             services.AddMvc().AddFluentValidation(options =>
             {
                 options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                options.RegisterValidatorsFromAssembly(Assembly.GetAssembly(typeof(JwtBearerConfigurator)));
+                options.RegisterValidatorsFromAssembly(typeof(JwtBearerConfigurator).Assembly);
+                options.RegisterValidatorsFromAssembly(typeof(SqlQueryContext<,>).Assembly);
             });
         }
 
@@ -72,8 +81,19 @@ namespace ReadingList.Api
 
         private static void ConfigureApplication(IServiceCollection services)
         {
-            services.AddScoped<IApplicationService, ApplicationService>();
-            services.AddApplication();
+            services.AddScoped<IDomainService, DomainService>();
+            
+            services.RegisterDomainDependencies();
+            services.RegisterReadDependencies();
+            services.RegisterWriteDependencies();
+            
+            services.AddMediatR(typeof(SecuredCommand).Assembly, typeof(SqlQueryContext<,>).Assembly);
+            
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IEncryptionService, EncryptionService>();
+            services.AddSingleton<IJwtOptions, JwtOptions>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerConfigurator.Configure);
         }
     }
 }

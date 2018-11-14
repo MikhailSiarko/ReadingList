@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ReadingList.Domain.Entities.Identity;
+using ReadingList.Domain.Models.DAO.Identity;
 
 namespace ReadingList.Write.Configurations
 {

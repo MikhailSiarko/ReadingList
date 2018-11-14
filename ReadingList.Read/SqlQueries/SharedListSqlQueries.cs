@@ -1,5 +1,5 @@
 using Cinch.SqlBuilder;
-using ReadingList.Domain.Enumerations;
+using ReadingList.Domain.Models.DAO;
 
 namespace ReadingList.Read.SqlQueries
 {
@@ -58,14 +58,14 @@ namespace ReadingList.Read.SqlQueries
                     .Select("l.Id", "l.Name", "l.OwnerId", "l.Type", "COUNT(i.Id) AS BooksCount")
                     .From("BookLists AS l")
                     .LeftJoin("SharedBookListItems AS i ON i.BookListId = l.Id")
-                    .Where($"Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlQueries.SelectIdByLogin})")
+                    .Where($"Type = {BookListType.Shared:D} AND OwnerId = UserId")
                     .GroupBy("l.Id")
                     .ToSql();
 
                 var getTagsSql = new SqlBuilder()
                     .Select("Name AS TagName", "SharedBookListId AS ListId")
                     .From("Tags")
-                    .LeftJoin($"(SELECT TagId, SharedBookListId FROM SharedBookListTags WHERE SharedBookListId IN (SELECT Id FROM BookLists WHERE Type = {BookListType.Shared:D} AND OwnerId = ({UserSqlQueries.SelectIdByLogin}))) AS it ON it.TagId = Id")
+                    .LeftJoin($"(SELECT TagId, SharedBookListId FROM SharedBookListTags WHERE SharedBookListId IN (SELECT Id FROM BookLists WHERE Type = {BookListType.Shared:D} AND OwnerId = @UserId)) AS it ON it.TagId = Id")
                     .ToSql();
 
                 return $"{getListsSql}; {getTagsSql}";

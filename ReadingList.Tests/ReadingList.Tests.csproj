@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReadingList.Api\ReadingList.Api.csproj" />
-    <ProjectReference Include="..\ReadingList.Application\ReadingList.Application.csproj" />
     <ProjectReference Include="..\ReadingList.Domain\ReadingList.Domain.csproj" />
   </ItemGroup>
 </Project>

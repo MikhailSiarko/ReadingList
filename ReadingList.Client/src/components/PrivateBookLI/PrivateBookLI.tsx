@@ -20,23 +20,10 @@ const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) 
     </div>
 );
 
-const Input: React.SFC<{value: string, name: string}> = ({value, name}) => (
-    <div>
-        <input
-            className={globalStyles.shadowed}
-            type="text"
-            required={true}
-            name={name}
-            defaultValue={value}
-        />
-    </div>
-);
-
-export const BookInfoEditor: React.SFC<{title: string, author: string}> = ({title, author}) => (
+export const BookInfoInEditMode: React.SFC<{title: string, author: string}> = ({title, author}) => (
     <div className={styles['editable-book-info']}>
         <div className={styles['editing-book-title']}>
-            <Input value={title} name={'title'} />by
-            <Input value={author} name={'author'} />
+            <div>{title} <span>by</span> {author}</div>
         </div>
     </div>
 );
@@ -95,12 +82,8 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
-        const title = target.elements['title'].value;
-        const author = target.elements['author'].value;
         const status = target.elements['status'].value;
         const item = Object.assign({}, this.props.listItem, {
-            title,
-            author,
             status,
             isOnEditMode: false
         });
@@ -118,7 +101,7 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>
-                        <BookInfoEditor title={this.props.listItem.title} author={this.props.listItem.author} />
+                        <BookInfoInEditMode title={this.props.listItem.title} author={this.props.listItem.author} />
                         <BookStatusEditor status={this.props.listItem.status} options={this.props.statuses} />
                         <Footer onCancel={this.cancelHandler} />
                     </form>

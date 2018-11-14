@@ -1,17 +1,18 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
-using ReadingList.Application.Queries;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Services;
+using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Read.Queries;
 
 namespace ReadingList.Api.Controllers
 {
     [ApiRoute("[controller]")]
     public class BookStatusesController : Controller
     {
-        private readonly IApplicationService _domainService;
+        private readonly IDomainService _domainService;
 
-        public BookStatusesController(IApplicationService domainService)
+        public BookStatusesController(IDomainService domainService)
         {
             _domainService = domainService;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,44 +6,29 @@ using System.Reflection;
 
 namespace ReadingList.Domain.Infrastructure
 {
-    public static class ObjectUpdater
+    internal static class ObjectUpdater<T>
     {
-        private static readonly ConcurrentDictionary<Type, object> Cache;
-        private static readonly MethodInfo GetValueOrDefaultMethodInfo;
-        private static readonly MethodInfo ContainsKeyMethodInfo;
+        private static readonly Action<T, Dictionary<string, object>> Action;
 
         static ObjectUpdater()
         {
-            Cache = new ConcurrentDictionary<Type, object>();
-
-            GetValueOrDefaultMethodInfo = typeof(CollectionExtensions)
-                .GetMethods().Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(string), typeof(object));
-
-            ContainsKeyMethodInfo = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
+            Action = InitializeUpdater();
         }
 
-        public static void Update<TEntity>(TEntity entity, Dictionary<string, object> source)
+        public static void Update(T obj, Dictionary<string, object> source)
         {
-            if(source == null)
+            if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
             if (!source.Any())
                 return;
-            
-            var updater = GetUpdater<TEntity>();
-            updater(entity, source);
+
+            Action(obj, source);
         }
 
-        private static Action<TEntity, Dictionary<string, object>> GetUpdater<TEntity>()
+        private static Action<T, Dictionary<string, object>> InitializeUpdater()
         {
-            return (Action<TEntity, Dictionary<string, object>>) Cache.GetOrAdd(typeof(TEntity),
-                _ => RegisterUpdater<TEntity>());
-        }
-
-        private static Action<TEntity, Dictionary<string, object>> RegisterUpdater<TEntity>()
-        {
-            var entityType = typeof(TEntity);
+            var entityType = typeof(T);
 
             var propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p =>
                 p.GetCustomAttribute<IgnoreUpdateAttribute>(true) == null).ToList();
@@ -54,21 +38,42 @@ namespace ReadingList.Domain.Infrastructure
 
             var block = Expression.Block(BuildExpressionSequence(propertyInfos, entityParameter, sourceParameter));
 
-            return Expression.Lambda<Action<TEntity, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
+            return Expression
+                .Lambda<Action<T, Dictionary<string, object>>>(block, entityParameter, sourceParameter).Compile();
         }
 
-        private static IEnumerable<Expression> BuildExpressionSequence(IEnumerable<PropertyInfo> propertyInfos, Expression entityParameter, Expression sourceParameter)
+        private static IEnumerable<Expression> BuildExpressionSequence(IEnumerable<PropertyInfo> propertyInfos,
+            Expression entityParameter, Expression sourceParameter)
         {
             foreach (var propertyInfo in propertyInfos)
             {
                 var propertyName = Expression.Constant(propertyInfo.Name);
                 var propertyExpression = Expression.PropertyOrField(entityParameter, propertyInfo.Name);
                 yield return Expression.IfThen(
-                    Expression.Call(sourceParameter, ContainsKeyMethodInfo, propertyName),
+                    Expression.Call(sourceParameter, DictionaryMethodInfos.ContainsKey, propertyName),
                     Expression.Assign(
                         propertyExpression,
-                        Expression.Convert(Expression.Call(GetValueOrDefaultMethodInfo, sourceParameter, propertyName), propertyInfo.PropertyType)));
+                        Expression.Convert(
+                            Expression.Call(DictionaryMethodInfos.GetValueOrDefault, sourceParameter,
+                                propertyName),
+                            propertyInfo.PropertyType)));
             }
+        }
+    }
+
+    internal static class DictionaryMethodInfos
+    {
+        public static readonly MethodInfo GetValueOrDefault;
+        
+        public static readonly MethodInfo ContainsKey;
+        
+        static DictionaryMethodInfos()
+        {
+            GetValueOrDefault = typeof(CollectionExtensions)
+                .GetMethods().Single(m => m.Name == "GetValueOrDefault" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(typeof(string), typeof(object));
+
+            ContainsKey = typeof(Dictionary<string, object>).GetMethod("ContainsKey");
         }
     }
 }

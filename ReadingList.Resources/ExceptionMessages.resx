@@ -162,7 +162,7 @@
   <data name="ValidationExceptionMessage" xml:space="preserve">
     <value>One or more validation failures have occurred:</value>
   </data>
-  <data name="UsernameValidationMessage" xml:space="preserve">
-    <value>User login is not specified</value>
+  <data name="UserIdValidationMessage" xml:space="preserve">
+    <value>User Identity is not specified</value>
   </data>
 </root>

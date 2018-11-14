@@ -70,7 +70,12 @@
 }
 
 .editing-book-title > div {
-    display: inline-block;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.editing-book-title > div > span {
+    font-size: 2rem;
 }
 
 .reading-time {

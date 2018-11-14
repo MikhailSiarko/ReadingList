@@ -1,7 +1,6 @@
-﻿using ReadingList.Domain.Entities;
-using ReadingList.Domain.Enumerations;
-using ReadingList.Application.Exceptions;
-using ReadingList.Application.Services.Validation;
+﻿using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Models.DAO;
+using ReadingList.Domain.Services.Validation;
 using Xunit;
 
 namespace ReadingList.Tests

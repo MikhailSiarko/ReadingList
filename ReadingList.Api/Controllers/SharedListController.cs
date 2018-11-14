@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.RequestData;
-using ReadingList.Application.Commands;
-using ReadingList.Application.Infrastructure;
-using ReadingList.Application.Queries;
-using ReadingList.Application.Queries.SharedList;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Commands;
+using ReadingList.Domain.Infrastructure;
+using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Read.Queries;
 
 namespace ReadingList.Api.Controllers
 {
@@ -15,9 +15,9 @@ namespace ReadingList.Api.Controllers
     [ListRoute("Shared")]
     public class SharedListController : Controller
     {
-        private readonly IApplicationService _domainService;
+        private readonly IDomainService _domainService;
 
-        public SharedListController(IApplicationService domainService)
+        public SharedListController(IDomainService domainService)
         {
             _domainService = domainService;
         }
@@ -25,7 +25,7 @@ namespace ReadingList.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _domainService.ExecuteAsync(new DeleteSharedListCommand(User.Identity.Name, id));
+            await _domainService.ExecuteAsync(new DeleteSharedListCommand(User.Claims.GetUserId(), id));
             
             return Ok();
         }
@@ -41,7 +41,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
-            var list = await _domainService.AskAsync(new GetSharedListQuery(id, User.Identity.Name));
+            var list = await _domainService.AskAsync(new GetSharedListQuery(id, User.Claims.GetUserId()));
                 
             return Ok(list);
         }
@@ -49,7 +49,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet("own")]
         public async Task<IActionResult> Get()
         {
-            var bookLists = await _domainService.AskAsync(new GetUserSharedListsQuery(User.Identity.Name));
+            var bookLists = await _domainService.AskAsync(new GetUserSharedListsQuery(User.Claims.GetUserId()));
             
             return Ok(bookLists);
         }
@@ -57,7 +57,7 @@ namespace ReadingList.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] SharedListRequestData requestData)
         {
-            var list = await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Identity.Name,
+            var list = await _domainService.ExecuteAsync(new CreateSharedListCommand(User.Claims.GetUserId(),
                 requestData.Name, requestData.Tags));
             return Ok(list);
         }
@@ -66,7 +66,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] SharedListRequestData requestData)
         {
             var list = await _domainService.ExecuteAsync(
-                new UpdateSharedListCommand(User.Identity.Name, id, requestData.Name, requestData.Tags));
+                new UpdateSharedListCommand(User.Claims.GetUserId(), id, requestData.Name, requestData.Tags));
 
             return Ok(list);
         }
@@ -82,7 +82,7 @@ namespace ReadingList.Api.Controllers
         [HttpPost("{listId}/items")]
         public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] SharedItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Identity.Name,
+            var item = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Claims.GetUserId(),
                 new BookInfo
                 {
                     Author = requestData.Author,
@@ -103,7 +103,7 @@ namespace ReadingList.Api.Controllers
         [HttpDelete("{listId}/items/{itemId}")]
         public async Task<IActionResult> DeleteItem([FromRoute] int listId, [FromRoute] int itemId)
         {
-            await _domainService.ExecuteAsync(new DeleteSharedListItemCommand(User.Identity.Name, listId, itemId));
+            await _domainService.ExecuteAsync(new DeleteSharedListItemCommand(User.Claims.GetUserId(), listId, itemId));
             
             return Ok();
         }
@@ -111,12 +111,8 @@ namespace ReadingList.Api.Controllers
         [HttpPut("{listId}/items/{itemId}")]
         public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] SharedItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Identity.Name, itemId,
-                listId, new BookInfo
-                {
-                    Author = requestData.Author,
-                    Title = requestData.Title
-                }, requestData.Tags));
+            var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Claims.GetUserId(), itemId,
+                listId, requestData.Tags));
             
             return Ok(item);
         }

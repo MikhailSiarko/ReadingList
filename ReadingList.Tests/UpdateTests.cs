@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using ReadingList.Domain.Entities;
-using ReadingList.Domain.Enumerations;
 using ReadingList.Domain.Infrastructure;
+using ReadingList.Domain.Models.DAO;
 using Xunit;
 
 namespace ReadingList.Tests

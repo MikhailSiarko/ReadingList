@@ -1,7 +1,6 @@
 ﻿using System;
-using ReadingList.Domain.Entities;
-using ReadingList.Domain.Enumerations;
-using ReadingList.Application.Services;
+using ReadingList.Domain.Infrastructure;
+using ReadingList.Domain.Models.DAO;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -13,8 +12,11 @@ namespace ReadingList.Tests
         {
             var item = new PrivateBookListItem
             {
-                Author = "Author",
-                Title = "Title",
+                Book = new Book
+                {
+                    Author = "Author",
+                    Title = "Title",
+                },
                 BookListId = 3,
                 Id = 5,
                 ReadingTimeInSeconds = default(int),
@@ -33,8 +35,11 @@ namespace ReadingList.Tests
         {
             var item = new PrivateBookListItem
             {
-                Author = "Author",
-                Title = "Title",
+                Book = new Book
+                {
+                    Author = "Author",
+                    Title = "Title",
+                },
                 BookListId = 3,
                 Id = 5,
                 ReadingTimeInSeconds = Convert.ToInt32(TimeSpan.FromMinutes(65).TotalSeconds),
@@ -53,8 +58,11 @@ namespace ReadingList.Tests
         {
             var item = new PrivateBookListItem
             {
-                Author = "Author",
-                Title = "Title",
+                Book = new Book
+                {
+                    Author = "Author",
+                    Title = "Title",
+                },
                 BookListId = 3,
                 Id = 5,
                 ReadingTimeInSeconds = Convert.ToInt32(TimeSpan.FromMinutes(165).TotalSeconds),
@@ -75,8 +83,11 @@ namespace ReadingList.Tests
         {
             var item = new PrivateBookListItem
             {
-                Author = "Author",
-                Title = "Title",
+                Book = new Book
+                {
+                    Author = "Author",
+                    Title = "Title",
+                },
                 BookListId = 3,
                 Id = 5,
                 ReadingTimeInSeconds = default(int),

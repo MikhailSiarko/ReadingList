@@ -30,8 +30,6 @@ export class PrivateBookListService extends ApiService {
         return this.configureRequest(
             ApiConfiguration.getPrivateListItemUrl(item.id),
             'PUT', {
-                title: item.title,
-                author: item.author,
                 status: item.status
             })
             .then(this.onSuccess<PrivateBookListItem>())

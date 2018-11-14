@@ -4,8 +4,6 @@ namespace ReadingList.Read.SqlQueries
 {
     public static class UserSqlQueries
     {
-        public const string SelectIdByLogin = "SELECT Id FROM Users WHERE Login = @Login";
-
         public static string SelectById => CreateSqlBuilder().Where("Id = @UserId").ToSql();
         
         public static string SelectByLogin => CreateSqlBuilder().Where("Login = @Login").ToSql();
