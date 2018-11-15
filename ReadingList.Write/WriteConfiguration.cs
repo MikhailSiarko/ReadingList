@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain.FetchQueries;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Models.DAO;
+using ReadingList.Domain.Models.DAO.Identity;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Write.FetchHandlers;
 
@@ -19,6 +20,8 @@ namespace ReadingList.Write
             services
                 .AddTransient<IFetchHandler<GetBookListItemQuery, PrivateBookListItem>,
                     GetBookListItemFetchHandler<PrivateBookListItem>>();
+
+            services.AddTransient<IFetchHandler<GetUserByLoginQuery, User>, GetUserByLoginFetchHandler>();
             
             services
                 .AddTransient<IFetchHandler<GetBookListItemQuery, SharedBookListItem>,

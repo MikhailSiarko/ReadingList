@@ -33,17 +33,24 @@ namespace ReadingList.Read.QueryHandlers
                 var items = new List<SharedBookListItemDto>(await reader.ReadAsync<SharedBookListItemDto>());
 
                 var itemsTags =
-                    (await reader.ReadAsync<(string TagName, int ItemId)>()).ToLookup(tuple => tuple.ItemId);
+                    (await reader.ReadAsync<(string TagName, int BookId)>()).ToLookup(tuple => tuple.BookId);
 
                 foreach (var item in items)
                 {
-                    item.Tags = itemsTags[item.Id].Select(x => x.TagName).ToList();
+                    item.Tags = itemsTags[item.BookId].Select(x => x.TagName).ToList();
                 }
 
                 list.Items = items;
 
+                list.CanEdit = (await reader.ReadSingleAsync<Access>()).CanEdit;
+
                 return list;
             }
+        }
+        
+        private class Access
+        {
+            public bool CanEdit { get; set; }
         }
     }
 }

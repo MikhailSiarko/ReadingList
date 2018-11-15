@@ -10,7 +10,7 @@ namespace ReadingList.Read.SqlQueries
             get
             {
                 var getListsSql = new SqlBuilder()
-                    .Select("Id", "Name", "OwnerId", "Type", "(SELECT Login FROM Users WHERE Id = OwnerId) = @Login AS CanEdit")
+                    .Select("Id", "Name", "OwnerId", "Type")
                     .From("BookLists")
                     .Where($"Type = {BookListType.Shared:D}")
                     .Where("Id = @ListId")
@@ -19,12 +19,25 @@ namespace ReadingList.Read.SqlQueries
                 var getTagsSql = new SqlBuilder()
                     .Select("Name")
                     .From("Tags")
-                    .Where("Id IN (SELECT TagId FROM SharedBookListTags WHERE SharedBookListId = @ListId)")
+                    .Where("Id IN (" +
+                           new SqlBuilder()
+                               .Select("TagId")
+                               .From("SharedBookListTags")
+                               .Where("SharedBookListId = @ListId")
+                               .ToSql() +
+                           ")")
                     .ToSql();
 
-                var getItemsSql = GetSharedListItemsSqlQuery();
+                var getItemsSql = SharedItemSqlQueries.SelectByListId;
+                
+                const string canEditSql = "SELECT CASE " +
+                                          "WHEN (SELECT COUNT(*) FROM BookLists WHERE Id = @ListId AND OwnerId = @UserId) = 1 THEN 1 " +
+                                          "WHEN (SELECT COUNT(*) FROM BookListModerators WHERE BookListId = @ListId AND UserId = @UserId) = 1 THEN 1 " +
+                                          "ELSE 0 " +
+                                          "END " + 
+                                          "AS CanEdit";
 
-                return $"{getListsSql}; {getTagsSql}; {getItemsSql}";
+                return $"{getListsSql}; {getTagsSql}; {getItemsSql}; {canEditSql}";
             }
         }
 
@@ -43,7 +56,17 @@ namespace ReadingList.Read.SqlQueries
                 var getTagsSql = new SqlBuilder()
                     .Select("Name AS TagName", "SharedBookListId AS ListId")
                     .From("Tags")
-                    .LeftJoin($"(SELECT TagId, SharedBookListId FROM SharedBookListTags WHERE SharedBookListId IN (SELECT Id FROM BookLists WHERE Type = {BookListType.Shared:D})) AS it ON it.TagId = Id")
+                    .LeftJoin("(" +
+                              new SqlBuilder()
+                                  .Select("TagId", "SharedBookListId")
+                                  .From("SharedBookListTags")
+                                  .Where("SharedBookListId IN (" +
+                                         new SqlBuilder()
+                                             .Select("Id")
+                                             .From("BookLists")
+                                             .Where($"Type = {BookListType.Shared:D}")
+                                             .ToSql() + ")") +
+                              ") AS it ON it.TagId = Id")
                     .ToSql();
 
                 return $"{getListsSql}; {getTagsSql}";
@@ -58,35 +81,29 @@ namespace ReadingList.Read.SqlQueries
                     .Select("l.Id", "l.Name", "l.OwnerId", "l.Type", "COUNT(i.Id) AS BooksCount")
                     .From("BookLists AS l")
                     .LeftJoin("SharedBookListItems AS i ON i.BookListId = l.Id")
-                    .Where($"Type = {BookListType.Shared:D} AND OwnerId = UserId")
+                    .Where($"Type = {BookListType.Shared:D} AND OwnerId = @UserId")
                     .GroupBy("l.Id")
                     .ToSql();
 
                 var getTagsSql = new SqlBuilder()
                     .Select("Name AS TagName", "SharedBookListId AS ListId")
                     .From("Tags")
-                    .LeftJoin($"(SELECT TagId, SharedBookListId FROM SharedBookListTags WHERE SharedBookListId IN (SELECT Id FROM BookLists WHERE Type = {BookListType.Shared:D} AND OwnerId = @UserId)) AS it ON it.TagId = Id")
+                    .LeftJoin("(" +
+                              new SqlBuilder()
+                                  .Select("TagId", "SharedBookListId")
+                                  .From("SharedBookListTags")
+                                  .Where("SharedBookListId IN (" +
+                                         new SqlBuilder()
+                                             .Select("Id")
+                                             .From("BookLists")
+                                             .Where($"Type = {BookListType.Shared:D}")
+                                             .Where("OwnerId = @UserId")
+                                             .ToSql() + ")") +
+                              ") AS it ON it.TagId = Id")
                     .ToSql();
 
                 return $"{getListsSql}; {getTagsSql}";
             }
-        }
-        
-        private static string GetSharedListItemsSqlQuery()
-        {
-            var getItemsSql = new SqlBuilder()
-                .Select("Id", "Author", "Title", "BookListId AS ListId", "GenreId")
-                .From("SharedBookListItems")
-                .Where("BookListId = @ListId")
-                .ToSql();
-
-            var getTagsSql = new SqlBuilder()
-                .Select("Name AS TagName", "SharedBookListItemId AS ItemId")
-                .From("Tags")
-                .LeftJoin("(SELECT TagId, SharedBookListItemId FROM SharedBookListItemTags WHERE SharedBookListItemId IN (SELECT Id FROM SharedBookListItems WHERE BookListId = @ListId)) AS it ON it.TagId = Id")
-                .ToSql();
-
-            return $"{getItemsSql}; {getTagsSql}";
         }
     }
 }

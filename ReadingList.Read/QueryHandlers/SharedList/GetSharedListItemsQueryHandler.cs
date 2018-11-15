@@ -20,12 +20,12 @@ namespace ReadingList.Read.QueryHandlers
             {
                 var items = (await reader.ReadAsync<SharedBookListItemDto>()).ToList();
 
-                var tags = (await reader.ReadAsync<(string TagName, int SharedBookListItemId)>()).ToLookup(tuple =>
-                    tuple.SharedBookListItemId);
+                var tags = (await reader.ReadAsync<(string TagName, int BookId)>()).ToLookup(tuple =>
+                    tuple.BookId);
 
                 foreach (var item in items)
                 {
-                    item.Tags = tags[item.Id].Select(t => t.TagName).ToList();
+                    item.Tags = tags[item.BookId].Select(t => t.TagName).ToList();
                 }
 
                 return items;

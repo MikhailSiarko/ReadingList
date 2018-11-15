@@ -9,4 +9,5 @@ export class PrivateBookListItem implements ListItem {
     genreId: string;
     readingTimeInSeconds: number;
     listId: number;
+    bookId: number;
 }

@@ -19,17 +19,17 @@ namespace ReadingList.Read.QueryHandlers
         {
             using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
             {
-                var list = await reader.ReadSingleOrDefaultAsync<SharedBookListItemDto>() ??
+                var item = await reader.ReadSingleOrDefaultAsync<SharedBookListItemDto>() ??
                            throw new ObjectNotExistException<SharedBookListItem>(new OnExceptionObjectDescriptor
                            {
                                ["Item Id"] = context.Query.ItemId.ToString()
                            });
 
-                var tags = (await reader.ReadAsync<(string TagName, int ListId)>()).ToList();
+                var tags = (await reader.ReadAsync<(string TagName, int BookId)>()).ToList();
 
-                list.Tags = tags.Where(t => t.ListId == list.Id).Select(t => t.TagName);
+                item.Tags = tags.Where(t => t.BookId == item.BookId).Select(t => t.TagName);
 
-                return list;
+                return item;
             }
         }
     }

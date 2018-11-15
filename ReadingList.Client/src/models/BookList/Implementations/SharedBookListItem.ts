@@ -8,6 +8,7 @@ export class SharedBookListItem implements ListItem {
     genreId: string;
     tags: string[];
     listId: number;
+    bookId: number;
     
     constructor(author: string, title: string, tags: string[]) {
         this.author = author;

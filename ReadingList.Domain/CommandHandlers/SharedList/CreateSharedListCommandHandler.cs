@@ -54,6 +54,8 @@ namespace ReadingList.Domain.CommandHandlers
 
             await WriteService.SaveAsync(list);
 
+            // TODO Implement tags adding
+            
             // var listTags = await DbContext.UpdateOrAddSharedListTags(command.Tags, list);
 
             // list.SharedBookListTags = listTags.ToList();

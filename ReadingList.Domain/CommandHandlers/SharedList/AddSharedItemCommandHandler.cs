@@ -51,6 +51,8 @@ namespace ReadingList.Domain.CommandHandlers
                 BookId = bookId
             };
 
+            // TODO Implement tags adding
+            
             // item.SharedBookListItemTags = command.Tags;
             
             return item;
