@@ -54,12 +54,12 @@ class App extends React.Component<AppProps> {
                             path="/shared"
                             component={() =>
                                 <Switch>
-                                    <Route
+                                    <PrivateRoute
                                         exact={true}
                                         path="/shared/search/:query?"
                                         component={SharedBookLists}
                                     />
-                                    <Route
+                                    <PrivateRoute
                                         exact={true}
                                         path="/shared/:id"
                                         component={SharedBookList}

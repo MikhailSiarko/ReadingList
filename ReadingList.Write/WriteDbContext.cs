@@ -40,55 +40,5 @@ namespace ReadingList.Write
 
             base.OnModelCreating(modelBuilder);
         }
-        
-//        public async Task<IEnumerable<SharedBookListTag>> UpdateOrAddSharedListTags(IEnumerable<string> tags, BookList list)
-//        {
-//            if (list.SharedBookListTags != null)
-//            {
-//                SharedBookListTags.RemoveRange(list.SharedBookListTags);
-//
-//                await SaveChangesAsync();
-//            }
-//
-//            var existingTags = await Tags.Where(x => tags.Contains(x.Name)).ToListAsync();
-//
-//            var newTags = tags.Where(x => !Tags.Any(y => y.Name == x)).Select(x => new Tag
-//            {
-//                Name = x
-//            }).ToList();
-//
-//            await Tags.AddRangeAsync(newTags);
-//
-//            return existingTags.Concat(newTags).Select(t => new SharedBookListTag
-//            {
-//                TagId = t.Id,
-//                SharedBookListId = list.Id
-//            });
-//        }
-//
-//        public async Task<IEnumerable<SharedBookListItemTag>> UpdateOrAddSharedListItemTags(IEnumerable<string> tags, SharedBookListItem item)
-//        {
-//            if (item.SharedBookListItemTags != null)
-//            {
-//                SharedBookListItemTags.RemoveRange(item.SharedBookListItemTags);
-//
-//                await SaveChangesAsync();
-//            }
-//
-//            var existingTags = await Tags.Where(x => tags.Contains(x.Name)).ToListAsync();
-//
-//            var newTags = tags.Where(x => !Tags.Any(y => y.Name == x)).Select(x => new Tag
-//            {
-//                Name = x
-//            }).ToList();
-//
-//            await Tags.AddRangeAsync(newTags);
-//
-//            return existingTags.Concat(newTags).Select(t => new SharedBookListItemTag
-//            {
-//                TagId = t.Id,
-//                SharedBookListItemId = item.Id
-//            });
-//        }
     }
 }
