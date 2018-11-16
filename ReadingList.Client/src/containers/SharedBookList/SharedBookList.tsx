@@ -55,9 +55,8 @@ class SharedBookList extends React.Component<Props, State> {
         this.props.loadingStart();
         const title = values.filter(item => item.name === 'title')[0].value;
         const author = values.filter(item => item.name === 'author')[0].value;
-        const tags = values.filter(item => item.name === 'tags')[0].value.replace(' ', '').split(',');
         const listItem =
-            await this.props.addItem((this.state.list as SharedList).id, new SharedBookListItem(author, title, tags));
+            await this.props.addItem((this.state.list as SharedList).id, new SharedBookListItem(author, title));
         this.props.loadingEnd();
         const copy = cloneDeep(this.state.list);
         if(copy) {
@@ -94,6 +93,7 @@ class SharedBookList extends React.Component<Props, State> {
                                         <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
                                         <AddForm
                                             header={'Add new item'}
+                                            // TODO Replace author and title entering with searching
                                             inputs={[
                                                 {
                                                     name: 'title',
@@ -106,12 +106,6 @@ class SharedBookList extends React.Component<Props, State> {
                                                     type: 'text',
                                                     required: true,
                                                     placeholder: 'Enter the author...'
-                                                },
-                                                {
-                                                    name: 'tags',
-                                                    type: 'text',
-                                                    required: true,
-                                                    placeholder: 'Enter the tags...'
                                                 }
                                             ]}
                                             isHidden={this.state.isFormHidden}

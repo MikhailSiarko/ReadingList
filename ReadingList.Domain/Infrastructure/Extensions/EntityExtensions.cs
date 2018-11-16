@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ReadingList.Domain.Models;
 using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Services;
 
 namespace ReadingList.Domain.Infrastructure
 {

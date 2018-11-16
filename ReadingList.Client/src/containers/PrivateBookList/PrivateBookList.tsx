@@ -140,6 +140,7 @@ class PrivateBookList extends React.Component<Props, State> {
                     <AddForm
                         onSubmit={this.handleFormSubmit}
                         header={'Add book'}
+                        // TODO Replace author and title entering with searching
                         inputs={[
                             {name: 'title', type: 'text', placeholder: 'Enter the title...', required: true},
                             {name: 'author', type: 'text', placeholder: 'Enter the author...', required: true}

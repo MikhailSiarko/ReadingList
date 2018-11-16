@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ReadingList.Domain.Models;
@@ -45,6 +48,23 @@ namespace ReadingList.Write
             var entity = await _dbContext.Set<T>().Include(_dbContext.GetIncludePaths<T>())
                 .SingleOrDefaultAsync(x => x.Id == id);
             _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task SaveRangeAsync<T>(IEnumerable<T> entities) where T : Entity
+        {
+            var enumerable = entities.ToList();
+            var existedEntities = enumerable.Where(e => e.Id != default(int)).ToList();
+
+            if (existedEntities.Any())
+            {
+                _dbContext.RemoveRange(existedEntities);
+            
+                await _dbContext.SaveChangesAsync();
+            }
+            
+            await _dbContext.Set<T>().AddRangeAsync(enumerable);
+            
             await _dbContext.SaveChangesAsync();
         }
     }

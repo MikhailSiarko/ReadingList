@@ -12,7 +12,7 @@ namespace ReadingList.Domain.CommandHandlers
 {
     public class AddSharedItemCommandHandler 
         : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItem, SharedBookListItemDto>
-    {
+    {     
         public AddSharedItemCommandHandler(IDataStorage writeService,
             IFetchHandler<GetBookByAuthorAndTitleQuery, Book> bookFetchHandler,
             IFetchHandler<GetBookListItemQuery, SharedBookListItem> itemFetchHandler) 
@@ -35,7 +35,7 @@ namespace ReadingList.Domain.CommandHandlers
             
             var accessSpecification = new BookListAccessSpecification(list);
             
-            if (!accessSpecification.SatisfiedBy(command.ListId))
+            if (!accessSpecification.SatisfiedBy(command.UserId))
             {
                 throw new AccessDeniedException();
             }
@@ -44,16 +44,12 @@ namespace ReadingList.Domain.CommandHandlers
         }
 
         protected override SharedBookListItem CreateItem(int bookId, int listId)
-        {           
+        {
             var item = new SharedBookListItem
             {
                 BookListId = listId,
                 BookId = bookId
             };
-
-            // TODO Implement tags adding
-            
-            // item.SharedBookListItemTags = command.Tags;
             
             return item;
         }

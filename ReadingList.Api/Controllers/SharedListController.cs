@@ -87,7 +87,7 @@ namespace ReadingList.Api.Controllers
                 {
                     Author = requestData.Author,
                     Title = requestData.Title
-                }, requestData.Tags));
+                }));
 
             return Ok(item);
         }
@@ -112,7 +112,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] SharedItemRequestData requestData)
         {
             var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Claims.GetUserId(), itemId,
-                listId, requestData.Tags));
+                listId));
             
             return Ok(item);
         }

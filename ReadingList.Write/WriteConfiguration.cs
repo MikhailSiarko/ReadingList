@@ -42,6 +42,8 @@ namespace ReadingList.Write
             services
                 .AddTransient<IFetchHandler<GetSharedListsByUserIdQuery, IEnumerable<BookList>>,
                     GetSharedListsByUserIdFetchHandler>();
+
+            services.AddTransient<IFetchHandler<GetExistingTagsQuery, IEnumerable<Tag>>, GetExistingTagsFetchHandler>();
             
             services.AddDbContextPool<WriteDbContext>((provider, builder) =>
                 builder.UseSqlite(provider.GetConnectionString("Write")));
