@@ -5,7 +5,6 @@ using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.RequestData;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Read.Queries;
 
@@ -40,9 +39,10 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPost("items")]
-        public async Task<IActionResult> AddItem([FromBody] BookInfo bookInfo)
+        public async Task<IActionResult> AddItem([FromBody] AddItemRequestData addItemRequestData)
         {
-            var item = await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Claims.GetUserId(), bookInfo));
+            var item = await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Claims.GetUserId(),
+                addItemRequestData.BookId));
             
             return Ok(item);
         }

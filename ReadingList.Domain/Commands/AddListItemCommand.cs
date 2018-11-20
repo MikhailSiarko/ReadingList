@@ -1,14 +1,12 @@
-using ReadingList.Domain.Infrastructure;
-
 namespace ReadingList.Domain.Commands
 {
     public abstract class AddListItemCommand<TListItemDto> : SecuredCommand<TListItemDto>
     {
-        public readonly BookInfo BookInfo;
+        public readonly int BookId;
 
-        protected AddListItemCommand(int userId, BookInfo bookInfo) : base(userId)
+        protected AddListItemCommand(int userId, int bookId) : base(userId)
         {
-            BookInfo = bookInfo;
+            BookId = bookId;
         }
     }
 }

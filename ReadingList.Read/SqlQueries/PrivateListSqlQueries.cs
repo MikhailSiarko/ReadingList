@@ -14,7 +14,7 @@ namespace ReadingList.Read.SqlQueries
                           .Select("pi.Id", "b.Title", "b.Author", "pi.BookId", "pi.BookListId", "pi.Status",
                               "pi.ReadingTimeInSeconds")
                           .From("PrivateBookListItems AS pi")
-                          .LeftJoin("Books AS b ON pi.Id = b.Id")
+                          .LeftJoin("Books AS b ON pi.BookId = b.Id")
                           .ToSql() +
                       ") AS i ON i.BookListId = l.Id")
             .Where("l.OwnerId = @UserId")

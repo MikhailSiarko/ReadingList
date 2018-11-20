@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using ReadingList.Domain.Models.DTO;
 using ReadingList.Domain.Models.DTO.User;
 using ReadingList.Domain.Services.Interfaces;
 
@@ -60,14 +61,14 @@ namespace ReadingList.Domain.Services.Authentication
                     SecurityAlgorithms.HmacSha256));
         }
 
-        public AuthenticationData Authenticate(UserDto user)
+        public AuthenticationDataDto Authenticate(UserDto user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
             
             var token = EncodeSecurityToken(user);
             var userIdentityDto = Mapper.Map<UserDto, UserIdentityDto>(user);
-            return new AuthenticationData(token, userIdentityDto); 
+            return new AuthenticationDataDto(token, userIdentityDto); 
         }
     }
 }

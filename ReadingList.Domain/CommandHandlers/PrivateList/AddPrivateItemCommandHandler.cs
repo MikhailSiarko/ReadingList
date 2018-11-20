@@ -39,12 +39,13 @@ namespace ReadingList.Domain.CommandHandlers
             return list.Id;
         }
 
-        protected override PrivateBookListItem CreateItem(int bookId, int listId)
+        protected override PrivateBookListItem CreateItem(Book book, int listId)
         {
             return new PrivateBookListItem
             {
                 BookListId = listId,
-                BookId = bookId
+                BookId = book.Id,
+                Book = book
             };
         }
 

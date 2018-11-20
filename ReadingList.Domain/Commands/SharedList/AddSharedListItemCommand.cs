@@ -1,5 +1,4 @@
-﻿using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Models.DTO.BookLists;
+﻿using ReadingList.Domain.Models.DTO.BookLists;
 
 namespace ReadingList.Domain.Commands
 {
@@ -7,7 +6,7 @@ namespace ReadingList.Domain.Commands
     {
         public readonly int ListId;
 
-        public AddSharedListItemCommand(int listId, int userId, BookInfo bookInfo) : base(userId, bookInfo)
+        public AddSharedListItemCommand(int listId, int userId, int bookId) : base(userId, bookId)
         {
             ListId = listId;
         }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Dapper;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Models.DAO.Identity;
+using ReadingList.Domain.Models.DTO;
 using ReadingList.Domain.Models.DTO.User;
 using ReadingList.Domain.Services.Authentication;
 using ReadingList.Domain.Services.Encryption;
@@ -11,7 +12,7 @@ using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
-    public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationData>
+    public class LoginUserQueryHandler : QueryHandler<LoginUserQuery, AuthenticationDataDto>
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IEncryptionService _encryptionService;
@@ -23,7 +24,7 @@ namespace ReadingList.Read.QueryHandlers
             _encryptionService = encryptionService;
         }
 
-        protected override async Task<AuthenticationData> Handle(SqlQueryContext<LoginUserQuery, AuthenticationData> context)
+        protected override async Task<AuthenticationDataDto> Handle(SqlQueryContext<LoginUserQuery, AuthenticationDataDto> context)
         {
             var user = await DbConnection.QuerySingleOrDefaultAsync<UserDto>(context.Sql, context.Parameters) ??
                        throw new ObjectNotExistException<User>(new OnExceptionObjectDescriptor

@@ -22,8 +22,8 @@ export class SharedBookListService extends ApiService {
             .catch(onError);
     }
 
-    addItem =(listId: number, listItem: SharedBookListItem) => {
-        return this.configureRequest(ApiConfiguration.getAddItemToSharedListUrl(listId), 'POST', listItem)
+    addItem =(listId: number, bookId: number) => {
+        return this.configureRequest(ApiConfiguration.getAddItemToSharedListUrl(listId), 'POST', {bookId})
             .then(this.onSuccess<SharedBookListItem>())
             .catch(onError);
     }

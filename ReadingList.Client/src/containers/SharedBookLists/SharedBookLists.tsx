@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Search from '../../components/Search';
+import SharedListSearch from '../../components/SharedListSearch';
 import Grid from '../../components/Grid';
 import { SharedBookList } from '../../models';
 import { SharedBookListService } from '../../services';
@@ -104,7 +104,7 @@ class SharedBookLists extends React.Component<Props, State> {
                     });
                 return (
                     <div>
-                        <Search query={this.props.match.params.query} onSubmit={this.searchHandler} />
+                        <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
                         <Grid items={items} />
                         <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
                         <AddForm

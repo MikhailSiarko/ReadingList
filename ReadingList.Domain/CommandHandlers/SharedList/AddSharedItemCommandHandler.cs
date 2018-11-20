@@ -43,12 +43,13 @@ namespace ReadingList.Domain.CommandHandlers
             return command.ListId;
         }
 
-        protected override SharedBookListItem CreateItem(int bookId, int listId)
+        protected override SharedBookListItem CreateItem(Book book, int listId)
         {
             var item = new SharedBookListItem
             {
                 BookListId = listId,
-                BookId = bookId
+                BookId = book.Id,
+                Book = book
             };
             
             return item;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItem, SelectListItem, PrivateBookList as PrivateList } from '../../models';
+import { PrivateBookListItem, SelectListItem, PrivateBookList as PrivateList, Book } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
@@ -11,14 +11,14 @@ import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
-import { NamedValue, AddForm } from '../../components/AddForm';
-import FixedButton from '../../components/FixedButton';
+import Search from '../../components/Search';
+import { BookService } from '../../services/BookService';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
     bookList: PrivateList;
     statuses: SelectListItem[];
-    addItem: (listItem: PrivateBookListItem) => Promise<void>;
+    addItem: (bookId: number) => Promise<void>;
     updateList: (list: PrivateList) => Promise<void>;
     deleteItem: (itemId: number) => Promise<void>;
     updateItem: (item: PrivateBookListItem) => Promise<void>;
@@ -28,6 +28,7 @@ interface Props extends RouteComponentProps<any> {
     getBookStatuses: () => Promise<void>;
     loadingStart: () => void;
     loadingEnd: () => void;
+    findBooks: (query: string) => Promise<Book[]>;
 }
 
 interface State {
@@ -70,21 +71,10 @@ class PrivateBookList extends React.Component<Props, State> {
         return nextProps.bookList != null && nextProps.statuses != null;
     }
 
-    handleFormSubmit = async (values: NamedValue[]) => {
-        const title = values.filter(item => item.name === 'title')[0].value;
-        const author = values.filter(item => item.name === 'author')[0].value;
+    handleSearchItemClick = async (item: Book) => {
         this.props.loadingStart();
-        await this.props.addItem({title, author} as PrivateBookListItem);
+        await this.props.addItem(item.id);
         this.props.loadingEnd();
-        this.setState({isFormHidden: true});
-    }
-
-    handleFormCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
-        this.setState({isFormHidden: true});
-    }
-
-    handleButtonClick = () => {
-        this.setState({isFormHidden: false});
     }
 
     render() {
@@ -136,17 +126,16 @@ class PrivateBookList extends React.Component<Props, State> {
 
             return (
                 <>
-                    <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
-                    <AddForm
-                        onSubmit={this.handleFormSubmit}
-                        header={'Add book'}
-                        // TODO Replace author and title entering with searching
-                        inputs={[
-                            {name: 'title', type: 'text', placeholder: 'Enter the title...', required: true},
-                            {name: 'author', type: 'text', placeholder: 'Enter the author...', required: true}
-                        ]}
-                        isHidden={this.state.isFormHidden}
-                        onCancel={this.handleFormCancel}
+                    <Search
+                        onSubmit={this.props.findBooks}
+                        itemRender={
+                            (item: Book) => (
+                                <div>
+                                    <p>{item.title} by {item.author}</p>
+                                </div>
+                            )
+                        }
+                        onItemClick={this.handleSearchItemClick}
                     />
                     <ContexedList items={listItems} legend={legend} />
                 </>
@@ -170,26 +159,31 @@ function mapStateToProps(state: RootState) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const bookService = new PrivateBookListService();
+    const listService = new PrivateBookListService();
+    const bookService = new BookService();
     return {
-        addItem: createPropAction(bookService.addItem, dispatch, privateBookListAction.addItem),
-        deleteItem: createPropAction(bookService.removeItem, dispatch, privateBookListAction.removeItem),
-        updateItem: createPropAction(bookService.updateItem, dispatch, privateBookListAction.updateItem),
+        addItem: createPropAction(listService.addItem, dispatch, privateBookListAction.addItem),
+        deleteItem: createPropAction(listService.removeItem, dispatch, privateBookListAction.removeItem),
+        updateItem: createPropAction(listService.updateItem, dispatch, privateBookListAction.updateItem),
         switchItemEditMode: (itemId: number) => {
             dispatch(privateBookListAction.switchEditModeForItem(itemId));
         },
-        getList: createPropAction(bookService.getList, dispatch, privateBookListAction.updateList),
+        getList: createPropAction(listService.getList, dispatch, privateBookListAction.updateList),
         switchListEditMode: () => {
             dispatch(privateBookListAction.switchEditModeForList());
         },
-        updateList: createPropAction(bookService.updateList, dispatch, privateBookListAction.updateList),
-        getBookStatuses: createPropAction(bookService.getBookStatuses, dispatch,
+        updateList: createPropAction(listService.updateList, dispatch, privateBookListAction.updateList),
+        getBookStatuses: createPropAction(listService.getBookStatuses, dispatch,
             privateBookListAction.setBookStatuses),
         loadingStart: () => {
             dispatch(loadingActions.start());
         },
         loadingEnd: () => {
             dispatch(loadingActions.end());
+        },
+        findBooks: async (query: string) => {
+            const result = await bookService.findBooks(query);
+            return result.data;
         }
     };
 }

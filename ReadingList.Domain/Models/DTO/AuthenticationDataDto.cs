@@ -1,14 +1,14 @@
 ﻿using ReadingList.Domain.Models.DTO.User;
 
-namespace ReadingList.Domain.Services.Authentication
+namespace ReadingList.Domain.Models.DTO
 {
-    public class AuthenticationData
+    public class AuthenticationDataDto
     {
         public string Token { get; }
 
         public UserIdentityDto User { get; }
 
-        public AuthenticationData(string token, UserIdentityDto user)
+        public AuthenticationDataDto(string token, UserIdentityDto user)
         {
             Token = token;
             User = user;

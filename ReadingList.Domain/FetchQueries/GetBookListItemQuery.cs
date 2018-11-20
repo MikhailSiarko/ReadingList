@@ -2,16 +2,13 @@ namespace ReadingList.Domain.FetchQueries
 {
     public class GetBookListItemQuery
     {
-        public readonly string Author;
-
-        public readonly string Title;
+        public readonly int BookId;
 
         public readonly int ListId;
 
-        public GetBookListItemQuery(string author, string title, int listId)
+        public GetBookListItemQuery(int bookId, int listId)
         {
-            Author = author;
-            Title = title;
+            BookId = bookId;
             ListId = listId;
         }
     }

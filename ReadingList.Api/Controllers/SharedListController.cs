@@ -80,14 +80,10 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPost("{listId}/items")]
-        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] SharedItemRequestData requestData)
+        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemRequestData requestData)
         {
             var item = await _domainService.ExecuteAsync(new AddSharedListItemCommand(listId, User.Claims.GetUserId(),
-                new BookInfo
-                {
-                    Author = requestData.Author,
-                    Title = requestData.Title
-                }));
+                requestData.BookId));
 
             return Ok(item);
         }
@@ -109,7 +105,7 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPut("{listId}/items/{itemId}")]
-        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] SharedItemRequestData requestData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] AddItemRequestData requestData)
         {
             var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Claims.GetUserId(), itemId,
                 listId));

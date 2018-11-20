@@ -1,36 +1,36 @@
 import * as React from 'react';
 import { SharedBookList as SharedList } from '../../models/BookList/Implementations/SharedBookList';
-import { SharedBookListService } from '../../services';
-import { Dispatch } from 'redux';
-import { RootState } from '../../store/reducers';
-import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI/SharedBookLI';
 import { withSpinner } from '../../hoc';
-import { AddForm, NamedValue } from '../../components/AddForm';
-import { cloneDeep } from 'lodash';
 import { SharedBookListItem } from '../../models/BookList';
-import FixedButton from '../../components/FixedButton';
+import Search from '../../components/Search';
+import { Book } from '../../models';
+import { RootState } from '../../store/reducers';
+import { connect, Dispatch } from 'react-redux';
+import { SharedBookListService } from '../../services';
+import { BookService } from '../../services/BookService';
+import { cloneDeep } from 'lodash';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
     getList: (id: number) => Promise<SharedList>;
-    addItem: (listId: number, item: SharedBookListItem) => Promise<SharedBookListItem>;
+    addItem: (listId: number, bookId: number) => Promise<SharedBookListItem>;
     loadingStart: () => void;
     loadingEnd: () => void;
+    findBooks: (query: string) => Promise<Book[]>;
 }
 
 interface State {
     list: SharedList | null;
-    isFormHidden: boolean;
 }
 
 class SharedBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = {list: null, isFormHidden: true};
+        this.state = {list: null};
     }
 
     async componentDidMount() {
@@ -43,25 +43,17 @@ class SharedBookList extends React.Component<Props, State> {
         }
     }
 
-    handleButtonClick = () => {
-        this.setState({isFormHidden: false});
-    }
-
-    handleCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
-        this.setState({isFormHidden: true});
-    }
-
-    handleListFormSubmit = async (values: NamedValue[]) => {
+    handleSearchItemClick = async (item: Book) => {
         this.props.loadingStart();
-        const title = values.filter(item => item.name === 'title')[0].value;
-        const author = values.filter(item => item.name === 'author')[0].value;
-        const listItem =
-            await this.props.addItem((this.state.list as SharedList).id, new SharedBookListItem(author, title));
+        let copy;
+        if(this.state.list) {
+            const bookItem = await this.props.addItem(this.state.list.id, item.id);
+            copy = cloneDeep(this.state.list);
+            copy.items.push(bookItem);
+        }
         this.props.loadingEnd();
-        const copy = cloneDeep(this.state.list);
         if(copy) {
-            copy.items.push(listItem);
-            this.setState({list: copy, isFormHidden: true});
+            this.setState({list: copy});
         }
     }
 
@@ -85,38 +77,26 @@ class SharedBookList extends React.Component<Props, State> {
                 );
                 return (
                     <>
-                        <BookList items={listItems} legend={legend} />
                         {
                             this.state.list && this.state.list.canEdit
                                 ? (
                                     <>
-                                        <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
-                                        <AddForm
-                                            header={'Add new item'}
-                                            // TODO Replace author and title entering with searching
-                                            inputs={[
-                                                {
-                                                    name: 'title',
-                                                    type: 'text',
-                                                    required: true,
-                                                    placeholder: 'Enter the title...'
-                                                },
-                                                {
-                                                    name: 'author',
-                                                    type: 'text',
-                                                    required: true,
-                                                    placeholder: 'Enter the author...'
-                                                }
-                                            ]}
-                                            isHidden={this.state.isFormHidden}
-                                            onSubmit={this.handleListFormSubmit}
-                                            onCancel={this.handleCancel}
+                                        <Search
+                                            onSubmit={this.props.findBooks}
+                                            itemRender={
+                                                (item: Book) => (
+                                                    <div>
+                                                        <p>{item.title} by {item.author}</p>
+                                                    </div>
+                                                )
+                                            }
+                                            onItemClick={this.handleSearchItemClick}
                                         />
                                     </>
                                 )
                                 : null
                         }
-
+                        <BookList items={listItems} legend={legend} />
                     </>
                 );
             }
@@ -133,21 +113,35 @@ function mapStateToProps(state: RootState) {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const bookService = new SharedBookListService();
+    const listService = new SharedBookListService();
+    const bookService = new BookService();
     return {
         getList: async (id: number) => {
-            const result = await bookService.getList(id);
-            return result.data as SharedList;
+            const result = await listService.getList(id);
+            if(!result.isSucceed) {
+                alert(result.errorMessage);
+            }
+            return result.data;
         },
-        addItem: async (listId: number, listItem: SharedBookListItem) => {
-            const result = await bookService.addItem(listId, listItem);
-            return result.data as SharedBookListItem;
+        addItem: async (listId: number, bookId: number) => {
+            const result = await listService.addItem(listId, bookId);
+            if(!result.isSucceed) {
+                alert(result.errorMessage);
+            }
+            return result.data;
         },
         loadingStart: () => {
             dispatch(loadingActions.start());
         },
         loadingEnd: () => {
             dispatch(loadingActions.end());
+        },
+        findBooks: async (query: string) => {
+            const result = await bookService.findBooks(query);
+            if(!result.isSucceed) {
+                alert(result.errorMessage);
+            }
+            return result.data;
         }
     };
 }

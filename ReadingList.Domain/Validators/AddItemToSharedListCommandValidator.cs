@@ -10,8 +10,7 @@ namespace ReadingList.Domain.Validators
         public AddItemToSharedListCommandValidator()
         {
             Include(new SecuredCommandValidator<SharedBookListItemDto>());
-            RuleFor(m => m.BookInfo.Author).NotEmptyWithMessage(m => nameof(m.BookInfo.Author));
-            RuleFor(m => m.BookInfo.Title).NotEmptyWithMessage(m => nameof(m.BookInfo.Title));
+            RuleFor(m => m.BookId).NotEqualToDefault();
         }
     }
 }

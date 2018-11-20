@@ -20,7 +20,7 @@ namespace ReadingList.Domain.MapperProfiles
             CreateMap<SharedBookListItem, SharedBookListItemDto>()
                 .ForMember(dto => dto.Tags,
                     expression => expression.MapFrom(wm => wm.Book.BookTags.Select(t => t.Tag.Name)))
-                .ForMember(dto => dto.ListId, expression => expression.MapFrom(wm => wm.BookListId))
+                .ForMember(dto => dto.ListId, expression => expression.MapFrom(item => item.BookListId))
                 .ForMember(dto => dto.Author, expression => expression.MapFrom(item => item.Book.Author))
                 .ForMember(dto => dto.Title, expression => expression.MapFrom(item => item.Book.Title))
                 .ForMember(dto => dto.GenreId, expression => expression.MapFrom(item => item.Book.GenreId));

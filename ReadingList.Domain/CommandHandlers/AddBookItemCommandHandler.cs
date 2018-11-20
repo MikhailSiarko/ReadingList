@@ -2,7 +2,6 @@
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Models.DAO;
 using ReadingList.Domain.Services.Interfaces;
 
@@ -28,52 +27,31 @@ namespace ReadingList.Domain.CommandHandlers
         {
             var listId = await GetBookListId(command);
 
-            if (await DoItemExist(command.BookInfo, listId))
+            if (await DoItemExist(command.BookId, listId))
                 throw new ObjectAlreadyExistsException<TItem>(new OnExceptionObjectDescriptor
                 {
-                    ["Title"] = command.BookInfo.Title,
-                    ["Author"] = command.BookInfo.Author
+                    ["Book Id"] = command.BookId.ToString()
                 });
             
-            var book = await FindOrAddBook(command.BookInfo);
+            var book = await WriteService.GetAsync<Book>(command.BookId);
             
-            var item = CreateItem(book.Id, listId);
+            var item = CreateItem(book, listId);
 
             await SaveAsync(item);
 
             return Convert(item);
         }
 
-        private async Task<Book> FindOrAddBook(BookInfo bookInfo)
+        private async Task<bool> DoItemExist(int bookId, int bookListId)
         {
-            var book = await _bookFetchHandler.Fetch(
-                new GetBookByAuthorAndTitleQuery(bookInfo.Author, bookInfo.Title));
-
-            if (book != null) return book;
-            
-            book = new Book
-            {
-                Author = bookInfo.Author,
-                Title = bookInfo.Title,
-                GenreId = bookInfo.GenreId
-            };
-                
-            await WriteService.SaveAsync(book);
-
-            return book;
-        }
-
-        private async Task<bool> DoItemExist(BookInfo bookInfo, int bookListId)
-        {
-            var item = await _itemFetchHandler.Fetch(new GetBookListItemQuery(bookInfo.Author, bookInfo.Title,
-                bookListId));
+            var item = await _itemFetchHandler.Fetch(new GetBookListItemQuery(bookId, bookListId));
 
             return item != null;
         }
         
         protected abstract Task<int> GetBookListId(TCommand command);
 
-        protected abstract TItem CreateItem(int bookId, int listId);
+        protected abstract TItem CreateItem(Book book, int listId);
         
         protected abstract Task SaveAsync(TItem item);
 

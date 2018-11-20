@@ -1,11 +1,10 @@
-﻿using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Models.DTO.BookLists;
+﻿using ReadingList.Domain.Models.DTO.BookLists;
 
 namespace ReadingList.Domain.Commands
 {
     public class AddPrivateItemCommand : AddListItemCommand<PrivateBookListItemDto>
     {
-        public AddPrivateItemCommand(int userId, BookInfo bookInfo) : base(userId, bookInfo)
+        public AddPrivateItemCommand(int userId, int bookId) : base(userId, bookId)
         {
         }
     }

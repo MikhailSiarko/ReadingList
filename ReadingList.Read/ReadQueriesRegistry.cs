@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ReadingList.Read.Queries;
+using ReadingList.Read.Queries.Book;
 using ReadingList.Read.SqlQueries;
 
 namespace ReadingList.Read
@@ -30,7 +31,9 @@ namespace ReadingList.Read
             [typeof(GetUserSharedListsQuery)] = SharedListSqlQueries.SelectOwn,
             // Private
             [typeof(GetPrivateListQuery)] = PrivateListSqlQueries.SelectByLogin,
-            [typeof(GetPrivateListItemQuery)] = PrivateItemSqlQueries.SelectById
+            [typeof(GetPrivateListItemQuery)] = PrivateItemSqlQueries.SelectById,
+            // Book
+            [typeof(FindBooksQuery)] = BookSqlQueries.FindBooks
         };
     }
 }

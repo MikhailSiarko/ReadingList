@@ -16,11 +16,10 @@ export class PrivateBookListService extends ApiService {
             .catch(onError);
     }
 
-    addItem = (item: PrivateBookListItem) => {
+    addItem = (bookId: number) => {
         return this.configureRequest(`${ApiConfiguration.PRIVATE_LIST_ITEMS}`, 'POST',
             {
-                title: item.title,
-                author: item.author
+                bookId: bookId
             })
             .then(this.onSuccess<PrivateBookListItem>())
             .catch(onError);

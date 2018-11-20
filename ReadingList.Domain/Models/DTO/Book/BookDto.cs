@@ -1,6 +1,6 @@
-namespace ReadingList.Api.RequestData
+namespace ReadingList.Domain.Models.DTO.Book
 {
-    public struct SharedItemRequestData
+    public class BookDto : Entity
     {
         public string Author { get; set; }
 

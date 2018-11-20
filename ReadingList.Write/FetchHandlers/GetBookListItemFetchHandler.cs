@@ -20,8 +20,7 @@ namespace ReadingList.Write.FetchHandlers
         {
             return await _dbContext.Set<TItem>()
                 .Include(_dbContext.GetIncludePaths<TItem>())
-                .SingleOrDefaultAsync(i =>
-                    i.Book.Author == query.Author && i.Book.Title == query.Title && i.BookListId == query.ListId);
+                .SingleOrDefaultAsync(i => i.BookId == query.BookId && i.BookListId == query.ListId);
         }
     }
 }

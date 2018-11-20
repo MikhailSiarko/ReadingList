@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.RequestData;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.Services;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Read.Queries;
 
