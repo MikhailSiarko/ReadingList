@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
+using ReadingList.Domain.Models;
 using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public abstract class UpdateCommandHandler<TCommand, TEntity, TDto> : CommandHandler<TCommand, TDto>
         where TCommand : UpdateCommand<TDto>
+        where TEntity : Entity
     {
         protected UpdateCommandHandler(IDataStorage writeService) : base(writeService)
         {
@@ -16,6 +18,8 @@ namespace ReadingList.Domain.CommandHandlers
             var entity = await GetEntity(command);
 
             Update(entity, command);
+
+            await WriteService.SaveAsync(entity);
             
             return Convert(entity);
         }

@@ -27,7 +27,7 @@ class Search extends React.Component<Props, State> {
         clearTimeout(this.state.timer as NodeJS.Timer);
         this.setState({query: event.target.value, timer: setTimeout(async () => {
             await this.findBooks();
-        }, 1000)});
+        }, 500)});
     }
 
     handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,19 +37,9 @@ class Search extends React.Component<Props, State> {
 
     handleItemClick = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        let target = event.target as HTMLElement;
-        let continueIteration = true;
-        while(continueIteration) {
-            if(target.tagName === 'LI') {
-                continueIteration = false;
-            } else {
-                target = target.parentElement as HTMLElement;
-            }
-        }
-        const dataIndex = target.dataset.itemIndex;
+        const dataIndex = this.findTarget(event).dataset.itemIndex;
         const index = parseInt(dataIndex as string, 10);
-        const item = this.state.searchItems[index];
-        await this.props.onItemClick(item);
+        await this.props.onItemClick(this.state.searchItems[index]);
         clearTimeout(this.state.timer as NodeJS.Timer);
     }
 
@@ -97,6 +87,19 @@ class Search extends React.Component<Props, State> {
     private findBooks = async () => {
         const items = await this.props.onSubmit(this.state.query as string);
         this.setState({searchItems: Array.from(items)});
+    }
+
+    private findTarget = (event: React.MouseEvent<HTMLElement>) => {
+        let target = event.target as HTMLElement;
+        let continueIteration = true;
+        while(continueIteration) {
+            if(target.tagName === 'LI') {
+                continueIteration = false;
+            } else {
+                target = target.parentElement as HTMLElement;
+            }
+        }
+        return target;
     }
 }
 
