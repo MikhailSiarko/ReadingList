@@ -24,8 +24,9 @@ namespace ReadingList.Read.QueryHandlers.Book
             {
                 if (books.Any(a => a.Id == row.Id)) 
                     continue;
-                
-                var tags = rows.Where(b => b.Id == row.Id).Select(b => b.Tag).ToList();
+
+                var tags = rows.Where(b => b.Id == row.Id).Select(b => b.Tag).Where(t => !string.IsNullOrEmpty(t))
+                    .ToList();
 
                 books.Add(new BookDto
                 {

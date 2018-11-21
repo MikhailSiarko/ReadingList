@@ -19,7 +19,7 @@ namespace ReadingList.Domain.Infrastructure
             using (var fs = new FileStream(Path.Combine(
                 Directory.GetParent(Directory.GetCurrentDirectory()).GetDirectories()
                     .Single(d => d.Name == "ReadingList.Domain").FullName,
-                "\\Resources\\genres.json"), FileMode.Open))
+                "Resources\\genres.json"), FileMode.Open))
             {
                 genres = (IEnumerable<Genre>) jsonFormatter.ReadObject(fs);
             }

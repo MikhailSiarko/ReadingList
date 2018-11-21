@@ -24,8 +24,9 @@ namespace ReadingList.Read.QueryHandlers
             {
                 if (lists.Any(a => a.Id == row.Id)) 
                     continue;
-                
-                var tags = rows.Where(r => r.Id == row.Id).Select(r => r.Tag).ToList();
+
+                var tags = rows.Where(r => r.Id == row.Id).Select(r => r.Tag).Where(t => !string.IsNullOrEmpty(t))
+                    .ToList();
 
                 lists.Add(new SharedBookListPreviewDto()
                 {

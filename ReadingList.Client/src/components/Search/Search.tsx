@@ -15,7 +15,6 @@ interface State {
 }
 
 class Search extends React.Component<Props, State> {
-    private form: HTMLFormElement;
     private input: HTMLInputElement;
 
     constructor(props: Props) {
@@ -95,7 +94,7 @@ class Search extends React.Component<Props, State> {
     render() {
         return (
             <div className={styles['search-wrapper']}>
-                <form onSubmit={this.handleSubmit} ref={ref => this.form = (ref as HTMLFormElement)} autoComplete="off">
+                <form onSubmit={this.handleSubmit} autoComplete="off">
                     <input
                         ref={ref => this.input = (ref as HTMLInputElement)}
                         autoFocus={true}
