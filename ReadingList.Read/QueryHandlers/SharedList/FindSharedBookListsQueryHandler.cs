@@ -16,19 +16,44 @@ namespace ReadingList.Read.QueryHandlers
 
         protected override async Task<IEnumerable<SharedBookListPreviewDto>> Handle(SqlQueryContext<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>> context)
         {           
-            using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
+            var rows = (await DbConnection.QueryAsync<SharedListDbRow>(context.Sql, context.Parameters)).ToList();
+
+            var lists = new List<SharedBookListPreviewDto>();
+            
+            foreach (var row in rows)
             {
-                var lists = (await reader.ReadAsync<SharedBookListPreviewDto>()).ToList();
+                if (lists.Any(a => a.Id == row.Id)) 
+                    continue;
+                
+                var tags = rows.Where(r => r.Id == row.Id).Select(r => r.Tag).ToList();
 
-                var tags = (await reader.ReadAsync<(string TagName, int ListId)>()).ToLookup(tuple => tuple.ListId);
-
-                foreach (var list in lists)
+                lists.Add(new SharedBookListPreviewDto()
                 {
-                    list.Tags = tags[list.Id].Select(t => t.TagName).ToList();
-                }
-
-                return lists;
+                    Id = row.Id,
+                    OwnerId = row.OwnerId,
+                    Name = row.Name,
+                    Type = row.Type,
+                    BooksCount = row.BookCount,
+                    Tags = tags
+                });
             }
+            
+            return lists;
+        }
+        
+        private class SharedListDbRow
+        {
+            public int Id { get; set; }
+            
+            public string Name { get; set; }
+
+            public int OwnerId { get; set; }
+
+            public int Type { get; set; }
+
+            public string Tag { get; set; }
+
+            public int BookCount { get; set; }
         }
     }
 }

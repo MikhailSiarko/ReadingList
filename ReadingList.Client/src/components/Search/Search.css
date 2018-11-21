@@ -25,11 +25,6 @@
     padding: 1rem 0;
 }
 
-.search-wrapper ul li * {
-    margin: 0;
-    padding: 0;
-}
-
 .search-wrapper ul li:not(:last-child) {
     border-bottom: 0.1rem solid grey;
 }

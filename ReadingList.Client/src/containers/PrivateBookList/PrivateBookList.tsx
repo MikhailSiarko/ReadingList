@@ -13,6 +13,7 @@ import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
 import Search from '../../components/Search';
 import { BookService } from '../../services/BookService';
+import BookSearchItem from '../../components/BookSearchItem';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -77,46 +78,55 @@ class PrivateBookList extends React.Component<Props, State> {
         this.props.loadingEnd();
     }
 
+    handleUpdateList = async (newName: string) => {
+        this.props.loadingStart();
+        await this.props.updateList({name: newName} as PrivateList);
+        this.props.loadingEnd();
+    }
+
+    renderSearchItem = (item: Book) => <BookSearchItem book={item} />;
+
+    handleUpdateItem = async (item: PrivateBookListItem) => {
+        this.props.loadingStart();
+        await this.props.updateItem(item);
+        this.props.loadingEnd();
+    }
+
+    mapItem = (item: PrivateBookListItem) => {
+        const actions = [
+            {onClick: () => this.props.switchItemEditMode(item.id), text: 'Edit'},
+            {onClick: deleteItem(item, async itemId => {
+                    this.props.loadingStart();
+                    await this.props.deleteItem(itemId);
+                    this.props.loadingEnd();
+                }), text: 'Delete'}
+        ];
+
+        const Contexed = withContextMenu(actions, PrivateBookLI);
+
+        return (
+            <Contexed
+                key={item.id}
+                listItem={item}
+                onSave={this.handleUpdateItem}
+                onCancel={this.props.switchItemEditMode}
+                statuses={this.props.statuses}
+            />
+        );
+    }
+
     render() {
         const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), () => {
             let listItems;
             if(this.props.bookList.items.length > 0) {
-                listItems = this.props.bookList.items.map(listItem => {
-                    const actions = [
-                        {onClick: () => this.props.switchItemEditMode(listItem.id), text: 'Edit'},
-                        {onClick: deleteItem(listItem, async itemId => {
-                                this.props.loadingStart();
-                                await this.props.deleteItem(itemId);
-                                this.props.loadingEnd();
-                            }), text: 'Delete'}
-                    ];
-                    const Contexed = withContextMenu(actions, PrivateBookLI);
-
-                    return (
-                        <Contexed
-                            key={listItem.id}
-                            listItem={listItem}
-                            onSave={async item => {
-                                this.props.loadingStart();
-                                await this.props.updateItem(item);
-                                this.props.loadingEnd();
-                            }}
-                            onCancel={this.props.switchItemEditMode}
-                            statuses={this.props.statuses}
-                        />
-                    );
-                });
+                listItems = this.props.bookList.items.map(this.mapItem);
             }
             const legend = (
                 this.props.bookList.isInEditMode ?
                 (
                     <PrivateListNameEditor
                         name={this.props.bookList.name}
-                        onSave={async newName => {
-                            this.props.loadingStart();
-                            await this.props.updateList({name: newName} as PrivateList);
-                            this.props.loadingEnd();
-                        }}
+                        onSave={this.handleUpdateList}
                         onCancel={this.props.switchListEditMode}
                     />
                 ) : this.props.bookList.name
@@ -128,13 +138,7 @@ class PrivateBookList extends React.Component<Props, State> {
                 <>
                     <Search
                         onSubmit={this.props.findBooks}
-                        itemRender={
-                            (item: Book) => (
-                                <div>
-                                    <p>{item.title} by {item.author}</p>
-                                </div>
-                            )
-                        }
+                        itemRender={this.renderSearchItem}
                         onItemClick={this.handleSearchItemClick}
                     />
                     <ContexedList items={listItems} legend={legend} />
@@ -183,6 +187,9 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         findBooks: async (query: string) => {
             const result = await bookService.findBooks(query);
+            if(!result.isSucceed) {
+                alert(result.errorMessage);
+            }
             return result.data;
         }
     };

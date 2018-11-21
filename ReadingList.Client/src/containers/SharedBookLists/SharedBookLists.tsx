@@ -5,11 +5,10 @@ import { SharedBookList } from '../../models';
 import { SharedBookListService } from '../../services';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import { createPropActionWithResult } from '../../utils';
+import { createPropActionWithResult, reduceTags } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
-import { withSpinner } from '../../hoc';
 import { cloneDeep } from 'lodash';
 import { NamedValue, AddForm } from '../../components/AddForm';
 import FixedButton from '../../components/FixedButton';
@@ -36,21 +35,15 @@ class SharedBookLists extends React.Component<Props, State> {
 
     searchHandler = async (query: string) => {
         this.props.loadingStart();
-        this.props.history.push(`/shared/search/${query}`, {from: this.props.location});
+        const lists = await this.props.getSharedLists(query);
+        this.props.loadingEnd();
+        this.setState({sharedLists: lists});
     }
 
     async componentDidMount() {
-        this.props.loadingStart();
         if(this.state.sharedLists === null) {
-            let lists;
-            if(this.props.match.params.query === 'own') {
-                lists = await this.props.getOwnSharedLists();
-            } else {
-                lists = await this.props.getSharedLists(
-                    this.props.match.params.query
-                        ? this.props.match.params.query
-                        : '');
-            }
+            this.props.loadingStart();
+            let lists = await this.props.getSharedLists('');
             this.props.loadingEnd();
             this.setState({sharedLists: lists});
         }
@@ -85,23 +78,23 @@ class SharedBookLists extends React.Component<Props, State> {
         this.props.loadingEnd();
     }
 
+    mapList = (list: SharedBookList) => {
+        return {
+            header: list.name,
+            content: (
+                <div>
+                    <p>{reduceTags(list.tags)}</p>
+                    <h4>{list.booksCount} book(s)</h4>
+                </div>
+            ),
+            onClick: () => this.props.history.push('/shared/' + list.id,
+                {from: this.props.location})
+        };
+    }
+
     render() {
-        const Spinnered = withSpinner(this.state.sharedLists && !this.props.loading, () => {
-            if(this.state.sharedLists) {
-                const items = this.state.sharedLists.map(
-                    list => {
-                        return {
-                            header: list.name,
-                            content: (
-                                <div>
-                                    <p>{list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)}</p>
-                                    <h4>{list.booksCount} book(s)</h4>
-                                </div>
-                            ),
-                            onClick: () => this.props.history.push('/shared/' + list.id,
-                                {from: this.props.location})
-                        };
-                    });
+        if(this.state.sharedLists) {
+                const items = this.state.sharedLists.map(this.mapList);
                 return (
                     <div>
                         <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
@@ -121,9 +114,6 @@ class SharedBookLists extends React.Component<Props, State> {
                 );
             }
             return null;
-        });
-
-        return <Spinnered />;
     }
 }
 

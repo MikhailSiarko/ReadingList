@@ -59,7 +59,7 @@ export function applyClasses(...classes: string[]) {
   return classes.join(' ');
 }
 
-export function createPropAction<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>, 
+export function createPropAction<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>,
                 dispatch: Dispatch<RootState>, action?: (out: TOut) => any) {
     return async function(inner: TIn) {
         const result = await func(inner);
@@ -71,7 +71,7 @@ export function createPropAction<TIn, TOut>(func: (data: TIn) => Promise<Request
     };
 }
 
-export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>, 
+export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>,
                 dispatch: Dispatch<RootState>, action?: (out: TOut) => any) {
     return async function(inner: TIn) {
         const result = await func(inner);
@@ -82,4 +82,8 @@ export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promi
         }
         return result.data as TOut;
     };
+}
+
+export function reduceTags(tags: string[]) {
+  return tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1);
 }

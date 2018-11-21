@@ -13,6 +13,8 @@ import { connect, Dispatch } from 'react-redux';
 import { SharedBookListService } from '../../services';
 import { BookService } from '../../services/BookService';
 import { cloneDeep } from 'lodash';
+import { reduceTags } from '../../utils';
+import BookSearchItem from '../../components/BookSearchItem';
 
 interface Props extends RouteComponentProps<any> {
     loading: boolean;
@@ -57,46 +59,54 @@ class SharedBookList extends React.Component<Props, State> {
         }
     }
 
+    renderLegend = () => {
+        if(this.state.list) {
+            return (
+                <div>
+                    <h4 style={{margin: 0}}>{this.state.list.name}</h4>
+                    <p style={{margin: 0}}>
+                        {
+                            reduceTags(this.state.list.tags)
+                        }
+                    </p>
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }
+
+    renderSearchItem = (item: Book) => <BookSearchItem book={item} />;
+
+    mapItem = (item: SharedBookListItem) => <SharedBookLI key={item.id} item={item} />;
+
+    renderSearch = () => {
+        if(this.state.list && this.state.list.editable) {
+            return (
+                <Search
+                    onSubmit={this.props.findBooks}
+                    itemRender={this.renderSearchItem}
+                    onItemClick={this.handleSearchItemClick}
+                />
+            );
+        } else {
+            return null;
+        }
+    }
+
     render() {
         const Spinnered = withSpinner(this.state.list && !this.props.loading, () => {
             let listItems;
             if(this.state.list && this.state.list.items.length > 0) {
-                listItems = this.state.list.items.map(
-                    listItem => <SharedBookLI key={listItem.id} item={listItem} />);
+                listItems = this.state.list.items.map(this.mapItem);
             }
             if(this.state.list) {
-                const legend = (
-                    <div>
-                        <h4 style={{margin: 0}}>{this.state.list.name}</h4>
-                        <p style={{margin: 0}}>
-                            {
-                                this.state.list.tags.reduce((acc, tag) => acc + ' #' + tag, '').substring(1)
-                            }
-                        </p>
-                    </div>
-                );
                 return (
                     <>
                         {
-                            this.state.list && this.state.list.canEdit
-                                ? (
-                                    <>
-                                        <Search
-                                            onSubmit={this.props.findBooks}
-                                            itemRender={
-                                                (item: Book) => (
-                                                    <div>
-                                                        <p>{item.title} by {item.author}</p>
-                                                    </div>
-                                                )
-                                            }
-                                            onItemClick={this.handleSearchItemClick}
-                                        />
-                                    </>
-                                )
-                                : null
+                            this.renderSearch()
                         }
-                        <BookList items={listItems} legend={legend} />
+                        <BookList items={listItems} legend={this.renderLegend()} />
                     </>
                 );
             }

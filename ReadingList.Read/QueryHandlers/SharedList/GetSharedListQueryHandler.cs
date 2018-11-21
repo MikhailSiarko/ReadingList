@@ -42,15 +42,8 @@ namespace ReadingList.Read.QueryHandlers
 
                 list.Items = items;
 
-                list.CanEdit = (await reader.ReadSingleAsync<Access>()).CanEdit;
-
                 return list;
             }
-        }
-        
-        private class Access
-        {
-            public bool CanEdit { get; set; }
         }
     }
 }

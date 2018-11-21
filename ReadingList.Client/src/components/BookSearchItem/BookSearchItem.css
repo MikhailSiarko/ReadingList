@@ -1,0 +1,8 @@
+.book-search-item, .book-search-item * {
+    margin: 0;
+    padding: 0;
+}
+
+.book-search-item > p:last-of-type {
+    font-size: 1.5rem;
+}

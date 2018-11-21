@@ -16,6 +16,7 @@ interface State {
 
 class Search extends React.Component<Props, State> {
     private form: HTMLFormElement;
+    private input: HTMLInputElement;
 
     constructor(props: Props) {
         super(props);
@@ -26,13 +27,13 @@ class Search extends React.Component<Props, State> {
         event.preventDefault();
         clearTimeout(this.state.timer as NodeJS.Timer);
         this.setState({query: event.target.value, timer: setTimeout(async () => {
-            await this.findBooks();
+            await this.findItems();
         }, 500)});
     }
 
     handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        await this.findBooks();
+        await this.findItems();
     }
 
     handleItemClick = async (event: React.MouseEvent<HTMLElement>) => {
@@ -47,13 +48,56 @@ class Search extends React.Component<Props, State> {
         if(this.state.timer) {
             clearTimeout(this.state.timer);
         }
+        this.input.removeEventListener('focusout', this.handleFocusOut);
+    }
+
+    componentDidMount() {
+        this.input.addEventListener('focusout', this.handleFocusOut);
+    }
+
+    handleFocusOut = () => {
+        if(this.state.timer) {
+            clearTimeout(this.state.timer);
+        }
+        this.setState({searchItems: new Array<any>(0), query: '', timer: null});
+    }
+
+    findItems = async () => {
+        const items = await this.props.onSubmit(this.state.query as string);
+        if(items) {
+            this.setState({searchItems: Array.from(items)});
+        }
+    }
+
+    findTarget = (event: React.MouseEvent<HTMLElement>) => {
+        let target = event.target as HTMLElement;
+        let continueIteration = true;
+        while(continueIteration) {
+            if(target.tagName === 'LI') {
+                continueIteration = false;
+            } else {
+                target = target.parentElement as HTMLElement;
+            }
+        }
+        return target;
+    }
+
+    mapItem = (item: any, index: number) => {
+        return (
+            <li key={index} data-item-index={index} onClick={this.handleItemClick}>
+                {
+                    this.props.itemRender(item)
+                }
+            </li>
+        );
     }
 
     render() {
         return (
             <div className={styles['search-wrapper']}>
-                <form onSubmit={this.handleSubmit} ref={r => this.form = (r as HTMLFormElement)} autoComplete="off">
+                <form onSubmit={this.handleSubmit} ref={ref => this.form = (ref as HTMLFormElement)} autoComplete="off">
                     <input
+                        ref={ref => this.input = (ref as HTMLInputElement)}
                         autoFocus={true}
                         className={globalStyles.shadowed}
                         type="search"
@@ -68,13 +112,7 @@ class Search extends React.Component<Props, State> {
                         ? (
                             <ul className={globalStyles.shadowed}>
                                 {
-                                    this.state.searchItems.map((item, index) => (
-                                        <li key={index} data-item-index={index} onClick={this.handleItemClick}>
-                                            {
-                                                this.props.itemRender(item)
-                                            }
-                                        </li>
-                                    ))
+                                    this.state.searchItems.map(this.mapItem)
                                 }
                             </ul>
                         )
@@ -82,24 +120,6 @@ class Search extends React.Component<Props, State> {
                 }
             </div>
         );
-    }
-
-    private findBooks = async () => {
-        const items = await this.props.onSubmit(this.state.query as string);
-        this.setState({searchItems: Array.from(items)});
-    }
-
-    private findTarget = (event: React.MouseEvent<HTMLElement>) => {
-        let target = event.target as HTMLElement;
-        let continueIteration = true;
-        while(continueIteration) {
-            if(target.tagName === 'LI') {
-                continueIteration = false;
-            } else {
-                target = target.parentElement as HTMLElement;
-            }
-        }
-        return target;
     }
 }
 

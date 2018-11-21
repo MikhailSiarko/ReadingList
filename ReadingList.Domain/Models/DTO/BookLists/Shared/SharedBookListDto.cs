@@ -6,6 +6,6 @@ namespace ReadingList.Domain.Models.DTO.BookLists
     {
         public IEnumerable<SharedBookListItemDto> Items { get; set; }
         
-        public bool CanEdit { get; set; }
+        public bool Editable { get; set; }
     }
 }

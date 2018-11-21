@@ -9,8 +9,14 @@ namespace ReadingList.Read.SqlQueries
         {
             get
             {
+                const string canEditSql = "SELECT CASE " +
+                                          "WHEN (SELECT COUNT(*) FROM BookLists WHERE Id = @ListId AND OwnerId = @UserId) = 1 THEN 1 " +
+                                          "WHEN (SELECT COUNT(*) FROM BookListModerators WHERE BookListId = @ListId AND UserId = @UserId) = 1 THEN 1 " +
+                                          "ELSE 0 " +
+                                          "END";
+                
                 var getListsSql = new SqlBuilder()
-                    .Select("Id", "Name", "OwnerId", "Type")
+                    .Select("Id", "Name", "OwnerId", "Type", $"({canEditSql}) AS Editable")
                     .From("BookLists")
                     .Where($"Type = {BookListType.Shared:D}")
                     .Where("Id = @ListId")
@@ -28,16 +34,9 @@ namespace ReadingList.Read.SqlQueries
                            ")")
                     .ToSql();
 
-                var getItemsSql = SharedItemSqlQueries.SelectByListId;
-                
-                const string canEditSql = "SELECT CASE " +
-                                          "WHEN (SELECT COUNT(*) FROM BookLists WHERE Id = @ListId AND OwnerId = @UserId) = 1 THEN 1 " +
-                                          "WHEN (SELECT COUNT(*) FROM BookListModerators WHERE BookListId = @ListId AND UserId = @UserId) = 1 THEN 1 " +
-                                          "ELSE 0 " +
-                                          "END " + 
-                                          "AS CanEdit";
+                var getItemsSql = SharedItemSqlQueries.SelectByListId;   
 
-                return $"{getListsSql}; {getTagsSql}; {getItemsSql}; {canEditSql}";
+                return $"{getListsSql}; {getTagsSql}; {getItemsSql};";
             }
         }
 
@@ -72,6 +71,22 @@ namespace ReadingList.Read.SqlQueries
                 return $"{getListsSql}; {getTagsSql}";
             }
         }
+        
+        public static string FindPreviews =>
+            new SqlBuilder()
+                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId", "t.Name AS Tag", "COUNT(s.Id) AS BookCount")
+                .From("BookLists AS l")
+                .LeftJoin("SharedBookListTags AS lt on l.Id = lt.SharedBookListId")
+                .LeftJoin("Tags AS t on lt.TagId = t.Id")
+                .LeftJoin("SharedBookListItems s on l.Id = s.BookListId")
+                .Where("l.Type = 2")
+                .Where("CASE " +
+                       "WHEN @Query IS NULL OR @Query = '' THEN (1 + 1)" +
+                       "WHEN @Query LIKE '#%' THEN lower(t.Name) LIKE '%' || substr(@Query, 2) || '%' " +
+                       "ELSE lower(l.Name) LIKE '%' || @Query || '%' " +
+                       "END")
+                .GroupBy("l.Id", "Tag")
+                .ToSql();
 
         public static string SelectOwn
         {

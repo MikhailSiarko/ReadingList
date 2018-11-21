@@ -24,7 +24,7 @@ namespace ReadingList.Read
             [typeof(LoginUserQuery)] = UserSqlQueries.SelectByLogin,
             [typeof(GetUserQuery)] = UserSqlQueries.SelectById,
             // Shared
-            [typeof(FindSharedListsQuery)] = SharedListSqlQueries.SelectPreviews, // TODO change after search logic implementation
+            [typeof(FindSharedListsQuery)] = SharedListSqlQueries.FindPreviews,
             [typeof(GetSharedListQuery)] = SharedListSqlQueries.SelectById,
             [typeof(GetSharedListItemsQuery)] = SharedItemSqlQueries.SelectByListId,
             [typeof(GetSharedListItemQuery)] = SharedItemSqlQueries.SelectById,

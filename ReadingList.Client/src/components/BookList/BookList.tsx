@@ -5,7 +5,7 @@ import { createDOMAttributeProps } from '../../utils';
 
 export interface Props extends React.DOMAttributes<HTMLFieldSetElement> {
     items: JSX.Element[] | undefined;
-    legend: string | JSX.Element;
+    legend: string | JSX.Element | null;
 }
 
 const BookList: React.StatelessComponent<Props> = props => {
