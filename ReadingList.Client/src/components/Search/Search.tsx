@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './Search.css';
 import globalStyles from '../../styles/global.css';
+import { isNullOrEmpty } from '../../utils';
 
 interface Props {
     onSubmit: (search: string) => Promise<any[]>;
@@ -15,6 +16,7 @@ interface State {
 }
 
 class Search extends React.Component<Props, State> {
+    private wrapper: HTMLDivElement;
     private input: HTMLInputElement;
 
     constructor(props: Props) {
@@ -47,18 +49,32 @@ class Search extends React.Component<Props, State> {
         if(this.state.timer) {
             clearTimeout(this.state.timer);
         }
-        this.input.removeEventListener('focusout', this.handleFocusOut);
+        document.removeEventListener('click', this.handleWindowClick);
     }
 
     componentDidMount() {
-        this.input.addEventListener('focusout', this.handleFocusOut);
+        document.addEventListener('click', this.handleWindowClick);
     }
 
-    handleFocusOut = () => {
-        if(this.state.timer) {
-            clearTimeout(this.state.timer);
+    handleWindowClick = (event: MouseEvent) => {
+        const target = event.target as Element;
+        if(this.wrapper) {
+            const searchList = this.wrapper.lastElementChild;
+            if(searchList && searchList.tagName === 'UL' && !Object.is(target, this.input)) {
+                if (!Object.is(target, searchList)) {
+                    if(this.state.timer) {
+                        clearTimeout(this.state.timer);
+                    }
+                    this.setState({searchItems: new Array<any>(0), timer: null});
+                }
+            }
         }
-        this.setState({searchItems: new Array<any>(0), query: '', timer: null});
+    }
+
+    handleFocus = async (event: React.FocusEvent<HTMLInputElement>) => {
+        if(this.state.searchItems.length === 0 && !isNullOrEmpty(this.state.query)) {
+            await this.findItems();
+        }
     }
 
     findItems = async () => {
@@ -93,11 +109,12 @@ class Search extends React.Component<Props, State> {
 
     render() {
         return (
-            <div className={styles['search-wrapper']}>
+            <div className={styles['search-wrapper']} ref={ref => this.wrapper = (ref as HTMLDivElement)}>
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                     <input
-                        ref={ref => this.input = (ref as HTMLInputElement)}
                         autoFocus={true}
+                        ref={ref => this.input = (ref as HTMLInputElement)}
+                        onFocus={this.handleFocus}
                         className={globalStyles.shadowed}
                         type="search"
                         placeholder="Search..."

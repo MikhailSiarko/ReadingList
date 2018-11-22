@@ -82,7 +82,7 @@ namespace ReadingList.Read.SqlQueries
                         .LeftJoin("SharedBookListTags ON Tags.Id = SharedBookListTags.TagId")
                         .Where("SharedBookListId = l.Id")
                         .ToSql() +
-                    ") AS Tags", "COUNT(s.Id) AS BookCount")
+                    ") AS Tags", "COUNT(DISTINCT s.Id) AS BookCount")
                 .From("BookLists AS l")
                 .LeftJoin("SharedBookListTags AS lt on l.Id = lt.SharedBookListId")
                 .LeftJoin("Tags AS t on lt.TagId = t.Id")
