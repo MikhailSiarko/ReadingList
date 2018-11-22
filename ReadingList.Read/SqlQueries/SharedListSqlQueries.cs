@@ -74,7 +74,15 @@ namespace ReadingList.Read.SqlQueries
         
         public static string FindPreviews =>
             new SqlBuilder()
-                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId", "t.Name AS Tag", "COUNT(s.Id) AS BookCount")
+                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId",
+                    "(" +
+                    new SqlBuilder()
+                        .Select("GROUP_CONCAT(Name)")
+                        .From("Tags")
+                        .LeftJoin("SharedBookListTags ON Tags.Id = SharedBookListTags.TagId")
+                        .Where("SharedBookListId = l.Id")
+                        .ToSql() +
+                    ") AS Tags", "COUNT(s.Id) AS BookCount")
                 .From("BookLists AS l")
                 .LeftJoin("SharedBookListTags AS lt on l.Id = lt.SharedBookListId")
                 .LeftJoin("Tags AS t on lt.TagId = t.Id")
@@ -85,7 +93,7 @@ namespace ReadingList.Read.SqlQueries
                        "WHEN @Query LIKE '#%' THEN lower(t.Name) LIKE '%' || substr(@Query, 2) || '%' " +
                        "ELSE lower(l.Name) LIKE '%' || @Query || '%' " +
                        "END")
-                .GroupBy("l.Id", "Tag")
+                .GroupBy("l.Id")
                 .ToSql();
 
         public static string SelectOwn

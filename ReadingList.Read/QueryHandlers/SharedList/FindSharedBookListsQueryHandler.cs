@@ -18,28 +18,15 @@ namespace ReadingList.Read.QueryHandlers
         {           
             var rows = (await DbConnection.QueryAsync<SharedListDbRow>(context.Sql, context.Parameters)).ToList();
 
-            var lists = new List<SharedBookListPreviewDto>();
-            
-            foreach (var row in rows)
+            return rows.Select(r => new SharedBookListPreviewDto()
             {
-                if (lists.Any(a => a.Id == row.Id)) 
-                    continue;
-
-                var tags = rows.Where(r => r.Id == row.Id).Select(r => r.Tag).Where(t => !string.IsNullOrEmpty(t))
-                    .ToList();
-
-                lists.Add(new SharedBookListPreviewDto()
-                {
-                    Id = row.Id,
-                    OwnerId = row.OwnerId,
-                    Name = row.Name,
-                    Type = row.Type,
-                    BooksCount = row.BookCount,
-                    Tags = tags
-                });
-            }
-            
-            return lists;
+                Id = r.Id,
+                OwnerId = r.OwnerId,
+                Name = r.Name,
+                Type = r.Type,
+                BooksCount = r.BookCount,
+                Tags = r.Tags.Split(',').Where(t => !string.IsNullOrEmpty(t)).ToList()
+            });
         }
         
         private class SharedListDbRow
@@ -52,7 +39,7 @@ namespace ReadingList.Read.QueryHandlers
 
             public int Type { get; set; }
 
-            public string Tag { get; set; }
+            public string Tags { get; set; }
 
             public int BookCount { get; set; }
         }
