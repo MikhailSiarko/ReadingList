@@ -57,7 +57,7 @@ class SharedBookLists extends React.Component<Props, State> {
         this.setState({isFormHidden: false});
     }
 
-    handleCancel = (_: React.MouseEvent<HTMLButtonElement>) => {
+    handleCancel = () => {
         this.setState({isFormHidden: true});
     }
 

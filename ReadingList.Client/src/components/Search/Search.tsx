@@ -71,7 +71,7 @@ class Search extends React.Component<Props, State> {
         }
     }
 
-    handleFocus = async (event: React.FocusEvent<HTMLInputElement>) => {
+    handleFocus = async () => {
         if(this.state.searchItems.length === 0 && !isNullOrEmpty(this.state.query)) {
             await this.findItems();
         }
