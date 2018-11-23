@@ -70,7 +70,7 @@ namespace ReadingList.Api
                 },
                 {
                     HttpStatusCode.Forbidden,
-                    new []
+                    new[]
                     {
                         typeof(AccessDeniedException)
                     }
@@ -81,13 +81,13 @@ namespace ReadingList.Api
         private static void ConfigureApplication(IServiceCollection services)
         {
             services.AddScoped<IDomainService, DomainService>();
-            
+
             services.RegisterDomainDependencies();
             services.RegisterReadDependencies();
             services.RegisterWriteDependencies();
-            
+
             services.AddMediatR(typeof(SecuredCommand).Assembly, typeof(SqlQueryContext<,>).Assembly);
-            
+
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEncryptionService, EncryptionService>();
             services.AddSingleton<IJwtOptions, JwtOptions>();

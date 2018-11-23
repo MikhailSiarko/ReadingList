@@ -16,8 +16,8 @@ namespace ReadingList.Domain.CommandHandlers
         protected override async Task Handle(DeleteSharedListCommand command)
         {
             var list = await WriteService.GetAsync<BookList>(command.ListId);
-            
-            if(list == null)
+
+            if (list == null)
             {
                 throw new ObjectNotExistException<BookList>(new OnExceptionObjectDescriptor
                 {
@@ -26,8 +26,8 @@ namespace ReadingList.Domain.CommandHandlers
             }
 
             var accessSpecification = new BookListAccessSpecification(list);
-            
-            if(!accessSpecification.SatisfiedBy(command.UserId))
+
+            if (!accessSpecification.SatisfiedBy(command.UserId))
                 throw new AccessDeniedException();
 
             await WriteService.DeleteAsync<BookList>(list.Id);

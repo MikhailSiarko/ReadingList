@@ -12,7 +12,7 @@ namespace ReadingList.Write.Infrastructure
         {
             return navigationPropertyPaths.Aggregate(source, (query, path) => query.Include(path));
         }
-        
+
         public static IEnumerable<string> GetIncludePaths<T>(this DbContext context)
         {
             var entityType = context.Model.FindEntityType(typeof(T));
@@ -26,6 +26,7 @@ namespace ReadingList.Write.Infrastructure
                     if (includedProperties.Add(navigation))
                         entityProperties.Add(navigation);
                 }
+
                 if (entityProperties.Count == 0)
                 {
                     if (stack.Count > 0)
@@ -39,8 +40,10 @@ namespace ReadingList.Write.Infrastructure
                         if (inverseNavigation != null)
                             includedProperties.Add(inverseNavigation);
                     }
+
                     stack.Push(entityProperties.GetEnumerator());
                 }
+
                 while (stack.Count > 0 && !stack.Peek().MoveNext())
                     stack.Pop();
                 if (stack.Count == 0) break;

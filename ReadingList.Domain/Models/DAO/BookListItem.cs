@@ -6,7 +6,7 @@ namespace ReadingList.Domain.Models.DAO
     {
         [IgnoreUpdate]
         public int BookId { get; set; }
-        
+
         [IgnoreUpdate]
         public Book Book { get; set; }
 

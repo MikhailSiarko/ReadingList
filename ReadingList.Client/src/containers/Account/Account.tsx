@@ -2,10 +2,10 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { AuthenticationService } from '../../services';
-import { Credentials, AuthenticationData, authenticationActions } from '../../store/actions/authentication';
+import { authenticationActions } from '../../store/actions/authentication';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import { RequestResult } from '../../models';
+import { RequestResult, AuthenticationData, Credentials } from '../../models';
 import AccountForm from '../../components/AccountForm';
 import { isNullOrEmpty } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
@@ -26,13 +26,13 @@ class Account extends React.Component<AccountProps> {
 
     public submitHandler = async (email: string, password: string, confirmPassword?: string) => {
         this.props.loadingStart();
-        if(confirmPassword) {
+        if (confirmPassword) {
             await this.submitRegister(email, password, confirmPassword as string);
         } else {
             await this.submitLogin(email, password);
         }
         this.props.loadingEnd();
-    }
+    };
 
     render() {
         const Spinnered = withSpinner(!this.props.loading, () => (
@@ -44,20 +44,21 @@ class Account extends React.Component<AccountProps> {
     }
 
     private async submitLogin(email: string, password: string) {
-        if(Account.validateCredentials(email, password)) {
+        if (Account.validateCredentials(email, password)) {
             await this.props.login(new Credentials(email, password));
         }
     }
+
     private async submitRegister(email: string, password: string, confirmPassword: string) {
-        if(Account.validateCredentials(email, password, confirmPassword)) {
+        if (Account.validateCredentials(email, password, confirmPassword)) {
             await this.props.register(new Credentials(email, password, confirmPassword));
         }
     }
 }
 
 async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
-        ownProps: AccountProps) {
-    if(result.isSucceed && result.data) {
+                               ownProps: AccountProps) {
+    if (result.isSucceed && result.data) {
         dispatch(authenticationActions.signIn(result.data));
         ownProps.history.push('/private');
     } else {

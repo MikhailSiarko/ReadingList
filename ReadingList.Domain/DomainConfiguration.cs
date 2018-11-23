@@ -13,7 +13,7 @@ namespace ReadingList.Domain
         {
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            
+
             Mapper.Initialize(conf =>
             {
                 conf.AddProfile<PrivateBookListProfile>();

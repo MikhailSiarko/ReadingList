@@ -14,7 +14,7 @@ namespace ReadingList.Read.SqlQueries
                                           "WHEN (SELECT COUNT(*) FROM BookListModerators WHERE BookListId = @ListId AND UserId = @UserId) = 1 THEN 1 " +
                                           "ELSE 0 " +
                                           "END";
-                
+
                 var getListsSql = new SqlBuilder()
                     .Select("Id", "Name", "OwnerId", "Type", $"({canEditSql}) AS Editable")
                     .From("BookLists")
@@ -34,7 +34,7 @@ namespace ReadingList.Read.SqlQueries
                            ")")
                     .ToSql();
 
-                var getItemsSql = SharedItemSqlQueries.SelectByListId;   
+                var getItemsSql = SharedItemSqlQueries.SelectByListId;
 
                 return $"{getListsSql}; {getTagsSql}; {getItemsSql};";
             }
@@ -71,7 +71,7 @@ namespace ReadingList.Read.SqlQueries
                 return $"{getListsSql}; {getTagsSql}";
             }
         }
-        
+
         public static string FindPreviews =>
             new SqlBuilder()
                 .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId",

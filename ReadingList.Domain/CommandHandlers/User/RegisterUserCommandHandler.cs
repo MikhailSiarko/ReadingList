@@ -14,7 +14,7 @@ namespace ReadingList.Domain.CommandHandlers
         private readonly IEncryptionService _encryptionService;
 
         private readonly IFetchHandler<GetUserByLoginQuery, User> _userFetchHandler;
-        
+
         public RegisterUserCommandHandler(IDataStorage writeService, IEncryptionService encryptionService,
             IFetchHandler<GetUserByLoginQuery, User> userFetchHandler) : base(writeService)
         {
@@ -25,13 +25,13 @@ namespace ReadingList.Domain.CommandHandlers
         protected override async Task Handle(RegisterUserCommand command)
         {
             var user = await _userFetchHandler.Fetch(new GetUserByLoginQuery(command.Email));
-            
-            if(user != null)
+
+            if (user != null)
                 throw new ObjectAlreadyExistsException<User>(new OnExceptionObjectDescriptor
                 {
                     ["Email"] = command.Email
                 });
-            
+
             user = new User
             {
                 Login = command.Email,
@@ -39,9 +39,9 @@ namespace ReadingList.Domain.CommandHandlers
                 RoleId = (int) UserRole.User,
                 Profile = new Profile {Email = command.Email}
             };
-            
+
             await WriteService.SaveAsync(user);
-            
+
             await WriteService.SaveAsync(new BookList
             {
                 Name = "Default",

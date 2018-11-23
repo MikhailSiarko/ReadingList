@@ -9,7 +9,7 @@ namespace ReadingList.Domain.Commands
         public readonly string Name;
 
         public readonly string[] Tags;
-        
+
         public UpdateSharedListCommand(int userId, int listId, string name, string[] tags) : base(userId)
         {
             ListId = listId;

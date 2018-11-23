@@ -14,9 +14,11 @@ namespace ReadingList.Read.QueryHandlers
         {
         }
 
-        protected override async Task<PrivateBookListItemDto> Handle(SqlQueryContext<GetPrivateListItemQuery, PrivateBookListItemDto> context)
+        protected override async Task<PrivateBookListItemDto> Handle(
+            SqlQueryContext<GetPrivateListItemQuery, PrivateBookListItemDto> context)
         {
-            return await DbConnection.QuerySingleOrDefaultAsync<PrivateBookListItemDto>(context.Sql, context.Parameters) ??
+            return await DbConnection.QuerySingleOrDefaultAsync<PrivateBookListItemDto>(context.Sql,
+                       context.Parameters) ??
                    throw new ObjectNotExistException<BookList>(new OnExceptionObjectDescriptor
                    {
                        ["Id"] = context.Query.ItemId.ToString()

@@ -17,12 +17,13 @@ namespace ReadingList.Read.QueryHandlers
         {
         }
 
-        protected override async Task<PrivateBookListDto> Handle(SqlQueryContext<GetPrivateListQuery, PrivateBookListDto> context)
+        protected override async Task<PrivateBookListDto> Handle(
+            SqlQueryContext<GetPrivateListQuery, PrivateBookListDto> context)
         {
             var listDictionary = new Dictionary<int, PrivateBookListDto>();
-            return 
+            return
                 (await DbConnection.QueryAsync<PrivateBookListDto, PrivateBookListItemDto, PrivateBookListDto>(
-                    context.Sql, 
+                    context.Sql,
                     (list, item) =>
                     {
                         if (!listDictionary.TryGetValue(list.Id, out var listEntry))
@@ -33,7 +34,7 @@ namespace ReadingList.Read.QueryHandlers
                         }
 
                         if (item != null)
-                            ((List<PrivateBookListItemDto>)listEntry.Items).Add(item);
+                            ((List<PrivateBookListItemDto>) listEntry.Items).Add(item);
                         return listEntry;
                     }, context.Parameters)).FirstOrDefault() ??
                 throw new ObjectNotExistForException<BookList, User>(null, new OnExceptionObjectDescriptor

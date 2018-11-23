@@ -24,21 +24,21 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
             status,
             isOnEditMode: false
         });
-        if(this.props.onSave) {
+        if (this.props.onSave) {
             this.props.onSave(item);
         }
     }
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if(this.props.onCancel) {
+        if (this.props.onCancel) {
             this.props.onCancel(this.props.item.id);
         }
     }
 
     render() {
         const liProps = createDOMAttributeProps(this.props, 'item', 'onSave', 'onCancel');
-        if(this.props.item.isOnEditMode) {
+        if (this.props.item.isOnEditMode) {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>

@@ -26,7 +26,7 @@ namespace ReadingList.Tests
             var statusCode = provider.GetStatusCode(typeof(NullReferenceException));
             Assert.Equal(HttpStatusCode.InternalServerError, statusCode);
         }
-        
+
         [Fact]
         public void GetStatusCode_ReturnsInternalServerError_When_TypeIsFactAttribute()
         {
@@ -34,7 +34,7 @@ namespace ReadingList.Tests
             var statusCode = provider.GetStatusCode(typeof(FactAttribute));
             Assert.Equal(HttpStatusCode.InternalServerError, statusCode);
         }
-        
+
         [Fact]
         public void GetStatusCode_ReturnsBadRequest_When_TypeIsObjectNotExistException()
         {
@@ -42,7 +42,7 @@ namespace ReadingList.Tests
             var statusCode = provider.GetStatusCode(typeof(ObjectNotExistException));
             Assert.Equal(HttpStatusCode.BadRequest, statusCode);
         }
-        
+
         [Fact]
         public void GetStatusCode_ReturnsInternalServerError_When_TypeIsException()
         {

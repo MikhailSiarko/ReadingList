@@ -16,21 +16,21 @@ namespace ReadingList.Write
         public static IServiceCollection RegisterWriteDependencies(this IServiceCollection services)
         {
             services.AddTransient<IFetchHandler<GetBookByAuthorAndTitleQuery, Book>, GetBookFetchHandler>();
-            
+
             services
                 .AddTransient<IFetchHandler<GetBookListItemQuery, PrivateBookListItem>,
                     GetBookListItemFetchHandler<PrivateBookListItem>>();
 
             services.AddTransient<IFetchHandler<GetUserByLoginQuery, User>, GetUserByLoginFetchHandler>();
-            
+
             services
                 .AddTransient<IFetchHandler<GetBookListItemQuery, SharedBookListItem>,
                     GetBookListItemFetchHandler<SharedBookListItem>>();
-            
+
             services
                 .AddTransient<IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>>,
                     GetItemsByListIdFetchHandler<PrivateBookListItem>>();
-            
+
             services
                 .AddTransient<IFetchHandler<GetItemsByListIdQuery, IEnumerable<SharedBookListItem>>,
                     GetItemsByListIdFetchHandler<SharedBookListItem>>();
@@ -44,12 +44,12 @@ namespace ReadingList.Write
                     GetSharedListsByUserIdFetchHandler>();
 
             services.AddTransient<IFetchHandler<GetExistingTagsQuery, IEnumerable<Tag>>, GetExistingTagsFetchHandler>();
-            
+
             services.AddDbContextPool<WriteDbContext>((provider, builder) =>
                 builder.UseSqlite(provider.GetConnectionString("Write")));
 
             services.AddScoped<IDataStorage, DataStorage>();
-            
+
             services.AddFluentMigratorCore()
                 .ConfigureRunner(builder =>
                 {
@@ -58,7 +58,7 @@ namespace ReadingList.Write
                         .WithGlobalConnectionString("Write")
                         .ScanIn(typeof(IDomainService).Assembly).For.Migrations();
                 });
-            
+
             MigrateDatabase(services);
 
             return services;

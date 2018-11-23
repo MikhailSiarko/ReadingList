@@ -12,7 +12,7 @@ namespace ReadingList.Domain.Models.DAO
             SharedBookListTags = new List<SharedBookListTag>();
             BookListModerators = new List<BookListModerator>();
         }
-        
+
         [IgnoreUpdate]
         public User Owner { get; set; }
 
@@ -21,7 +21,7 @@ namespace ReadingList.Domain.Models.DAO
 
         [IgnoreUpdate]
         public BookListType Type { get; set; }
-        
+
         public IEnumerable<SharedBookListTag> SharedBookListTags { get; set; }
 
         public IEnumerable<BookListModerator> BookListModerators { get; set; }

@@ -12,8 +12,9 @@ namespace ReadingList.Domain.Exceptions
     public abstract class ObjectStateException : ApplicationException
     {
         public override string Message { get; }
-        
-        protected ObjectStateException(string stateInfo, string entityTypeName, OnExceptionObjectDescriptor objectDescriptor)
+
+        protected ObjectStateException(string stateInfo, string entityTypeName,
+            OnExceptionObjectDescriptor objectDescriptor)
         {
             var paramsString = GetParams(objectDescriptor);
             Message = stateInfo.F(
@@ -21,7 +22,7 @@ namespace ReadingList.Domain.Exceptions
                     ? !string.IsNullOrEmpty(paramsString) ? message.F(paramsString) : message.RemoveWithData()
                     : ExceptionMessages.Object_Default.F(paramsString));
         }
-        
+
         private static bool TryGetNotExistExceptionMessageByTypeName(string objectTypeName, out string value)
         {
             return ExceptionMessages.ResourceManager
@@ -30,7 +31,7 @@ namespace ReadingList.Domain.Exceptions
                 .ToDictionary(entry => entry.Key.ToString(), entry => entry.Value.ToString())
                 .TryGetValue($"Object_{objectTypeName}", out value);
         }
-        
+
         protected static string GetParams(OnExceptionObjectDescriptor objectDescriptor)
         {
             return objectDescriptor == null

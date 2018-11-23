@@ -28,7 +28,7 @@ namespace ReadingList.Domain.Services
         {
             return await _mediator.Send(query);
         }
-        
+
         public void Execute(IRequest command)
         {
             _mediator.Send(command).RunSync();

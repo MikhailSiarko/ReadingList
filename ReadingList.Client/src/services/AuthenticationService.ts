@@ -1,6 +1,5 @@
 import ApiConfiguration from '../config/ApiConfiguration';
-import { Credentials } from '../store/actions/authentication/infrastructure';
-import { AuthenticationData } from '../store/actions/authentication';
+import { Credentials, AuthenticationData } from '../models';
 import ApiService from './ApiService';
 import { onError } from '../utils';
 

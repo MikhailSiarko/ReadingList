@@ -9,7 +9,7 @@ using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class UpdateSharedListItemCommandHandler 
+    public class UpdateSharedListItemCommandHandler
         : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItem, SharedBookListItemDto>
     {
         public UpdateSharedListItemCommandHandler(IDataStorage writeService) : base(writeService)

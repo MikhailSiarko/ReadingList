@@ -8,7 +8,7 @@
         {
             return source.Replace(" with {0}", string.Empty);
         }
-        
+
         public static string RemoveWith(this string source)
         {
             return source.Replace(" with ", string.Empty);

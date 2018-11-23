@@ -7,14 +7,14 @@ using MediatR;
 namespace ReadingList.Read
 {
     public class SqlQueryContext<TQuery, TResult>
-        where TQuery : class, IRequest<TResult> 
+        where TQuery : class, IRequest<TResult>
     {
         public string Sql { get; }
 
         public IReadOnlyDictionary<string, object> Parameters => _queryType
             .GetFields(BindingFlags.Public | BindingFlags.Instance)
             .ToDictionary(x => x.Name, x => x.GetValue(Query));
-        
+
         public TQuery Query { get; }
 
         private readonly Type _queryType;
@@ -22,7 +22,7 @@ namespace ReadingList.Read
         public SqlQueryContext(TQuery query)
         {
             Query = query;
-            
+
             _queryType = query.GetType();
 
             if (ReadQueriesRegistry.TryGetSql(_queryType, out var sql))

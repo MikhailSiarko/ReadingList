@@ -6,7 +6,7 @@ export function withSpinner<P>(condition: boolean | null | undefined, Child: Rea
         static displayName = `withSpinner(${Child.displayName || Child.name})`;
 
         render() {
-            if(condition) {
+            if (condition) {
                 return <Child />;
             }
             return <Spinner />;

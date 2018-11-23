@@ -52,7 +52,7 @@ namespace ReadingList.Tests
             Assert.Equal((int) privateListItem.Status, mapped.Status);
             Assert.Equal(privateListItem.ReadingTimeInSeconds, mapped.ReadingTimeInSeconds);
         }
-        
+
         [Fact]
         public void Map_ReturnsSharedBookListDto_When_SharedBookListIsMapped()
         {
@@ -67,7 +67,7 @@ namespace ReadingList.Tests
             Assert.Equal(sharedList.Name, mapped.Name);
             Assert.Equal(sharedList.OwnerId, mapped.OwnerId);
         }
-        
+
         [Fact]
         public void Map_ReturnsSharedBookListItem_When_SharedBookListItemIsMapped()
         {

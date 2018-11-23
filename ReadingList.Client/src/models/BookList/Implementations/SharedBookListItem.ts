@@ -9,7 +9,7 @@ export class SharedBookListItem implements ListItem {
     tags: string[];
     listId: number;
     bookId: number;
-    
+
     constructor(author: string, title: string) {
         this.author = author;
         this.title = title;

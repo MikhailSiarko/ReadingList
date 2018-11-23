@@ -17,7 +17,7 @@ namespace ReadingList.Api.Controllers
         {
             _domainService = domainService;
         }
-        
+
         public async Task<IActionResult> Get()
         {
             var statuses = await _domainService.AskAsync(new BookStatusesQuery());

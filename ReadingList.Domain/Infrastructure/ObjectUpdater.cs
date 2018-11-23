@@ -64,9 +64,9 @@ namespace ReadingList.Domain.Infrastructure
     internal static class DictionaryMethodInfos
     {
         public static readonly MethodInfo GetValueOrDefault;
-        
+
         public static readonly MethodInfo ContainsKey;
-        
+
         static DictionaryMethodInfos()
         {
             GetValueOrDefault = typeof(CollectionExtensions)

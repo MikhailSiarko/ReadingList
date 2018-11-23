@@ -6,10 +6,10 @@ abstract class ApiService {
     protected onSuccess<TOut>() {
         return (response: AxiosResponse) => new RequestResult<TOut>(true, response.data);
     }
-    
+
     protected configureRequest<TData>(url: string, method: string, data?: TData) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
-        
+
         axiosInstance.interceptors.request.use(config => config, error => {
             let result = new RequestResult<never>(false, undefined,
                 error.response ? error.response.data.errorMessage : error.message);
@@ -18,13 +18,13 @@ abstract class ApiService {
 
         axiosInstance.interceptors.response.use(response => response, error => {
             let result;
-            if(error.response && error.response.status === 401) {
+            if (error.response && error.response.status === 401) {
                 result = new RequestResult<never>(false, undefined, 'You are not authenticated', 401);
             } else {
                 result = new RequestResult<never>(false, undefined,
                     error.response ? error.response.data.errorMessage : error.message);
             }
-            
+
             return Promise.reject(result);
         });
 

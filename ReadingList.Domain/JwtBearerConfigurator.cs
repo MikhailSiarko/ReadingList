@@ -11,7 +11,7 @@ namespace ReadingList.Domain
             options.RequireHttpsMetadata = false;
             options.TokenValidationParameters = ConfigureTokenValidationParameters();
         }
-        
+
         private static TokenValidationParameters ConfigureTokenValidationParameters()
         {
             var jwtOptions = new JwtOptions();

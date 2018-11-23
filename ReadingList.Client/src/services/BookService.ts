@@ -8,5 +8,5 @@ export class BookService extends ApiService {
         return this.configureRequest(ApiConfiguration.getBooksSearchUrl(query), 'GET')
             .then(this.onSuccess<Book[]>())
             .catch(onError);
-        }
+    }
 }

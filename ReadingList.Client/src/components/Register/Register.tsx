@@ -37,7 +37,7 @@ const Register: React.SFC<RegisterProps> = props => (
                 placeholder="Confirm Password"
                 required={true}
                 onChange={props.onConfirmPasswordChange}
-             />
+            />
             <span hidden={true} id={'validation-message'}>Passwords don't confirm</span>
         </div>
         <div className={styles['form-button-wrapper']}>

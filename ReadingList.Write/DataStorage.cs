@@ -58,12 +58,12 @@ namespace ReadingList.Write
             if (existedEntities.Any())
             {
                 _dbContext.RemoveRange(existedEntities);
-            
+
                 await _dbContext.SaveChangesAsync();
             }
-            
+
             await _dbContext.Set<T>().AddRangeAsync(enumerable);
-            
+
             await _dbContext.SaveChangesAsync();
         }
     }

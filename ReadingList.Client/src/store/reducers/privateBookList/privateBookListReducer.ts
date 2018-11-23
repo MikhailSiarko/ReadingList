@@ -6,13 +6,13 @@ import { PrivateBookListItem } from '../../../models';
 import { cloneDeep } from 'lodash';
 
 export function privateBookListReducer(state: RootState.Private = initialState.private,
-                                      action: PrivateBookListAction) {
+                                       action: PrivateBookListAction) {
     const copy = cloneDeep(state);
     switch (action.type) {
         case getType(privateBookListAction.unsetPrivate):
             return initialState.private;
         case getType(privateBookListAction.switchEditModeForList):
-            if(copy.list) {
+            if (copy.list) {
                 copy.list.isInEditMode = !copy.list.isInEditMode;
             }
             return copy;
@@ -20,28 +20,28 @@ export function privateBookListReducer(state: RootState.Private = initialState.p
             copy.list = action.list;
             return copy;
         case getType(privateBookListAction.addItem):
-            if(copy.list) {
+            if (copy.list) {
                 copy.list.items.push(action.listItem);
             }
             return copy;
         case getType(privateBookListAction.removeItem):
-            if(copy.list) {
+            if (copy.list) {
                 const itemIndex = copy.list.items
-                .findIndex((listItem: PrivateBookListItem) => listItem.id === action.itemId);
+                    .findIndex((listItem: PrivateBookListItem) => listItem.id === action.itemId);
                 copy.list.items.splice(itemIndex, 1);
             }
             return copy;
         case getType(privateBookListAction.updateItem):
-            if(copy.list) {
+            if (copy.list) {
                 const index = copy.list.items.findIndex(
                     ((listItem: PrivateBookListItem) => listItem.id === action.item.id));
-                    copy.list.items[index] = action.item;
+                copy.list.items[index] = action.item;
             }
             return copy;
         case getType(privateBookListAction.switchEditModeForItem):
-            if(copy.list) {
+            if (copy.list) {
                 copy.list.items.forEach((listItem: PrivateBookListItem) => {
-                    if(listItem.id === action.itemId) {
+                    if (listItem.id === action.itemId) {
                         listItem.isOnEditMode = !listItem.isOnEditMode;
                     }
                 });

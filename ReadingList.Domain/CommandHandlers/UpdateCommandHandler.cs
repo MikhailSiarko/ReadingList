@@ -20,7 +20,7 @@ namespace ReadingList.Domain.CommandHandlers
             Update(entity, command);
 
             await WriteService.SaveAsync(entity);
-            
+
             return Convert(entity);
         }
 

@@ -22,13 +22,13 @@ export class SharedBookListService extends ApiService {
             .catch(onError);
     }
 
-    addItem =(listId: number, bookId: number) => {
+    addItem = (listId: number, bookId: number) => {
         return this.configureRequest(ApiConfiguration.getAddItemToSharedListUrl(listId), 'POST', {bookId})
             .then(this.onSuccess<SharedBookListItem>())
             .catch(onError);
     }
 
-    createList = (data: {name: string, tags: string[]}) => {
+    createList = (data: { name: string, tags: string[] }) => {
         return this.configureRequest(ApiConfiguration.SHARED_LISTS, 'POST', {name: data.name, tags: data.tags})
             .then(this.onSuccess<SharedBookList>())
             .catch(onError);

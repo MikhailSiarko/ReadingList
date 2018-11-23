@@ -6,14 +6,14 @@ namespace ReadingList.Api.Infrastructure.Routes
     public class RouteBuilder
     {
         private const char Separator = '/';
-        
+
         private readonly LinkedList<string> _routeSegments;
 
         public RouteBuilder()
         {
             _routeSegments = new LinkedList<string>();
         }
-        
+
         public RouteBuilder(string rootSegment) : this()
         {
             _routeSegments.AddLast(rootSegment);

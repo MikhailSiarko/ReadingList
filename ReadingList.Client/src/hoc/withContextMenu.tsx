@@ -12,7 +12,7 @@ export function closeContextMenues() {
 }
 
 export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menuItems: MenuItem[],
-        Child: React.ComponentType<P>) {
+                                                                            Child: React.ComponentType<P>) {
 
     function createMenu(items: MenuItem[]) {
         const contextMenu = document.createElement('div');
@@ -34,7 +34,7 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
         let rootW: number = 0;
         let rootH: number = 0;
 
-        if(contextMenu) {
+        if (contextMenu) {
             rootW = contextMenu.offsetWidth;
             rootH = contextMenu.offsetHeight;
         }
@@ -81,9 +81,9 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
 
         handleWindowClick = (event: MouseEvent) => {
             const target = event.target as Node;
-            if(this.menuWrapper) {
+            if (this.menuWrapper) {
                 const contextMenu = this.menuWrapper.firstElementChild;
-                if(contextMenu) {
+                if (contextMenu) {
                     const wasOutside = target.contains(contextMenu);
                     if (wasOutside) {
                         contextMenu.remove();
@@ -93,9 +93,9 @@ export function withContextMenu<P extends React.DOMAttributes<HTMLElement>>(menu
         }
 
         hideContextMenu = () => {
-            if(this.menuWrapper) {
+            if (this.menuWrapper) {
                 const contextMenu = this.menuWrapper.firstElementChild;
-                if(contextMenu) {
+                if (contextMenu) {
                     contextMenu.remove();
                 }
             }

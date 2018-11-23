@@ -14,15 +14,16 @@ using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateListCommand, BookList, PrivateBookListDto>
+    public class
+        UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateListCommand, BookList, PrivateBookListDto>
     {
         private readonly IFetchHandler<GetPrivateListByUserIdQuery, BookList> _listFetchHandler;
 
         private readonly IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>> _itemsFetchHandler;
-        
+
         public UpdatePrivateListCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler, 
-            IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>> itemsFetchHandler) 
+            IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler,
+            IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>> itemsFetchHandler)
             : base(writeService)
         {
             _listFetchHandler = listFetchHandler;
@@ -49,8 +50,8 @@ namespace ReadingList.Domain.CommandHandlers
         protected override async Task<BookList> GetEntity(UpdatePrivateListCommand command)
         {
             var list = await _listFetchHandler.Fetch(new GetPrivateListByUserIdQuery(command.UserId));
-            
-            if(list == null)
+
+            if (list == null)
             {
                 throw new ObjectNotExistForException<BookList, User>(null, new OnExceptionObjectDescriptor
                 {

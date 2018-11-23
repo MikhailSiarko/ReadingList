@@ -5,7 +5,6 @@ using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.RequestData;
 using ReadingList.Domain.Commands;
-using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Read.Queries;
 
@@ -26,7 +25,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _domainService.ExecuteAsync(new DeleteSharedListCommand(User.Claims.GetUserId(), id));
-            
+
             return Ok();
         }
 
@@ -34,15 +33,15 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Get([FromQuery] string query)
         {
             var bookLists = await _domainService.AskAsync(new FindSharedListsQuery(query));
-            
+
             return Ok(bookLists);
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             var list = await _domainService.AskAsync(new GetSharedListQuery(id, User.Claims.GetUserId()));
-                
+
             return Ok(list);
         }
 
@@ -50,7 +49,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var bookLists = await _domainService.AskAsync(new GetUserSharedListsQuery(User.Claims.GetUserId()));
-            
+
             return Ok(bookLists);
         }
 
@@ -70,7 +69,7 @@ namespace ReadingList.Api.Controllers
 
             return Ok(list);
         }
-        
+
         [HttpGet("{listId}/items")]
         public async Task<IActionResult> GetItems([FromRoute] int listId)
         {
@@ -87,12 +86,12 @@ namespace ReadingList.Api.Controllers
 
             return Ok(item);
         }
-        
+
         [HttpGet("{listId}/items/{itemId}")]
         public async Task<IActionResult> GetItem([FromRoute] int listId, [FromRoute] int itemId)
         {
             var item = await _domainService.AskAsync(new GetSharedListItemQuery(listId, itemId));
-            
+
             return Ok(item);
         }
 
@@ -100,16 +99,18 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> DeleteItem([FromRoute] int listId, [FromRoute] int itemId)
         {
             await _domainService.ExecuteAsync(new DeleteSharedListItemCommand(User.Claims.GetUserId(), listId, itemId));
-            
+
             return Ok();
         }
 
         [HttpPut("{listId}/items/{itemId}")]
-        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId, [FromBody] AddItemRequestData requestData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId,
+            [FromBody] AddItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Claims.GetUserId(), itemId,
+            var item = await _domainService.ExecuteAsync(new UpdateSharedListItemCommand(User.Claims.GetUserId(),
+                itemId,
                 listId));
-            
+
             return Ok(item);
         }
     }

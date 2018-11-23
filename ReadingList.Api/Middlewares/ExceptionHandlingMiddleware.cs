@@ -10,7 +10,8 @@ namespace ReadingList.Api.Middlewares
         private readonly RequestDelegate _next;
         private readonly ExceptionToStatusCodeProvider _exceptionToStatusCodeProvider;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next, ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
+        public ExceptionHandlingMiddleware(RequestDelegate next,
+            ExceptionToStatusCodeProvider exceptionToStatusCodeProvider)
         {
             _next = next;
             _exceptionToStatusCodeProvider = exceptionToStatusCodeProvider;
@@ -27,12 +28,12 @@ namespace ReadingList.Api.Middlewares
                 await HandleExceptionAsync(context, e);
             }
         }
-        
+
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int) _exceptionToStatusCodeProvider.GetStatusCode(exception.GetType());
-            var result = JsonConvert.SerializeObject(new { errorMessage = exception.Message });
+            var result = JsonConvert.SerializeObject(new {errorMessage = exception.Message});
             return context.Response.WriteAsync(result);
         }
     }

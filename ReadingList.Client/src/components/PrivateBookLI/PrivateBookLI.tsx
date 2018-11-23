@@ -13,14 +13,14 @@ export interface BookListItemProps extends React.DOMAttributes<HTMLLIElement> {
     statuses: SelectListItem[];
 }
 
-const Footer: React.SFC<{onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void}> = ({onCancel}) => (
+const Footer: React.SFC<{ onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void }> = ({onCancel}) => (
     <div className={styles['edited-footer']}>
         <RoundButton radius={2} type="submit">✓</RoundButton>
         <RoundButton radius={2} onClick={onCancel} color={Colors.Red}>×</RoundButton>
     </div>
 );
 
-export const BookInfoInEditMode: React.SFC<{title: string, author: string}> = ({title, author}) => (
+export const BookInfoInEditMode: React.SFC<{ title: string, author: string }> = ({title, author}) => (
     <div className={styles['editable-book-info']}>
         <div className={styles['editing-book-title']}>
             <div>{title} <span>by</span> {author}</div>
@@ -28,7 +28,7 @@ export const BookInfoInEditMode: React.SFC<{title: string, author: string}> = ({
     </div>
 );
 
-const BookStatusEditor: React.SFC<{status: number, options: SelectListItem[]}> = ({status, options}) => (
+const BookStatusEditor: React.SFC<{ status: number, options: SelectListItem[] }> = ({status, options}) => (
     <div className={styles['edited-status']}>
         <p>Status:</p>
         <select className={globalStyles.shadowed} name="status" defaultValue={status.toString()}>
@@ -43,11 +43,11 @@ const BookStatusEditor: React.SFC<{status: number, options: SelectListItem[]}> =
     </div>
 );
 
-const BookStatus: React.SFC<{status: number, statuses: SelectListItem[]}> = ({status, statuses}) => {
+const BookStatus: React.SFC<{ status: number, statuses: SelectListItem[] }> = ({status, statuses}) => {
     let statusValue = null;
-    if(statuses != null) {
+    if (statuses != null) {
         let filtered = statuses.filter(item => item.value === status);
-        if(filtered.length > 0) {
+        if (filtered.length > 0) {
             statusValue = filtered[0].text;
         }
     }
@@ -60,7 +60,7 @@ const BookStatus: React.SFC<{status: number, statuses: SelectListItem[]}> = ({st
     );
 };
 
-const ReadingTime = ({readingTimeInSeconds}: {readingTimeInSeconds: number}) => (
+const ReadingTime = ({readingTimeInSeconds}: { readingTimeInSeconds: number }) => (
     <div className={styles['reading-time']}>
         <p>
             Reading time:
@@ -70,7 +70,7 @@ const ReadingTime = ({readingTimeInSeconds}: {readingTimeInSeconds: number}) => 
     </div>
 );
 
-export const BookInfo = ({title, author}: {title: string, author: string}) => (
+export const BookInfo = ({title, author}: { title: string, author: string }) => (
     <div className={styles['book-info']}>
         <h5 className={styles['book-title']}>
             <q>{title}</q> by {author}
@@ -97,7 +97,7 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
 
     render() {
         const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options', 'statuses');
-        if(this.props.listItem.isOnEditMode) {
+        if (this.props.listItem.isOnEditMode) {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>

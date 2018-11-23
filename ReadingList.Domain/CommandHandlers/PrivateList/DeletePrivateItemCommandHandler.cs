@@ -17,7 +17,7 @@ namespace ReadingList.Domain.CommandHandlers
         {
             var item = await WriteService.GetAsync<PrivateBookListItem>(command.ItemId);
 
-            if(item == null)
+            if (item == null)
             {
                 throw new ObjectNotExistException<PrivateBookListItem>(new OnExceptionObjectDescriptor
                 {
@@ -26,7 +26,7 @@ namespace ReadingList.Domain.CommandHandlers
             }
 
             var accessSpecification = new BookListAccessSpecification(item.BookList);
-            
+
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
                 throw new AccessDeniedException();

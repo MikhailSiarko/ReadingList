@@ -10,6 +10,6 @@ namespace ReadingList.Read.Validators
         public SecuredQueryValidator()
         {
             RuleFor(q => q.UserId).NotEmptyWithMessage(q => ExceptionMessages.UserIdValidationMessage);
-        }   
+        }
     }
 }

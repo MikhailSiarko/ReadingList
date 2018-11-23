@@ -11,7 +11,7 @@ export type NamedValue = {
 
 interface Props {
     header: string | JSX.Element;
-    inputs: {type: string, name: string, placeholder: string | undefined, required: boolean}[];
+    inputs: { type: string, name: string, placeholder: string | undefined, required: boolean }[];
     isHidden: boolean;
     onSubmit: (values: NamedValue[]) => Promise<void>;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -22,7 +22,7 @@ export class AddForm extends React.Component<Props> {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const inputs = Array.from(form.elements).filter(item => item.tagName === 'INPUT');
-        let values = new Array<NamedValue>();
+        let values = new Array<NamedValue>(0);
         inputs.forEach(element => {
             const input = element as HTMLInputElement;
             values.push({name: input.name, value: input.value});
@@ -34,15 +34,15 @@ export class AddForm extends React.Component<Props> {
     resetForm = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         const button = event.target as HTMLButtonElement;
-        if(button.form) {
+        if (button.form) {
             const nameInput = button.form.elements.namedItem('name') as HTMLInputElement;
             const tagsInput = button.form.elements.namedItem('tags') as HTMLInputElement;
-            if(nameInput && tagsInput) {
+            if (nameInput && tagsInput) {
                 nameInput.value = '';
                 tagsInput.value = '';
             }
         }
-        if(this.props.onCancel) {
+        if (this.props.onCancel) {
             this.props.onCancel(event);
         }
     }

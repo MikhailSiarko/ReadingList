@@ -36,7 +36,7 @@ class SharedBookList extends React.Component<Props, State> {
     }
 
     async componentDidMount() {
-        if(this.state.list == null) {
+        if (this.state.list == null) {
             const id = parseInt(this.props.match.params.id, 10);
             this.props.loadingStart();
             const list = await this.props.getList(id);
@@ -48,19 +48,19 @@ class SharedBookList extends React.Component<Props, State> {
     handleSearchItemClick = async (item: Book) => {
         this.props.loadingStart();
         let copy;
-        if(this.state.list) {
+        if (this.state.list) {
             const bookItem = await this.props.addItem(this.state.list.id, item.id);
             copy = cloneDeep(this.state.list);
             copy.items.push(bookItem);
         }
         this.props.loadingEnd();
-        if(copy) {
+        if (copy) {
             this.setState({list: copy});
         }
     }
 
     renderLegend = () => {
-        if(this.state.list) {
+        if (this.state.list) {
             return (
                 <div>
                     <h4 style={{margin: 0}}>{this.state.list.name}</h4>
@@ -81,7 +81,7 @@ class SharedBookList extends React.Component<Props, State> {
     mapItem = (item: SharedBookListItem) => <SharedBookLI key={item.id} item={item} />;
 
     renderSearch = () => {
-        if(this.state.list && this.state.list.editable) {
+        if (this.state.list && this.state.list.editable) {
             return (
                 <Search
                     onSubmit={this.props.findBooks}
@@ -97,10 +97,10 @@ class SharedBookList extends React.Component<Props, State> {
     render() {
         const Spinnered = withSpinner(this.state.list && !this.props.loading, () => {
             let listItems;
-            if(this.state.list && this.state.list.items.length > 0) {
+            if (this.state.list && this.state.list.items.length > 0) {
                 listItems = this.state.list.items.map(this.mapItem);
             }
-            if(this.state.list) {
+            if (this.state.list) {
                 return (
                     <>
                         {
@@ -128,14 +128,14 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
         getList: async (id: number) => {
             const result = await listService.getList(id);
-            if(!result.isSucceed) {
+            if (!result.isSucceed) {
                 alert(result.errorMessage);
             }
             return result.data;
         },
         addItem: async (listId: number, bookId: number) => {
             const result = await listService.addItem(listId, bookId);
-            if(!result.isSucceed) {
+            if (!result.isSucceed) {
                 alert(result.errorMessage);
             }
             return result.data;
@@ -148,7 +148,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         findBooks: async (query: string) => {
             const result = await bookService.findBooks(query);
-            if(!result.isSucceed) {
+            if (!result.isSucceed) {
                 alert(result.errorMessage);
             }
             return result.data;

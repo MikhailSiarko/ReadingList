@@ -3,6 +3,7 @@ export class RequestResult<T> {
     errorMessage?: string;
     status?: number;
     data?: T;
+
     constructor(isSucceed: boolean, data?: T, errorMessage?: string, status?: number) {
         this.isSucceed = isSucceed;
         this.errorMessage = errorMessage;

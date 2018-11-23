@@ -12,7 +12,7 @@ namespace ReadingList.Domain.Validators
             RuleFor(c => c.UserId).NotEmptyWithMessage(c => ExceptionMessages.UserIdValidationMessage);
         }
     }
-    
+
     public class SecuredCommandValidator<T> : AbstractValidator<SecuredCommand<T>>
     {
         public SecuredCommandValidator()

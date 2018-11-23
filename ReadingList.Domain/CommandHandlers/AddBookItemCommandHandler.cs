@@ -7,14 +7,14 @@ using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public abstract class AddBookItemCommandHandler<TCommand, TItem, TDto> : CommandHandler<TCommand, TDto> 
+    public abstract class AddBookItemCommandHandler<TCommand, TItem, TDto> : CommandHandler<TCommand, TDto>
         where TCommand : AddListItemCommand<TDto>
         where TItem : BookListItem
     {
         private readonly IFetchHandler<GetBookByAuthorAndTitleQuery, Book> _bookFetchHandler;
 
         private readonly IFetchHandler<GetBookListItemQuery, TItem> _itemFetchHandler;
-        
+
         protected AddBookItemCommandHandler(IDataStorage writeService,
             IFetchHandler<GetBookByAuthorAndTitleQuery, Book> bookFetchHandler,
             IFetchHandler<GetBookListItemQuery, TItem> itemFetchHandler) : base(writeService)
@@ -32,9 +32,9 @@ namespace ReadingList.Domain.CommandHandlers
                 {
                     ["Book Id"] = command.BookId.ToString()
                 });
-            
+
             var book = await WriteService.GetAsync<Book>(command.BookId);
-            
+
             var item = CreateItem(book, listId);
 
             await SaveAsync(item);
@@ -48,11 +48,11 @@ namespace ReadingList.Domain.CommandHandlers
 
             return item != null;
         }
-        
+
         protected abstract Task<int> GetBookListId(TCommand command);
 
         protected abstract TItem CreateItem(Book book, int listId);
-        
+
         protected abstract Task SaveAsync(TItem item);
 
         protected abstract TDto Convert(TItem item);

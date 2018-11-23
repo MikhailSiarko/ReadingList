@@ -24,17 +24,18 @@ namespace ReadingList.Read.QueryHandlers
             _encryptionService = encryptionService;
         }
 
-        protected override async Task<AuthenticationDataDto> Handle(SqlQueryContext<LoginUserQuery, AuthenticationDataDto> context)
+        protected override async Task<AuthenticationDataDto> Handle(
+            SqlQueryContext<LoginUserQuery, AuthenticationDataDto> context)
         {
             var user = await DbConnection.QuerySingleOrDefaultAsync<UserDto>(context.Sql, context.Parameters) ??
                        throw new ObjectNotExistException<User>(new OnExceptionObjectDescriptor
                        {
                            ["Email"] = context.Query.Login
                        });
-            
-            if(_encryptionService.Encrypt(context.Query.Password) != user.Password)
+
+            if (_encryptionService.Encrypt(context.Query.Password) != user.Password)
                 throw new WrongPasswordException();
-            
+
             return _authenticationService.Authenticate(user);
         }
     }

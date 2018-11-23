@@ -10,7 +10,7 @@ namespace ReadingList.Domain.Models.DAO
             BookTags = new List<BookTag>();
             SharedBookListTags = new List<SharedBookListTag>();
         }
-        
+
         public IEnumerable<BookTag> BookTags { get; set; }
 
         public IEnumerable<SharedBookListTag> SharedBookListTags { get; set; }

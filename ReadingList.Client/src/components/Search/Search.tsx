@@ -27,9 +27,11 @@ class Search extends React.Component<Props, State> {
     handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         clearTimeout(this.state.timer as NodeJS.Timer);
-        this.setState({query: event.target.value, timer: setTimeout(async () => {
-            await this.findItems();
-        }, 500)});
+        this.setState({
+            query: event.target.value, timer: setTimeout(async () => {
+                await this.findItems();
+            }, 500)
+        });
     }
 
     handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -46,7 +48,7 @@ class Search extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
-        if(this.state.timer) {
+        if (this.state.timer) {
             clearTimeout(this.state.timer);
         }
         document.removeEventListener('click', this.handleWindowClick);
@@ -58,11 +60,11 @@ class Search extends React.Component<Props, State> {
 
     handleWindowClick = (event: MouseEvent) => {
         const target = event.target as Element;
-        if(this.wrapper) {
+        if (this.wrapper) {
             const searchList = this.wrapper.lastElementChild;
-            if(searchList && searchList.tagName === 'UL' && !Object.is(target, this.input)) {
+            if (searchList && searchList.tagName === 'UL' && !Object.is(target, this.input)) {
                 if (!Object.is(target, searchList)) {
-                    if(this.state.timer) {
+                    if (this.state.timer) {
                         clearTimeout(this.state.timer);
                     }
                     this.setState({searchItems: new Array<any>(0), timer: null});
@@ -72,14 +74,14 @@ class Search extends React.Component<Props, State> {
     }
 
     handleFocus = async () => {
-        if(this.state.searchItems.length === 0 && !isNullOrEmpty(this.state.query)) {
+        if (this.state.searchItems.length === 0 && !isNullOrEmpty(this.state.query)) {
             await this.findItems();
         }
     }
 
     findItems = async () => {
         const items = await this.props.onSubmit(this.state.query as string);
-        if(items) {
+        if (items) {
             this.setState({searchItems: Array.from(items)});
         }
     }
@@ -87,8 +89,8 @@ class Search extends React.Component<Props, State> {
     findTarget = (event: React.MouseEvent<HTMLElement>) => {
         let target = event.target as HTMLElement;
         let continueIteration = true;
-        while(continueIteration) {
-            if(target.tagName === 'LI') {
+        while (continueIteration) {
+            if (target.tagName === 'LI') {
                 continueIteration = false;
             } else {
                 target = target.parentElement as HTMLElement;

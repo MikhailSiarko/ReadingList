@@ -12,13 +12,15 @@ namespace ReadingList.Domain.Infrastructure.Extensions
         {
             return builder.NotEmpty().WithMessage(arg => ValidationMessages.CannotBeEmpty.F(propertyNameProvider(arg)));
         }
-        
-        public static IRuleBuilderOptions<T, TProperty> NotEqualToDefault<T, TProperty>(this IRuleBuilder<T, TProperty> builder) where TProperty : struct
+
+        public static IRuleBuilderOptions<T, TProperty> NotEqualToDefault<T, TProperty>(
+            this IRuleBuilder<T, TProperty> builder) where TProperty : struct
         {
             var defaultValue = default(TProperty);
 
             return builder.NotEqual(defaultValue).WithMessage(x =>
-                ValidationMessages.CannotBeDefault.F(((RuleBuilder<T, TProperty>) builder).Rule.Member.Name.SplitPascalCase(),
+                ValidationMessages.CannotBeDefault.F(
+                    ((RuleBuilder<T, TProperty>) builder).Rule.Member.Name.SplitPascalCase(),
                     defaultValue.ToString()));
         }
     }

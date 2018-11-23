@@ -8,7 +8,7 @@ namespace ReadingList.Domain.Models.DTO.Book
         {
             Tags = new List<string>();
         }
-        
+
         public string Author { get; set; }
 
         public string Title { get; set; }

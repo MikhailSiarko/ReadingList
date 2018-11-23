@@ -7,7 +7,7 @@ namespace ReadingList.Read.Queries
     public class LoginUserQuery : IRequest<AuthenticationDataDto>
     {
         public readonly string Login;
-        
+
         public readonly string Password;
 
         public LoginUserQuery(string login, string password)

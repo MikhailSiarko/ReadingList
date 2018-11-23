@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Monoton');
+
 .account-form {
     padding: 8rem;
     text-align: center;
 }
+
 .account-header {
     font-size: 6.4rem;
     font-family: 'Monoton', cursive;

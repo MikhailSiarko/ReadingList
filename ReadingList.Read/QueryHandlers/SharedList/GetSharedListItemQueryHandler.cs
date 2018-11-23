@@ -15,7 +15,8 @@ namespace ReadingList.Read.QueryHandlers
         {
         }
 
-        protected override async Task<SharedBookListItemDto> Handle(SqlQueryContext<GetSharedListItemQuery, SharedBookListItemDto> context)
+        protected override async Task<SharedBookListItemDto> Handle(
+            SqlQueryContext<GetSharedListItemQuery, SharedBookListItemDto> context)
         {
             using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
             {

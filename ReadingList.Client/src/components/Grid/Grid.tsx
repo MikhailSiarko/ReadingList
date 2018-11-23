@@ -9,24 +9,24 @@ interface Props {
 
 const Grid: React.SFC<Props> = props => {
     let items;
-    if(props.children) {
+    if (props.children) {
         items = (props.children as GridItemProps[]).map(
             (value, index) => (
-            <GridItem 
-                header={value.header} 
-                onClick={value.onClick} 
-                content={value.content} key={index} 
-            />
-        ));
+                <GridItem
+                    header={value.header}
+                    onClick={value.onClick}
+                    content={value.content} key={index}
+                />
+            ));
     }
-    if(props.items) {
+    if (props.items) {
         items = props.items.map(
             (value, index) => (
                 <GridItem
                     header={value.header}
                     onClick={value.onClick}
                     content={value.content}
-                    key={index} 
+                    key={index}
                 />
             ));
     }

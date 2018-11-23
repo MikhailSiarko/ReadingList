@@ -34,7 +34,7 @@ namespace ReadingList.Tests
             bookList.Update(source);
 
             Assert.True(bookList.Id == id);
-            Assert.True(bookList.Name == (string)source[nameof(BookList.Name)]);
+            Assert.True(bookList.Name == (string) source[nameof(BookList.Name)]);
             Assert.True(bookList.Type == type);
             Assert.True(bookList.OwnerId == ownerId);
         }

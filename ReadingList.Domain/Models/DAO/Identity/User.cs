@@ -8,11 +8,11 @@ namespace ReadingList.Domain.Models.DAO.Identity
         {
             BookLists = new List<BookList>();
         }
-        
+
         public string Login { get; set; }
 
         public string Password { get; set; }
-        
+
         public Role Role { get; set; }
 
         public int RoleId { get; set; }

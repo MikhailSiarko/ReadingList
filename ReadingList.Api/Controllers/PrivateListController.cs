@@ -28,7 +28,7 @@ namespace ReadingList.Api.Controllers
 
             return Ok(bookList);
         }
-        
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdatePrivateListRequestData requestData)
         {
@@ -43,7 +43,7 @@ namespace ReadingList.Api.Controllers
         {
             var item = await _domainService.ExecuteAsync(new AddPrivateItemCommand(User.Claims.GetUserId(),
                 addItemRequestData.BookId));
-            
+
             return Ok(item);
         }
 
@@ -56,11 +56,12 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpPut("items/{id}")]
-        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromBody] UpdatePrivateItemRequestData requestData)
+        public async Task<IActionResult> UpdateItem([FromRoute] int id,
+            [FromBody] UpdatePrivateItemRequestData requestData)
         {
             var item = await _domainService.ExecuteAsync(new UpdatePrivateListItemCommand(User.Claims.GetUserId(), id,
                 requestData.Status));
-            
+
             return Ok(item);
         }
 

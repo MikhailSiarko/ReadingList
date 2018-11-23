@@ -8,7 +8,8 @@ namespace ReadingList.Tests
     public class ReadingTimeCalculationTests
     {
         [Fact]
-        public void Calculate_Returns0_When_BookStatusChangedFromToReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
+        public void
+            Calculate_Returns0_When_BookStatusChangedFromToReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
             var item = new PrivateBookListItem
             {
@@ -24,14 +25,16 @@ namespace ReadingList.Tests
                 Status = BookItemStatus.ToReading
             };
 
-            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
-                                  BookItemStatus.Reading);
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status,
+                item.LastStatusUpdateDate,
+                BookItemStatus.Reading);
 
             Assert.True(readingTime == default(int));
         }
 
         [Fact]
-        public void Calculate_Returns0_When_BookStatusChangedFromReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
+        public void
+            Calculate_Returns0_When_BookStatusChangedFromReadingToReading_And_LastStatusUpdateDateIsNowMinus3Days()
         {
             var item = new PrivateBookListItem
             {
@@ -47,14 +50,16 @@ namespace ReadingList.Tests
                 Status = BookItemStatus.Reading
             };
 
-            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
-                                  BookItemStatus.Reading);
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status,
+                item.LastStatusUpdateDate,
+                BookItemStatus.Reading);
 
             Assert.True(item.ReadingTimeInSeconds == readingTime);
         }
 
         [Fact]
-        public void Calculate_Returns135Minutes_When_BookStatusChangedFromReadingToRead_And_LastStatusUpdateDateIsNowMinus135Minutes()
+        public void
+            Calculate_Returns135Minutes_When_BookStatusChangedFromReadingToRead_And_LastStatusUpdateDateIsNowMinus135Minutes()
         {
             var item = new PrivateBookListItem
             {
@@ -72,14 +77,16 @@ namespace ReadingList.Tests
 
             var oldReadingTime = item.ReadingTimeInSeconds;
 
-            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
-                                  BookItemStatus.Read);
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status,
+                item.LastStatusUpdateDate,
+                BookItemStatus.Read);
 
             Assert.True(oldReadingTime + Convert.ToInt32(TimeSpan.FromMinutes(135).TotalSeconds) == readingTime);
         }
 
         [Fact]
-        public void Calculate_Returns3Days_When_BookStatusChangedFromReadingToStartedButPostponed_And_LastStatusUpdateDateIsNowMinus3Days()
+        public void
+            Calculate_Returns3Days_When_BookStatusChangedFromReadingToStartedButPostponed_And_LastStatusUpdateDateIsNowMinus3Days()
         {
             var item = new PrivateBookListItem
             {
@@ -95,8 +102,9 @@ namespace ReadingList.Tests
                 Status = BookItemStatus.Reading
             };
 
-            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status, item.LastStatusUpdateDate,
-                                  BookItemStatus.StartedButPostponed);
+            var readingTime = ReadingTimeCalculator.Calculate(item.ReadingTimeInSeconds, item.Status,
+                item.LastStatusUpdateDate,
+                BookItemStatus.StartedButPostponed);
 
             Assert.True(Convert.ToInt32(TimeSpan.FromDays(3).TotalSeconds) == readingTime);
         }

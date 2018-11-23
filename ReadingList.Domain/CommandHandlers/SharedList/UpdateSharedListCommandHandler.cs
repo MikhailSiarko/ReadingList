@@ -12,7 +12,9 @@ using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookList, SharedBookListPreviewDto>
+    public class
+        UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookList,
+            SharedBookListPreviewDto>
     {
         public UpdateSharedListCommandHandler(IDataStorage writeService) : base(writeService)
         {
@@ -27,9 +29,7 @@ namespace ReadingList.Domain.CommandHandlers
         {
             entity.Update(new Dictionary<string, object>
             {
-                [nameof(BookList.Name)] = command.Name,
-//                [nameof(BookList.SharedBookListTags)] =
-//                    DbContext.UpdateOrAddSharedListTags(command.Tags, entity).RunSync().ToList()
+                [nameof(BookList.Name)] = command.Name
             });
         }
 
@@ -46,11 +46,11 @@ namespace ReadingList.Domain.CommandHandlers
             }
 
             var accessSpecification = new BookListAccessSpecification(list);
-            
+
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
                 throw new AccessDeniedException();
-            }        
+            }
 
             return list;
         }

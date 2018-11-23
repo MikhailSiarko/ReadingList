@@ -17,7 +17,7 @@ interface Props extends RouteComponentProps<any> {
     loading: boolean;
     getSharedLists: (query: string) => Promise<SharedBookList[]>;
     getOwnSharedLists: () => Promise<SharedBookList[]>;
-    createList: (data: {name: string, tags: string[]}) => Promise<SharedBookList>;
+    createList: (data: { name: string, tags: string[] }) => Promise<SharedBookList>;
     loadingStart: () => void;
     loadingEnd: () => void;
 }
@@ -41,7 +41,7 @@ class SharedBookLists extends React.Component<Props, State> {
     }
 
     async componentDidMount() {
-        if(this.state.sharedLists === null) {
+        if (this.state.sharedLists === null) {
             this.props.loadingStart();
             let lists = await this.props.getSharedLists('');
             this.props.loadingEnd();
@@ -68,7 +68,7 @@ class SharedBookLists extends React.Component<Props, State> {
         const list = await this.props.createList({name, tags});
         this.props.loadingEnd();
         const copies = cloneDeep(this.state.sharedLists);
-        if(copies) {
+        if (copies) {
             copies.push(list);
             this.setState({sharedLists: copies, isFormHidden: true});
         }
@@ -93,27 +93,27 @@ class SharedBookLists extends React.Component<Props, State> {
     }
 
     render() {
-        if(this.state.sharedLists) {
-                const items = this.state.sharedLists.map(this.mapList);
-                return (
-                    <div>
-                        <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
-                        <Grid items={items} />
-                        <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
-                        <AddForm
-                            header={'Add new list'}
-                            inputs={[
-                                {name: 'name', type: 'text', required: true, placeholder: 'Enter the name...' },
-                                {name: 'tags', type: 'text', required: true, placeholder: 'Enter the tags...' }
-                            ]}
-                            isHidden={this.state.isFormHidden}
-                            onSubmit={this.handleListFormSubmit}
-                            onCancel={this.handleCancel}
-                        />
-                    </div>
-                );
-            }
-            return null;
+        if (this.state.sharedLists) {
+            const items = this.state.sharedLists.map(this.mapList);
+            return (
+                <div>
+                    <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
+                    <Grid items={items} />
+                    <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
+                    <AddForm
+                        header={'Add new list'}
+                        inputs={[
+                            {name: 'name', type: 'text', required: true, placeholder: 'Enter the name...'},
+                            {name: 'tags', type: 'text', required: true, placeholder: 'Enter the tags...'}
+                        ]}
+                        isHidden={this.state.isFormHidden}
+                        onSubmit={this.handleListFormSubmit}
+                        onCancel={this.handleCancel}
+                    />
+                </div>
+            );
+        }
+        return null;
     }
 }
 

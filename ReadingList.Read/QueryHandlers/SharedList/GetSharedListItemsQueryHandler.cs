@@ -8,13 +8,15 @@ using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
-    public class GetSharedListItemsQueryHandler : QueryHandler<GetSharedListItemsQuery, IEnumerable<SharedBookListItemDto>>
+    public class
+        GetSharedListItemsQueryHandler : QueryHandler<GetSharedListItemsQuery, IEnumerable<SharedBookListItemDto>>
     {
         public GetSharedListItemsQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
-        protected override async Task<IEnumerable<SharedBookListItemDto>> Handle(SqlQueryContext<GetSharedListItemsQuery, IEnumerable<SharedBookListItemDto>> context)
+        protected override async Task<IEnumerable<SharedBookListItemDto>> Handle(
+            SqlQueryContext<GetSharedListItemsQuery, IEnumerable<SharedBookListItemDto>> context)
         {
             using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
             {

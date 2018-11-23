@@ -9,7 +9,8 @@ using ReadingList.Write.Infrastructure;
 
 namespace ReadingList.Write.FetchHandlers
 {
-    public class GetItemsByListIdFetchHandler<TItem> : IFetchHandler<GetItemsByListIdQuery, IEnumerable<TItem>> where TItem : BookListItem
+    public class GetItemsByListIdFetchHandler<TItem> : IFetchHandler<GetItemsByListIdQuery, IEnumerable<TItem>>
+        where TItem : BookListItem
     {
         private readonly WriteDbContext _dbContext;
 

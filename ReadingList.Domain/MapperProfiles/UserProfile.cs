@@ -10,6 +10,6 @@ namespace ReadingList.Domain.MapperProfiles
         {
             CreateMap<User, UserIdentityDto>()
                 .ForMember(u => u.Role, expression => expression.MapFrom(i => i.Role.Name));
-        } 
+        }
     }
 }

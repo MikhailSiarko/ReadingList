@@ -37,12 +37,12 @@ interface State {
 }
 
 function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number) => Promise<void>) {
-    return async function() {
+    return async function () {
         closeContextMenues();
         const confirmDeleting = confirm(
             `Do you really want to delete the item "${item.title}" by ${item.author}`);
 
-        if(confirmDeleting) {
+        if (confirmDeleting) {
             await deleteFromProps(item.id);
         } else {
             return;
@@ -55,13 +55,14 @@ class PrivateBookList extends React.Component<Props, State> {
         super(props);
         this.state = {isFormHidden: true};
     }
+
     async componentDidMount() {
-        if(!this.props.bookList || !this.props.statuses) {
+        if (!this.props.bookList || !this.props.statuses) {
             this.props.loadingStart();
-            if(!this.props.bookList) {
+            if (!this.props.bookList) {
                 await this.props.getList();
             }
-            if(!this.props.statuses) {
+            if (!this.props.statuses) {
                 await this.props.getBookStatuses();
             }
             this.props.loadingEnd();
@@ -95,11 +96,13 @@ class PrivateBookList extends React.Component<Props, State> {
     mapItem = (item: PrivateBookListItem) => {
         const actions = [
             {onClick: () => this.props.switchItemEditMode(item.id), text: 'Edit'},
-            {onClick: deleteItem(item, async itemId => {
+            {
+                onClick: deleteItem(item, async itemId => {
                     this.props.loadingStart();
                     await this.props.deleteItem(itemId);
                     this.props.loadingEnd();
-                }), text: 'Delete'}
+                }), text: 'Delete'
+            }
         ];
 
         const Contexed = withContextMenu(actions, PrivateBookLI);
@@ -118,18 +121,18 @@ class PrivateBookList extends React.Component<Props, State> {
     render() {
         const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), () => {
             let listItems;
-            if(this.props.bookList.items.length > 0) {
+            if (this.props.bookList.items.length > 0) {
                 listItems = this.props.bookList.items.map(this.mapItem);
             }
             const legend = (
                 this.props.bookList.isInEditMode ?
-                (
-                    <PrivateListNameEditor
-                        name={this.props.bookList.name}
-                        onSave={this.handleUpdateList}
-                        onCancel={this.props.switchListEditMode}
-                    />
-                ) : this.props.bookList.name
+                    (
+                        <PrivateListNameEditor
+                            name={this.props.bookList.name}
+                            onSave={this.handleUpdateList}
+                            onCancel={this.props.switchListEditMode}
+                        />
+                    ) : this.props.bookList.name
             );
             const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
             const ContexedList = withContextMenu(bookListActions, BookList);
@@ -187,7 +190,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         findBooks: async (query: string) => {
             const result = await bookService.findBooks(query);
-            if(!result.isSucceed) {
+            if (!result.isSucceed) {
                 alert(result.errorMessage);
             }
             return result.data;

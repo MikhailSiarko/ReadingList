@@ -13,7 +13,7 @@ namespace ReadingList.Domain.Infrastructure
         public static IEnumerable<Genre> Genres()
         {
             IEnumerable<Genre> genres;
-            
+
             var jsonFormatter = new DataContractJsonSerializer(typeof(IEnumerable<Genre>));
 
             using (var fs = new FileStream(Path.Combine(

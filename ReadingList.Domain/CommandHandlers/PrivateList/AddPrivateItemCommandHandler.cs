@@ -10,15 +10,15 @@ using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class AddPrivateItemCommandHandler 
+    public class AddPrivateItemCommandHandler
         : AddBookItemCommandHandler<AddPrivateItemCommand, PrivateBookListItem, PrivateBookListItemDto>
     {
         private readonly IFetchHandler<GetPrivateListByUserIdQuery, BookList> _listFetchHandler;
-        
+
         public AddPrivateItemCommandHandler(IDataStorage writeService,
             IFetchHandler<GetBookByAuthorAndTitleQuery, Book> bookFetchHandler,
             IFetchHandler<GetBookListItemQuery, PrivateBookListItem> itemFetchHandler,
-            IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler) 
+            IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler)
             : base(writeService, bookFetchHandler, itemFetchHandler)
         {
             _listFetchHandler = listFetchHandler;
@@ -27,8 +27,8 @@ namespace ReadingList.Domain.CommandHandlers
         protected override async Task<int> GetBookListId(AddPrivateItemCommand command)
         {
             var list = await _listFetchHandler.Fetch(new GetPrivateListByUserIdQuery(command.UserId));
-            
-            if(list == null)
+
+            if (list == null)
             {
                 throw new ObjectNotExistForException<BookList, User>(null, new OnExceptionObjectDescriptor
                 {

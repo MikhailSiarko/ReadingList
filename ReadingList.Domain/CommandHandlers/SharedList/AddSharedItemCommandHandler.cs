@@ -10,12 +10,12 @@ using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class AddSharedItemCommandHandler 
+    public class AddSharedItemCommandHandler
         : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItem, SharedBookListItemDto>
-    {     
+    {
         public AddSharedItemCommandHandler(IDataStorage writeService,
             IFetchHandler<GetBookByAuthorAndTitleQuery, Book> bookFetchHandler,
-            IFetchHandler<GetBookListItemQuery, SharedBookListItem> itemFetchHandler) 
+            IFetchHandler<GetBookListItemQuery, SharedBookListItem> itemFetchHandler)
             : base(writeService, bookFetchHandler, itemFetchHandler)
         {
         }
@@ -23,7 +23,7 @@ namespace ReadingList.Domain.CommandHandlers
         protected override async Task<int> GetBookListId(AddSharedListItemCommand command)
         {
             var list = await WriteService.GetAsync<BookList>(command.ListId);
-            
+
             if (list == null)
             {
                 throw new ObjectNotExistException<BookList>(
@@ -32,9 +32,9 @@ namespace ReadingList.Domain.CommandHandlers
                         ["Id"] = command.ListId.ToString()
                     });
             }
-            
+
             var accessSpecification = new BookListAccessSpecification(list);
-            
+
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
                 throw new AccessDeniedException();
@@ -51,7 +51,7 @@ namespace ReadingList.Domain.CommandHandlers
                 BookId = book.Id,
                 Book = book
             };
-            
+
             return item;
         }
 

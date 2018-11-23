@@ -11,7 +11,8 @@ namespace ReadingList.Read.QueryHandlers
 {
     public class BookStatusesQueryHandler : IRequestHandler<BookStatusesQuery, IEnumerable<SelectListItem>>
     {
-        public async Task<IEnumerable<SelectListItem>> Handle(BookStatusesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<SelectListItem>> Handle(BookStatusesQuery request,
+            CancellationToken cancellationToken)
         {
             return await Task.Run(() => BookItemStatus.Read.ToSelectListItems(), cancellationToken);
         }

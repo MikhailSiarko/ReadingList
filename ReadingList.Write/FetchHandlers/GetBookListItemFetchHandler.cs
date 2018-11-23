@@ -7,7 +7,8 @@ using ReadingList.Write.Infrastructure;
 
 namespace ReadingList.Write.FetchHandlers
 {
-    public class GetBookListItemFetchHandler<TItem> : IFetchHandler<GetBookListItemQuery, TItem> where TItem : BookListItem
+    public class GetBookListItemFetchHandler<TItem> : IFetchHandler<GetBookListItemQuery, TItem>
+        where TItem : BookListItem
     {
         private readonly WriteDbContext _dbContext;
 

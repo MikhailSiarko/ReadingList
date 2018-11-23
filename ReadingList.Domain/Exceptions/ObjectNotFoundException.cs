@@ -6,12 +6,12 @@ namespace ReadingList.Domain.Exceptions
 {
     public class ObjectNotFoundException : ApplicationException
     {
-        public ObjectNotFoundException(string kindOfObject, string objectData) 
+        public ObjectNotFoundException(string kindOfObject, string objectData)
             : base(ExceptionMessages.ObjectNotFoundWithData.F(kindOfObject, objectData))
         {
         }
-        
-        public ObjectNotFoundException(string kindOfObject) 
+
+        public ObjectNotFoundException(string kindOfObject)
             : base(ExceptionMessages.ObjectNotFound.F(kindOfObject))
         {
         }

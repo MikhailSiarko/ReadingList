@@ -16,7 +16,8 @@ namespace ReadingList.Read.QueryHandlers
         {
         }
 
-        protected override async Task<SharedBookListDto> Handle(SqlQueryContext<GetSharedListQuery, SharedBookListDto> context)
+        protected override async Task<SharedBookListDto> Handle(
+            SqlQueryContext<GetSharedListQuery, SharedBookListDto> context)
         {
             using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
             {
@@ -25,7 +26,7 @@ namespace ReadingList.Read.QueryHandlers
                            {
                                ["Id"] = context.Query.ListId.ToString()
                            });
-                        
+
                 var tags = (await reader.ReadAsync<string>()).ToList();
 
                 list.Tags = tags;

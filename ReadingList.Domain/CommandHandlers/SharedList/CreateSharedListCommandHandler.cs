@@ -18,7 +18,7 @@ namespace ReadingList.Domain.CommandHandlers
         private readonly IFetchHandler<GetSharedListsByUserIdQuery, IEnumerable<BookList>> _listsFetchHandler;
 
         private readonly IFetchHandler<GetExistingTagsQuery, IEnumerable<Tag>> _existingTagsFetchHandler;
-        
+
         public CreateSharedListCommandHandler(IDataStorage writeService,
             IFetchHandler<GetSharedListsByUserIdQuery, IEnumerable<BookList>> listsFetchHandler,
             IFetchHandler<GetExistingTagsQuery, IEnumerable<Tag>> existingTagsFetchHandler)
@@ -31,8 +31,8 @@ namespace ReadingList.Domain.CommandHandlers
         protected override async Task<SharedBookListPreviewDto> Handle(CreateSharedListCommand command)
         {
             var user = await WriteService.GetAsync<User>(command.UserId);
-            
-            if(user == null)
+
+            if (user == null)
             {
                 throw new ObjectNotExistException<User>(new OnExceptionObjectDescriptor
                 {
@@ -41,7 +41,7 @@ namespace ReadingList.Domain.CommandHandlers
             }
 
             var lists = await _listsFetchHandler.Fetch(new GetSharedListsByUserIdQuery(command.UserId));
-            
+
             if (lists.Any(x => x.Name == command.Name))
             {
                 throw new ObjectAlreadyExistsException<BookList>(new OnExceptionObjectDescriptor
@@ -62,7 +62,7 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (newTags.Any())
             {
-                await WriteService.SaveRangeAsync(newTags);   
+                await WriteService.SaveRangeAsync(newTags);
             }
 
             var list = new BookList

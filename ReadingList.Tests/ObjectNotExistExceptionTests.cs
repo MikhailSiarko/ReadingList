@@ -8,8 +8,9 @@ namespace ReadingList.Tests
     public class ObjectNotExistExceptionTests
     {
         [Fact]
-        public void ObjectNotExistForException_GeneratesMessage_BookListWith_ListData_ForUserWith_UserData_DoesNotExist()
-        {           
+        public void
+            ObjectNotExistForException_GeneratesMessage_BookListWith_ListData_ForUserWith_UserData_DoesNotExist()
+        {
             const string username = "test";
             const int listId = 1;
 
@@ -28,7 +29,7 @@ namespace ReadingList.Tests
 
             Assert.Equal(result, exception.Message);
         }
-        
+
         [Fact]
         public void ObjectNotExistForException_GeneratesMessage_BookListWith_ListData_DoesNotExist()
         {
@@ -45,10 +46,11 @@ namespace ReadingList.Tests
 
             Assert.Equal(result, exception.Message);
         }
-        
+
         [Fact]
-        public void ObjectNotExistForException_GeneratesMessage_BookList_ForUserWith_UserData_DoesNotExist_When_BookListDescriptorIsNull()
-        {            
+        public void
+            ObjectNotExistForException_GeneratesMessage_BookList_ForUserWith_UserData_DoesNotExist_When_BookListDescriptorIsNull()
+        {
             const string email = "test@test.com";
 
             var result =
@@ -62,10 +64,11 @@ namespace ReadingList.Tests
 
             Assert.Equal(result, exception.Message);
         }
-        
+
         [Fact]
-        public void ObjectNotExistForException_GeneratesMessage_BookListWith_BookListData_ForUser_DoesNotExist_When_UserDescriptorIsNull()
-        {            
+        public void
+            ObjectNotExistForException_GeneratesMessage_BookListWith_BookListData_ForUser_DoesNotExist_When_UserDescriptorIsNull()
+        {
             const int id = 2;
 
             var result =
@@ -81,8 +84,9 @@ namespace ReadingList.Tests
         }
 
         [Fact]
-        public void ObjectNotExistException_GeneratesMessage_SharedBookListItemWith_SharedBookListItemData_DoesNotExist()
-        {            
+        public void
+            ObjectNotExistException_GeneratesMessage_SharedBookListItemWith_SharedBookListItemData_DoesNotExist()
+        {
             const int id = 2;
 
             var result =
@@ -98,8 +102,9 @@ namespace ReadingList.Tests
         }
 
         [Fact]
-        public void ObjectNotExistException_GeneratesMessage_PrivateBookListItemWith_PrivateBookListItemData_DoesNotExist()
-        {            
+        public void
+            ObjectNotExistException_GeneratesMessage_PrivateBookListItemWith_PrivateBookListItemData_DoesNotExist()
+        {
             const int id = 2;
 
             var result =

@@ -8,14 +8,16 @@ using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
-    public class FindSharedBookListsQueryHandler : QueryHandler<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>>
+    public class
+        FindSharedBookListsQueryHandler : QueryHandler<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>>
     {
         public FindSharedBookListsQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
-        protected override async Task<IEnumerable<SharedBookListPreviewDto>> Handle(SqlQueryContext<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>> context)
-        {           
+        protected override async Task<IEnumerable<SharedBookListPreviewDto>> Handle(
+            SqlQueryContext<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>> context)
+        {
             var rows = (await DbConnection.QueryAsync<SharedListDbRow>(context.Sql, context.Parameters)).ToList();
 
             return rows.Select(r => new SharedBookListPreviewDto()
@@ -28,11 +30,11 @@ namespace ReadingList.Read.QueryHandlers
                 Tags = r.Tags.Split(',').Where(t => !string.IsNullOrEmpty(t)).ToList()
             });
         }
-        
+
         private class SharedListDbRow
         {
             public int Id { get; set; }
-            
+
             public string Name { get; set; }
 
             public int OwnerId { get; set; }

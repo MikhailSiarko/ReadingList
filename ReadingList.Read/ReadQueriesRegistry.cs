@@ -17,7 +17,7 @@ namespace ReadingList.Read
         {
             return ReadQueriesMap.TryGetValue(type, out sql);
         }
-        
+
         private static IReadOnlyDictionary<Type, string> ReadQueriesMap => new Dictionary<Type, string>
         {
             // User

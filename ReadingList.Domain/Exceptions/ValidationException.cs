@@ -16,7 +16,7 @@ namespace ReadingList.Domain.Exceptions
             var failureString = failures
                 .Select(e => $"- {e.ErrorMessage}")
                 .Join("\r\n");
-            Message = ExceptionMessages.ValidationExceptionMessage +  "\r\n" + failureString;
+            Message = ExceptionMessages.ValidationExceptionMessage + "\r\n" + failureString;
         }
     }
 }

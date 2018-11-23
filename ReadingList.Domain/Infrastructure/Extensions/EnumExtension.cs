@@ -10,7 +10,7 @@ namespace ReadingList.Domain.Infrastructure.Extensions
         public static string ToStringFromDescription(this Enum @enum)
         {
             var fieldInfo = @enum.GetType().GetField(@enum.ToString());
-            var attribute = (DescriptionAttribute)fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute), false);
+            var attribute = (DescriptionAttribute) fieldInfo.GetCustomAttribute(typeof(DescriptionAttribute), false);
             return attribute != null ? attribute.Description : @enum.ToString();
         }
 
@@ -26,8 +26,8 @@ namespace ReadingList.Domain.Infrastructure.Extensions
             {
                 items.Add(new SelectListItem
                 {
-                    Value = (int)Convert.ChangeType(value, enumType),
-                    Text = ((Enum)value).ToStringFromDescription()
+                    Value = (int) Convert.ChangeType(value, enumType),
+                    Text = ((Enum) value).ToStringFromDescription()
                 });
             }
 

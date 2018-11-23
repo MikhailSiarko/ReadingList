@@ -7,7 +7,7 @@ namespace ReadingList.Domain.Commands
         public readonly string Name;
 
         public readonly string[] Tags;
-        
+
         public CreateSharedListCommand(int userId, string name, string[] tags) : base(userId)
         {
             Name = name;

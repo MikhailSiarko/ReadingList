@@ -5,7 +5,7 @@ namespace ReadingList.Domain.Commands
     public class RegisterUserCommand : IRequest
     {
         public readonly string Email;
-        
+
         public readonly string Password;
 
         public readonly string ConfirmPassword;

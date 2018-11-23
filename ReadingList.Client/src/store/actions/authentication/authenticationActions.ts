@@ -1,6 +1,6 @@
-import { AuthenticationData } from './infrastructure';
 import { AuthenticationActionType } from './AuthenticationActionType';
 import { createAction, getReturnOfExpression } from 'typesafe-actions';
+import { AuthenticationData } from '../../../models';
 
 export const authenticationActions = {
     signIn: createAction(AuthenticationActionType.SIGN_IN, (authData: AuthenticationData) => {

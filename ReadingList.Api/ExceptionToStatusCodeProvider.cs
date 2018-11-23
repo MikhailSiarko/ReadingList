@@ -12,9 +12,9 @@ namespace ReadingList.Api
 
         public ExceptionToStatusCodeProvider(IReadOnlyDictionary<HttpStatusCode, Type[]> map)
         {
-            if(map == null)
+            if (map == null)
                 throw new ArgumentNullException(nameof(map));
-            
+
             _baseCaseExceptionType = typeof(Exception);
             _source = InitializeExceptionToStatusCodeMap(map);
         }
@@ -31,7 +31,8 @@ namespace ReadingList.Api
             return HttpStatusCode.InternalServerError;
         }
 
-        private static IReadOnlyDictionary<Type, HttpStatusCode> InitializeExceptionToStatusCodeMap(IReadOnlyDictionary<HttpStatusCode, Type[]> map)
+        private static IReadOnlyDictionary<Type, HttpStatusCode> InitializeExceptionToStatusCodeMap(
+            IReadOnlyDictionary<HttpStatusCode, Type[]> map)
         {
             return
                 map.SelectMany(pair => pair.Value
@@ -39,7 +40,7 @@ namespace ReadingList.Api
                     .Distinct(new KeyValueEqualityComparer())
                     .ToDictionary(pair => pair.Key, pair => pair.Value);
         }
-        
+
         private class KeyValueEqualityComparer : IEqualityComparer<KeyValuePair<Type, HttpStatusCode>>
         {
             public bool Equals(KeyValuePair<Type, HttpStatusCode> x, KeyValuePair<Type, HttpStatusCode> y)

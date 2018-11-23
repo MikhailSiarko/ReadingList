@@ -4,7 +4,7 @@ namespace ReadingList.Domain.Models
 {
     public abstract class Entity
     {
-        [IgnoreUpdate] 
+        [IgnoreUpdate]
         public int Id { get; set; }
     }
 }
