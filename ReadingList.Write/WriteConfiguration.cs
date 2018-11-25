@@ -15,8 +15,6 @@ namespace ReadingList.Write
     {
         public static IServiceCollection RegisterWriteDependencies(this IServiceCollection services)
         {
-            services.AddTransient<IFetchHandler<GetBookByAuthorAndTitleQuery, Book>, GetBookFetchHandler>();
-
             services
                 .AddTransient<IFetchHandler<GetBookListItemQuery, PrivateBookListItem>,
                     GetBookListItemFetchHandler<PrivateBookListItem>>();

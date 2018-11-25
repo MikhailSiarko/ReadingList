@@ -32,7 +32,7 @@ class Account extends React.Component<AccountProps> {
             await this.submitLogin(email, password);
         }
         this.props.loadingEnd();
-    };
+    }
 
     render() {
         const Spinnered = withSpinner(!this.props.loading, () => (

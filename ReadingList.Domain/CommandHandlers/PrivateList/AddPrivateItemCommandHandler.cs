@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
@@ -16,10 +16,9 @@ namespace ReadingList.Domain.CommandHandlers
         private readonly IFetchHandler<GetPrivateListByUserIdQuery, BookList> _listFetchHandler;
 
         public AddPrivateItemCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetBookByAuthorAndTitleQuery, Book> bookFetchHandler,
             IFetchHandler<GetBookListItemQuery, PrivateBookListItem> itemFetchHandler,
             IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler)
-            : base(writeService, bookFetchHandler, itemFetchHandler)
+            : base(writeService, itemFetchHandler)
         {
             _listFetchHandler = listFetchHandler;
         }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.FetchQueries;
@@ -11,15 +11,11 @@ namespace ReadingList.Domain.CommandHandlers
         where TCommand : AddListItemCommand<TDto>
         where TItem : BookListItem
     {
-        private readonly IFetchHandler<GetBookByAuthorAndTitleQuery, Book> _bookFetchHandler;
-
         private readonly IFetchHandler<GetBookListItemQuery, TItem> _itemFetchHandler;
 
         protected AddBookItemCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetBookByAuthorAndTitleQuery, Book> bookFetchHandler,
             IFetchHandler<GetBookListItemQuery, TItem> itemFetchHandler) : base(writeService)
         {
-            _bookFetchHandler = bookFetchHandler;
             _itemFetchHandler = itemFetchHandler;
         }
 

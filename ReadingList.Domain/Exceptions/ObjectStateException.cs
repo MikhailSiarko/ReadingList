@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Internal;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Resources;
 
@@ -36,7 +35,7 @@ namespace ReadingList.Domain.Exceptions
         {
             return objectDescriptor == null
                 ? string.Empty
-                : objectDescriptor.Select(x => $"{x.Key}:{x.Value}").Join();
+                : string.Join(", ", objectDescriptor.Select(x => $"{x.Key}:{x.Value}"));
         }
     }
 
