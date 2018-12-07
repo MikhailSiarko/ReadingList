@@ -1,6 +1,6 @@
 ﻿using System;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.Services.Validation
 {

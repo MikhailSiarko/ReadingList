@@ -2,24 +2,24 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.FetchQueries;
 using ReadingList.Domain.Infrastructure.Specifications;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class AddSharedItemCommandHandler
-        : AddBookItemCommandHandler<AddSharedListItemCommand, SharedBookListItem, SharedBookListItemDto>
+        : AddBookItemCommandHandler<AddSharedListItem, SharedBookListItem, SharedBookListItemDto>
     {
         public AddSharedItemCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetBookListItemQuery, SharedBookListItem> itemFetchHandler)
+            IFetchHandler<GetBookListItem, SharedBookListItem> itemFetchHandler)
             : base(writeService, itemFetchHandler)
         {
         }
 
-        protected override async Task<int> GetBookListId(AddSharedListItemCommand command)
+        protected override async Task<int> GetBookListId(AddSharedListItem command)
         {
             var list = await WriteService.GetAsync<BookList>(command.ListId);
 

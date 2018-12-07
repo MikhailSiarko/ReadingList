@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using ReadingList.Domain.FetchQueries;
 using ReadingList.Domain.Infrastructure.Extensions;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 using ReadingList.Write.FetchHandlers;
 
 namespace ReadingList.Write
@@ -16,32 +16,32 @@ namespace ReadingList.Write
         public static IServiceCollection RegisterWriteDependencies(this IServiceCollection services)
         {
             services
-                .AddTransient<IFetchHandler<GetBookListItemQuery, PrivateBookListItem>,
+                .AddTransient<IFetchHandler<GetBookListItem, PrivateBookListItem>,
                     GetBookListItemFetchHandler<PrivateBookListItem>>();
 
-            services.AddTransient<IFetchHandler<GetUserByLoginQuery, User>, GetUserByLoginFetchHandler>();
+            services.AddTransient<IFetchHandler<GetUserByLogin, User>, GetUserByLoginFetchHandler>();
 
             services
-                .AddTransient<IFetchHandler<GetBookListItemQuery, SharedBookListItem>,
+                .AddTransient<IFetchHandler<GetBookListItem, SharedBookListItem>,
                     GetBookListItemFetchHandler<SharedBookListItem>>();
 
             services
-                .AddTransient<IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>>,
+                .AddTransient<IFetchHandler<GetItemsByListId, IEnumerable<PrivateBookListItem>>,
                     GetItemsByListIdFetchHandler<PrivateBookListItem>>();
 
             services
-                .AddTransient<IFetchHandler<GetItemsByListIdQuery, IEnumerable<SharedBookListItem>>,
+                .AddTransient<IFetchHandler<GetItemsByListId, IEnumerable<SharedBookListItem>>,
                     GetItemsByListIdFetchHandler<SharedBookListItem>>();
 
             services
-                .AddTransient<IFetchHandler<GetPrivateListByUserIdQuery, BookList>,
+                .AddTransient<IFetchHandler<GetPrivateListByUserId, BookList>,
                     GetPrivateListByUserIdFetchHandler>();
 
             services
-                .AddTransient<IFetchHandler<GetSharedListsByUserIdQuery, IEnumerable<BookList>>,
+                .AddTransient<IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>>,
                     GetSharedListsByUserIdFetchHandler>();
 
-            services.AddTransient<IFetchHandler<GetExistingTagsQuery, IEnumerable<Tag>>, GetExistingTagsFetchHandler>();
+            services.AddTransient<IFetchHandler<GetExistingTags, IEnumerable<Tag>>, GetExistingTagsFetchHandler>();
 
             services.AddDbContextPool<WriteDbContext>((provider, builder) =>
                 builder.UseSqlite(provider.GetConnectionString("Write")));

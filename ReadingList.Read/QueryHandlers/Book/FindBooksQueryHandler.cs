@@ -3,19 +3,19 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using ReadingList.Domain.Models.DTO.Book;
+using ReadingList.Models.Read;
 using ReadingList.Read.Queries.Book;
 
 namespace ReadingList.Read.QueryHandlers.Book
 {
-    public class FindBooksQueryHandler : QueryHandler<FindBooksQuery, IEnumerable<BookDto>>
+    public class FindBooksQueryHandler : QueryHandler<FindBooks, IEnumerable<BookDto>>
     {
         public FindBooksQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
         protected override async Task<IEnumerable<BookDto>> Handle(
-            SqlQueryContext<FindBooksQuery, IEnumerable<BookDto>> context)
+            SqlQueryContext<FindBooks, IEnumerable<BookDto>> context)
         {
             var rows = (await DbConnection.QueryAsync<BookDbRow>(context.Sql, context.Parameters)).ToList();
 

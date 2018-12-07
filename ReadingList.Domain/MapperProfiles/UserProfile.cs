@@ -1,6 +1,6 @@
-﻿using ReadingList.Domain.Models.DTO.User;
+﻿using ReadingList.Models.Read;
 using Profile = AutoMapper.Profile;
-using User = ReadingList.Domain.Models.DAO.Identity.User;
+using User = ReadingList.Models.Write.Identity.User;
 
 namespace ReadingList.Domain.MapperProfiles
 {

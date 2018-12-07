@@ -1,6 +1,6 @@
 ﻿using System;
 using ReadingList.Domain.Infrastructure.Extensions;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Models.Write;
 using ReadingList.Resources;
 
 namespace ReadingList.Domain.Exceptions

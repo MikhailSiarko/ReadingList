@@ -6,15 +6,15 @@ using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Specifications;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DTO.BookLists;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Domain.Services.Validation;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class UpdatePrivateListItemCommandHandler
-        : UpdateCommandHandler<UpdatePrivateListItemCommand, PrivateBookListItem, PrivateBookListItemDto>
+        : UpdateCommandHandler<UpdatePrivateListItem, PrivateBookListItem, PrivateBookListItemDto>
     {
         public UpdatePrivateListItemCommandHandler(IDataStorage writeService) : base(writeService)
         {
@@ -25,7 +25,7 @@ namespace ReadingList.Domain.CommandHandlers
             return Mapper.Map<PrivateBookListItem, PrivateBookListItemDto>(entity);
         }
 
-        protected override void Update(PrivateBookListItem entity, UpdatePrivateListItemCommand command)
+        protected override void Update(PrivateBookListItem entity, UpdatePrivateListItem command)
         {
             entity.Update(new Dictionary<string, object>
             {
@@ -34,7 +34,7 @@ namespace ReadingList.Domain.CommandHandlers
             }, (BookItemStatus) command.Status);
         }
 
-        protected override async Task<PrivateBookListItem> GetEntity(UpdatePrivateListItemCommand command)
+        protected override async Task<PrivateBookListItem> GetEntity(UpdatePrivateListItem command)
         {
             var item = await WriteService.GetAsync<PrivateBookListItem>(command.ItemId);
 

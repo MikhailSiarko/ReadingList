@@ -17,13 +17,14 @@ abstract class ApiService {
         });
 
         axiosInstance.interceptors.response.use(response => response, error => {
-            let result;
-            if (error.response && error.response.status === 401) {
-                result = new RequestResult<never>(false, undefined, 'You are not authenticated', 401);
-            } else {
-                result = new RequestResult<never>(false, undefined,
-                    error.response ? error.response.data.errorMessage : error.message);
-            }
+            let result = new RequestResult<never>(
+                false,
+                undefined,
+                error.response
+                    ? error.response.data.errorMessage
+                    : error.message,
+                error.response ? error.response.status : undefined
+            );
 
             return Promise.reject(result);
         });

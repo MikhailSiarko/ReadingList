@@ -4,26 +4,26 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.FetchQueries;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Extensions;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class
-        UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateListCommand, BookList, PrivateBookListDto>
+        UpdatePrivateListCommandHandler : UpdateCommandHandler<UpdatePrivateList, BookList, PrivateBookListDto>
     {
-        private readonly IFetchHandler<GetPrivateListByUserIdQuery, BookList> _listFetchHandler;
+        private readonly IFetchHandler<GetPrivateListByUserId, BookList> _listFetchHandler;
 
-        private readonly IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>> _itemsFetchHandler;
+        private readonly IFetchHandler<GetItemsByListId, IEnumerable<PrivateBookListItem>> _itemsFetchHandler;
 
         public UpdatePrivateListCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler,
-            IFetchHandler<GetItemsByListIdQuery, IEnumerable<PrivateBookListItem>> itemsFetchHandler)
+            IFetchHandler<GetPrivateListByUserId, BookList> listFetchHandler,
+            IFetchHandler<GetItemsByListId, IEnumerable<PrivateBookListItem>> itemsFetchHandler)
             : base(writeService)
         {
             _listFetchHandler = listFetchHandler;
@@ -33,13 +33,13 @@ namespace ReadingList.Domain.CommandHandlers
         protected override PrivateBookListDto Convert(BookList entity)
         {
             var items = Mapper.Map<IEnumerable<PrivateBookListItem>, IEnumerable<PrivateBookListItemDto>>(
-                _itemsFetchHandler.Fetch(new GetItemsByListIdQuery(entity.Id)).RunSync()).ToList();
+                _itemsFetchHandler.Handle(new GetItemsByListId(entity.Id)).RunSync()).ToList();
 
             return Mapper.Map<BookList, PrivateBookListDto>(entity,
                 options => options.AfterMap((wm, listDto) => listDto.Items = items));
         }
 
-        protected override void Update(BookList entity, UpdatePrivateListCommand command)
+        protected override void Update(BookList entity, UpdatePrivateList command)
         {
             entity.Update(new Dictionary<string, object>
             {
@@ -47,9 +47,9 @@ namespace ReadingList.Domain.CommandHandlers
             });
         }
 
-        protected override async Task<BookList> GetEntity(UpdatePrivateListCommand command)
+        protected override async Task<BookList> GetEntity(UpdatePrivateList command)
         {
-            var list = await _listFetchHandler.Fetch(new GetPrivateListByUserIdQuery(command.UserId));
+            var list = await _listFetchHandler.Handle(new GetPrivateListByUserId(command.UserId));
 
             if (list == null)
             {

@@ -12,5 +12,10 @@ export default {
     private: {
         list: null,
         bookStatuses: null
+    },
+    notification: {
+        hidden: true,
+        message: '',
+        type: undefined
     }
 };

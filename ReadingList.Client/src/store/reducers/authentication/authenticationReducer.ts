@@ -4,7 +4,7 @@ import { AuthenticationAction, authenticationActions } from '../../actions/authe
 import { getType } from 'typesafe-actions';
 import { cloneDeep } from 'lodash';
 
-export function authenticationReducer(state: RootState.IdentityState = initialState.identity,
+export function authenticationReducer(state: RootState.Identity = initialState.identity,
                                       action: AuthenticationAction) {
     switch (action.type) {
         case getType(authenticationActions.signIn):
@@ -13,14 +13,14 @@ export function authenticationReducer(state: RootState.IdentityState = initialSt
             return Object.assign({}, state, {
                 isAuthenticated: true,
                 user: cloneDeep(action.authData.user)
-            } as RootState.IdentityState);
+            } as RootState.Identity);
         case getType(authenticationActions.signOut):
             sessionStorage.removeItem('reading_list');
             sessionStorage.removeItem('reading_list_user');
             return Object.assign({}, state, {
                 isAuthenticated: false,
                 user: null
-            } as RootState.IdentityState);
+            } as RootState.Identity);
         default:
             return state;
     }

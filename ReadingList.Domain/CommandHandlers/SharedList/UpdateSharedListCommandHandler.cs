@@ -5,15 +5,15 @@ using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Specifications;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
-using ReadingList.Domain.Models.DTO.BookLists;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class
-        UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedListCommand, BookList,
+        UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedList, BookList,
             SharedBookListPreviewDto>
     {
         public UpdateSharedListCommandHandler(IDataStorage writeService) : base(writeService)
@@ -25,7 +25,7 @@ namespace ReadingList.Domain.CommandHandlers
             return Mapper.Map<BookList, SharedBookListPreviewDto>(entity);
         }
 
-        protected override void Update(BookList entity, UpdateSharedListCommand command)
+        protected override void Update(BookList entity, UpdateSharedList command)
         {
             entity.Update(new Dictionary<string, object>
             {
@@ -33,7 +33,7 @@ namespace ReadingList.Domain.CommandHandlers
             });
         }
 
-        protected override async Task<BookList> GetEntity(UpdateSharedListCommand command)
+        protected override async Task<BookList> GetEntity(UpdateSharedList command)
         {
             var list = await WriteService.GetAsync<BookList>(command.ListId);
 

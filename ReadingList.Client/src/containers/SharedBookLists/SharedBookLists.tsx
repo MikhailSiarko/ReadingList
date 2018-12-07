@@ -96,7 +96,7 @@ class SharedBookLists extends React.Component<Props, State> {
         if (this.state.sharedLists) {
             const items = this.state.sharedLists.map(this.mapList);
             return (
-                <div>
+                <>
                     <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
                     <Grid items={items} />
                     <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
@@ -106,11 +106,11 @@ class SharedBookLists extends React.Component<Props, State> {
                             {name: 'name', type: 'text', required: true, placeholder: 'Enter the name...'},
                             {name: 'tags', type: 'text', required: true, placeholder: 'Enter the tags...'}
                         ]}
-                        isHidden={this.state.isFormHidden}
+                        hidden={this.state.isFormHidden}
                         onSubmit={this.handleListFormSubmit}
                         onCancel={this.handleCancel}
                     />
-                </div>
+                </>
             );
         }
         return null;

@@ -15,6 +15,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ReadingList.Models\ReadingList.Models.csproj" />
     <ProjectReference Include="..\ReadingList.Resources\ReadingList.Resources.csproj" />
   </ItemGroup>
 </Project>

@@ -62,13 +62,6 @@ namespace ReadingList.Api
                     }
                 },
                 {
-                    HttpStatusCode.NotFound,
-                    new[]
-                    {
-                        typeof(ObjectNotFoundException)
-                    }
-                },
-                {
                     HttpStatusCode.Forbidden,
                     new[]
                     {

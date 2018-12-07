@@ -1,3 +1,4 @@
 {
-    "npm.includeDirectories": ["./ReadingList.Client"]
+    "npm.includeDirectories": ["./ReadingList.Client"],
+    "typescript.tsdk": "./ReadingList.Client/node_modules/typescript/lib"
 }

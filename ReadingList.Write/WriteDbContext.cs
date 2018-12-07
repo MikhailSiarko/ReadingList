@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.HelpEntities;
-using ReadingList.Domain.Models.DAO.Identity;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using ReadingList.Models;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.HelpEntities;
+using ReadingList.Models.Write.Identity;
 using ReadingList.Write.Configurations;
+using ReadingList.Write.Infrastructure;
 
 namespace ReadingList.Write
 {
@@ -24,6 +27,9 @@ namespace ReadingList.Write
         public WriteDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public IQueryable<T> Table<T>() where T : Entity =>
+            Set<T>().Include(this.GetIncludePaths<T>());
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

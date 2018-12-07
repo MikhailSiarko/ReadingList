@@ -2,30 +2,30 @@ using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class AddPrivateItemCommandHandler
-        : AddBookItemCommandHandler<AddPrivateItemCommand, PrivateBookListItem, PrivateBookListItemDto>
+        : AddBookItemCommandHandler<AddPrivateItem, PrivateBookListItem, PrivateBookListItemDto>
     {
-        private readonly IFetchHandler<GetPrivateListByUserIdQuery, BookList> _listFetchHandler;
+        private readonly IFetchHandler<GetPrivateListByUserId, BookList> _listFetchHandler;
 
         public AddPrivateItemCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetBookListItemQuery, PrivateBookListItem> itemFetchHandler,
-            IFetchHandler<GetPrivateListByUserIdQuery, BookList> listFetchHandler)
+            IFetchHandler<GetBookListItem, PrivateBookListItem> itemFetchHandler,
+            IFetchHandler<GetPrivateListByUserId, BookList> listFetchHandler)
             : base(writeService, itemFetchHandler)
         {
             _listFetchHandler = listFetchHandler;
         }
 
-        protected override async Task<int> GetBookListId(AddPrivateItemCommand command)
+        protected override async Task<int> GetBookListId(AddPrivateItem command)
         {
-            var list = await _listFetchHandler.Fetch(new GetPrivateListByUserIdQuery(command.UserId));
+            var list = await _listFetchHandler.Handle(new GetPrivateListByUserId(command.UserId));
 
             if (list == null)
             {

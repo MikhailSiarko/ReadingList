@@ -21,7 +21,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string query)
         {
-            var books = await _domainService.AskAsync(new FindBooksQuery(query));
+            var books = await _domainService.AskAsync(new FindBooks(query));
 
             return Ok(books);
         }

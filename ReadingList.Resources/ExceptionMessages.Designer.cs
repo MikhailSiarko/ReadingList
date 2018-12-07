@@ -160,24 +160,6 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} wasn&apos;t found.
-        /// </summary>
-        public static string ObjectNotFound {
-            get {
-                return ResourceManager.GetString("ObjectNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} with {1} wasn&apos;t found.
-        /// </summary>
-        public static string ObjectNotFoundWithData {
-            get {
-                return ResourceManager.GetString("ObjectNotFoundWithData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to User Identity is not specified.
         /// </summary>
         public static string UserIdValidationMessage {

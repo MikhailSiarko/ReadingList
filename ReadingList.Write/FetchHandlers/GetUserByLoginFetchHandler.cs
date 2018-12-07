@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Models.DAO.Identity;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Write.FetchHandlers
 {
-    public class GetUserByLoginFetchHandler : IFetchHandler<GetUserByLoginQuery, User>
+    public class GetUserByLoginFetchHandler : IFetchHandler<GetUserByLogin, User>
     {
         private readonly WriteDbContext _dbContext;
 
@@ -15,7 +15,7 @@ namespace ReadingList.Write.FetchHandlers
             _dbContext = dbContext;
         }
 
-        public async Task<User> Fetch(GetUserByLoginQuery query)
+        public async Task<User> Handle(GetUserByLogin query)
         {
             return await _dbContext.Users.SingleOrDefaultAsync(u => u.Login == query.Login);
         }

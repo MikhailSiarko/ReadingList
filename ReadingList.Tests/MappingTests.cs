@@ -1,8 +1,8 @@
 ﻿using System;
 using AutoMapper;
 using ReadingList.Domain;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
 using Xunit;
 
 namespace ReadingList.Tests

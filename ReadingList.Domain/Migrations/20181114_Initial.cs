@@ -25,7 +25,7 @@ namespace ReadingList.Domain.Migrations
             Create.Table("Roles")
                 .WithColumn("Id").AsInt32().PrimaryKey("PK_Roles").Identity().NotNullable()
                 .WithColumn("Name").AsFixedLengthString(30).Unique().Nullable();
-            
+
             Create.Table("Tags")
                 .WithColumn("Id").AsInt32().PrimaryKey("PK_Tags").Identity().NotNullable()
                 .WithColumn("Name").AsFixedLengthString(30).Unique().Nullable();
@@ -37,7 +37,7 @@ namespace ReadingList.Domain.Migrations
                 .WithColumn("GenreId").AsString().Indexed("IX_Books_GenreId")
                     .ForeignKey("FK_Books_Genres_GenreId", "Genres", "Id")
                     .OnDelete(Rule.SetNull).Nullable();
-            
+
             Create.UniqueConstraint("IX_Books_Title_Author").OnTable("Books").Columns("Title", "Author");
 
             Create.Table("Users")
@@ -84,15 +84,15 @@ namespace ReadingList.Domain.Migrations
                 .WithColumn("LastStatusUpdateDate").AsString().NotNullable()
                 .WithColumn("ReadingTimeInSeconds").AsInt32().NotNullable()
                 .WithColumn("Status").AsInt32().NotNullable()
-                .WithColumn("BookListId").AsString().Indexed("IX_PrivateBookListItems_BookListId")
+                .WithColumn("BookListId").AsInt32().Indexed("IX_PrivateBookListItems_BookListId")
                 .ForeignKey("FK_PrivateBookListItems_BookLists_BookListId", "BookLists", "Id").OnDelete(Rule.Cascade)
                     .NotNullable();
-            
+
             Create.Table("SharedBookListItems")
                 .WithColumn("Id").AsInt32().PrimaryKey("PK_SharedBookListItems").Identity().NotNullable()
                 .WithColumn("BookId").AsInt32().ForeignKey("FK_SharedBookListItems_Books_BookId", "Books", "Id")
                     .OnDelete(Rule.Cascade).NotNullable()
-                .WithColumn("BookListId").AsString().Indexed("IX_SharedBookListItems_BookListId")
+                .WithColumn("BookListId").AsInt32().Indexed("IX_SharedBookListItems_BookListId")
                     .ForeignKey("FK_SharedBookListItems_BookLists_BookListId", "BookLists", "Id").OnDelete(Rule.Cascade)
                 .NotNullable();
 
@@ -121,27 +121,27 @@ namespace ReadingList.Domain.Migrations
         public override void Down()
         {
             Delete.Table("Genres");
-            
+
             Delete.Table("Profiles");
 
             Delete.Table("Roles");
-            
+
             Delete.Table("Tags");
-            
+
             Delete.Table("Books");
-            
+
             Delete.Table("Users");
-            
+
             Delete.Table("BookTags");
-            
+
             Delete.Table("BookLists");
-            
+
             Delete.Table("BookListModerators");
-            
+
             Delete.Table("PrivateBookListItems");
-            
+
             Delete.Table("SharedBookListItems");
-            
+
             Delete.Table("SharedBookListTags");
         }
     }

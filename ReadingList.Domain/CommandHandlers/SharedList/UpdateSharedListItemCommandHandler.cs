@@ -3,14 +3,14 @@ using AutoMapper;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Specifications;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DTO.BookLists;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class UpdateSharedListItemCommandHandler
-        : UpdateCommandHandler<UpdateSharedListItemCommand, SharedBookListItem, SharedBookListItemDto>
+        : UpdateCommandHandler<UpdateSharedListItem, SharedBookListItem, SharedBookListItemDto>
     {
         public UpdateSharedListItemCommandHandler(IDataStorage writeService) : base(writeService)
         {
@@ -21,7 +21,7 @@ namespace ReadingList.Domain.CommandHandlers
             return Mapper.Map<SharedBookListItem, SharedBookListItemDto>(entity);
         }
 
-        protected override void Update(SharedBookListItem entity, UpdateSharedListItemCommand command)
+        protected override void Update(SharedBookListItem entity, UpdateSharedListItem command)
         {
 //            entity.Update(new Dictionary<string, object>
 //            {
@@ -30,7 +30,7 @@ namespace ReadingList.Domain.CommandHandlers
 //            });
         }
 
-        protected override async Task<SharedBookListItem> GetEntity(UpdateSharedListItemCommand command)
+        protected override async Task<SharedBookListItem> GetEntity(UpdateSharedListItem command)
         {
             var item = await WriteService.GetAsync<SharedBookListItem>(command.ItemId);
 

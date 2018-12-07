@@ -1,30 +1,29 @@
 ﻿using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
-using ReadingList.Domain.Services.Encryption;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class RegisterUserCommandHandler : CommandHandler<RegisterUserCommand>
+    public class RegisterUserCommandHandler : CommandHandler<RegisterUser>
     {
         private readonly IEncryptionService _encryptionService;
 
-        private readonly IFetchHandler<GetUserByLoginQuery, User> _userFetchHandler;
+        private readonly IFetchHandler<GetUserByLogin, User> _userFetchHandler;
 
         public RegisterUserCommandHandler(IDataStorage writeService, IEncryptionService encryptionService,
-            IFetchHandler<GetUserByLoginQuery, User> userFetchHandler) : base(writeService)
+            IFetchHandler<GetUserByLogin, User> userFetchHandler) : base(writeService)
         {
             _encryptionService = encryptionService;
             _userFetchHandler = userFetchHandler;
         }
 
-        protected override async Task Handle(RegisterUserCommand command)
+        protected override async Task Handle(RegisterUser command)
         {
-            var user = await _userFetchHandler.Fetch(new GetUserByLoginQuery(command.Email));
+            var user = await _userFetchHandler.Handle(new GetUserByLogin(command.Email));
 
             if (user != null)
                 throw new ObjectAlreadyExistsException<User>(new OnExceptionObjectDescriptor

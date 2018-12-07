@@ -39,16 +39,16 @@ namespace ReadingList.Domain.Exceptions
         }
     }
 
-    public class OnExceptionObjectDescriptor : IEnumerable<KeyValuePair<string, object>>
+    public class OnExceptionObjectDescriptor : IEnumerable<KeyValuePair<string, string>>
     {
-        private readonly IDictionary<string, object> _dictionary;
+        private readonly IDictionary<string, string> _dictionary;
 
         public OnExceptionObjectDescriptor()
         {
-            _dictionary = new Dictionary<string, object>();
+            _dictionary = new Dictionary<string, string>();
         }
 
-        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
         {
             return _dictionary.GetEnumerator();
         }
@@ -58,7 +58,7 @@ namespace ReadingList.Domain.Exceptions
             return GetEnumerator();
         }
 
-        public object this[string key]
+        public string this[string key]
         {
             get => _dictionary[key];
 

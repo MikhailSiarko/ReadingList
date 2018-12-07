@@ -16,5 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ReadingList.Api\ReadingList.Api.csproj" />
     <ProjectReference Include="..\ReadingList.Domain\ReadingList.Domain.csproj" />
+    <ProjectReference Include="..\ReadingList.Models\ReadingList.Models.csproj" />
   </ItemGroup>
 </Project>

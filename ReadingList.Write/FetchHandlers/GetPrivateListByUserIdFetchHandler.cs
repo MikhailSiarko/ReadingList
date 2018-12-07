@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
-using ReadingList.Write.Infrastructure;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Write.FetchHandlers
 {
-    public class GetPrivateListByUserIdFetchHandler : IFetchHandler<GetPrivateListByUserIdQuery, BookList>
+    public class GetPrivateListByUserIdFetchHandler : IFetchHandler<GetPrivateListByUserId, BookList>
     {
         private readonly WriteDbContext _dbContext;
 
@@ -16,10 +15,10 @@ namespace ReadingList.Write.FetchHandlers
             _dbContext = dbContext;
         }
 
-        public async Task<BookList> Fetch(GetPrivateListByUserIdQuery query)
+        public async Task<BookList> Handle(GetPrivateListByUserId query)
         {
-            return await _dbContext.BookLists
-                .Include(_dbContext.GetIncludePaths<BookList>())
+            return await _dbContext
+                .Table<BookList>()
                 .SingleOrDefaultAsync(b => b.OwnerId == query.UserId && b.Type == BookListType.Private);
         }
     }

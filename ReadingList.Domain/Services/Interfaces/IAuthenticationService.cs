@@ -1,6 +1,4 @@
-﻿using ReadingList.Domain.Models.DTO;
-using ReadingList.Domain.Models.DTO.User;
-using ReadingList.Domain.Services.Authentication;
+﻿using ReadingList.Models.Read;
 
 namespace ReadingList.Domain.Services.Interfaces
 {

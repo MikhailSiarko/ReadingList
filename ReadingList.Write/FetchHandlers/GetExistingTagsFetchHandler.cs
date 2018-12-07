@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Write.FetchHandlers
 {
-    public class GetExistingTagsFetchHandler : IFetchHandler<GetExistingTagsQuery, IEnumerable<Tag>>
+    public class GetExistingTagsFetchHandler : IFetchHandler<GetExistingTags, IEnumerable<Tag>>
     {
         private readonly WriteDbContext _dbContext;
 
@@ -17,7 +17,7 @@ namespace ReadingList.Write.FetchHandlers
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Tag>> Fetch(GetExistingTagsQuery query)
+        public async Task<IEnumerable<Tag>> Handle(GetExistingTags query)
         {
             return await _dbContext.Tags.Where(t => query.TagsNames.Contains(t.Name)).ToListAsync();
         }

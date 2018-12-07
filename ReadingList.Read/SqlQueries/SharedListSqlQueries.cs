@@ -1,5 +1,5 @@
 using Cinch.SqlBuilder;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Read.SqlQueries
 {

@@ -21,19 +21,19 @@ namespace ReadingList.Read
         private static IReadOnlyDictionary<Type, string> ReadQueriesMap => new Dictionary<Type, string>
         {
             // User
-            [typeof(LoginUserQuery)] = UserSqlQueries.SelectByLogin,
-            [typeof(GetUserQuery)] = UserSqlQueries.SelectById,
+            [typeof(LoginUser)] = UserSqlQueries.SelectByLogin,
+            [typeof(GetUser)] = UserSqlQueries.SelectById,
             // Shared
-            [typeof(FindSharedListsQuery)] = SharedListSqlQueries.FindPreviews,
-            [typeof(GetSharedListQuery)] = SharedListSqlQueries.SelectById,
-            [typeof(GetSharedListItemsQuery)] = SharedItemSqlQueries.SelectByListId,
-            [typeof(GetSharedListItemQuery)] = SharedItemSqlQueries.SelectById,
-            [typeof(GetUserSharedListsQuery)] = SharedListSqlQueries.SelectOwn,
+            [typeof(FindSharedLists)] = SharedListSqlQueries.FindPreviews,
+            [typeof(GetSharedList)] = SharedListSqlQueries.SelectById,
+            [typeof(GetSharedListItems)] = SharedItemSqlQueries.SelectByListId,
+            [typeof(GetSharedListItem)] = SharedItemSqlQueries.SelectById,
+            [typeof(GetUserSharedLists)] = SharedListSqlQueries.SelectOwn,
             // Private
-            [typeof(GetPrivateListQuery)] = PrivateListSqlQueries.SelectByLogin,
-            [typeof(GetPrivateListItemQuery)] = PrivateItemSqlQueries.SelectById,
+            [typeof(GetPrivateList)] = PrivateListSqlQueries.SelectByLogin,
+            [typeof(GetPrivateListItem)] = PrivateItemSqlQueries.SelectById,
             // Book
-            [typeof(FindBooksQuery)] = BookSqlQueries.FindBooks
+            [typeof(FindBooks)] = BookSqlQueries.FindBooks
         };
     }
 }

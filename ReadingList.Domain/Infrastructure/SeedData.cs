@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.Infrastructure
 {

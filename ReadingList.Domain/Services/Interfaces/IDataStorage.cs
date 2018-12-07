@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ReadingList.Domain.Models;
+using ReadingList.Models;
 
 namespace ReadingList.Domain.Services.Interfaces
 {
@@ -13,6 +13,6 @@ namespace ReadingList.Domain.Services.Interfaces
 
         Task DeleteAsync<T>(int id) where T : Entity;
 
-        Task SaveRangeAsync<T>(IEnumerable<T> entities) where T : Entity;
+        Task SaveBatchAsync<T>(IEnumerable<T> entities) where T : Entity;
     }
 }

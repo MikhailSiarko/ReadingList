@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Write.Configurations
 {

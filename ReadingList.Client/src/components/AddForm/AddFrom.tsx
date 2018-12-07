@@ -12,7 +12,7 @@ export type NamedValue = {
 interface Props {
     header: string | JSX.Element;
     inputs: { type: string, name: string, placeholder: string | undefined, required: boolean }[];
-    isHidden: boolean;
+    hidden: boolean;
     onSubmit: (values: NamedValue[]) => Promise<void>;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -29,6 +29,7 @@ export class AddForm extends React.Component<Props> {
             input.value = '';
         });
         await this.props.onSubmit(values);
+        this.setState({});
     }
 
     resetForm = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,7 +61,7 @@ export class AddForm extends React.Component<Props> {
             </div>
         ));
         return (
-            <form onSubmit={this.handleSubmit} hidden={this.props.isHidden} className={styles['add-form']}>
+            <form onSubmit={this.handleSubmit} hidden={this.props.hidden} className={styles['add-form']}>
                 <div className={styles['lookup']}>
                     <div>
                         <h2>{this.props.header}</h2>

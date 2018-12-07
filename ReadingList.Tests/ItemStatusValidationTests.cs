@@ -1,6 +1,6 @@
 ﻿using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Models.DAO;
 using ReadingList.Domain.Services.Validation;
+using ReadingList.Models.Write;
 using Xunit;
 
 namespace ReadingList.Tests

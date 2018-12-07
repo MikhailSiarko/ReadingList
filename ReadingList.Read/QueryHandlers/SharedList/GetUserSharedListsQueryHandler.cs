@@ -3,26 +3,26 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Models.Read;
 using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
     public class
-        GetUserSharedListsQueryHandler : QueryHandler<GetUserSharedListsQuery, IEnumerable<SharedBookListPreviewDto>>
+        GetUserSharedListsQueryHandler : QueryHandler<GetUserSharedLists, IEnumerable<SharedBookListPreviewDto>>
     {
         public GetUserSharedListsQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
         protected override async Task<IEnumerable<SharedBookListPreviewDto>> Handle(
-            SqlQueryContext<GetUserSharedListsQuery, IEnumerable<SharedBookListPreviewDto>> context)
+            SqlQueryContext<GetUserSharedLists, IEnumerable<SharedBookListPreviewDto>> context)
         {
             using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
             {
                 var lists = (await reader.ReadAsync<SharedBookListPreviewDto>()).ToList();
 
-                var tags = (await reader.ReadAsync<(string TagName, int ListId)>()).ToLookup(tuple => tuple.ListId);
+                var tags = (await reader.ReadAsync<(string TagName, int ListId)>()).ToLookup(t => t.ListId);
 
                 foreach (var list in lists)
                 {

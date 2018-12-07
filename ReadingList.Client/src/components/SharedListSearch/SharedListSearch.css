@@ -1,9 +1,10 @@
 .search-wrapper {
-    width: 70%;
+    width: 20%;
     margin: 0 auto;
     text-align: center;
 }
 
-.search-wrapper > input[type="search"] {
+.search-wrapper input[type="search"] {
     margin: 0.5rem auto;
+    width: 100%;
 }

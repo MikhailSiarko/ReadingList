@@ -4,9 +4,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
-using ReadingList.Domain.Models.DTO;
-using ReadingList.Domain.Models.DTO.User;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
 
 namespace ReadingList.Domain.Services.Authentication
 {

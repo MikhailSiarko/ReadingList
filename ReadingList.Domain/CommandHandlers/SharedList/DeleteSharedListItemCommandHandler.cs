@@ -2,18 +2,18 @@ using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure.Specifications;
-using ReadingList.Domain.Models.DAO;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class DeleteSharedListItemCommandHandler : CommandHandler<DeleteSharedListItemCommand>
+    public class DeleteSharedListItemCommandHandler : CommandHandler<DeleteSharedListItem>
     {
         public DeleteSharedListItemCommandHandler(IDataStorage writeService) : base(writeService)
         {
         }
 
-        protected override async Task Handle(DeleteSharedListItemCommand command)
+        protected override async Task Handle(DeleteSharedListItem command)
         {
             var item = await WriteService.GetAsync<SharedBookListItem>(command.ItemId);
 

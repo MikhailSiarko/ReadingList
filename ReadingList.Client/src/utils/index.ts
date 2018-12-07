@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import { Dispatch } from 'react-redux';
 import { RootState } from '../store/reducers';
 import { authenticationActions } from '../store/actions/authentication';
+import { notificationActions } from '../store/actions/notification';
 
 export function onError(error: RequestResult<never>) {
     return error;
@@ -47,11 +48,16 @@ export function convertSecondsToReadingTime(seconds: number): string {
     return `days: ${days} | hours: ${hours} | minutes: ${minutes}`;
 }
 
-export function postRequestProcess(result: RequestResult<any>, dispatch: Dispatch<RootState>) {
+export function processFailedRequest(result: RequestResult<any>, dispatch: Dispatch<RootState>) {
     if (!result.isSucceed && result.status && result.status === 401) {
         dispatch(authenticationActions.signOut());
     } else if (!result.isSucceed) {
-        alert(result.errorMessage);
+        if(result.status && result.status >= 500) {
+            dispatch(notificationActions.error(result.errorMessage as String));
+        } else {
+            dispatch(notificationActions.info(result.errorMessage as String));
+        }
+        setTimeout(() => dispatch(notificationActions.hide()), 4000);
     }
 }
 
@@ -66,7 +72,7 @@ export function createPropAction<TIn, TOut>(func: (data: TIn) => Promise<Request
         if (result.isSucceed && result.data && action) {
             dispatch(action(result.data));
         } else {
-            postRequestProcess(result, dispatch);
+            processFailedRequest(result, dispatch);
         }
     };
 }
@@ -78,7 +84,7 @@ export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promi
         if (result.isSucceed && result.data && action) {
             dispatch(action(result.data));
         } else {
-            postRequestProcess(result, dispatch);
+            processFailedRequest(result, dispatch);
         }
         return result.data as TOut;
     };

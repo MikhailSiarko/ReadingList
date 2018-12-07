@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ReadingList.Domain.Models;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Models;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.Infrastructure
 {

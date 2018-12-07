@@ -5,7 +5,7 @@ using ReadingList.Resources;
 
 namespace ReadingList.Read.Validators
 {
-    public class LoginQueryValidator : AbstractValidator<LoginUserQuery>
+    public class LoginQueryValidator : AbstractValidator<LoginUser>
     {
         public LoginQueryValidator()
         {

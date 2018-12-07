@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ReadingList.Domain.Models;
 using ReadingList.Domain.Services.Interfaces;
-using ReadingList.Write.Infrastructure;
+using ReadingList.Models;
 
 namespace ReadingList.Write
 {
@@ -24,8 +23,7 @@ namespace ReadingList.Write
 
         public async Task<T> GetAsync<T>(int id) where T : Entity
         {
-            return await _dbContext.Set<T>().Include(_dbContext.GetIncludePaths<T>())
-                .SingleOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Table<T>().SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task SaveAsync<T>(T entity) where T : Entity
@@ -44,20 +42,21 @@ namespace ReadingList.Write
 
         public async Task DeleteAsync<T>(int id) where T : Entity
         {
-            var entity = await _dbContext.Set<T>().Include(_dbContext.GetIncludePaths<T>())
-                .SingleOrDefaultAsync(x => x.Id == id);
+            var entity = await _dbContext.Table<T>().SingleOrDefaultAsync(x => x.Id == id);
+
             _dbContext.Set<T>().Remove(entity);
+
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task SaveRangeAsync<T>(IEnumerable<T> entities) where T : Entity
+        public async Task SaveBatchAsync<T>(IEnumerable<T> entities) where T : Entity
         {
             var enumerable = entities.ToList();
             var existedEntities = enumerable.Where(e => e.Id != default(int)).ToList();
 
             if (existedEntities.Any())
             {
-                _dbContext.RemoveRange(existedEntities);
+                _dbContext.Set<T>().RemoveRange(existedEntities);
 
                 await _dbContext.SaveChangesAsync();
             }

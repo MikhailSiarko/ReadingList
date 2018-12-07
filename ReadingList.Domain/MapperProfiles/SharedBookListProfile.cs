@@ -1,7 +1,7 @@
 using System.Linq;
 using AutoMapper;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.MapperProfiles
 {

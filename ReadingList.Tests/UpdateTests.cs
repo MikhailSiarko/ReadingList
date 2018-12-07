@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ReadingList.Domain.Infrastructure;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Models.Write;
 using Xunit;
 
 namespace ReadingList.Tests

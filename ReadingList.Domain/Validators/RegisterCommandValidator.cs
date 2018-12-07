@@ -5,7 +5,7 @@ using ReadingList.Resources;
 
 namespace ReadingList.Domain.Validators
 {
-    public class RegisterCommandValidator : AbstractValidator<RegisterUserCommand>
+    public class RegisterCommandValidator : AbstractValidator<RegisterUser>
     {
         public RegisterCommandValidator()
         {

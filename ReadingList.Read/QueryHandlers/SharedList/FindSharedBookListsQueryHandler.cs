@@ -3,20 +3,20 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Models.Read;
 using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
     public class
-        FindSharedBookListsQueryHandler : QueryHandler<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>>
+        FindSharedBookListsQueryHandler : QueryHandler<FindSharedLists, IEnumerable<SharedBookListPreviewDto>>
     {
         public FindSharedBookListsQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
         protected override async Task<IEnumerable<SharedBookListPreviewDto>> Handle(
-            SqlQueryContext<FindSharedListsQuery, IEnumerable<SharedBookListPreviewDto>> context)
+            SqlQueryContext<FindSharedLists, IEnumerable<SharedBookListPreviewDto>> context)
         {
             var rows = (await DbConnection.QueryAsync<SharedListDbRow>(context.Sql, context.Parameters)).ToList();
 

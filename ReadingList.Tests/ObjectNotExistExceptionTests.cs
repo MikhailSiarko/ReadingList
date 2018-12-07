@@ -1,6 +1,6 @@
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DAO.Identity;
+using ReadingList.Models.Write;
+using ReadingList.Models.Write.Identity;
 using Xunit;
 
 namespace ReadingList.Tests

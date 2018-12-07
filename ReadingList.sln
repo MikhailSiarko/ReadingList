@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Write", "Readin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingList.Read", "ReadingList.Read\ReadingList.Read.csproj", "{8EBCDFE9-0CAB-4D45-B6F7-F3166C421C3F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingList.Models", "ReadingList.Models\ReadingList.Models.csproj", "{1D114F11-6F88-4301-8D11-DC4EC4944D5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{8EBCDFE9-0CAB-4D45-B6F7-F3166C421C3F}.Release|x64.Build.0 = Release|Any CPU
 		{8EBCDFE9-0CAB-4D45-B6F7-F3166C421C3F}.Release|x86.ActiveCfg = Release|Any CPU
 		{8EBCDFE9-0CAB-4D45-B6F7-F3166C421C3F}.Release|x86.Build.0 = Release|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Debug|x64.Build.0 = Debug|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Debug|x86.Build.0 = Debug|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Release|x64.ActiveCfg = Release|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Release|x64.Build.0 = Release|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1D114F11-6F88-4301-8D11-DC4EC4944D5E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

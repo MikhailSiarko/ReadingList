@@ -20,7 +20,7 @@ namespace ReadingList.Api.Controllers
 
         public async Task<IActionResult> Get()
         {
-            var statuses = await _domainService.AskAsync(new BookStatusesQuery());
+            var statuses = await _domainService.AskAsync(new GetBookStatuses());
 
             return Ok(statuses);
         }

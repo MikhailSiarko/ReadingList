@@ -5,21 +5,29 @@ import { authenticationReducer } from './authentication/authenticationReducer';
 import { PrivateBookList, UserModel, SelectListItem } from '../../models';
 import { privateBookListReducer } from './privateBookList/privateBookListReducer';
 import { loadingReducer } from './loading/loadingReducer';
+import { notificationReducer } from './notification/notificationReducer';
+import { NotificationType } from '../../models/NotificationType';
 
 export type RootState = Readonly<{
-    loading: RootState.LoadingState;
-    identity: RootState.IdentityState;
+    loading: RootState.Loading;
+    identity: RootState.Identity;
     router: RouterState;
     private: RootState.Private;
+    notification: RootState.Notification
 }>;
 
 export namespace RootState {
-    export type LoadingState = boolean;
-    export type UserState = UserModel | null;
-    export type AuthenticatedState = boolean;
-    export type IdentityState = {
-        isAuthenticated: AuthenticatedState;
-        user: UserState;
+    export type Loading = boolean;
+    export type User = UserModel | null;
+    export type Authenticated = boolean;
+    export type Notification = {
+        hidden: boolean;
+        message: String;
+        type: NotificationType | undefined
+    };
+    export type Identity = {
+        isAuthenticated: Authenticated;
+        user: User;
     };
     export type Private = {
         list: PrivateBookList | null,
@@ -29,6 +37,7 @@ export namespace RootState {
 
 export const rootReducer = combineReducers<RootState>({
         loading: loadingReducer,
+        notification: notificationReducer,
         identity: authenticationReducer,
         private: privateBookListReducer,
         router: routerReducer

@@ -13,7 +13,7 @@ import { connect, Dispatch } from 'react-redux';
 import { SharedBookListService } from '../../services';
 import { BookService } from '../../services/BookService';
 import { cloneDeep } from 'lodash';
-import { reduceTags } from '../../utils';
+import { reduceTags, processFailedRequest } from '../../utils';
 import BookSearchItem from '../../components/BookSearchItem';
 
 interface Props extends RouteComponentProps<any> {
@@ -50,8 +50,10 @@ class SharedBookList extends React.Component<Props, State> {
         let copy;
         if (this.state.list) {
             const bookItem = await this.props.addItem(this.state.list.id, item.id);
-            copy = cloneDeep(this.state.list);
-            copy.items.push(bookItem);
+            if(bookItem) {
+                copy = cloneDeep(this.state.list);
+                copy.items.push(bookItem);
+            }
         }
         this.props.loadingEnd();
         if (copy) {
@@ -80,20 +82,6 @@ class SharedBookList extends React.Component<Props, State> {
 
     mapItem = (item: SharedBookListItem) => <SharedBookLI key={item.id} item={item} />;
 
-    renderSearch = () => {
-        if (this.state.list && this.state.list.editable) {
-            return (
-                <Search
-                    onSubmit={this.props.findBooks}
-                    itemRender={this.renderSearchItem}
-                    onItemClick={this.handleSearchItemClick}
-                />
-            );
-        } else {
-            return null;
-        }
-    }
-
     render() {
         const Spinnered = withSpinner(this.state.list && !this.props.loading, () => {
             let listItems;
@@ -104,7 +92,13 @@ class SharedBookList extends React.Component<Props, State> {
                 return (
                     <>
                         {
-                            this.renderSearch()
+                            (this.state.list && this.state.list.editable) && (
+                                <Search
+                                    onSubmit={this.props.findBooks}
+                                    itemRender={this.renderSearchItem}
+                                    onItemClick={this.handleSearchItemClick}
+                                />
+                            )
                         }
                         <BookList items={listItems} legend={this.renderLegend()} />
                     </>
@@ -129,14 +123,14 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         getList: async (id: number) => {
             const result = await listService.getList(id);
             if (!result.isSucceed) {
-                alert(result.errorMessage);
+                processFailedRequest(result, dispatch);
             }
             return result.data;
         },
         addItem: async (listId: number, bookId: number) => {
             const result = await listService.addItem(listId, bookId);
             if (!result.isSucceed) {
-                alert(result.errorMessage);
+                processFailedRequest(result, dispatch);
             }
             return result.data;
         },
@@ -149,7 +143,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         findBooks: async (query: string) => {
             const result = await bookService.findBooks(query);
             if (!result.isSucceed) {
-                alert(result.errorMessage);
+                processFailedRequest(result, dispatch);
             }
             return result.data;
         }

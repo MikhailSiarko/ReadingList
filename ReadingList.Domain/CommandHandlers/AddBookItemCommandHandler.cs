@@ -1,20 +1,20 @@
 using System.Threading.Tasks;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.FetchQueries;
-using ReadingList.Domain.Models.DAO;
+using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public abstract class AddBookItemCommandHandler<TCommand, TItem, TDto> : CommandHandler<TCommand, TDto>
-        where TCommand : AddListItemCommand<TDto>
+        where TCommand : AddListItem<TDto>
         where TItem : BookListItem
     {
-        private readonly IFetchHandler<GetBookListItemQuery, TItem> _itemFetchHandler;
+        private readonly IFetchHandler<GetBookListItem, TItem> _itemFetchHandler;
 
         protected AddBookItemCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetBookListItemQuery, TItem> itemFetchHandler) : base(writeService)
+            IFetchHandler<GetBookListItem, TItem> itemFetchHandler) : base(writeService)
         {
             _itemFetchHandler = itemFetchHandler;
         }
@@ -23,13 +23,14 @@ namespace ReadingList.Domain.CommandHandlers
         {
             var listId = await GetBookListId(command);
 
+            var book = await WriteService.GetAsync<Book>(command.BookId);
+
             if (await DoItemExist(command.BookId, listId))
                 throw new ObjectAlreadyExistsException<TItem>(new OnExceptionObjectDescriptor
                 {
-                    ["Book Id"] = command.BookId.ToString()
+                    ["Author"] = book.Author,
+                    ["Title"] = book.Title
                 });
-
-            var book = await WriteService.GetAsync<Book>(command.BookId);
 
             var item = CreateItem(book, listId);
 
@@ -40,7 +41,7 @@ namespace ReadingList.Domain.CommandHandlers
 
         private async Task<bool> DoItemExist(int bookId, int bookListId)
         {
-            var item = await _itemFetchHandler.Fetch(new GetBookListItemQuery(bookId, bookListId));
+            var item = await _itemFetchHandler.Handle(new GetBookListItem(bookId, bookListId));
 
             return item != null;
         }

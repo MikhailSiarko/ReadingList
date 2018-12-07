@@ -14,9 +14,12 @@ import PrivateBookList from '../PrivateBookList';
 import SharedBookLists from '../SharedBookLists';
 import DefaultRoute from '../DefaultRoute';
 import SharedBookList from '../SharedBookList';
+import NotificationMessage from '../../components/NotificationMessage';
+import { NotificationType } from '../../models/NotificationType';
 
 interface AppProps extends RouteComponentProps<any> {
-    identity: RootState.IdentityState;
+    identity: RootState.Identity;
+    notification: RootState.Notification;
     signOut: () => void;
 }
 
@@ -76,6 +79,11 @@ class App extends React.Component<AppProps> {
                         <DefaultRoute defaultPath="/private" forPath="/" />
                     </Switch>
                 </Main>
+                <NotificationMessage
+                    content={this.props.notification.message}
+                    type={this.props.notification.type as NotificationType}
+                    hidden={this.props.notification.hidden}
+                />
             </div>
         );
     }
@@ -83,7 +91,8 @@ class App extends React.Component<AppProps> {
 
 function mapStateToProps(state: RootState) {
     return {
-        identity: state.identity
+        identity: state.identity,
+        notification: state.notification
     };
 }
 

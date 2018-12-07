@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
 import { RequestResult, AuthenticationData, Credentials } from '../../models';
 import AccountForm from '../../components/AccountForm';
-import { isNullOrEmpty } from '../../utils';
+import { isNullOrEmpty, processFailedRequest } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { withSpinner } from 'src/hoc';
 
@@ -56,13 +56,13 @@ class Account extends React.Component<AccountProps> {
     }
 }
 
-async function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
+function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
                                ownProps: AccountProps) {
     if (result.isSucceed && result.data) {
         dispatch(authenticationActions.signIn(result.data));
         ownProps.history.push('/private');
     } else {
-        alert(result.errorMessage);
+        processFailedRequest(result, dispatch);
     }
 }
 
@@ -77,11 +77,11 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProp
     return {
         login: async (credentials: Credentials) => {
             const result = await authService.login(credentials);
-            await postAuthProcess(dispatch, result, ownProps);
+            postAuthProcess(dispatch, result, ownProps);
         },
         register: async (credentials: Credentials) => {
             const result = await authService.register(credentials);
-            await postAuthProcess(dispatch, result, ownProps);
+            postAuthProcess(dispatch, result, ownProps);
         },
         loadingStart: () => {
             dispatch(loadingActions.start());

@@ -22,7 +22,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestData requestData)
         {
             var authenticationData =
-                await _domainService.AskAsync(new LoginUserQuery(requestData.Email, requestData.Password));
+                await _domainService.AskAsync(new LoginUser(requestData.Email, requestData.Password));
 
             return Ok(authenticationData);
         }
@@ -30,11 +30,11 @@ namespace ReadingList.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestData requestData)
         {
-            await _domainService.ExecuteAsync(new RegisterUserCommand(requestData.Email, requestData.Password,
+            await _domainService.ExecuteAsync(new RegisterUser(requestData.Email, requestData.Password,
                 requestData.ConfirmPassword));
 
             var authenticationData =
-                await _domainService.AskAsync(new LoginUserQuery(requestData.Email, requestData.Password));
+                await _domainService.AskAsync(new LoginUser(requestData.Email, requestData.Password));
 
             return Ok(authenticationData);
         }

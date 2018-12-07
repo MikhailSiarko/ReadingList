@@ -2,13 +2,13 @@
 using FluentValidation;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Infrastructure.Extensions;
-using ReadingList.Domain.Models.DAO;
-using ReadingList.Domain.Models.DTO.BookLists;
+using ReadingList.Models.Read;
+using ReadingList.Models.Write;
 using ReadingList.Resources;
 
 namespace ReadingList.Domain.Validators
 {
-    public class UpdatePrivateListItemCommandValidator : AbstractValidator<UpdatePrivateListItemCommand>
+    public class UpdatePrivateListItemCommandValidator : AbstractValidator<UpdatePrivateListItem>
     {
         public UpdatePrivateListItemCommandValidator()
         {
