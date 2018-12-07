@@ -10,24 +10,30 @@ abstract class ApiService {
     protected configureRequest<TData>(url: string, method: string, data?: TData) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
 
-        axiosInstance.interceptors.request.use(config => config, error => {
-            let result = new RequestResult<never>(false, undefined,
-                error.response ? error.response.data.errorMessage : error.message);
-            return Promise.reject(result);
-        });
+        axiosInstance.interceptors.request.use(
+            config => config,
+            error => {
+                let result = new RequestResult<never>(false, undefined,
+                    error.response ? error.response.data.errorMessage : error.message);
+                return Promise.reject(result);
+            }
+        );
 
-        axiosInstance.interceptors.response.use(response => response, error => {
-            let result = new RequestResult<never>(
-                false,
-                undefined,
-                error.response
-                    ? error.response.data.errorMessage
-                    : error.message,
-                error.response ? error.response.status : undefined
-            );
+        axiosInstance.interceptors.response.use(
+            response => response,
+            error => {
+                let result = new RequestResult<never>(
+                    false,
+                    undefined,
+                    error.response
+                        ? error.response.data.errorMessage
+                        : error.message,
+                    error.response ? error.response.status : undefined
+                );
 
-            return Promise.reject(result);
-        });
+                return Promise.reject(result);
+            }
+        );
 
         return axiosInstance.request({
             url: url,

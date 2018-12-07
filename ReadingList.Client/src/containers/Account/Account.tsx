@@ -11,7 +11,7 @@ import { isNullOrEmpty, processFailedRequest } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { withSpinner } from 'src/hoc';
 
-interface AccountProps extends RouteComponentProps<any> {
+interface Props extends RouteComponentProps<React.HTMLProps<Props>> {
     loading: boolean;
     login: (credentials: Credentials) => Promise<void>;
     register: (credentials: Credentials) => Promise<void>;
@@ -19,7 +19,7 @@ interface AccountProps extends RouteComponentProps<any> {
     loadingEnd: () => void;
 }
 
-class Account extends React.Component<AccountProps> {
+class Account extends React.Component<Props> {
     private static validateCredentials(email: string, password: string, confirmPassword?: string) {
         return isNullOrEmpty(email) || !isNullOrEmpty(password) || !isNullOrEmpty(confirmPassword);
     }
@@ -35,12 +35,8 @@ class Account extends React.Component<AccountProps> {
     }
 
     render() {
-        const Spinnered = withSpinner(!this.props.loading, () => (
-            <div>
-                <AccountForm onSubmit={this.submitHandler} />
-            </div>
-        ));
-        return <Spinnered />;
+        const Spinnered = withSpinner(!this.props.loading, AccountForm);
+        return <Spinnered onSubmit={this.submitHandler} />;
     }
 
     private async submitLogin(email: string, password: string) {
@@ -57,7 +53,7 @@ class Account extends React.Component<AccountProps> {
 }
 
 function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<AuthenticationData>,
-                               ownProps: AccountProps) {
+                               ownProps: Props) {
     if (result.isSucceed && result.data) {
         dispatch(authenticationActions.signIn(result.data));
         ownProps.history.push('/private');
@@ -72,7 +68,7 @@ function mapStatetoProps(state: RootState) {
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: AccountProps) {
+function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: Props) {
     const authService = new AuthenticationService();
     return {
         login: async (credentials: Credentials) => {

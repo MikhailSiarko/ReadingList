@@ -13,11 +13,13 @@ interface PrivateRouteProps {
 class PrivateRoute extends React.Component<PrivateRouteProps> {
     render() {
         return (
-            <Route exact={this.props.exact} path={this.props.path} render={props => (
-                this.props.isAuthenticated
-                    ? <this.props.component {...props} />
-                    : <Redirect to={{pathname: '/account/login', state: {from: props.location}}} />
-            )} />
+            <Route exact={this.props.exact} path={this.props.path} render={
+                props => (
+                    this.props.isAuthenticated
+                        ? <this.props.component {...props} />
+                        : <Redirect to={{pathname: '/account/login', state: {from: props.location}}} />
+                    )
+            } />
         );
     }
 }

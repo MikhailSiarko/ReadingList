@@ -87,8 +87,10 @@ class SharedBookLists extends React.Component<Props, State> {
                     <h4>{list.booksCount} book(s)</h4>
                 </div>
             ),
-            onClick: () => this.props.history.push('/shared/' + list.id,
-                {from: this.props.location})
+            onClick: () => this.props.history.push(
+                '/shared/' + list.id,
+                {from: this.props.location}
+            )
         };
     }
 

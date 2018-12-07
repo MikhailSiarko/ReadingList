@@ -42,7 +42,7 @@ class App extends React.Component<AppProps> {
             ];
 
         return (
-            <div>
+            <>
                 <NavBar links={navLinks} />
                 <Main>
                     <Switch>
@@ -84,7 +84,7 @@ class App extends React.Component<AppProps> {
                     type={this.props.notification.type as NotificationType}
                     hidden={this.props.notification.hidden}
                 />
-            </div>
+            </>
         );
     }
 }

@@ -3,10 +3,7 @@ import globalStyles from '../../styles/global.css';
 import styles from '../AccountForm/AccountForm.css';
 import RoundButton from '../RoundButton';
 
-interface LoginProps {
-}
-
-const Login: React.SFC<LoginProps> = () => (
+const Login = () => (
     <div>
         <h1 className={styles['account-header']}>Login</h1>
         <div>

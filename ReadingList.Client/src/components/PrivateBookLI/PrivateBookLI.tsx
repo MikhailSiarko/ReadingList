@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.css';
 import { PrivateBookListItem, SelectListItem } from '../../models';
-import { convertSecondsToReadingTime, createDOMAttributeProps, applyClasses } from '../../utils';
+import { convertSecondsToReadingTime, applyClasses, createDOMAttributeProps } from '../../utils';
 import Colors from '../../styles/colors';
 import globalStyles from '../../styles/global.css';
 import RoundButton from '../RoundButton';
 
-export interface BookListItemProps extends React.DOMAttributes<HTMLLIElement> {
+export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
     onSave: (item: PrivateBookListItem) => void;
     onCancel: (itemId: number) => void;

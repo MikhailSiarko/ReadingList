@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styles from '../PrivateBookLI/PrivateBookLI.css';
 import { SharedBookListItem } from '../../models';
-import { createDOMAttributeProps, applyClasses } from '../../utils';
+import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.css';
 import { BookInfo, BookInfoInEditMode } from '../PrivateBookLI/PrivateBookLI';
 
-export interface SharedBookListItemProps extends React.DOMAttributes<HTMLLIElement> {
+export interface SharedBookListItemProps extends React.HTMLProps<HTMLLIElement> {
     item: SharedBookListItem;
     onSave?: (item: SharedBookListItem) => void;
     onCancel?: (itemId: number) => void;

@@ -36,20 +36,6 @@ interface State {
     isFormHidden: boolean;
 }
 
-function deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number) => Promise<void>) {
-    return async function () {
-        closeContextMenues();
-        const confirmDeleting = confirm(
-            `Do you really want to delete the item "${item.title}" by ${item.author}`);
-
-        if (confirmDeleting) {
-            await deleteFromProps(item.id);
-        } else {
-            return;
-        }
-    };
-}
-
 class PrivateBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -71,6 +57,20 @@ class PrivateBookList extends React.Component<Props, State> {
 
     shouldComponentUpdate(nextProps: Props) {
         return nextProps.bookList != null && nextProps.statuses != null;
+    }
+
+    deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number) => Promise<void>) {
+        return async function () {
+            closeContextMenues();
+            const confirmDeleting = confirm(
+                `Do you really want to delete the item "${item.title}" by ${item.author}`);
+
+            if (confirmDeleting) {
+                await deleteFromProps(item.id);
+            } else {
+                return;
+            }
+        };
     }
 
     handleSearchItemClick = async (item: Book) => {
@@ -97,11 +97,15 @@ class PrivateBookList extends React.Component<Props, State> {
         const actions = [
             {onClick: () => this.props.switchItemEditMode(item.id), text: 'Edit'},
             {
-                onClick: deleteItem(item, async itemId => {
-                    this.props.loadingStart();
-                    await this.props.deleteItem(itemId);
-                    this.props.loadingEnd();
-                }), text: 'Delete'
+                onClick: this.deleteItem(
+                    item,
+                    async itemId => {
+                        this.props.loadingStart();
+                        await this.props.deleteItem(itemId);
+                        this.props.loadingEnd();
+                    }
+                ),
+                text: 'Delete'
             }
         ];
 
@@ -118,37 +122,41 @@ class PrivateBookList extends React.Component<Props, State> {
         );
     }
 
+    renderLegend = () => (
+        this.props.bookList.isInEditMode ?
+            (
+                <PrivateListNameEditor
+                    name={this.props.bookList.name}
+                    onSave={this.handleUpdateList}
+                    onCancel={this.props.switchListEditMode}
+                />
+            ) : this.props.bookList.name
+    )
+
+    renderPrivateBookListPage = () => {
+        let listItems;
+
+        if (this.props.bookList.items.length > 0) {
+            listItems = this.props.bookList.items.map(this.mapItem);
+        }
+
+        const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
+        const ContexedList = withContextMenu(bookListActions, BookList);
+
+        return (
+            <>
+                <Search
+                    onSubmit={this.props.findBooks}
+                    itemRender={this.renderSearchItem}
+                    onItemClick={this.handleSearchItemClick}
+                />
+                <ContexedList items={listItems} legend={this.renderLegend()} />
+            </>
+        );
+    }
+
     render() {
-        const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), () => {
-            let listItems;
-            if (this.props.bookList.items.length > 0) {
-                listItems = this.props.bookList.items.map(this.mapItem);
-            }
-            const legend = (
-                this.props.bookList.isInEditMode ?
-                    (
-                        <PrivateListNameEditor
-                            name={this.props.bookList.name}
-                            onSave={this.handleUpdateList}
-                            onCancel={this.props.switchListEditMode}
-                        />
-                    ) : this.props.bookList.name
-            );
-            const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
-            const ContexedList = withContextMenu(bookListActions, BookList);
-
-            return (
-                <>
-                    <Search
-                        onSubmit={this.props.findBooks}
-                        itemRender={this.renderSearchItem}
-                        onItemClick={this.handleSearchItemClick}
-                    />
-                    <ContexedList items={listItems} legend={legend} />
-                </>
-            );
-        });
-
+        const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), this.renderPrivateBookListPage);
         return <Spinnered />;
     }
 

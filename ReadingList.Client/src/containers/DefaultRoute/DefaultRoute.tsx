@@ -12,11 +12,13 @@ interface DefaultRouteProps {
 class DefaultRoute extends React.Component<DefaultRouteProps> {
     render() {
         return (
-            <Route exact={true} path={this.props.forPath} render={props => (
-                this.props.isAuthenticated
-                    ? <Redirect to={{pathname: this.props.defaultPath, state: {from: props.location}}} />
-                    : <Redirect to={{pathname: '/account/login', state: {from: props.location}}} />
-            )} />
+            <Route exact={true} path={this.props.forPath} render={
+                props => (
+                    this.props.isAuthenticated
+                        ? <Redirect to={{pathname: this.props.defaultPath, state: {from: props.location}}} />
+                        : <Redirect to={{pathname: '/account/login', state: {from: props.location}}} />
+                )
+            } />
         );
     }
 }

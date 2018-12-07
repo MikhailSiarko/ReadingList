@@ -4,7 +4,7 @@ import globalStyles from 'src/styles/global.css';
 import style from './RoundButton.css';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface Props extends React.HTMLProps<HTMLButtonElement> {
     color?: string;
     radius: number;
     wrapperStyle?: React.CSSProperties;
@@ -12,8 +12,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const RoundButton: React.SFC<Props> = props => {
-    let clearProps =
-        createDOMAttributeProps(props, 'color', 'radius', 'wrapperStyle', 'wrapperClassName', 'className');
+    const clearProps = createDOMAttributeProps(props, 'colors', 'radius', 'wrapperStyle', 'wrapperClassName');
     return (
         <div style={props.wrapperStyle} className={props.wrapperClassName}>
             <button
@@ -29,8 +28,9 @@ const RoundButton: React.SFC<Props> = props => {
             >
                 {props.children}
             </button>
-        </div>
+    </div>
     );
+
 };
 
 export default RoundButton;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import style from './Fieldset.css';
 import { createDOMAttributeProps } from '../../utils';
 
-interface Props extends React.DOMAttributes<HTMLFieldSetElement> {
+interface Props extends React.HTMLProps<HTMLFieldSetElement> {
     className?: string;
     legend: string | JSX.Element;
 }

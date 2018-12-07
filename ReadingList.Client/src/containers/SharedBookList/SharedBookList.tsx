@@ -3,7 +3,7 @@ import { SharedBookList as SharedList } from '../../models/BookList/Implementati
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
-import SharedBookLI from '../../components/SharedBookLI/SharedBookLI';
+import SharedBookLI from '../../components/SharedBookLI';
 import { withSpinner } from '../../hoc';
 import { SharedBookListItem } from '../../models/BookList';
 import Search from '../../components/Search';
@@ -74,7 +74,7 @@ class SharedBookList extends React.Component<Props, State> {
                 </div>
             );
         } else {
-            return null;
+            return '';
         }
     }
 
@@ -84,10 +84,6 @@ class SharedBookList extends React.Component<Props, State> {
 
     render() {
         const Spinnered = withSpinner(this.state.list && !this.props.loading, () => {
-            let listItems;
-            if (this.state.list && this.state.list.items.length > 0) {
-                listItems = this.state.list.items.map(this.mapItem);
-            }
             if (this.state.list) {
                 return (
                     <>
@@ -100,7 +96,7 @@ class SharedBookList extends React.Component<Props, State> {
                                 />
                             )
                         }
-                        <BookList items={listItems} legend={this.renderLegend()} />
+                        <BookList items={this.state.list.items.map(this.mapItem)} legend={this.renderLegend()} />
                     </>
                 );
             }
