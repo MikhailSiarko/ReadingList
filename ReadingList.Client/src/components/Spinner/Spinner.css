@@ -10,7 +10,7 @@
 
 .spinner {
     color: #1259a9;
-    margin: 42rem auto;
+    margin: calc(50vh - 1rem) auto 0 auto;
     font-size: 2rem;
     width: 2rem;
     height: 2rem;
@@ -23,6 +23,7 @@
     -ms-transform: translateZ(0);
     transform: translateZ(0);
   }
+
   @-webkit-keyframes load4 {
     0%,
     100% {
