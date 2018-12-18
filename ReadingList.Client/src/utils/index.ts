@@ -4,6 +4,7 @@ import { Dispatch } from 'react-redux';
 import { RootState } from '../store/reducers';
 import { authenticationActions } from '../store/actions/authentication';
 import { notificationActions } from '../store/actions/notification';
+import { loadingActions } from '../store/actions/loading';
 
 export function onError(error: RequestResult<never>) {
     return error;
@@ -51,6 +52,7 @@ export function convertSecondsToReadingTime(seconds: number): string {
 export function processFailedRequest(result: RequestResult<any>, dispatch: Dispatch<RootState>) {
     if (!result.isSucceed && result.status && result.status === 401) {
         dispatch(authenticationActions.signOut());
+        dispatch(loadingActions.end());
     } else if (!result.isSucceed) {
         if(result.status && result.status >= 500) {
             dispatch(notificationActions.error(result.errorMessage as String));

@@ -22,7 +22,8 @@ class SharedListSearch extends React.Component<Props, State> {
         event.preventDefault();
         clearTimeout(this.state.timer as NodeJS.Timer);
         this.setState({
-            query: event.target.value, timer: setTimeout(async () => {
+            query: event.target.value,
+            timer: setTimeout(async () => {
                 await this.findItems();
             }, 500)
         });

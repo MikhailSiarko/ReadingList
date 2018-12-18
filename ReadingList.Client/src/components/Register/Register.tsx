@@ -31,7 +31,7 @@ const Register = () => {
     }
 
     return (
-        <div>
+        <>
             <h1 className={styles['account-header']}>Register</h1>
             <div>
                 <input
@@ -73,7 +73,7 @@ const Register = () => {
                     ✓
                 </RoundButton>
             </div>
-        </div>
+        </>
     );
 };
 

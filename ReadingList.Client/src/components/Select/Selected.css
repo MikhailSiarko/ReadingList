@@ -1,0 +1,21 @@
+.selected {
+    display: inline-block;
+    background-color: #dcdcdc;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    padding-left: 0.6rem;
+    margin: 0.1rem 0.4rem;
+    color: black;
+    font-family: 'Assistant', sans-serif;
+    cursor: text;
+}
+
+.selected > button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+}
+
+.selected > button:hover {
+    color: red;
+}

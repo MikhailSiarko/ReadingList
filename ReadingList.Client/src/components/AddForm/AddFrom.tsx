@@ -1,17 +1,11 @@
 import * as React from 'react';
-import globalStyles from 'src/styles/global.css';
 import Colors from 'src/styles/colors';
 import styles from './AddForm.css';
 import RoundButton from '../RoundButton';
-
-export type NamedValue = {
-    name: string;
-    value: any;
-};
+import { NamedValue } from '../../models';
 
 interface Props {
     header: string | JSX.Element;
-    inputs: { type: string, name: string, placeholder: string | undefined, required: boolean }[];
     hidden: boolean;
     onSubmit: (values: NamedValue[]) => Promise<void>;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -49,24 +43,14 @@ export class AddForm extends React.Component<Props> {
     }
 
     render() {
-        const inputs = this.props.inputs.map((input, index) => (
-            <div key={index}>
-                <input
-                    className={globalStyles.shadowed}
-                    type={input.type}
-                    name={input.name}
-                    placeholder={input.placeholder}
-                    required={input.required}
-                />
-            </div>
-        ));
         return (
             <form onSubmit={this.handleSubmit} hidden={this.props.hidden} className={styles['add-form']}>
                 <div className={styles['lookup']}>
-                    <div>
-                        <h2>{this.props.header}</h2>
+                    <h2>{this.props.header}</h2>
+                    <hr />
+                    <div className={styles['lookup-content']}>
+                        {this.props.children}
                     </div>
-                    {inputs}
                     <div className={styles['buttons-wrapper']}>
                         <RoundButton radius={3} type="submit">✓</RoundButton>
                         <RoundButton radius={3} onClick={this.resetForm} color={Colors.Red}>×</RoundButton>

@@ -20,6 +20,7 @@ const RoundButton: React.SFC<Props> = props => {
                 style={{
                     backgroundColor: props.color ? props.color : Colors.Primary,
                     height: props.radius * 2 + 'rem',
+                    lineHeight: props.radius * 2 + 'rem',
                     width: props.radius * 2 + 'rem',
                     fontSize: props.radius + 'rem',
                     borderRadius: props.radius + 'rem'

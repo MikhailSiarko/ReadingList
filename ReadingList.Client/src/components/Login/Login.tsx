@@ -4,7 +4,7 @@ import styles from '../AccountForm/AccountForm.css';
 import RoundButton from '../RoundButton';
 
 const Login = () => (
-    <div>
+    <>
         <h1 className={styles['account-header']}>Login</h1>
         <div>
             <input
@@ -27,7 +27,7 @@ const Login = () => (
         <div className={styles['form-button-wrapper']}>
             <RoundButton radius={3} type={'submit'}>✓</RoundButton>
         </div>
-    </div>
+    </>
 );
 
 export default Login;

@@ -5,6 +5,12 @@
     text-align: center;
 }
 
+.account-form > div {
+    width: 15%;
+    margin: 0 auto;
+    margin-bottom: 2rem
+}
+
 .account-header {
     font-size: 6.4rem;
     font-family: 'Monoton', cursive;

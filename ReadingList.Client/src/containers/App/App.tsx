@@ -16,8 +16,10 @@ import DefaultRoute from '../DefaultRoute';
 import SharedBookList from '../SharedBookList';
 import NotificationMessage from '../../components/NotificationMessage';
 import { NotificationType } from '../../models/NotificationType';
+import Spinner from '../../components/Spinner';
 
 interface AppProps extends RouteComponentProps<any> {
+    loading: boolean;
     identity: RootState.Identity;
     notification: RootState.Notification;
     signOut: () => void;
@@ -53,23 +55,14 @@ class App extends React.Component<AppProps> {
                         />
 
                         <PrivateRoute
-                            exact={false}
-                            path="/shared"
-                            component={() =>
-                                <Switch>
-                                    <PrivateRoute
-                                        exact={true}
-                                        path="/shared/search/:query?"
-                                        component={SharedBookLists}
-                                    />
-                                    <PrivateRoute
-                                        exact={true}
-                                        path="/shared/:id"
-                                        component={SharedBookList}
-                                    />
-                                    <DefaultRoute defaultPath="/shared/search" forPath="/shared" />
-                                </Switch>
-                            }
+                            exact={true}
+                            path="/shared/search/:query?"
+                            component={SharedBookLists}
+                        />
+                        <PrivateRoute
+                            exact={true}
+                            path="/shared/:id"
+                            component={SharedBookList}
                         />
                         {
                             !this.props.identity.isAuthenticated
@@ -77,6 +70,7 @@ class App extends React.Component<AppProps> {
                                 : <Redirect to="/private" />
                         }
                         <DefaultRoute defaultPath="/private" forPath="/" />
+                        <DefaultRoute defaultPath="/shared/search" forPath="/shared" />
                     </Switch>
                 </Main>
                 <NotificationMessage
@@ -84,6 +78,7 @@ class App extends React.Component<AppProps> {
                     type={this.props.notification.type as NotificationType}
                     hidden={this.props.notification.hidden}
                 />
+                <Spinner loading={this.props.loading} />
             </>
         );
     }
@@ -92,7 +87,8 @@ class App extends React.Component<AppProps> {
 function mapStateToProps(state: RootState) {
     return {
         identity: state.identity,
-        notification: state.notification
+        notification: state.notification,
+        loading: state.loading
     };
 }
 

@@ -9,6 +9,7 @@ export class ApiConfiguration {
     public static SHARED_LISTS_OWN = `${ApiConfiguration.SHARED_LISTS}/own`;
     public static BOOK_STATUSES = '/bookstatuses';
     public static BOOKS = '/books';
+    public static TAGS = '/tags';
 
     public static getPrivateListItemUrl(itemId: number) {
         return `${ApiConfiguration.PRIVATE_LIST}/items/${itemId}`;

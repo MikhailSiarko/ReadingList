@@ -9,7 +9,6 @@ import { RequestResult, AuthenticationData, Credentials } from '../../models';
 import AccountForm from '../../components/AccountForm';
 import { isNullOrEmpty, processFailedRequest } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
-import { withSpinner } from 'src/hoc';
 
 interface Props extends RouteComponentProps<React.HTMLProps<Props>> {
     loading: boolean;
@@ -35,8 +34,7 @@ class Account extends React.Component<Props> {
     }
 
     render() {
-        const Spinnered = withSpinner(!this.props.loading, AccountForm);
-        return <Spinnered onSubmit={this.submitHandler} />;
+        return <AccountForm onSubmit={this.submitHandler} />;
     }
 
     private async submitLogin(email: string, password: string) {

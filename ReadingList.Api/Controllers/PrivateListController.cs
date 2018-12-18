@@ -11,7 +11,7 @@ using ReadingList.Read.Queries;
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [ListRoute("Private")]
+    [ListRoute("private")]
     public class PrivateListController : Controller
     {
         private readonly IDomainService _domainService;

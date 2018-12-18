@@ -108,7 +108,7 @@ export function withContextMenu<P extends React.HTMLProps<HTMLElement>>(
             }
 
             componentWillUnmount() {
-                document.removeEventListener('click', this.hideContextMenu);
+                document.removeEventListener('click', this.handleWindowClick);
                 document.removeEventListener('scroll', this.hideContextMenu);
             }
 

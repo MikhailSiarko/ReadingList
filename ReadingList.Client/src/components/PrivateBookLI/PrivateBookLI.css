@@ -38,6 +38,10 @@
     font-size: 1.8rem;
 }
 
+.edited-status > select {
+    width: 30%;
+}
+
 .edited-footer > div {
     display: inline-block;
     margin: 0.8rem 2rem;

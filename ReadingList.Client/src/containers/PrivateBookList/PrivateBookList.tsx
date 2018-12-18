@@ -5,7 +5,7 @@ import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
-import { withContextMenu, closeContextMenues, withSpinner } from '../../hoc';
+import { withContextMenu, closeContextMenues } from '../../hoc';
 import BookList from '../../components/BookList';
 import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
 import { createPropAction } from '../../utils';
@@ -45,10 +45,10 @@ class PrivateBookList extends React.Component<Props, State> {
     async componentDidMount() {
         if (!this.props.bookList || !this.props.statuses) {
             this.props.loadingStart();
-            if (!this.props.bookList) {
+            if(!this.props.bookList) {
                 await this.props.getList();
             }
-            if (!this.props.statuses) {
+            if(!this.props.statuses) {
                 await this.props.getBookStatuses();
             }
             this.props.loadingEnd();
@@ -123,20 +123,20 @@ class PrivateBookList extends React.Component<Props, State> {
     }
 
     renderLegend = () => (
-        this.props.bookList.isInEditMode ?
+        this.props.bookList && this.props.bookList.isInEditMode ?
             (
                 <PrivateListNameEditor
                     name={this.props.bookList.name}
                     onSave={this.handleUpdateList}
                     onCancel={this.props.switchListEditMode}
                 />
-            ) : this.props.bookList.name
+            ) : this.props.bookList ? this.props.bookList.name : null
     )
 
-    renderPrivateBookListPage = () => {
+    render() {
         let listItems;
 
-        if (this.props.bookList.items.length > 0) {
+        if (this.props.bookList && this.props.bookList.items.length > 0) {
             listItems = this.props.bookList.items.map(this.mapItem);
         }
 
@@ -153,15 +153,6 @@ class PrivateBookList extends React.Component<Props, State> {
                 <ContexedList items={listItems} legend={this.renderLegend()} />
             </>
         );
-    }
-
-    render() {
-        const Spinnered = withSpinner(!this.props.loading && this.isDataLoaded(), this.renderPrivateBookListPage);
-        return <Spinnered />;
-    }
-
-    private isDataLoaded() {
-        return this.props.bookList != null && this.props.statuses != null;
     }
 }
 

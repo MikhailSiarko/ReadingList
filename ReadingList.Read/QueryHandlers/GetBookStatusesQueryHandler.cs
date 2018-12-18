@@ -9,7 +9,7 @@ using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
-    public class BookStatusesQueryHandler : IRequestHandler<GetBookStatuses, IEnumerable<SelectListItem>>
+    public class GetBookStatusesQueryHandler : IRequestHandler<GetBookStatuses, IEnumerable<SelectListItem>>
     {
         public async Task<IEnumerable<SelectListItem>> Handle(GetBookStatuses request,
             CancellationToken cancellationToken)

@@ -4,7 +4,6 @@ import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI';
-import { withSpinner } from '../../hoc';
 import { SharedBookListItem } from '../../models/BookList';
 import Search from '../../components/Search';
 import { Book } from '../../models';
@@ -40,8 +39,7 @@ class SharedBookList extends React.Component<Props, State> {
             const id = parseInt(this.props.match.params.id, 10);
             this.props.loadingStart();
             const list = await this.props.getList(id);
-            this.props.loadingEnd();
-            this.setState({list});
+            this.setState({list}, () => this.props.loadingEnd());
         }
     }
 
@@ -55,9 +53,9 @@ class SharedBookList extends React.Component<Props, State> {
                 copy.items.push(bookItem);
             }
         }
-        this.props.loadingEnd();
+
         if (copy) {
-            this.setState({list: copy});
+            this.setState({list: copy}, () => this.props.loadingEnd());
         }
     }
 
@@ -83,26 +81,23 @@ class SharedBookList extends React.Component<Props, State> {
     mapItem = (item: SharedBookListItem) => <SharedBookLI key={item.id} item={item} />;
 
     render() {
-        const Spinnered = withSpinner(this.state.list && !this.props.loading, () => {
-            if (this.state.list) {
-                return (
-                    <>
-                        {
-                            (this.state.list && this.state.list.editable) && (
-                                <Search
-                                    onSubmit={this.props.findBooks}
-                                    itemRender={this.renderSearchItem}
-                                    onItemClick={this.handleSearchItemClick}
-                                />
-                            )
-                        }
-                        <BookList items={this.state.list.items.map(this.mapItem)} legend={this.renderLegend()} />
-                    </>
-                );
-            }
-            return null;
-        });
-        return <Spinnered />;
+        if (this.state.list) {
+            return (
+                <>
+                    {
+                        (this.state.list && this.state.list.editable) && (
+                            <Search
+                                onSubmit={this.props.findBooks}
+                                itemRender={this.renderSearchItem}
+                                onItemClick={this.handleSearchItemClick}
+                            />
+                        )
+                    }
+                    <BookList items={this.state.list.items.map(this.mapItem)} legend={this.renderLegend()} />
+                </>
+            );
+        }
+        return null;
     }
 }
 

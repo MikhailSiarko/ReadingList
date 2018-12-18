@@ -13,8 +13,14 @@ abstract class ApiService {
         axiosInstance.interceptors.request.use(
             config => config,
             error => {
-                let result = new RequestResult<never>(false, undefined,
-                    error.response ? error.response.data.errorMessage : error.message);
+                let result = new RequestResult<never>(
+                    false,
+                    undefined,
+                    error.response
+                        ? error.response.data ? error.response.data.errorMessage : error.message
+                        : error.message,
+                    error.response ? error.response.status : undefined
+                );
                 return Promise.reject(result);
             }
         );
@@ -26,7 +32,7 @@ abstract class ApiService {
                     false,
                     undefined,
                     error.response
-                        ? error.response.data.errorMessage
+                        ? error.response.data ? error.response.data.errorMessage : error.message
                         : error.message,
                     error.response ? error.response.status : undefined
                 );

@@ -33,7 +33,9 @@ namespace ReadingList.Read
             [typeof(GetPrivateList)] = PrivateListSqlQueries.SelectByLogin,
             [typeof(GetPrivateListItem)] = PrivateItemSqlQueries.SelectById,
             // Book
-            [typeof(FindBooks)] = BookSqlQueries.FindBooks
+            [typeof(FindBooks)] = BookSqlQueries.FindBooks,
+            // Tags
+            [typeof(GetTags)] = TagsSqlQueries.Select
         };
     }
 }

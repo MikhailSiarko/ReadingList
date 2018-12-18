@@ -10,6 +10,7 @@
     font-size: 0;
     z-index: 9999;
     background-color: rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
 }
 
 .add-form:before {
@@ -28,19 +29,35 @@
     height: 50rem;
     text-align: center;
     border-radius: 1rem;
+    padding: 2rem;
 }
 
 .lookup h2 {
+    margin: 2rem;
+    margin-top: 1rem;
     color: black;
     font-size: 2.4rem;
 }
 
-.lookup > div {
-    margin-top: 4rem;
-    margin-bottom: 4rem;
+.buttons-wrapper {
+    margin-top: 25rem;
+    margin-bottom: 0;
 }
 
 .buttons-wrapper > div {
     display: inline-block;
     margin: 1rem 2rem;
+}
+
+.lookup-content {
+    width: 70%;
+    margin: auto;
+}
+
+.lookup-content > div:not(:last-child) {
+    margin-bottom: 4rem;
+}
+
+.lookup-content > div:first-child {
+    margin-top: 4rem;
 }

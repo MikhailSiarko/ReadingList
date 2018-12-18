@@ -41,7 +41,7 @@ class Search extends React.Component<Props, State> {
 
     handleItemClick = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
-        const dataIndex = this.findTarget(event).dataset.itemIndex;
+        const dataIndex = event.currentTarget.dataset.itemIndex;
         const index = parseInt(dataIndex as string, 10);
         await this.props.onItemClick(this.state.searchItems[index]);
         clearTimeout(this.state.timer as NodeJS.Timer);
@@ -84,19 +84,6 @@ class Search extends React.Component<Props, State> {
         if (items) {
             this.setState({searchItems: Array.from(items)});
         }
-    }
-
-    findTarget = (event: React.MouseEvent<HTMLElement>) => {
-        let target = event.target as HTMLElement;
-        let continueIteration = true;
-        while (continueIteration) {
-            if (target.tagName === 'LI') {
-                continueIteration = false;
-            } else {
-                target = target.parentElement as HTMLElement;
-            }
-        }
-        return target;
     }
 
     mapItem = (item: any, index: number) => {
