@@ -11,14 +11,14 @@ import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import { AddForm } from '../../components/AddForm';
 import FixedButton from '../../components/FixedButton';
-import Select from '../../components/Select';
+import MultiSelect from '../../components/MultiSelect';
 import globalStyles from '../../styles/global.css';
 import { TagsService } from '../../services/TagsService';
 
 interface Props extends RouteComponentProps<any> {
     getSharedLists: (query: string) => Promise<SharedBookList[]>;
     getOwnSharedLists: () => Promise<SharedBookList[]>;
-    createList: (data: { name: string, tags: string[] }) => Promise<SharedBookList>;
+    createList: (data: { name: string, tags: SelectListItem[] }) => Promise<SharedBookList>;
     loadingStart: () => void;
     loadingEnd: () => void;
 }
@@ -72,12 +72,14 @@ class SharedBookLists extends React.PureComponent<Props, State> {
     handleListFormSubmit = async (values: NamedValue[]) => {
         this.props.loadingStart();
         const name = values.filter(item => item.name === 'name')[0].value;
-        const tags = values.filter(item => item.name === 'tags')[0].value.replace(' ', '').split(',');
+        const tags = values.filter(item => item.name === 'tags')[0].value;
         const list = await this.props.createList({name, tags});
         const copies = [...(this.state.sharedLists as SharedBookList[])];
-        if (copies) {
+        if (copies && list) {
             copies.push(list);
             this.setState({sharedLists: copies, isFormHidden: true}, () => this.props.loadingEnd());
+        } else {
+            this.setState({isFormHidden: true}, () => this.props.loadingEnd());
         }
     }
 
@@ -104,7 +106,7 @@ class SharedBookLists extends React.PureComponent<Props, State> {
                 <>
                     <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
                     <Grid items={items} />
-                    <FixedButton radius={3} onClick={this.handleButtonClick}>+</FixedButton>
+                    <FixedButton radius={3} title="Create new list" onClick={this.handleButtonClick}>+</FixedButton>
                     <AddForm
                         header={'Add new list'}
                         hidden={this.state.isFormHidden}
@@ -121,11 +123,12 @@ class SharedBookLists extends React.PureComponent<Props, State> {
                             />
                         </div>
                         <div>
-                            <Select
+                            <MultiSelect
                                 name="tags"
                                 placeholder={'Select tags'}
                                 options={this.state.tags as SelectListItem[]}
                                 selectedFormat={item => `#${item.text}`}
+                                addNewIfNotFound={true}
                             />
                         </div>
                     </AddForm>

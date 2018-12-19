@@ -69,6 +69,7 @@ const Register = () => {
                     radius={3}
                     className={applyClasses(globalStyles.disabled, globalStyles.shadowed)}
                     type={'submit'}
+                    title="Submit"
                 >
                     ✓
                 </RoundButton>

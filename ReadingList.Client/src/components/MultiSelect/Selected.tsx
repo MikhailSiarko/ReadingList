@@ -4,14 +4,16 @@ import styles from './Selected.css';
 
 interface Props {
     item: SelectListItem;
-    onRemove: (value: any) => void;
+    onRemove: (option: SelectListItem) => void;
     format?: (item: SelectListItem) => string;
 }
 
 class Selected extends React.PureComponent<Props> {
     handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        this.props.onRemove(this.props.item.value);
+        event.stopPropagation();
+        event.nativeEvent.stopImmediatePropagation();
+        this.props.onRemove(this.props.item);
     }
 
     render() {

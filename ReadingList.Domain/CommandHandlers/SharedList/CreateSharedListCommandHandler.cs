@@ -17,15 +17,11 @@ namespace ReadingList.Domain.CommandHandlers
     {
         private readonly IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>> _listsFetchHandler;
 
-        private readonly IFetchHandler<GetExistingTags, IEnumerable<Tag>> _existingTagsFetchHandler;
-
         public CreateSharedListCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>> listsFetchHandler,
-            IFetchHandler<GetExistingTags, IEnumerable<Tag>> existingTagsFetchHandler)
+            IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>> listsFetchHandler)
             : base(writeService)
         {
             _listsFetchHandler = listsFetchHandler;
-            _existingTagsFetchHandler = existingTagsFetchHandler;
         }
 
         protected override async Task<SharedBookListPreviewDto> Handle(CreateSharedList command)
@@ -50,14 +46,12 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var existingTags = await _existingTagsFetchHandler.Handle(new GetExistingTags(command.Tags));
+            var existingTags = command.Tags
+                .Where(t => t.Id != default(int))
+                .ToList();
 
             var newTags = command.Tags
-                .Where(t => existingTags.All(e => e.Name != t))
-                .Select(t => new Tag
-                {
-                    Name = t
-                })
+                .Where(t => t.Id == default(int))
                 .ToList();
 
             if (newTags.Any())
@@ -76,8 +70,8 @@ namespace ReadingList.Domain.CommandHandlers
                 .Concat(newTags)
                 .Select(t => new SharedBookListTag
                 {
-                    Tag = t,
-                    SharedBookList = list
+                    TagId = t.Id,
+                    SharedBookListId = list.Id
                 })
                 .ToList();
 

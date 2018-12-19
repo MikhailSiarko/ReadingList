@@ -54,10 +54,11 @@ export function processFailedRequest(result: RequestResult<any>, dispatch: Dispa
         dispatch(authenticationActions.signOut());
         dispatch(loadingActions.end());
     } else if (!result.isSucceed) {
+        dispatch(loadingActions.end());
         if(result.status && result.status >= 500) {
-            dispatch(notificationActions.error(result.errorMessage as String));
+            dispatch(notificationActions.error(result.errorMessage as string));
         } else {
-            dispatch(notificationActions.info(result.errorMessage as String));
+            dispatch(notificationActions.info(result.errorMessage as string));
         }
         setTimeout(() => dispatch(notificationActions.hide()), 4000);
     }
@@ -85,8 +86,9 @@ export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promi
         const result = await func(inner);
         if (result.isSucceed && result.data && action) {
             dispatch(action(result.data));
-        } else {
+        } else if (!result.isSucceed) {
             processFailedRequest(result, dispatch);
+            return;
         }
         return result.data as TOut;
     };

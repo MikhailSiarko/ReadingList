@@ -36,11 +36,32 @@
     margin-top: 1rem;
 }
 
-.options input {
+.options > div {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.options > div > input {
     font-size: 1.6rem;
     margin: 0;
     padding: 0.5rem 0;
     border-bottom: 0.1rem #dcdcdc solid;
+}
+
+.options > div > button {
+    position: absolute;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    font-size: 1.6rem;
+    top: 0;
+    right: 2rem;
+    padding: 0.5rem 0;
+    z-index: 2;
+}
+
+.options > div > button:hover {
+    color: green;
 }
 
 .options > ul {

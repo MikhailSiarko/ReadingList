@@ -7,6 +7,7 @@ interface Props {
     radius: number;
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
     wrapperStyle?: React.CSSProperties;
+    title?: string;
 }
 
 const FixedButton: React.SFC<Props> = props => (
@@ -17,6 +18,7 @@ const FixedButton: React.SFC<Props> = props => (
         color={props.color}
         wrapperClassName={style.wrapper}
         wrapperStyle={props.wrapperStyle}
+        title={props.title}
     />
 );
 
