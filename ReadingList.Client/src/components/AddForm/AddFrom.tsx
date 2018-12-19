@@ -33,7 +33,6 @@ export class AddForm extends React.Component<Props> {
             }
         });
         await this.props.onSubmit(values);
-        this.setState({});
     }
 
     resetForm = (event: React.MouseEvent<HTMLButtonElement>) => {

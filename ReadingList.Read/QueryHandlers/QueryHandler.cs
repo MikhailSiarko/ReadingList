@@ -1,10 +1,11 @@
 ﻿using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
 namespace ReadingList.Read.QueryHandlers
 {
-    public abstract class QueryHandler<TQuery, TResult> : AsyncRequestHandler<TQuery, TResult>
+    public abstract class QueryHandler<TQuery, TResult> : IRequestHandler<TQuery, TResult>
         where TQuery : class, IRequest<TResult>
     {
         protected readonly IDbConnection DbConnection;
@@ -14,7 +15,7 @@ namespace ReadingList.Read.QueryHandlers
             DbConnection = dbConnection;
         }
 
-        protected sealed override async Task<TResult> HandleCore(TQuery request)
+        public async Task<TResult> Handle(TQuery request, CancellationToken cancellationToken)
         {
             return await Handle(new SqlQueryContext<TQuery, TResult>(request));
         }

@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public abstract class CommandHandler<TCommand> : AsyncRequestHandler<TCommand>
+    public abstract class CommandHandler<TCommand> : IRequestHandler<TCommand>
         where TCommand : IRequest
     {
         protected readonly IDataStorage WriteService;
@@ -14,15 +15,16 @@ namespace ReadingList.Domain.CommandHandlers
             WriteService = writeService;
         }
 
-        protected sealed override async Task HandleCore(TCommand request)
+        public async Task<Unit> Handle(TCommand request, CancellationToken cancellationToken)
         {
             await Handle(request);
+            return Unit.Value;
         }
 
-        protected abstract Task Handle(TCommand command);
+        protected abstract Task Handle(TCommand request);
     }
 
-    public abstract class CommandHandler<TCommand, TResult> : AsyncRequestHandler<TCommand, TResult>
+    public abstract class CommandHandler<TCommand, TResult> : IRequestHandler<TCommand, TResult>
         where TCommand : IRequest<TResult>
     {
         protected readonly IDataStorage WriteService;
@@ -32,11 +34,11 @@ namespace ReadingList.Domain.CommandHandlers
             WriteService = writeService;
         }
 
-        protected sealed override async Task<TResult> HandleCore(TCommand request)
+        public async Task<TResult> Handle(TCommand request, CancellationToken cancellationToken)
         {
             return await Handle(request);
         }
 
-        protected abstract Task<TResult> Handle(TCommand command);
+        protected abstract Task<TResult> Handle(TCommand request);
     }
 }
