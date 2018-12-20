@@ -3,6 +3,7 @@ interface AddFormStyle {
     ['lookup']: string;
     ['buttons-wrapper']: string;
     ['lookup-content']: string;
+    ['header']: string;
 }
 
 declare const style: AddFormStyle;

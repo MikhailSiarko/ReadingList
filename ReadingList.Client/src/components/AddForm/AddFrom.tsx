@@ -55,12 +55,15 @@ export class AddForm extends React.Component<Props> {
         return (
             <form onSubmit={this.handleSubmit} hidden={this.props.hidden} className={styles['add-form']}>
                 <div className={styles['lookup']}>
-                    <h2>{this.props.header}</h2>
-                    <hr />
+                    <div className={styles.header}>
+                        <h2>{this.props.header}</h2>
+                        <hr />
+                    </div>
                     <div className={styles['lookup-content']}>
                         {this.props.children}
                     </div>
                     <div className={styles['buttons-wrapper']}>
+                        <hr />
                         <RoundButton radius={3} type="submit" title="Submit">✓</RoundButton>
                         <RoundButton
                             radius={3}

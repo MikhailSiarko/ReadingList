@@ -17,4 +17,7 @@
     <ProjectReference Include="..\ReadingList.Models\ReadingList.Models.csproj" />
     <ProjectReference Include="..\ReadingList.Resources\ReadingList.Resources.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="FetchHandlers\GetExistingTagsFetchHandler.cs" />
+  </ItemGroup>
 </Project>

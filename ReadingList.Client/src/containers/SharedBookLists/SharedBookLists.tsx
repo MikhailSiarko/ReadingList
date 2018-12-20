@@ -5,7 +5,7 @@ import { SharedBookList, NamedValue, SelectListItem } from '../../models';
 import { SharedBookListService } from '../../services';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import { createPropActionWithResult, reduceTags } from '../../utils';
+import { createPropActionWithResult } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
@@ -14,6 +14,8 @@ import FixedButton from '../../components/FixedButton';
 import MultiSelect from '../../components/MultiSelect';
 import globalStyles from '../../styles/global.css';
 import { TagsService } from '../../services/TagsService';
+import GridItem from '../../components/Grid/GridItem';
+import { withContextMenu } from '../../hoc';
 
 interface Props extends RouteComponentProps<any> {
     getSharedLists: (query: string) => Promise<SharedBookList[]>;
@@ -84,19 +86,32 @@ class SharedBookLists extends React.PureComponent<Props, State> {
     }
 
     mapList = (list: SharedBookList) => {
-        return {
-            header: list.name,
-            content: (
-                <div>
-                    <p>{reduceTags(list.tags)}</p>
-                    <h4>{list.booksCount} book(s)</h4>
-                </div>
-            ),
-            onClick: () => this.props.history.push(
-                '/shared/' + list.id,
-                {from: this.props.location}
-            )
-        };
+        let actions = [
+            {
+                text: 'Open',
+                onClick: () => this.props.history.push(
+                    '/shared/' + list.id,
+                    {from: this.props.location}
+                )
+            }
+        ];
+
+        let Contexed = withContextMenu(actions, GridItem);
+
+        return (
+            <Contexed
+                key={list.id}
+                header={list.name}
+                tags={list.tags}
+                booksCount={list.booksCount}
+                onClick={
+                    () => this.props.history.push(
+                        '/shared/' + list.id,
+                        {from: this.props.location}
+                    )
+                }
+            />
+        );
     }
 
     render() {

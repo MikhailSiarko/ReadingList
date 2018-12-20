@@ -118,7 +118,14 @@ export function withContextMenu<P extends React.HTMLProps<HTMLElement>>(
                         <Child
                             {...this.props}
                             onContextMenu={this.handleContextMenu}
-                            onClick={this.hideContextMenu}
+                            onClick={
+                                (event) => {
+                                    if(this.props.onClick) {
+                                        this.props.onClick(event);
+                                    }
+                                    this.hideContextMenu();
+                                }
+                            }
                         />
                         <div
                             className={styles['context-menu-wrapper']}
