@@ -27,7 +27,7 @@ namespace ReadingList.Read.QueryHandlers
                                ["Id"] = context.Query.ListId.ToString()
                            });
 
-                var tags = (await reader.ReadAsync<string>()).ToList();
+                var tags = (await reader.ReadAsync<TagDto>()).ToList();
 
                 list.Tags = tags;
 

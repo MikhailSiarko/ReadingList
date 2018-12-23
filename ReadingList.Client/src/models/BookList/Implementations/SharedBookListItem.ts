@@ -2,7 +2,7 @@ import { ListItem } from '..';
 
 export class SharedBookListItem implements ListItem {
     id: number;
-    isOnEditMode: boolean = false;
+    isInEditMode: boolean = false;
     author: string;
     title: string;
     genreId: string;

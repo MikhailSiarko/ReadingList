@@ -20,7 +20,7 @@ namespace ReadingList.Domain.CommandHandlers
         {
         }
 
-        protected override PrivateBookListItemDto Convert(PrivateBookListItem entity)
+        protected override PrivateBookListItemDto Convert(PrivateBookListItem entity, UpdatePrivateListItem command)
         {
             return Mapper.Map<PrivateBookListItem, PrivateBookListItemDto>(entity);
         }

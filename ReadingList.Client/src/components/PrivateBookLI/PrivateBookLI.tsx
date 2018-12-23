@@ -97,7 +97,7 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
 
     render() {
         const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options', 'statuses');
-        if (this.props.listItem.isOnEditMode) {
+        if (this.props.listItem.isInEditMode) {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>

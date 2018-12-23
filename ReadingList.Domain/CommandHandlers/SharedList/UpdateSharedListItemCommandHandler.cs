@@ -16,7 +16,7 @@ namespace ReadingList.Domain.CommandHandlers
         {
         }
 
-        protected override SharedBookListItemDto Convert(SharedBookListItem entity)
+        protected override SharedBookListItemDto Convert(SharedBookListItem entity, UpdateSharedListItem command)
         {
             return Mapper.Map<SharedBookListItem, SharedBookListItemDto>(entity);
         }

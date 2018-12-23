@@ -38,7 +38,7 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
 
     render() {
         const liProps = createDOMAttributeProps(this.props, 'item', 'onSave', 'onCancel');
-        if (this.props.item.isOnEditMode) {
+        if (this.props.item.isInEditMode) {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
                     <form onSubmit={this.onSubmitHandler}>

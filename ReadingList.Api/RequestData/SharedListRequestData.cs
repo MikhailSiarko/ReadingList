@@ -1,4 +1,5 @@
-using ReadingList.Domain.Infrastructure;
+using System.Collections.Generic;
+using ReadingList.Models.Write;
 
 namespace ReadingList.Api.RequestData
 {
@@ -6,6 +7,6 @@ namespace ReadingList.Api.RequestData
     {
         public string Name { get; set; }
 
-        public SelectListItem[] Tags { get; set; }
+        public IEnumerable<Tag> Tags { get; set; }
     }
 }

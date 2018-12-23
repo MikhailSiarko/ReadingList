@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ReadingList.Domain.Infrastructure;
+﻿using System.Collections.Generic;
 using ReadingList.Models.Read;
 using ReadingList.Models.Write;
 
@@ -11,16 +8,12 @@ namespace ReadingList.Domain.Commands
     {
         public readonly string Name;
 
-        public readonly Tag[] Tags;
+        public readonly IEnumerable<Tag> Tags;
 
-        public CreateSharedList(int userId, string name, IEnumerable<SelectListItem> tags) : base(userId)
+        public CreateSharedList(int userId, string name, IEnumerable<Tag> tags) : base(userId)
         {
             Name = name;
-            Tags = tags.Select(t => new Tag
-            {
-                Id = Convert.ToInt32(t.Value),
-                Name = t.Text
-            }).ToArray();
+            Tags = tags;
         }
     }
 }

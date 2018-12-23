@@ -3,7 +3,7 @@ import { ListItem } from '..';
 export class PrivateBookListItem implements ListItem {
     id: number;
     status: number;
-    isOnEditMode: boolean = false;
+    isInEditMode: boolean = false;
     author: string;
     title: string;
     genreId: string;

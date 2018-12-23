@@ -30,7 +30,7 @@ namespace ReadingList.Domain.CommandHandlers
             _itemsFetchHandler = itemsFetchHandler;
         }
 
-        protected override PrivateBookListDto Convert(BookList entity)
+        protected override PrivateBookListDto Convert(BookList entity, UpdatePrivateList command)
         {
             var items = Mapper.Map<IEnumerable<PrivateBookListItem>, IEnumerable<PrivateBookListItemDto>>(
                 _itemsFetchHandler.Handle(new GetItemsByListId(entity.Id)).RunSync()).ToList();

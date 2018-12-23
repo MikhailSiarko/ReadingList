@@ -23,7 +23,7 @@ namespace ReadingList.Read.SqlQueries
                     .ToSql();
 
                 var getTagsSql = new SqlBuilder()
-                    .Select("Name")
+                    .Select("Id", "Name")
                     .From("Tags")
                     .Where("Id IN (" +
                            new SqlBuilder()

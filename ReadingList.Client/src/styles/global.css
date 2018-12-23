@@ -102,6 +102,7 @@ textarea::placeholder {
     position: fixed;
     background: white;
     box-shadow: 0 0.2rem 1rem #999999;
+    z-index: 9999;
 }
 
 .context-menu button {

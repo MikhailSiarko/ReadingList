@@ -25,14 +25,13 @@ interface State {
     selectOptions: JSX.Element[];
 }
 
-class MultipleSelect extends React.PureComponent<Props, State> {
+class MultipleSelect extends React.Component<Props, State> {
     wrapper: HTMLDivElement;
     searchInput: HTMLInputElement;
     select: HTMLSelectElement;
 
     constructor(props: Props) {
         super(props);
-
         this.state = this.createStateWithDefault();
     }
 
@@ -60,7 +59,7 @@ class MultipleSelect extends React.PureComponent<Props, State> {
         const value = this.props.value as SelectListItem[];
         if(value) {
             chosenOptions = this.props.options.filter(
-                o => value.every(this.buildTextPredicate(o, true))
+                o => value.some(this.buildTextPredicate(o, true))
             );
             options = this.props.options.filter(i => value.every(this.buildTextPredicate(i)));
         }
@@ -140,10 +139,12 @@ class MultipleSelect extends React.PureComponent<Props, State> {
     }
 
     buildTextPredicate(item1: SelectListItem, equal: boolean = false) {
-        return function(item2: SelectListItem) {
-            if(equal) {
+        if(equal) {
+            return function(item2: SelectListItem) {
                 return item2.text === item1.text;
-            }
+            };
+        }
+        return function(item2: SelectListItem) {
             return item2.text !== item1.text;
         };
     }

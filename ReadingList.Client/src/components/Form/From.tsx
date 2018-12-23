@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Colors from 'src/styles/colors';
-import styles from './AddForm.css';
+import styles from './Form.css';
 import RoundButton from '../RoundButton';
 import { NamedValue } from '../../models';
 import { isNullOrEmpty } from '../../utils';
@@ -8,11 +8,15 @@ import { isNullOrEmpty } from '../../utils';
 interface Props {
     header: string | JSX.Element;
     hidden: boolean;
+    size?: {
+        width: string;
+        height: string;
+    };
     onSubmit: (values: NamedValue[]) => Promise<void>;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export class AddForm extends React.Component<Props> {
+export class Form extends React.Component<Props> {
     handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
@@ -53,8 +57,15 @@ export class AddForm extends React.Component<Props> {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit} hidden={this.props.hidden} className={styles['add-form']}>
-                <div className={styles['lookup']}>
+            <form
+                onSubmit={this.handleSubmit}
+                hidden={this.props.hidden}
+                className={styles['form']}
+            >
+                <div
+                    className={styles['lookup']}
+                    style={this.props.size ? this.props.size : undefined}
+                >
                     <div className={styles.header}>
                         <h2>{this.props.header}</h2>
                         <hr />

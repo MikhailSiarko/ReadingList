@@ -21,10 +21,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             await WriteService.SaveAsync(entity);
 
-            return Convert(entity);
+            return Convert(entity, command);
         }
 
-        protected abstract TDto Convert(TEntity entity);
+        protected abstract TDto Convert(TEntity entity, TCommand command);
 
         protected abstract void Update(TEntity entity, TCommand command);
 

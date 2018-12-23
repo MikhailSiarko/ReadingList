@@ -38,6 +38,9 @@ namespace ReadingList.Write
                     GetPrivateListByUserIdFetchHandler>();
 
             services
+                .AddTransient<IFetchHandler<GetListAccessForUser, bool>, GetListAccessForUserFetchHandler>();
+
+            services
                 .AddTransient<IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>>,
                     GetSharedListsByUserIdFetchHandler>();
 

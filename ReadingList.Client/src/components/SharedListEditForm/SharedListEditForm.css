@@ -1,0 +1,14 @@
+.edit-form > div {
+    display: inline-block;
+    margin: 0 1rem;
+}
+
+.name-editor {
+    width: 25rem;
+}
+
+.tags-select {
+    position: relative;
+    top: 1rem;
+    width: 25rem;
+}

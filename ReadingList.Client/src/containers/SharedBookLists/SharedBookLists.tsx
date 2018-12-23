@@ -1,7 +1,7 @@
 import * as React from 'react';
 import SharedListSearch from '../../components/SharedListSearch';
 import Grid from '../../components/Grid';
-import { SharedBookList, NamedValue, SelectListItem } from '../../models';
+import { NamedValue, SelectListItem, SharedBookListPreview } from '../../models';
 import { SharedBookListService } from '../../services';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
@@ -9,57 +9,76 @@ import { createPropActionWithResult } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
-import { AddForm } from '../../components/AddForm';
+import { Form } from '../../components/Form';
 import FixedButton from '../../components/FixedButton';
-import MultiSelect from '../../components/MultiSelect';
-import globalStyles from '../../styles/global.css';
 import { TagsService } from '../../services/TagsService';
-import GridItem from '../../components/Grid/GridItem';
+import ListGridItem from '../../components/Grid/ListGridItem';
 import { withContextMenu } from '../../hoc';
+import CreateSharedList from '../../components/CreateSharedList';
+import { Tag } from '../../models/Tag';
 
 interface Props extends RouteComponentProps<any> {
-    getSharedLists: (query: string) => Promise<SharedBookList[]>;
-    getOwnSharedLists: () => Promise<SharedBookList[]>;
-    createList: (data: { name: string, tags: SelectListItem[] }) => Promise<SharedBookList>;
+    getSharedLists: (query: string) => Promise<SharedBookListPreview[]>;
+    getOwnSharedLists: () => Promise<SharedBookListPreview[]>;
+    createList: (data: { name: string, tags: Tag[] }) => Promise<SharedBookListPreview>;
+    getTags: () => Promise<Tag[]>;
     loadingStart: () => void;
     loadingEnd: () => void;
 }
 
 interface State {
-    sharedLists: SharedBookList[] | null;
+    sharedLists: SharedBookListPreview[] | null;
     tags: SelectListItem[] | null;
     isFormHidden: boolean;
+    dataFetched: boolean;
 }
 
-class SharedBookLists extends React.PureComponent<Props, State> {
+class SharedBookLists extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = {sharedLists: null, isFormHidden: true, tags: null};
+        this.state = {
+            sharedLists: null,
+            isFormHidden: true,
+            tags: null,
+            dataFetched: false
+        };
     }
 
     searchHandler = async (query: string) => {
-        this.props.loadingStart();
-        const lists = await this.props.getSharedLists(query);
-        this.setState({sharedLists: lists}, () => this.props.loadingEnd());
+        this.props.history.push('/shared/search/' + encodeURIComponent(query), {from: this.props.location});
     }
 
     async componentDidMount() {
-        let lists: SharedBookList[] | null = null;
-        let tags: SelectListItem[] | null = null;
         this.props.loadingStart();
-        if (this.state.sharedLists === null) {
-            lists = await this.props.getSharedLists('');
-        }
 
-        if(this.state.tags === null) {
-            let result = await new TagsService().getTags();
-            if(result.data) {
-                tags = result.data;
-            }
-        }
+        const query = this.props.match.params.query ? this.props.match.params.query : '';
+        let lists = await this.props.getSharedLists(decodeURIComponent(query));
 
-        if(lists || tags) {
-            this.setState({sharedLists: lists, tags: tags}, () => this.props.loadingEnd());
+        let tags = await this.props.getTags();
+
+        if(lists && tags) {
+            this.setState(
+                {
+                    sharedLists: lists,
+                    tags: tags.map(t => {
+                        return {
+                            text: t.name,
+                            value: t.id
+                        };
+                    }),
+                    dataFetched: true
+                },
+                () => this.props.loadingEnd()
+            );
+        }
+    }
+
+    async componentDidUpdate(prevProps: Props) {
+        if(prevProps.match.params.query !== this.props.match.params.query) {
+            this.props.loadingStart();
+            const query = this.props.match.params.query ? this.props.match.params.query : '';
+            const lists = await this.props.getSharedLists(decodeURIComponent(query));
+            this.setState({sharedLists: lists}, () => this.props.loadingEnd());
         }
     }
 
@@ -74,9 +93,19 @@ class SharedBookLists extends React.PureComponent<Props, State> {
     handleListFormSubmit = async (values: NamedValue[]) => {
         this.props.loadingStart();
         const name = values.filter(item => item.name === 'name')[0].value;
-        const tags = values.filter(item => item.name === 'tags')[0].value;
-        const list = await this.props.createList({name, tags});
-        const copies = [...(this.state.sharedLists as SharedBookList[])];
+        const tags = values.filter(item => item.name === 'tags')[0].value as SelectListItem[];
+        const list = await this.props.createList(
+            {
+                name,
+                tags: tags.map(i => {
+                    return {
+                        id: i.value,
+                        name: i.text
+                    };
+                })
+            }
+        );
+        const copies = [...(this.state.sharedLists as SharedBookListPreview[])];
         if (copies && list) {
             copies.push(list);
             this.setState({sharedLists: copies, isFormHidden: true}, () => this.props.loadingEnd());
@@ -85,18 +114,19 @@ class SharedBookLists extends React.PureComponent<Props, State> {
         }
     }
 
-    mapList = (list: SharedBookList) => {
+    mapList = (list: SharedBookListPreview) => {
+        const openList = () => this.props.history.push(
+            '/shared/' + list.id,
+            {from: this.props.location}
+        );
         let actions = [
             {
                 text: 'Open',
-                onClick: () => this.props.history.push(
-                    '/shared/' + list.id,
-                    {from: this.props.location}
-                )
+                onClick: openList
             }
         ];
 
-        let Contexed = withContextMenu(actions, GridItem);
+        let Contexed = withContextMenu(actions, ListGridItem);
 
         return (
             <Contexed
@@ -104,49 +134,27 @@ class SharedBookLists extends React.PureComponent<Props, State> {
                 header={list.name}
                 tags={list.tags}
                 booksCount={list.booksCount}
-                onClick={
-                    () => this.props.history.push(
-                        '/shared/' + list.id,
-                        {from: this.props.location}
-                    )
-                }
+                onClick={openList}
             />
         );
     }
 
     render() {
-        if (this.state.sharedLists) {
-            const items = this.state.sharedLists.map(this.mapList);
+        if (this.state.dataFetched) {
+            const items = (this.state.sharedLists as SharedBookListPreview[]).map(this.mapList);
             return (
                 <>
                     <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
                     <Grid items={items} />
                     <FixedButton radius={3} title="Create new list" onClick={this.handleButtonClick}>+</FixedButton>
-                    <AddForm
+                    <Form
                         header={'Add new list'}
                         hidden={this.state.isFormHidden}
                         onSubmit={this.handleListFormSubmit}
                         onCancel={this.handleCancel}
                     >
-                        <div>
-                            <input
-                                type="text"
-                                name="name"
-                                required={true}
-                                placeholder="Enter the name..."
-                                className={globalStyles.shadowed}
-                            />
-                        </div>
-                        <div>
-                            <MultiSelect
-                                name="tags"
-                                placeholder={'Select tags'}
-                                options={this.state.tags as SelectListItem[]}
-                                selectedFormat={item => `#${item.text}`}
-                                addNewIfNotFound={true}
-                            />
-                        </div>
-                    </AddForm>
+                        <CreateSharedList tags={this.state.tags as SelectListItem[]} />
+                    </Form>
                 </>
             );
         }
@@ -160,6 +168,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         getSharedLists: createPropActionWithResult(bookService.getLists, dispatch),
         getOwnSharedLists: createPropActionWithResult(bookService.getOwnLists, dispatch),
         createList: createPropActionWithResult(bookService.createList, dispatch),
+        getTags: createPropActionWithResult(new TagsService().getTags, dispatch),
         loadingStart: () => {
             dispatch(loadingActions.start());
         },

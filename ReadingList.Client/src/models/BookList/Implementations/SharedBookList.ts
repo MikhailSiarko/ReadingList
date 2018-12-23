@@ -1,5 +1,6 @@
 import { List } from '..';
 import { SharedBookListItem } from './SharedBookListItem';
+import { Tag } from '../../Tag';
 
 export class SharedBookList implements List<SharedBookListItem> {
     isInEditMode: boolean = false;
@@ -7,7 +8,7 @@ export class SharedBookList implements List<SharedBookListItem> {
     id: number;
     items: SharedBookListItem[];
     type: number;
-    tags: string[];
+    tags: Tag[];
     booksCount: number;
     editable: boolean;
 }

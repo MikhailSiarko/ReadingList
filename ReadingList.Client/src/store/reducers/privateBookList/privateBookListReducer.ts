@@ -42,7 +42,7 @@ export function privateBookListReducer(state: RootState.Private = initialState.p
             if (copy.list) {
                 copy.list.items.forEach((listItem: PrivateBookListItem) => {
                     if (listItem.id === action.itemId) {
-                        listItem.isOnEditMode = !listItem.isOnEditMode;
+                        listItem.isInEditMode = !listItem.isInEditMode;
                     }
                 });
             }

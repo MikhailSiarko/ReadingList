@@ -16,7 +16,6 @@ import { BookService } from '../../services/BookService';
 import BookSearchItem from '../../components/BookSearchItem';
 
 interface Props extends RouteComponentProps<any> {
-    loading: boolean;
     bookList: PrivateList;
     statuses: SelectListItem[];
     addItem: (bookId: number) => Promise<void>;
@@ -32,14 +31,9 @@ interface Props extends RouteComponentProps<any> {
     findBooks: (query: string) => Promise<Book[]>;
 }
 
-interface State {
-    isFormHidden: boolean;
-}
-
-class PrivateBookList extends React.Component<Props, State> {
+class PrivateBookList extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
-        this.state = {isFormHidden: true};
     }
 
     async componentDidMount() {
@@ -159,8 +153,7 @@ class PrivateBookList extends React.Component<Props, State> {
 function mapStateToProps(state: RootState) {
     return {
         bookList: state.private.list,
-        statuses: state.private.bookStatuses,
-        loading: state.loading
+        statuses: state.private.bookStatuses
     };
 }
 

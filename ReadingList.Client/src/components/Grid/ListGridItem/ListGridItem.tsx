@@ -1,15 +1,15 @@
 import * as React from 'react';
-import styles from './GridItem.css';
+import styles from './ListGridItem.css';
 import globalStyles from '../../../styles/global.css';
 import { applyClasses, reduceTags, createDOMAttributeProps } from '../../../utils';
 
-export interface GridItemProps extends React.HTMLProps<HTMLDivElement> {
+export interface ListGridItemProps extends React.HTMLProps<HTMLDivElement> {
     header: string;
     tags: string[];
     booksCount: number;
 }
 
-const GridItem: React.SFC<GridItemProps> = props => {
+const ListGridItem: React.SFC<ListGridItemProps> = props => {
     const newProps = createDOMAttributeProps(props, 'header', 'tags', 'booksCount');
     return (
         <div
@@ -24,4 +24,4 @@ const GridItem: React.SFC<GridItemProps> = props => {
     );
 };
 
-export default GridItem;
+export default ListGridItem;
