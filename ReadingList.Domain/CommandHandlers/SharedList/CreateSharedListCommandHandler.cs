@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Queries;
+using ReadingList.Domain.Infrastructure.Specifications;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Models.Read;
 using ReadingList.Models.Write;
@@ -15,13 +14,8 @@ namespace ReadingList.Domain.CommandHandlers
 {
     public class CreateSharedListCommandHandler : CommandHandler<CreateSharedList, SharedBookListPreviewDto>
     {
-        private readonly IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>> _listsFetchHandler;
-
-        public CreateSharedListCommandHandler(IDataStorage writeService,
-            IFetchHandler<GetSharedListsByUserId, IEnumerable<BookList>> listsFetchHandler)
-            : base(writeService)
+        public CreateSharedListCommandHandler(IDataStorage writeService) : base(writeService)
         {
-            _listsFetchHandler = listsFetchHandler;
         }
 
         protected override async Task<SharedBookListPreviewDto> Handle(CreateSharedList command)
@@ -36,9 +30,9 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var lists = await _listsFetchHandler.Handle(new GetSharedListsByUserId(command.UserId));
+            var listNameSpecification = new SharedListNameSpecification(user);
 
-            if (lists.Any(x => x.Name == command.Name))
+            if (!listNameSpecification.SatisfiedBy(command.Name))
             {
                 throw new ObjectAlreadyExistsException<BookList>(new OnExceptionObjectDescriptor
                 {

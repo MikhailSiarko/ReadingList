@@ -7,13 +7,13 @@ import { privateBookListAction } from '../../store/actions/privateBookList';
 import { PrivateBookListService } from '../../services';
 import { withContextMenu, closeContextMenues } from '../../hoc';
 import BookList from '../../components/BookList';
-import PrivateListNameEditor from '../../components/PrivateListNameEditForm';
+import PrivateListEditor from '../../components/PrivateListEditForm';
 import { createPropAction } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
-import Search from '../../components/Search';
 import { BookService } from '../../services/BookService';
-import BookSearchItem from '../../components/BookSearchItem';
+import FixedButton from '../../components/FixedButton';
+import AddBookForm from '../../components/AddBookForm';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;
@@ -31,9 +31,20 @@ interface Props extends RouteComponentProps<any> {
     findBooks: (query: string) => Promise<Book[]>;
 }
 
-class PrivateBookList extends React.Component<Props> {
+interface State {
+    isFormHidden: boolean;
+    books: Book[] | null;
+    bookSearchQuery: string | null;
+}
+
+class PrivateBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
+        this.state = {
+            isFormHidden: true,
+            books: null,
+            bookSearchQuery: null
+        };
     }
 
     async componentDidMount() {
@@ -67,19 +78,11 @@ class PrivateBookList extends React.Component<Props> {
         };
     }
 
-    handleSearchItemClick = async (item: Book) => {
-        this.props.loadingStart();
-        await this.props.addItem(item.id);
-        this.props.loadingEnd();
-    }
-
     handleUpdateList = async (newName: string) => {
         this.props.loadingStart();
         await this.props.updateList({name: newName} as PrivateList);
         this.props.loadingEnd();
     }
-
-    renderSearchItem = (item: Book) => <BookSearchItem book={item} />;
 
     handleUpdateItem = async (item: PrivateBookListItem) => {
         this.props.loadingStart();
@@ -119,13 +122,64 @@ class PrivateBookList extends React.Component<Props> {
     renderLegend = () => (
         this.props.bookList && this.props.bookList.isInEditMode ?
             (
-                <PrivateListNameEditor
+                <PrivateListEditor
                     name={this.props.bookList.name}
                     onSave={this.handleUpdateList}
                     onCancel={this.props.switchListEditMode}
                 />
-            ) : this.props.bookList ? this.props.bookList.name : null
+            ) : this.props.bookList
+                ? (
+                    <h3 style={{fontWeight: 400, margin: 0}}>
+                        {this.props.bookList.name.toUpperCase()}
+                    </h3>
+                )
+                : null
     )
+
+    closeForm = (event: React.MouseEvent<HTMLButtonElement>) => {
+        this.setState({
+            isFormHidden: true,
+            books: null,
+            bookSearchQuery: null
+        });
+    }
+
+    showBooksForm = async () => {
+        this.props.loadingStart();
+        const books = await this.props.findBooks('');
+        if(books) {
+            this.setState({
+                books,
+                isFormHidden: false
+            }, () => this.props.loadingEnd());
+        } else {
+            this.setState({
+                isFormHidden: false
+            }, () => this.props.loadingEnd());
+        }
+    }
+
+    handleSearchChange = async (query: string) => {
+        this.props.loadingStart();
+        const books = await this.props.findBooks(query);
+        if(books) {
+            this.setState({
+                books,
+                bookSearchQuery: query
+            }, () => this.props.loadingEnd());
+        } else {
+            this.props.loadingEnd();
+        }
+    }
+
+    handleAddBook = async (id: number) => {
+        this.props.loadingStart();
+        await this.props.addItem(id);
+        this.setState({
+            books: null,
+            isFormHidden: true
+        }, () => this.props.loadingEnd());
+    }
 
     render() {
         let listItems;
@@ -139,12 +193,16 @@ class PrivateBookList extends React.Component<Props> {
 
         return (
             <>
-                <Search
-                    onSubmit={this.props.findBooks}
-                    itemRender={this.renderSearchItem}
-                    onItemClick={this.handleSearchItemClick}
-                />
                 <ContexedList items={listItems} legend={this.renderLegend()} />
+                <FixedButton radius={3} title="Add book" onClick={this.showBooksForm}>+</FixedButton>
+                <AddBookForm
+                    hidden={this.state.isFormHidden}
+                    books={this.state.books ? this.state.books : []}
+                    searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
+                    onSubmit={this.handleAddBook}
+                    onCancel={this.closeForm}
+                    onQueryChange={this.handleSearchChange}
+                />
             </>
         );
     }

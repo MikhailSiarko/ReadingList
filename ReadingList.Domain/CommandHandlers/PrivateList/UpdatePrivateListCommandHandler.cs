@@ -49,9 +49,12 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected override async Task<BookList> GetEntity(UpdatePrivateList command)
         {
-            var list = await _listFetchHandler.Handle(new GetPrivateListByUserId(command.UserId));
+            return await _listFetchHandler.Handle(new GetPrivateListByUserId(command.UserId));
+        }
 
-            if (list == null)
+        protected override Task Validate(BookList entity, UpdatePrivateList command)
+        {
+            if (entity == null)
             {
                 throw new ObjectNotExistForException<BookList, User>(null, new OnExceptionObjectDescriptor
                 {
@@ -59,7 +62,7 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            return list;
+            return Task.CompletedTask;
         }
     }
 }

@@ -79,9 +79,12 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected override async Task<BookList> GetEntity(UpdateSharedList command)
         {
-            var list = await WriteService.GetAsync<BookList>(command.ListId);
+            return await WriteService.GetAsync<BookList>(command.ListId);
+        }
 
-            if (list == null)
+        protected override async Task Validate(BookList entity, UpdateSharedList command)
+        {
+            if (entity == null)
             {
                 throw new ObjectNotExistForException<BookList, User>(null, new OnExceptionObjectDescriptor
                 {
@@ -89,14 +92,24 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var accessSpecification = new BookListAccessSpecification(list);
+            var accessSpecification = new BookListAccessSpecification(entity);
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
                 throw new AccessDeniedException();
             }
 
-            return list;
+            var user = await WriteService.GetAsync<User>(command.UserId);
+
+            var listNameSpecification = new SharedListNameSpecification(user);
+
+            if (!listNameSpecification.SatisfiedBy(command.Name))
+            {
+                throw new ObjectAlreadyExistsException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Name"] = command.Name
+                });
+            }
         }
     }
 }

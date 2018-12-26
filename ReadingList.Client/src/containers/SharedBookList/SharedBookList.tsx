@@ -5,7 +5,6 @@ import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI';
 import { SharedBookListItem, SelectListItem } from '../../models/BookList';
-import Search from '../../components/Search';
 import { Book } from '../../models';
 import { RootState } from '../../store/reducers';
 import { connect, Dispatch } from 'react-redux';
@@ -13,11 +12,12 @@ import { SharedBookListService } from '../../services';
 import { BookService } from '../../services/BookService';
 import { cloneDeep } from 'lodash';
 import { reduceTags, processFailedRequest } from '../../utils';
-import BookSearchItem from '../../components/BookSearchItem';
 import { withContextMenu } from '../../hoc';
 import SharedListEditForm from '../../components/SharedListEditForm';
 import { TagsService } from '../../services/TagsService';
 import { Tag } from '../../models/Tag';
+import FixedButton from '../../components/FixedButton';
+import AddBookForm from '../../components/AddBookForm/AddBookForm';
 
 interface Props extends RouteComponentProps<any> {
     getList: (id: number) => Promise<SharedList>;
@@ -33,12 +33,22 @@ interface State {
     list: SharedList | null;
     isInEditMode: boolean;
     options: SelectListItem[] | null;
+    isFormHidden: boolean;
+    books: Book[] | null;
+    bookSearchQuery: string | null;
 }
 
 class SharedBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.state = {list: null, isInEditMode: false, options: null};
+        this.state = {
+            list: null,
+            isInEditMode: false,
+            options: null,
+            bookSearchQuery: null,
+            books: null,
+            isFormHidden: true
+        };
     }
 
     async componentDidMount() {
@@ -82,17 +92,21 @@ class SharedBookList extends React.Component<Props, State> {
         const list = this.state.list as SharedList;
         this.props.loadingStart();
         const updatedList = await this.props.updateList(list.id, name, assignedTags);
-        let options = this.state.options as SelectListItem[];
-        if(assignedTags.some(t => t.id.toString() === '0')) {
-            const tags = await this.props.getTags();
-            options = tags.map(o => {
-                return {
-                    value: o.id,
-                    text: o.name
-                };
-            });
+        if(updatedList) {
+            let options = this.state.options as SelectListItem[];
+            if(assignedTags.some(t => t.id.toString() === '0')) {
+                const tags = await this.props.getTags();
+                options = tags.map(o => {
+                    return {
+                        value: o.id,
+                        text: o.name
+                    };
+                });
+            }
+            this.setState({list: updatedList, isInEditMode: false, options: options}, () => this.props.loadingEnd());
+        } else {
+            this.props.loadingEnd();
         }
-        this.setState({list: updatedList, isInEditMode: false, options: options}, () => this.props.loadingEnd());
     }
 
     switchToEditMode = () => {
@@ -102,7 +116,7 @@ class SharedBookList extends React.Component<Props, State> {
     renderLegend = () => {
         if (this.state.list) {
             if(this.state.isInEditMode) {
-                return ( 
+                return (
                     <SharedListEditForm
                         tags={this.state.list.tags}
                         name={this.state.list.name}
@@ -114,7 +128,7 @@ class SharedBookList extends React.Component<Props, State> {
             }
             return (
                 <div>
-                    <h4 style={{margin: 0}}>{this.state.list.name}</h4>
+                    <h4 style={{margin: 0, fontWeight: 400}}>{this.state.list.name.toUpperCase()}</h4>
                     <p style={{margin: 0}}>
                         {
                             reduceTags(this.state.list.tags.map(i => i.name))
@@ -127,11 +141,74 @@ class SharedBookList extends React.Component<Props, State> {
         }
     }
 
-    renderSearchItem = (item: Book) => <BookSearchItem book={item} />;
-
     mapItem = (item: SharedBookListItem) => {
         const Contexed = withContextMenu([], SharedBookLI);
         return <Contexed key={item.id} item={item} />;
+    }
+
+    closeForm = (event: React.MouseEvent<HTMLButtonElement>) => {
+        this.setState({
+            isFormHidden: true,
+            books: null,
+            bookSearchQuery: null
+        });
+    }
+
+    showBooksForm = async () => {
+        this.props.loadingStart();
+        const books = await this.props.findBooks('');
+        if(books) {
+            this.setState({
+                books,
+                isFormHidden: false
+            }, () => this.props.loadingEnd());
+        } else {
+            this.setState({
+                isFormHidden: false
+            }, () => this.props.loadingEnd());
+        }
+    }
+
+    handleSearchChange = async (query: string) => {
+        this.props.loadingStart();
+        const books = await this.props.findBooks(query);
+        if(books) {
+            this.setState({
+                books,
+                bookSearchQuery: query
+            }, () => this.props.loadingEnd());
+        } else {
+            this.props.loadingEnd();
+        }
+    }
+
+    handleAddBook = async (id: number) => {
+        if (this.state.list) {
+            this.props.loadingStart();
+            const bookItem = await this.props.addItem(this.state.list.id, id);
+            if(bookItem) {
+                let copy = cloneDeep(this.state.list);
+                copy.items.push(bookItem);
+                if (copy) {
+                    this.setState(
+                        {
+                            list: copy,
+                            books: null,
+                            isFormHidden: true
+                        },
+                        () => this.props.loadingEnd()
+                    );
+                }
+            } else {
+                this.setState(
+                    {
+                        books: null,
+                        isFormHidden: true
+                    },
+                    () => this.props.loadingEnd()
+                );
+            }
+        }
     }
 
     render() {
@@ -149,16 +226,26 @@ class SharedBookList extends React.Component<Props, State> {
         if (this.state.list) {
             return (
                 <>
+                    <Contexed items={this.state.list.items.map(this.mapItem)} legend={this.renderLegend()} />
                     {
-                        (this.state.list && this.state.list.editable) && (
-                            <Search
-                                onSubmit={this.props.findBooks}
-                                itemRender={this.renderSearchItem}
-                                onItemClick={this.handleSearchItemClick}
-                            />
+                        this.state.list.editable && (
+                            <>
+                                <FixedButton
+                                    radius={3}
+                                    title="Add book"
+                                    onClick={this.showBooksForm}
+                                >+</FixedButton>
+                                <AddBookForm
+                                    hidden={this.state.isFormHidden}
+                                    books={this.state.books ? this.state.books : []}
+                                    searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
+                                    onSubmit={this.handleAddBook}
+                                    onCancel={this.closeForm}
+                                    onQueryChange={this.handleSearchChange}
+                                />
+                            </>
                         )
                     }
-                    <Contexed items={this.state.list.items.map(this.mapItem)} legend={this.renderLegend()} />
                 </>
             );
         }

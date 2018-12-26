@@ -17,6 +17,8 @@ namespace ReadingList.Domain.CommandHandlers
         {
             var entity = await GetEntity(command);
 
+            await Validate(entity, command);
+
             Update(entity, command);
 
             await WriteService.SaveAsync(entity);
@@ -29,5 +31,7 @@ namespace ReadingList.Domain.CommandHandlers
         protected abstract void Update(TEntity entity, TCommand command);
 
         protected abstract Task<TEntity> GetEntity(TCommand command);
+
+        protected abstract Task Validate(TEntity entity, TCommand command);
     }
 }

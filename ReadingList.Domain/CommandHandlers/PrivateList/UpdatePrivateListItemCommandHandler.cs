@@ -36,9 +36,12 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected override async Task<PrivateBookListItem> GetEntity(UpdatePrivateListItem command)
         {
-            var item = await WriteService.GetAsync<PrivateBookListItem>(command.ItemId);
+            return await WriteService.GetAsync<PrivateBookListItem>(command.ItemId);
+        }
 
-            if (item == null)
+        protected override Task Validate(PrivateBookListItem entity, UpdatePrivateListItem command)
+        {
+            if (entity == null)
             {
                 throw new ObjectNotExistException<PrivateBookListItem>(new OnExceptionObjectDescriptor
                 {
@@ -46,16 +49,16 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var accessSpecification = new BookListAccessSpecification(item.BookList);
+            var accessSpecification = new BookListAccessSpecification(entity.BookList);
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
                 throw new AccessDeniedException();
             }
 
-            PrivateBookListItemStatusValidator.Validate(item.Status, (BookItemStatus) command.Status);
+            PrivateBookListItemStatusValidator.Validate(entity.Status, (BookItemStatus) command.Status);
 
-            return item;
+            return Task.CompletedTask;
         }
     }
 }

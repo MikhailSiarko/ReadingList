@@ -2,7 +2,7 @@ import * as React from 'react';
 import Colors from '../../styles/colors';
 import globalStyles from '../../styles/global.css';
 import RoundButton from '../RoundButton';
-import style from './PrivateListNameEditor.css';
+import style from './PrivateListEditor.css';
 
 interface Props {
     name: string;
@@ -10,7 +10,7 @@ interface Props {
     onCancel: () => void;
 }
 
-class PrivateListNameEditForm extends React.Component<Props> {
+class PrivateListEditForm extends React.Component<Props> {
     submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
@@ -46,4 +46,4 @@ class PrivateListNameEditForm extends React.Component<Props> {
     }
 }
 
-export default PrivateListNameEditForm;
+export default PrivateListEditForm;

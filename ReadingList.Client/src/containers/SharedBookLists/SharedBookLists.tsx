@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SharedListSearch from '../../components/SharedListSearch';
+import SimpletSearch from '../../components/SimpleSearch';
 import Grid from '../../components/Grid';
 import { NamedValue, SelectListItem, SharedBookListPreview } from '../../models';
 import { SharedBookListService } from '../../services';
@@ -144,7 +144,7 @@ class SharedBookLists extends React.Component<Props, State> {
             const items = (this.state.sharedLists as SharedBookListPreview[]).map(this.mapList);
             return (
                 <>
-                    <SharedListSearch query={this.props.match.params.query} onSubmit={this.searchHandler} />
+                    <SimpletSearch query={this.props.match.params.query} onChange={this.searchHandler} />
                     <Grid items={items} />
                     <FixedButton radius={3} title="Create new list" onClick={this.handleButtonClick}>+</FixedButton>
                     <Form

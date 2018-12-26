@@ -33,7 +33,8 @@ namespace ReadingList.Read.QueryHandlers.Book
                     Id = row.Id,
                     Author = row.Author,
                     Title = row.Title,
-                    Tags = tags
+                    Tags = tags,
+                    Genre = row.Genre
                 });
             }
 
@@ -49,6 +50,8 @@ namespace ReadingList.Read.QueryHandlers.Book
             public string Title { get; set; }
 
             public string Tag { get; set; }
+
+            public string Genre { get; set; }
         }
     }
 }

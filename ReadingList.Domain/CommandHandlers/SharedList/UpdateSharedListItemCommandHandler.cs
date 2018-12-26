@@ -51,5 +51,25 @@ namespace ReadingList.Domain.CommandHandlers
 
             return item;
         }
+
+        protected override Task Validate(SharedBookListItem entity, UpdateSharedListItem command)
+        {
+            if (entity == null)
+            {
+                throw new ObjectNotExistException<SharedBookListItem>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = command.ItemId.ToString()
+                });
+            }
+
+            var accessSpecification = new BookListAccessSpecification(entity.BookList);
+
+            if (!accessSpecification.SatisfiedBy(command.UserId))
+            {
+                throw new AccessDeniedException();
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }

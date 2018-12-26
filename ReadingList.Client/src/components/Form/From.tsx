@@ -39,22 +39,6 @@ export class Form extends React.Component<Props> {
         await this.props.onSubmit(values);
     }
 
-    resetForm = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        const button = event.target as HTMLButtonElement;
-        if (button.form) {
-            const nameInput = button.form.elements.namedItem('name') as HTMLInputElement;
-            const tagsInput = button.form.elements.namedItem('tags') as HTMLInputElement;
-            if (nameInput && tagsInput) {
-                nameInput.value = '';
-                tagsInput.value = '';
-            }
-        }
-        if (this.props.onCancel) {
-            this.props.onCancel(event);
-        }
-    }
-
     render() {
         return (
             <form
@@ -78,7 +62,7 @@ export class Form extends React.Component<Props> {
                         <RoundButton radius={3} type="submit" title="Submit">✓</RoundButton>
                         <RoundButton
                             radius={3}
-                            onClick={this.resetForm}
+                            onClick={this.props.onCancel}
                             color={Colors.Red}
                             title="Cancel"
                         >×</RoundButton>
