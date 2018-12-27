@@ -1,0 +1,12 @@
+.edit-button {
+    right: 0;
+    border: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    font-size: 2.2rem;
+    cursor: pointer;
+}
+
+.wrapper {
+    padding: 0.5rem;
+}

@@ -1,0 +1,15 @@
+.book-status {
+    font-size: 1rem;
+    padding: 0.4rem;
+    width: 13%;
+}
+
+.book-status p {
+    margin: 0;
+    display: inline-block;
+}
+
+.book-status > select {
+    border: none;
+    text-align: left;
+}
