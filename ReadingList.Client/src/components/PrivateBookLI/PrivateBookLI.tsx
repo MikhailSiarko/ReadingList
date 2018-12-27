@@ -1,82 +1,23 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.css';
 import { PrivateBookListItem, SelectListItem } from '../../models';
-import { convertSecondsToReadingTime, applyClasses, createDOMAttributeProps } from '../../utils';
-import Colors from '../../styles/colors';
+import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.css';
-import RoundButton from '../RoundButton';
+import EditButton from './EditButton';
+import BookInfo from './BookInfo/BookInfo';
+import ReadingTime from './ReadingTime';
+import BookStatus from './BookStatus';
+import Footer from './Footer';
+import BookStatusEditor from './BookStatusEditor';
+import BookInfoInEditMode from './BookInfoInEditMode';
 
 export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
     onSave: (item: PrivateBookListItem) => void;
     onCancel: (itemId: number) => void;
+    onEditButtonClick: (itemId: number) => void;
     statuses: SelectListItem[];
 }
-
-const Footer: React.SFC<{ onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void }> = ({onCancel}) => (
-    <div className={styles['edited-footer']}>
-        <RoundButton radius={2} type="submit">✓</RoundButton>
-        <RoundButton radius={2} onClick={onCancel} color={Colors.Red}>×</RoundButton>
-    </div>
-);
-
-export const BookInfoInEditMode: React.SFC<{ title: string, author: string }> = ({title, author}) => (
-    <div className={styles['editable-book-info']}>
-        <div className={styles['editing-book-title']}>
-            <div>{title} <span>by</span> {author}</div>
-        </div>
-    </div>
-);
-
-const BookStatusEditor: React.SFC<{ status: number, options: SelectListItem[] }> = ({status, options}) => (
-    <div className={styles['edited-status']}>
-        <p>Status:</p>
-        <select className={globalStyles.shadowed} name="status" defaultValue={status.toString()}>
-            {
-                options
-                    ? options.map(item =>
-                        <option key={item.value} value={item.value}>{item.text}</option>
-                    )
-                    : <option key={0} value={0} />
-            }
-        </select>
-    </div>
-);
-
-const BookStatus: React.SFC<{ status: number, statuses: SelectListItem[] }> = ({status, statuses}) => {
-    let statusValue = null;
-    if (statuses != null) {
-        let filtered = statuses.filter(item => item.value === status);
-        if (filtered.length > 0) {
-            statusValue = filtered[0].text;
-        }
-    }
-    return (
-        <div className={styles['status']}>
-            <p>Status:</p>
-            <br />
-            <p>{statusValue}</p>
-        </div>
-    );
-};
-
-const ReadingTime = ({readingTimeInSeconds}: { readingTimeInSeconds: number }) => (
-    <div className={styles['reading-time']}>
-        <p>
-            Reading time:
-        </p>
-        <br />
-        <p>{convertSecondsToReadingTime(readingTimeInSeconds)}</p>
-    </div>
-);
-
-export const BookInfo = ({title, author}: { title: string, author: string }) => (
-    <div className={styles['book-info']}>
-        <h5 className={styles['book-title']}>
-            <q>{title}</q> by {author}
-        </h5>
-    </div>
-);
 
 class PrivateBookLI extends React.Component<BookListItemProps> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -95,8 +36,21 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
         this.props.onCancel(this.props.listItem.id);
     }
 
+    handleEditButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        this.props.onEditButtonClick(this.props.listItem.id);
+    }
+
     render() {
-        const liProps = createDOMAttributeProps(this.props, 'listItem', 'onSave', 'onCancel', 'options', 'statuses');
+        const liProps = createDOMAttributeProps(
+            this.props,
+            'listItem',
+            'onSave',
+            'onCancel',
+            'options',
+            'statuses',
+            'onEditButtonClick'
+        );
         if (this.props.listItem.isInEditMode) {
             return (
                 <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
@@ -114,6 +68,7 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
                 <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
                 <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
                 <BookStatus status={this.props.listItem.status} statuses={this.props.statuses} />
+                <EditButton onClick={this.handleEditButtonClick} />
             </li>
         );
     }

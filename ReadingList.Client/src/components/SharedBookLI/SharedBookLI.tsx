@@ -3,7 +3,8 @@ import styles from '../PrivateBookLI/PrivateBookLI.css';
 import { SharedBookListItem } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.css';
-import { BookInfo, BookInfoInEditMode } from '../PrivateBookLI/PrivateBookLI';
+import BookInfo from '../PrivateBookLI/BookInfo/BookInfo';
+import BookInfoInEditMode from '../PrivateBookLI/BookInfoInEditMode';
 
 export interface SharedBookListItemProps extends React.HTMLProps<HTMLLIElement> {
     item: SharedBookListItem;

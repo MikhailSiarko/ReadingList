@@ -47,6 +47,12 @@ export class PrivateBookListService extends ApiService {
             .catch(onError);
     }
 
+    sharePrivateList = (name: string) => {
+        return this.configureRequest(ApiConfiguration.getSharePrivateListUrl(name), 'POST')
+            .then(this.onSuccess<never>())
+            .catch(onError);
+    }
+
     private onDeleteItemSuccess(id: number) {
         return () => new RequestResult<number>(true, id);
     }

@@ -15,13 +15,13 @@ namespace ReadingList.Domain.CommandHandlers
             WriteService = writeService;
         }
 
-        public async Task<Unit> Handle(TCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(TCommand command, CancellationToken cancellationToken)
         {
-            await Handle(request);
+            await Handle(command);
             return Unit.Value;
         }
 
-        protected abstract Task Handle(TCommand request);
+        protected abstract Task Handle(TCommand command);
     }
 
     public abstract class CommandHandler<TCommand, TResult> : IRequestHandler<TCommand, TResult>
@@ -34,11 +34,11 @@ namespace ReadingList.Domain.CommandHandlers
             WriteService = writeService;
         }
 
-        public async Task<TResult> Handle(TCommand request, CancellationToken cancellationToken)
+        public async Task<TResult> Handle(TCommand command, CancellationToken cancellationToken)
         {
-            return await Handle(request);
+            return await Handle(command);
         }
 
-        protected abstract Task<TResult> Handle(TCommand request);
+        protected abstract Task<TResult> Handle(TCommand command);
     }
 }

@@ -20,14 +20,14 @@ namespace ReadingList.Read.QueryHandlers
         {
             var rows = (await DbConnection.QueryAsync<SharedListDbRow>(context.Sql, context.Parameters)).ToList();
 
-            return rows.Select(r => new SharedBookListPreviewDto()
+            return rows.Select(r => new SharedBookListPreviewDto
             {
                 Id = r.Id,
                 OwnerId = r.OwnerId,
                 Name = r.Name,
                 Type = r.Type,
                 BooksCount = r.BookCount,
-                Tags = r.Tags.Split(',').Where(t => !string.IsNullOrEmpty(t)).ToList()
+                Tags = r.Tags?.Split(',').Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>()
             });
         }
 

@@ -38,6 +38,14 @@ namespace ReadingList.Api.Controllers
             return Ok(list);
         }
 
+        [HttpPost("share")]
+        public async Task<IActionResult> Share([FromQuery] string name)
+        {
+            await _domainService.ExecuteAsync(new SharePrivateList(User.Claims.GetUserId(), name));
+
+            return Ok();
+        }
+
         [HttpPost("items")]
         public async Task<IActionResult> AddItem([FromBody] AddItemRequestData addItemRequestData)
         {

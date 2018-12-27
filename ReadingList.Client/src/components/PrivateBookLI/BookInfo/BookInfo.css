@@ -1,0 +1,12 @@
+.book-title {
+    font-weight: 300;
+    margin: 0;
+    padding: 0.95rem 0;
+    font-size: 1.8rem;
+}
+
+.book-info {
+    margin-right: 3rem;
+    font-size: 2.4rem;
+    min-width: 58%;
+}

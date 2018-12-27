@@ -13,50 +13,6 @@
     vertical-align: middle;
 }
 
-.book-title {
-    font-weight: 300;
-    margin: 0;
-    padding: 0.95rem 0;
-    font-size: 1.8rem;
-}
-
-.book-info {
-    margin-right: 3rem;
-    font-size: 2.4rem;
-    min-width: 65%;
-}
-
-.status {
-    font-size: 1rem;
-    padding: 0.8rem;
-}
-
-.status p {
-    margin: 0;
-    display: inline-block;
-}
-
-.edited-status p {
-    margin: 0;
-    display: inline-block;
-    font-size: 1.8rem;
-}
-
-.edited-status > select {
-    font-size: 1.6rem;
-    width: 30%;
-}
-
-.edited-footer > div {
-    display: inline-block;
-    margin: 0.8rem 2rem;
-}
-
-.status > select {
-    border: none;
-    text-align: left;
-}
-
 .editing-book-li {
     text-align: center;
     transition: all 0.1s;
@@ -70,29 +26,4 @@
 .editing-book-li > div {
     display: block;
     box-sizing: border-box;
-}
-
-.editable-book-info {
-    font-size: 2rem;
-    min-width: 40rem;
-    margin: 0.5rem;
-}
-
-.editing-book-title > div {
-    font-size: 4rem;
-    font-weight: bold;
-}
-
-.editing-book-title > div > span {
-    font-size: 2rem;
-}
-
-.reading-time {
-    font-size: 1rem;
-    padding: 0.8rem;
-}
-
-.reading-time p {
-    margin: 0;
-    display: inline-block;
 }

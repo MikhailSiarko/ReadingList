@@ -8,12 +8,14 @@ import { PrivateBookListService } from '../../services';
 import { withContextMenu, closeContextMenues } from '../../hoc';
 import BookList from '../../components/BookList';
 import PrivateListEditor from '../../components/PrivateListEditForm';
-import { createPropAction } from '../../utils';
+import { createPropAction, processFailedRequest } from '../../utils';
 import { loadingActions } from '../../store/actions/loading';
 import { RouteComponentProps } from 'react-router';
 import { BookService } from '../../services/BookService';
-import FixedButton from '../../components/FixedButton';
 import AddBookForm from '../../components/AddBookForm';
+import RoundButton from '../../components/RoundButton';
+import FixedGroup from '../../components/FixedGroup';
+import ShareForm from '../../components/ShareForm';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;
@@ -29,10 +31,12 @@ interface Props extends RouteComponentProps<any> {
     loadingStart: () => void;
     loadingEnd: () => void;
     findBooks: (query: string) => Promise<Book[]>;
+    shareList: (name: string) => Promise<void>;
 }
 
 interface State {
-    isFormHidden: boolean;
+    bookFormHidden: boolean;
+    shareFormHidden: boolean;
     books: Book[] | null;
     bookSearchQuery: string | null;
 }
@@ -41,9 +45,10 @@ class PrivateBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            isFormHidden: true,
+            bookFormHidden: true,
             books: null,
-            bookSearchQuery: null
+            bookSearchQuery: null,
+            shareFormHidden: true
         };
     }
 
@@ -115,6 +120,7 @@ class PrivateBookList extends React.Component<Props, State> {
                 onSave={this.handleUpdateItem}
                 onCancel={this.props.switchItemEditMode}
                 statuses={this.props.statuses}
+                onEditButtonClick={this.props.switchItemEditMode}
             />
         );
     }
@@ -138,7 +144,7 @@ class PrivateBookList extends React.Component<Props, State> {
 
     closeForm = (event: React.MouseEvent<HTMLButtonElement>) => {
         this.setState({
-            isFormHidden: true,
+            bookFormHidden: true,
             books: null,
             bookSearchQuery: null
         });
@@ -150,13 +156,19 @@ class PrivateBookList extends React.Component<Props, State> {
         if(books) {
             this.setState({
                 books,
-                isFormHidden: false
+                bookFormHidden: false
             }, () => this.props.loadingEnd());
         } else {
             this.setState({
-                isFormHidden: false
+                bookFormHidden: false
             }, () => this.props.loadingEnd());
         }
+    }
+
+    showShareForm = () => {
+        this.setState({
+            shareFormHidden: false
+        });
     }
 
     handleSearchChange = async (query: string) => {
@@ -177,7 +189,21 @@ class PrivateBookList extends React.Component<Props, State> {
         await this.props.addItem(id);
         this.setState({
             books: null,
-            isFormHidden: true
+            bookFormHidden: true
+        }, () => this.props.loadingEnd());
+    }
+
+    handleShareCancel = () => {
+        this.setState({
+            shareFormHidden: true
+        });
+    }
+
+    handleShareFormSubmit = async (name: string) => {
+        this.props.loadingStart();
+        await this.props.shareList(name);
+        this.setState({
+            shareFormHidden: true
         }, () => this.props.loadingEnd());
     }
 
@@ -194,14 +220,22 @@ class PrivateBookList extends React.Component<Props, State> {
         return (
             <>
                 <ContexedList items={listItems} legend={this.renderLegend()} />
-                <FixedButton radius={3} title="Add book" onClick={this.showBooksForm}>+</FixedButton>
+                <FixedGroup>
+                    <RoundButton radius={3} title="Share this list" onClick={this.showShareForm}>⛬</RoundButton>
+                    <RoundButton radius={3} title="Add book" onClick={this.showBooksForm}>+</RoundButton>
+                </FixedGroup>
                 <AddBookForm
-                    hidden={this.state.isFormHidden}
+                    hidden={this.state.bookFormHidden}
                     books={this.state.books ? this.state.books : []}
                     searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
                     onSubmit={this.handleAddBook}
                     onCancel={this.closeForm}
                     onQueryChange={this.handleSearchChange}
+                />
+                <ShareForm
+                    hidden={this.state.shareFormHidden}
+                    onCancel={this.handleShareCancel}
+                    onSubmit={this.handleShareFormSubmit}
                 />
             </>
         );
@@ -232,6 +266,12 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         updateList: createPropAction(listService.updateList, dispatch, privateBookListAction.updateList),
         getBookStatuses: createPropAction(listService.getBookStatuses, dispatch,
             privateBookListAction.setBookStatuses),
+        shareList: async (name: string) => {
+            const result = await listService.sharePrivateList(name);
+            if (!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+        },
         loadingStart: () => {
             dispatch(loadingActions.start());
         },

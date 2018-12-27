@@ -34,6 +34,10 @@ export class ApiConfiguration {
     public static getBooksSearchUrl(query: string) {
         return `${ApiConfiguration.BOOKS}?query=${encodeURIComponent(query)}`;
     }
+
+    public static getSharePrivateListUrl(name: string) {
+        return `${ApiConfiguration.PRIVATE_LIST}/share?name=${name}`;
+    }
 }
 
 export default ApiConfiguration;
