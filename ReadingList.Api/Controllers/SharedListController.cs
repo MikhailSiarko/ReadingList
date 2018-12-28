@@ -65,7 +65,8 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> Put(int id, [FromBody] SharedListRequestData requestData)
         {
             var list = await _domainService.ExecuteAsync(
-                new UpdateSharedList(User.Claims.GetUserId(), id, requestData.Name, requestData.Tags));
+                new UpdateSharedList(User.Claims.GetUserId(), id, requestData.Name, requestData.Tags,
+                    requestData.Moderators));
 
             return Ok(list);
         }

@@ -25,7 +25,7 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var accessSpecification = new BookListAccessSpecification(list);
+            var accessSpecification = new BookListOwnerAccessSpecification(list);
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
                 throw new AccessDeniedException();

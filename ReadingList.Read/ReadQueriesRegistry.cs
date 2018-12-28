@@ -23,6 +23,7 @@ namespace ReadingList.Read
             // User
             [typeof(LoginUser)] = UserSqlQueries.SelectByLogin,
             [typeof(GetUser)] = UserSqlQueries.SelectById,
+            [typeof(GetModerators)] = UserSqlQueries.SelectModerators,
             // Shared
             [typeof(FindSharedLists)] = SharedListSqlQueries.FindPreviews,
             [typeof(GetSharedList)] = SharedListSqlQueries.SelectById,

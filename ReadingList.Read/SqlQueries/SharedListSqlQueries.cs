@@ -11,12 +11,17 @@ namespace ReadingList.Read.SqlQueries
             {
                 const string canEditSql = "SELECT CASE " +
                                           "WHEN (SELECT COUNT(*) FROM BookLists WHERE Id = @ListId AND OwnerId = @UserId) = 1 THEN 1 " +
-                                          "WHEN (SELECT COUNT(*) FROM BookListModerators WHERE BookListId = @ListId AND UserId = @UserId) = 1 THEN 1 " +
                                           "ELSE 0 " +
                                           "END";
 
+                const string canModerate = "SELECT CASE " +
+                                           "WHEN (SELECT COUNT(*) FROM BookLists WHERE Id = @ListId AND OwnerId = @UserId) = 1 THEN 1 " +
+                                           "WHEN (SELECT COUNT(*) FROM BookListModerators WHERE BookListId = @ListId AND UserId = @UserId) = 1 THEN 1 " +
+                                           "ELSE 0 " +
+                                           "END";
+
                 var getListsSql = new SqlBuilder()
-                    .Select("Id", "Name", "OwnerId", "Type", $"({canEditSql}) AS Editable")
+                    .Select("Id", "Name", "OwnerId", "Type", $"({canEditSql}) AS Editable", $"({canModerate}) AS CanBeModerated")
                     .From("BookLists")
                     .Where($"Type = {BookListType.Shared:D}")
                     .Where("Id = @ListId")
@@ -34,9 +39,15 @@ namespace ReadingList.Read.SqlQueries
                            ")")
                     .ToSql();
 
+                var getModerators = new SqlBuilder()
+                    .Select("u.Id", "u.Login")
+                    .From("BookListModerators")
+                    .LeftJoin("Users AS u ON u.Id = UserId")
+                    .Where("BookListId = @ListId");
+
                 var getItemsSql = SharedItemSqlQueries.SelectByListId;
 
-                return $"{getListsSql}; {getTagsSql}; {getItemsSql};";
+                return $"{getListsSql}; {getTagsSql}; {getItemsSql}; {getModerators};";
             }
         }
 

@@ -11,7 +11,7 @@ interface Props {
 const BookStatusEditor: React.SFC<Props> = props => (
     <div className={styles['edited-status']}>
         <p>Status:</p>
-        <select className={globalStyles.shadowed} name="status" defaultValue={status.toString()}>
+        <select className={globalStyles.shadowed} name="status" defaultValue={props.status.toString()}>
             {
                 props.options
                     ? props.options.map(item =>

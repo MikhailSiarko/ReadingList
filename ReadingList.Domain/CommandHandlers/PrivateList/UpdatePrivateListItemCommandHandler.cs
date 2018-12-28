@@ -49,7 +49,7 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var accessSpecification = new BookListAccessSpecification(entity.BookList);
+            var accessSpecification = new BookListOwnerAccessSpecification(entity.BookList);
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {

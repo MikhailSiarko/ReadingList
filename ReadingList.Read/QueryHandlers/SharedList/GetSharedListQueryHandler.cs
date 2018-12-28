@@ -43,6 +43,8 @@ namespace ReadingList.Read.QueryHandlers
 
                 list.Items = items;
 
+                list.Moderators = (await reader.ReadAsync<ModeratorDto>()).ToList();
+
                 return list;
             }
         }

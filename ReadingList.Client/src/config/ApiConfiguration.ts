@@ -10,6 +10,7 @@ export class ApiConfiguration {
     public static BOOK_STATUSES = '/bookstatuses';
     public static BOOKS = '/books';
     public static TAGS = '/tags';
+    public static USERS = '/users';
 
     public static getPrivateListItemUrl(itemId: number) {
         return `${ApiConfiguration.PRIVATE_LIST}/items/${itemId}`;

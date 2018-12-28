@@ -6,6 +6,7 @@ using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Extensions;
+using ReadingList.Domain.Infrastructure.Specifications;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Models.Read;
@@ -60,6 +61,13 @@ namespace ReadingList.Domain.CommandHandlers
                 {
                     ["Id"] = command.UserId.ToString()
                 });
+            }
+
+            var accessSpecification = new BookListOwnerAccessSpecification(entity);
+
+            if (!accessSpecification.SatisfiedBy(command.UserId))
+            {
+                throw new AccessDeniedException();
             }
 
             return Task.CompletedTask;

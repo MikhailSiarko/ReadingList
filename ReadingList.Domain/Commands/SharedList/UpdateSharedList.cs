@@ -12,11 +12,15 @@ namespace ReadingList.Domain.Commands
 
         public readonly IEnumerable<Tag> Tags;
 
-        public UpdateSharedList(int userId, int listId, string name, IEnumerable<Tag> tags) : base(userId)
+        public readonly IEnumerable<int> Moderators;
+
+        public UpdateSharedList(int userId, int listId, string name, IEnumerable<Tag> tags,
+            IEnumerable<int> moderators) : base(userId)
         {
             ListId = listId;
             Name = name;
             Tags = tags;
+            Moderators = moderators;
         }
     }
 }

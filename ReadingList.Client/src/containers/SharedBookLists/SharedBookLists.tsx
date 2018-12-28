@@ -10,12 +10,13 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import { Form } from '../../components/Form';
-import FixedButton from '../../components/FixedButton';
 import { TagsService } from '../../services/TagsService';
 import ListGridItem from '../../components/Grid/ListGridItem';
 import { withContextMenu } from '../../hoc';
 import CreateSharedList from '../../components/CreateSharedList';
 import { Tag } from '../../models/Tag';
+import FixedGroup from '../../components/FixedGroup';
+import RoundButton from '../../components/RoundButton';
 
 interface Props extends RouteComponentProps<any> {
     getSharedLists: (query: string) => Promise<SharedBookListPreview[]>;
@@ -146,7 +147,9 @@ class SharedBookLists extends React.Component<Props, State> {
                 <>
                     <SimpletSearch query={this.props.match.params.query} onChange={this.searchHandler} />
                     <Grid items={items} />
-                    <FixedButton radius={3} title="Create new list" onClick={this.handleButtonClick}>+</FixedButton>
+                    <FixedGroup>
+                        <RoundButton radius={3} title="Create new list" onClick={this.handleButtonClick}>+</RoundButton>
+                    </FixedGroup>
                     <Form
                         header={'Add new list'}
                         hidden={this.state.isFormHidden}

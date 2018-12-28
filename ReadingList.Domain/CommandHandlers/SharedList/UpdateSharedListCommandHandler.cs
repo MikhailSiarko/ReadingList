@@ -20,27 +20,33 @@ namespace ReadingList.Domain.CommandHandlers
         UpdateSharedListCommandHandler : UpdateCommandHandler<UpdateSharedList, BookList,
             SharedBookListDto>
     {
-        private readonly IFetchHandler<GetListAccessForUser, bool> _listAccessFetchHandler;
+        private readonly IFetchHandler<GetListAccessForUser, (bool editable, bool moderated)> _listAccessFetchHandler;
 
-        private IEnumerable<Tag> _tags;
+        private readonly IFetchHandler<GetItemsByListId, IEnumerable<SharedBookListItem>> _itemsFetchHandler;
 
-        public UpdateSharedListCommandHandler(IDataStorage writeService, IFetchHandler<GetListAccessForUser, bool> listAccessFetchHandler)
+        public UpdateSharedListCommandHandler(IDataStorage writeService,
+            IFetchHandler<GetListAccessForUser, (bool editable, bool moderated)> listAccessFetchHandler,
+            IFetchHandler<GetItemsByListId, IEnumerable<SharedBookListItem>> itemsFetchHandler)
             : base(writeService)
         {
             _listAccessFetchHandler = listAccessFetchHandler;
-            _tags = new List<Tag>();
+            _itemsFetchHandler = itemsFetchHandler;
         }
 
         protected override SharedBookListDto Convert(BookList entity, UpdateSharedList command)
         {
-            foreach (var listTag in entity.SharedBookListTags)
-            {
-                listTag.Tag = _tags.Single(t => t.Id == listTag.TagId);
-            }
+            var items = Mapper.Map<IEnumerable<SharedBookListItem>, IEnumerable<SharedBookListItemDto>>(
+                _itemsFetchHandler.Handle(new GetItemsByListId(entity.Id)).RunSync()).ToList();
 
-            var dto = Mapper.Map<BookList, SharedBookListDto>(entity);
+            var dto = Mapper.Map<BookList, SharedBookListDto>(entity,
+                options => options.AfterMap((wm, listDto) => listDto.Items = items));
 
-            dto.Editable = _listAccessFetchHandler.Handle(new GetListAccessForUser(command.UserId)).RunSync();
+            var (editable, canBeModerated) = _listAccessFetchHandler
+                .Handle(new GetListAccessForUser(command.UserId, dto.Id)).RunSync();
+
+            dto.Editable = editable;
+
+            dto.CanBeModerated = canBeModerated;
 
             return dto;
         }
@@ -60,9 +66,7 @@ namespace ReadingList.Domain.CommandHandlers
                 WriteService.SaveBatchAsync(newTags).RunSync();
             }
 
-            _tags = existingTags.Concat(newTags);
-
-            var tags = _tags
+            var tags = existingTags.Concat(newTags)
                 .Select(t => new SharedBookListTag
                 {
                     TagId = t.Id,
@@ -70,10 +74,19 @@ namespace ReadingList.Domain.CommandHandlers
                 })
                 .ToList();
 
+            var moderators = command.Moderators
+                ?.Select(m => new BookListModerator
+                {
+                    UserId = m,
+                    BookListId = entity.Id
+                })
+                .ToList();
+
             entity.Update(new Dictionary<string, object>
             {
                 [nameof(BookList.Name)] = command.Name,
-                [nameof(BookList.SharedBookListTags)] = tags
+                [nameof(BookList.SharedBookListTags)] = tags,
+                [nameof(BookList.BookListModerators)] = moderators ?? entity.BookListModerators
             });
         }
 
@@ -101,14 +114,17 @@ namespace ReadingList.Domain.CommandHandlers
 
             var user = await WriteService.GetAsync<User>(command.UserId);
 
-            var listNameSpecification = new SharedListNameSpecification(user);
-
-            if (!listNameSpecification.SatisfiedBy(command.Name))
+            if (command.Name != entity.Name)
             {
-                throw new ObjectAlreadyExistsException<BookList>(new OnExceptionObjectDescriptor
+                var listNameSpecification = new SharedListNameSpecification(user);
+
+                if (!listNameSpecification.SatisfiedBy(command.Name))
                 {
-                    ["Name"] = command.Name
-                });
+                    throw new ObjectAlreadyExistsException<BookList>(new OnExceptionObjectDescriptor
+                    {
+                        ["Name"] = command.Name
+                    });
+                }
             }
         }
     }

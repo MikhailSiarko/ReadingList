@@ -1,6 +1,6 @@
-import { UserModel } from './';
+import { User } from './';
 
 export interface AuthenticationData {
     token: string;
-    user: UserModel;
+    user: User;
 }

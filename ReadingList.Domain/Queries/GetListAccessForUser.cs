@@ -4,9 +4,12 @@ namespace ReadingList.Domain.Queries
     {
         public readonly int UserId;
 
-        public GetListAccessForUser(int userId)
+        public readonly int ListId;
+
+        public GetListAccessForUser(int userId, int listId)
         {
             UserId = userId;
+            ListId = listId;
         }
     }
 }

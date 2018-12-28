@@ -3,6 +3,7 @@ import { ApiConfiguration } from '../config/ApiConfiguration';
 import { onError } from '../utils';
 import { SharedBookList, SharedBookListItem, SharedBookListPreview } from '../models/BookList';
 import { Tag } from '../models/Tag';
+import { RequestResult } from '../models';
 
 export class SharedBookListService extends ApiService {
     getOwnLists = () => {
@@ -35,11 +36,26 @@ export class SharedBookListService extends ApiService {
             .catch(onError);
     }
 
-    updateList = (data: { id: number, name: string, tags: Tag[] }) => {
+    updateList = (data: { id: number, name: string, tags: Tag[], moderators: number[] | null }) => {
         return this.configureRequest(
-            ApiConfiguration.SHARED_LISTS + `/${data.id}`, 'PUT', {name: data.name, tags: data.tags}
+            ApiConfiguration.SHARED_LISTS + `/${data.id}`, 'PUT',
+            {
+                name: data.name,
+                tags: data.tags,
+                moderators: data.moderators
+            }
         )
         .then(this.onSuccess<SharedBookList>())
         .catch(onError);
+    }
+
+    removeItem = (listId: number, itemId: number) => {
+        return this.configureRequest(ApiConfiguration.getSharedListItemUrl(listId, itemId), 'DELETE')
+            .then(this.onDeleteItemSuccess(itemId))
+            .catch(onError);
+    }
+
+    private onDeleteItemSuccess(id: number) {
+        return () => new RequestResult<number>(true, id);
     }
 }
