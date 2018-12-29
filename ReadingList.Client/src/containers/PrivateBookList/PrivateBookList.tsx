@@ -16,6 +16,7 @@ import AddBookForm from '../../components/AddBookForm';
 import RoundButton from '../../components/RoundButton';
 import FixedGroup from '../../components/FixedGroup';
 import ShareForm from '../../components/ShareForm';
+import PrivateListLegend from '../../components/PrivateListLegend';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;
@@ -96,17 +97,19 @@ class PrivateBookList extends React.Component<Props, State> {
     }
 
     mapItem = (item: PrivateBookListItem) => {
+        const deleteItem = this.deleteItem(
+            item,
+            async itemId => {
+                this.props.loadingStart();
+                await this.props.deleteItem(itemId);
+                this.props.loadingEnd();
+            }
+        );
+
         const actions = [
             {onClick: () => this.props.switchItemEditMode(item.id), text: 'Edit'},
             {
-                onClick: this.deleteItem(
-                    item,
-                    async itemId => {
-                        this.props.loadingStart();
-                        await this.props.deleteItem(itemId);
-                        this.props.loadingEnd();
-                    }
-                ),
+                onClick: deleteItem,
                 text: 'Delete'
             }
         ];
@@ -120,7 +123,8 @@ class PrivateBookList extends React.Component<Props, State> {
                 onSave={this.handleUpdateItem}
                 onCancel={this.props.switchItemEditMode}
                 statuses={this.props.statuses}
-                onEditButtonClick={this.props.switchItemEditMode}
+                onEdit={this.props.switchItemEditMode}
+                onDelete={deleteItem}
             />
         );
     }
@@ -134,11 +138,7 @@ class PrivateBookList extends React.Component<Props, State> {
                     onCancel={this.props.switchListEditMode}
                 />
             ) : this.props.bookList
-                ? (
-                    <h3 style={{fontWeight: 400, margin: 0}}>
-                        {this.props.bookList.name.toUpperCase()}
-                    </h3>
-                )
+                ? <PrivateListLegend name={this.props.bookList.name} />
                 : null
     )
 
@@ -221,8 +221,12 @@ class PrivateBookList extends React.Component<Props, State> {
             <>
                 <ContexedList items={listItems} legend={this.renderLegend()} />
                 <FixedGroup>
-                    <RoundButton radius={3} title="Share this list" onClick={this.showShareForm}>⛬</RoundButton>
-                    <RoundButton radius={3} title="Add book" onClick={this.showBooksForm}>+</RoundButton>
+                    <RoundButton radius={3} title="Share this list" onClick={this.showShareForm}>
+                        <i className="fas fa-share-alt" />
+                    </RoundButton>
+                    <RoundButton radius={3} title="Add book" onClick={this.showBooksForm}>
+                        <i className="fas fa-book" />
+                    </RoundButton>
                 </FixedGroup>
                 <AddBookForm
                     hidden={this.state.bookFormHidden}

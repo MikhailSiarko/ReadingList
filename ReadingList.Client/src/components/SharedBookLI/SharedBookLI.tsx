@@ -4,54 +4,30 @@ import { SharedBookListItem } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.css';
 import BookInfo from '../PrivateBookLI/BookInfo/BookInfo';
-import BookInfoInEditMode from '../PrivateBookLI/BookInfoInEditMode';
+import { DeleteButton } from '../PrivateBookLI/Buttons';
+import sharedStyles from './SharedBookLI.css';
 
 export interface SharedBookListItemProps extends React.HTMLProps<HTMLLIElement> {
     item: SharedBookListItem;
-    onSave?: (item: SharedBookListItem) => void;
-    onCancel?: (itemId: number) => void;
+    onDelete: (item: SharedBookListItem) => Promise<void>;
 }
 
 class SharedBookLI extends React.Component<SharedBookListItemProps> {
-    onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    handleDeleteButtonClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        const target = event.target as HTMLFormElement;
-        const title = target.elements['title'].value;
-        const author = target.elements['author'].value;
-        const status = target.elements['status'].value;
-        const item = Object.assign({}, this.props.item, {
-            title,
-            author,
-            status,
-            isOnEditMode: false
-        });
-        if (this.props.onSave) {
-            this.props.onSave(item);
-        }
+        await this.props.onDelete(this.props.item);
     }
-
-    cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        if (this.props.onCancel) {
-            this.props.onCancel(this.props.item.id);
-        }
-    }
-
     render() {
-        const liProps = createDOMAttributeProps(this.props, 'item', 'onSave', 'onCancel');
-        if (this.props.item.isInEditMode) {
-            return (
-                <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
-                    <form onSubmit={this.onSubmitHandler}>
-                        <BookInfoInEditMode title={this.props.item.title} author={this.props.item.author} />
-                    </form>
-                </li>
-            );
-        }
-
+        const liProps = createDOMAttributeProps(this.props, 'item', 'onSave', 'onCancel', 'onDelete');
         return (
             <li className={applyClasses(styles['book-li'], globalStyles['inner-shadowed'])} {...liProps}>
-                <BookInfo title={this.props.item.title} author={this.props.item.author} />
+                <BookInfo
+                    title={this.props.item.title}
+                    author={this.props.item.author}
+                    className={sharedStyles['shared-book-li']}
+                    genre={this.props.item.genre}
+                />
+                <DeleteButton onClick={this.handleDeleteButtonClick} />
             </li>
         );
     }

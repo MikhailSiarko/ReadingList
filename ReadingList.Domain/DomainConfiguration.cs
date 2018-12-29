@@ -3,7 +3,6 @@ using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain.Infrastructure.Behaviors;
-using ReadingList.Domain.MapperProfiles;
 
 namespace ReadingList.Domain
 {
@@ -14,12 +13,7 @@ namespace ReadingList.Domain
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-            Mapper.Initialize(conf =>
-            {
-                conf.AddProfile<PrivateBookListProfile>();
-                conf.AddProfile<SharedBookListProfile>();
-                conf.AddProfile<UserProfile>();
-            });
+            Mapper.Initialize(conf => conf.AddProfiles(typeof(DomainConfiguration).Assembly));
 
             return services;
         }

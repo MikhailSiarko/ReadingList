@@ -36,10 +36,14 @@ class PrivateListEditForm extends React.Component<Props> {
                     />
                 </div>
                 <div>
-                    <RoundButton radius={2} type={'submit'}>✓</RoundButton>
+                    <RoundButton radius={2} type={'submit'}>
+                        <i className="fas fa-check" />
+                    </RoundButton>
                 </div>
                 <div>
-                    <RoundButton radius={2} onClick={this.cancelHandler} color={Colors.Red}>×</RoundButton>
+                    <RoundButton radius={2} onClick={this.cancelHandler} color={Colors.Red}>
+                        <i className="fas fa-times" />
+                    </RoundButton>
                 </div>
             </form>
         );

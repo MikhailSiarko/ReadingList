@@ -59,13 +59,17 @@ export class Form extends React.Component<Props> {
                     </div>
                     <div className={styles['buttons-wrapper']}>
                         <hr />
-                        <RoundButton radius={3} type="submit" title="Submit">✓</RoundButton>
+                        <RoundButton radius={3} type="submit" title="Submit">
+                            <i className="fas fa-check" />
+                        </RoundButton>
                         <RoundButton
                             radius={3}
                             onClick={this.props.onCancel}
                             color={Colors.Red}
                             title="Cancel"
-                        >×</RoundButton>
+                        >
+                            <i className="fas fa-times" />
+                        </RoundButton>
                     </div>
                 </div>
             </form>

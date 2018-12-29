@@ -80,8 +80,14 @@ class AddBookForm extends React.Component<Props> {
     }
 
     handleFormSubmit = async (values: NamedValue[]) => {
-        const id = parseInt(values.filter(v => v.name === 'selected-book')[0].value, 10);
-        await this.props.onSubmit(id);
+        const idValue = values.filter(v => v.name === 'selected-book')[0].value;
+        if(idValue) {
+            const id = parseInt(values.filter(v => v.name === 'selected-book')[0].value, 10);
+            await this.props.onSubmit(id);
+        } else {
+            alert('A book isn\'t chosen!');
+        }
+
     }
 
     render() {

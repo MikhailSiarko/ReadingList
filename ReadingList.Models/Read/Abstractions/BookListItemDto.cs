@@ -8,6 +8,6 @@ namespace ReadingList.Models.Read.Abstractions
 
         public string Author { get; set; }
 
-        public string GenreId { get; set; }
+        public string Genre { get; set; }
     }
 }

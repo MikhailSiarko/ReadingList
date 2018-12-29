@@ -5,7 +5,7 @@ export class SharedBookListItem implements ListItem {
     isInEditMode: boolean = false;
     author: string;
     title: string;
-    genreId: string;
+    genre: string;
     tags: string[];
     listId: number;
     bookId: number;

@@ -3,7 +3,7 @@ import styles from './PrivateBookLI.css';
 import { PrivateBookListItem, SelectListItem } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.css';
-import EditButton from './EditButton';
+import { EditButton, DeleteButton } from './Buttons';
 import BookInfo from './BookInfo/BookInfo';
 import ReadingTime from './ReadingTime';
 import BookStatus from './BookStatus';
@@ -15,7 +15,8 @@ export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
     onSave: (item: PrivateBookListItem) => void;
     onCancel: (itemId: number) => void;
-    onEditButtonClick: (itemId: number) => void;
+    onEdit: (itemId: number) => void;
+    onDelete: (item: PrivateBookListItem) => void;
     statuses: SelectListItem[];
 }
 
@@ -38,7 +39,12 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
 
     handleEditButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        this.props.onEditButtonClick(this.props.listItem.id);
+        this.props.onEdit(this.props.listItem.id);
+    }
+
+    handleDeleteButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        this.props.onDelete(this.props.listItem);
     }
 
     render() {
@@ -49,7 +55,8 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
             'onCancel',
             'options',
             'statuses',
-            'onEditButtonClick'
+            'onEdit',
+            'onDelete'
         );
         if (this.props.listItem.isInEditMode) {
             return (
@@ -65,10 +72,15 @@ class PrivateBookLI extends React.Component<BookListItemProps> {
 
         return (
             <li className={applyClasses(styles['book-li'], globalStyles['inner-shadowed'])} {...liProps}>
-                <BookInfo title={this.props.listItem.title} author={this.props.listItem.author} />
+                <BookInfo
+                    title={this.props.listItem.title}
+                    author={this.props.listItem.author}
+                    genre={this.props.listItem.genre}
+                />
                 <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
                 <BookStatus status={this.props.listItem.status} statuses={this.props.statuses} />
                 <EditButton onClick={this.handleEditButtonClick} />
+                <DeleteButton onClick={this.handleDeleteButtonClick} />
             </li>
         );
     }

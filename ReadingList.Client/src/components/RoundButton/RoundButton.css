@@ -1,6 +1,6 @@
 .round-button {
     color: white;
-    font-weight: bold;
     border: none;
     cursor: pointer;
+    text-align: center;
 }

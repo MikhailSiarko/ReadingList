@@ -9,9 +9,10 @@ namespace ReadingList.Read.SqlQueries
             get
             {
                 var getItemSql = new SqlBuilder()
-                    .Select("i.Id", "b.Author", "b.Title", "i.BookListId AS ListId", "b.GenreId", "i.BookId")
+                    .Select("i.Id", "b.Author", "b.Title", "i.BookListId AS ListId", "b.GenreId", "i.BookId", "g.Name AS Genre")
                     .From("SharedBookListItems AS i")
                     .LeftJoin("Books AS b ON b.Id = i.BookId")
+                    .LeftJoin("Genres AS g on g.Id = b.GenreId")
                     .Where("BookListId = @ListId")
                     .Where("Id = @ItemId")
                     .ToSql();
@@ -41,9 +42,10 @@ namespace ReadingList.Read.SqlQueries
             get
             {
                 var getItemsSql = new SqlBuilder()
-                    .Select("i.Id", "b.Author", "b.Title", "i.BookListId AS ListId", "b.GenreId", "i.BookId")
+                    .Select("i.Id", "b.Author", "b.Title", "i.BookListId AS ListId", "b.GenreId", "i.BookId", "g.Name AS Genre")
                     .From("SharedBookListItems AS i")
                     .LeftJoin("Books AS b ON b.Id = i.BookId")
+                    .LeftJoin("Genres AS g on g.Id = b.GenreId")
                     .Where("BookListId = @ListId")
                     .ToSql();
 

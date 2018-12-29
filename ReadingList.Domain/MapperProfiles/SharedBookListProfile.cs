@@ -35,7 +35,7 @@ namespace ReadingList.Domain.MapperProfiles
                 .ForMember(dto => dto.ListId, expression => expression.MapFrom(item => item.BookListId))
                 .ForMember(dto => dto.Author, expression => expression.MapFrom(item => item.Book.Author))
                 .ForMember(dto => dto.Title, expression => expression.MapFrom(item => item.Book.Title))
-                .ForMember(dto => dto.GenreId, expression => expression.MapFrom(item => item.Book.GenreId));
+                .ForMember(dto => dto.Genre, expression => expression.MapFrom(item => item.Book.Genre.Name));
         }
     }
 }

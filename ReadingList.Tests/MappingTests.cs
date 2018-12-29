@@ -88,7 +88,7 @@ namespace ReadingList.Tests
             Assert.Equal(sharedBookListItem.Book.Title, mapped.Title);
             Assert.Equal(sharedBookListItem.Book.Author, mapped.Author);
             Assert.Equal(sharedBookListItem.BookListId, mapped.ListId);
-            Assert.Equal(sharedBookListItem.Book.GenreId, mapped.GenreId);
+            Assert.Equal(sharedBookListItem.Book.GenreId, mapped.Genre);
         }
     }
 }

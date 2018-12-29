@@ -183,7 +183,7 @@ class SharedBookList extends React.Component<Props, State> {
             actions.push({text: 'Delete', onClick: this.deleteItem(item)});
         }
         const Contexed = withContextMenu(actions, SharedBookLI);
-        return <Contexed key={item.id} item={item} />;
+        return <Contexed key={item.id} item={item} onDelete={this.deleteItem(item)} />;
     }
 
     closeForm = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -271,11 +271,13 @@ class SharedBookList extends React.Component<Props, State> {
                         this.state.list.canBeModerated && (
                             <>
                                 <FixedGroup>
-                                <RoundButton
-                                    radius={3}
-                                    title="Add book"
-                                    onClick={this.showBooksForm}
-                                >+</RoundButton>
+                                    <RoundButton
+                                        radius={3}
+                                        title="Add book"
+                                        onClick={this.showBooksForm}
+                                    >
+                                        <i className="fas fa-book" />
+                                    </RoundButton>
                                 </FixedGroup>
                                 <AddBookForm
                                     hidden={this.state.isFormHidden}

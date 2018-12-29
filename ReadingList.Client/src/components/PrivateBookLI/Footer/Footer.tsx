@@ -9,8 +9,12 @@ interface Props {
 
 const Footer: React.SFC<Props> = props => (
     <div className={styles['edited-footer']}>
-        <RoundButton radius={2} type="submit">✓</RoundButton>
-        <RoundButton radius={2} onClick={props.onCancel} color={Colors.Red}>×</RoundButton>
+        <RoundButton radius={2} type="submit">
+            <i className="fas fa-check" />
+        </RoundButton>
+        <RoundButton radius={2} onClick={props.onCancel} color={Colors.Red}>
+            <i className="fas fa-times" />
+        </RoundButton>
     </div>
 );
 

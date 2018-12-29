@@ -148,7 +148,9 @@ class SharedBookLists extends React.Component<Props, State> {
                     <SimpletSearch query={this.props.match.params.query} onChange={this.searchHandler} />
                     <Grid items={items} />
                     <FixedGroup>
-                        <RoundButton radius={3} title="Create new list" onClick={this.handleButtonClick}>+</RoundButton>
+                        <RoundButton radius={3} title="Create new list" onClick={this.handleButtonClick}>
+                            <i className="fas fa-list-alt" />
+                        </RoundButton>
                     </FixedGroup>
                     <Form
                         header={'Add new list'}

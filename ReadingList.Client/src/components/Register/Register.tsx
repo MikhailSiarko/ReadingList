@@ -71,7 +71,7 @@ const Register = () => {
                     type={'submit'}
                     title="Submit"
                 >
-                    ✓
+                    <i className="fas fa-check" />
                 </RoundButton>
             </div>
         </>
