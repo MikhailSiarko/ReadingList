@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
+using ReadingList.Domain.Commands;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Read.Queries.Book;
 
@@ -24,6 +26,14 @@ namespace ReadingList.Api.Controllers
             var books = await _domainService.AskAsync(new FindBooks(query));
 
             return Ok(books);
+        }
+
+        [HttpPost("{bookId}/{listId}")]
+        public async Task<IActionResult> Post([FromRoute] int bookId, [FromRoute] int listId)
+        {
+            await _domainService.ExecuteAsync(new AddBookToList(User.Claims.GetUserId(), bookId, listId));
+
+            return Ok();
         }
     }
 }

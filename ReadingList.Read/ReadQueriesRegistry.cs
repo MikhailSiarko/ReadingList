@@ -36,7 +36,9 @@ namespace ReadingList.Read
             // Book
             [typeof(FindBooks)] = BookSqlQueries.FindBooks,
             // Tags
-            [typeof(GetTags)] = TagsSqlQueries.Select
+            [typeof(GetTags)] = TagsSqlQueries.Select,
+            // Lists
+            [typeof(GetModeratedLists)] = ListsQueries.Select
         };
     }
 }

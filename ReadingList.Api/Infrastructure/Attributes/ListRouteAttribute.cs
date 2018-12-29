@@ -3,10 +3,10 @@ using ReadingList.Api.Infrastructure.Routes;
 
 namespace ReadingList.Api.Infrastructure.Attributes
 {
-    public class ListRouteAttribute : RouteAttribute
+    public class ListsRouteAttribute : RouteAttribute
     {
-        public ListRouteAttribute(string type)
-            : base(new ApiRouteBuilder("list").AddSegment(type.ToLower()).ToString())
+        public ListsRouteAttribute(string type)
+            : base(new ApiRouteBuilder("lists").AddSegment(type.ToLower()).ToString())
         {
         }
     }

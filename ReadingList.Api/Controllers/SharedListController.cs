@@ -11,7 +11,7 @@ using ReadingList.Read.Queries;
 namespace ReadingList.Api.Controllers
 {
     [Authorize]
-    [ListRoute("shared")]
+    [ListsRoute("shared")]
     public class SharedListController : Controller
     {
         private readonly IDomainService _domainService;

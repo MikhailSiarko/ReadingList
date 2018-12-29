@@ -2,10 +2,10 @@ export class ApiConfiguration {
     public static BASE_URL = 'http://localhost:50582/api';
     public static LOGIN = '/account/login';
     public static REGISTER = '/account/register';
-    public static LIST = '/list';
-    public static PRIVATE_LIST = `${ApiConfiguration.LIST}/private`;
-    public static PRIVATE_LIST_ITEMS = `${ApiConfiguration.LIST}/private/items`;
-    public static SHARED_LISTS = `${ApiConfiguration.LIST}/shared`;
+    public static LISTS = '/lists';
+    public static PRIVATE_LIST = `${ApiConfiguration.LISTS}/private`;
+    public static PRIVATE_LIST_ITEMS = `${ApiConfiguration.LISTS}/private/items`;
+    public static SHARED_LISTS = `${ApiConfiguration.LISTS}/shared`;
     public static SHARED_LISTS_OWN = `${ApiConfiguration.SHARED_LISTS}/own`;
     public static BOOK_STATUSES = '/bookstatuses';
     public static BOOKS = '/books';
@@ -17,11 +17,11 @@ export class ApiConfiguration {
     }
 
     public static getSharedListUrl(listId: number) {
-        return `${ApiConfiguration.LIST}/shared/${listId}`;
+        return `${ApiConfiguration.LISTS}/shared/${listId}`;
     }
 
     public static getSharedListItemUrl(listId: number, itemId: number) {
-        return `${ApiConfiguration.LIST}/shared/${listId}/items/${itemId}`;
+        return `${ApiConfiguration.LISTS}/shared/${listId}/items/${itemId}`;
     }
 
     public static getFindSharedListsUrl(query: string) {
@@ -29,7 +29,7 @@ export class ApiConfiguration {
     }
 
     public static getAddItemToSharedListUrl(listId: number) {
-        return `${ApiConfiguration.LIST}/shared/${listId}/items`;
+        return `${ApiConfiguration.LISTS}/shared/${listId}/items`;
     }
 
     public static getBooksSearchUrl(query: string) {

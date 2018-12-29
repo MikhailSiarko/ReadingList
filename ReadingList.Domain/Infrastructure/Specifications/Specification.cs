@@ -11,9 +11,9 @@ namespace ReadingList.Domain.Infrastructure.Specifications
             _predicate = predicate;
         }
 
-        public bool SatisfiedBy(T entity)
+        public bool SatisfiedBy(T param)
         {
-            return _predicate.Invoke(entity);
+            return _predicate.Invoke(param);
         }
     }
 }
