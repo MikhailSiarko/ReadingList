@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/query-string": "^6.1.1",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
@@ -104,6 +103,7 @@
     }
   },
   "devDependencies": {
+    "@types/query-string": "^6.1.1",
     "@types/history": "^4.6.2",
     "@types/jest": "^22.2.3",
     "@types/lodash": "^4.14.109",
