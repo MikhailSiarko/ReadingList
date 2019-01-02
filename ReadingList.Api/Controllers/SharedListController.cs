@@ -30,9 +30,9 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string query)
+        public async Task<IActionResult> Get([FromQuery] string query, [FromQuery] int? chunk, [FromQuery] int? count)
         {
-            var bookLists = await _domainService.AskAsync(new FindSharedLists(query));
+            var bookLists = await _domainService.AskAsync(new FindSharedLists(query, chunk, count));
 
             return Ok(bookLists);
         }
@@ -46,9 +46,9 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpGet("own")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int? chunk, [FromQuery] int? count)
         {
-            var bookLists = await _domainService.AskAsync(new GetUserSharedLists(User.Claims.GetUserId()));
+            var bookLists = await _domainService.AskAsync(new GetUserSharedLists(User.Claims.GetUserId(), chunk, count));
 
             return Ok(bookLists);
         }

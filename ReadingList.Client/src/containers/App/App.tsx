@@ -56,7 +56,7 @@ class App extends React.Component<AppProps> {
 
                         <PrivateRoute
                             exact={true}
-                            path="/shared/search/:query?"
+                            path="/shared/search/"
                             component={SharedBookLists}
                         />
                         <PrivateRoute

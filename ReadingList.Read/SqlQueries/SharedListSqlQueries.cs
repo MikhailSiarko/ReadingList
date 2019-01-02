@@ -105,39 +105,32 @@ namespace ReadingList.Read.SqlQueries
                        "ELSE lower(l.Name) LIKE '%' || @Query || '%' " +
                        "END")
                 .GroupBy("l.Id")
+                .OrderBy("l.Id " +
+                         "LIMIT @Count + 1 " +
+                         "OFFSET (@Count * (@Chunk - 1))")
                 .ToSql();
 
-        public static string SelectOwn
-        {
-            get
-            {
-                var getListsSql = new SqlBuilder()
-                    .Select("l.Id", "l.Name", "l.OwnerId", "l.Type", "COUNT(i.Id) AS BooksCount")
-                    .From("BookLists AS l")
-                    .LeftJoin("SharedBookListItems AS i ON i.BookListId = l.Id")
-                    .Where($"Type = {BookListType.Shared:D} AND OwnerId = @UserId")
-                    .GroupBy("l.Id")
-                    .ToSql();
-
-                var getTagsSql = new SqlBuilder()
-                    .Select("Name AS TagName", "SharedBookListId AS ListId")
-                    .From("Tags")
-                    .LeftJoin("(" +
-                              new SqlBuilder()
-                                  .Select("TagId", "SharedBookListId")
-                                  .From("SharedBookListTags")
-                                  .Where("SharedBookListId IN (" +
-                                         new SqlBuilder()
-                                             .Select("Id")
-                                             .From("BookLists")
-                                             .Where($"Type = {BookListType.Shared:D}")
-                                             .Where("OwnerId = @UserId")
-                                             .ToSql() + ")") +
-                              ") AS it ON it.TagId = Id")
-                    .ToSql();
-
-                return $"{getListsSql}; {getTagsSql}";
-            }
-        }
+        public static string SelectOwn =>
+            new SqlBuilder()
+                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId",
+                    "(" +
+                    new SqlBuilder()
+                        .Select("GROUP_CONCAT(Name)")
+                        .From("Tags")
+                        .LeftJoin("SharedBookListTags ON Tags.Id = SharedBookListTags.TagId")
+                        .Where("SharedBookListId = l.Id")
+                        .ToSql() +
+                    ") AS Tags", "COUNT(DISTINCT s.Id) AS BookCount, (COUNT(DISTINCT l.Id) * 1.0 / @Count) AS Chunks")
+                .From("BookLists AS l")
+                .LeftJoin("SharedBookListTags AS lt on l.Id = lt.SharedBookListId")
+                .LeftJoin("Tags AS t on lt.TagId = t.Id")
+                .LeftJoin("SharedBookListItems s on l.Id = s.BookListId")
+                .Where("l.Type = 2")
+                .Where("l.OwnerId = @UserId")
+                .GroupBy("l.Id")
+                .OrderBy("l.Id " +
+                         "LIMIT @Count + 1 " +
+                         "OFFSET (@Count * (@Chunk - 1))")
+                .ToSql();
     }
 }

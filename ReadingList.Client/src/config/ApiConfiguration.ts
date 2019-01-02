@@ -24,8 +24,12 @@ export class ApiConfiguration {
         return `${ApiConfiguration.LISTS}/shared/${listId}/items/${itemId}`;
     }
 
-    public static getFindSharedListsUrl(query: string) {
-        return `${ApiConfiguration.SHARED_LISTS}?query=${encodeURIComponent(query)}`;
+    public static getFindSharedListsUrl(query: string, chunk: number | null, count: number | null) {
+        return `${ApiConfiguration.SHARED_LISTS}?query=${encodeURIComponent(query)}&chunk=${chunk}&count=${count}`;
+    }
+
+    public static getOwnSharedListsUrl(chunk: number | null, count: number | null) {
+        return `${ApiConfiguration.SHARED_LISTS}/own?chunk=${chunk}&count=${count}`;
     }
 
     public static getAddItemToSharedListUrl(listId: number) {

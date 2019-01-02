@@ -3,18 +3,18 @@ import { ApiConfiguration } from '../config/ApiConfiguration';
 import { onError } from '../utils';
 import { SharedBookList, SharedBookListItem, SharedBookListPreview } from '../models/BookList';
 import { Tag } from '../models/Tag';
-import { RequestResult } from '../models';
+import { RequestResult, Chunked } from '../models';
 
 export class SharedBookListService extends ApiService {
-    getOwnLists = () => {
-        return this.configureRequest(ApiConfiguration.SHARED_LISTS_OWN, 'GET')
-            .then(this.onSuccess<SharedBookListPreview[]>())
+    getOwnLists = (chunk: number | null, count: number | null) => {
+        return this.configureRequest(ApiConfiguration.getOwnSharedListsUrl(chunk, count), 'GET')
+            .then(this.onSuccess<Chunked<SharedBookListPreview>>())
             .catch(onError);
     }
 
-    getLists = (query: string) => {
-        return this.configureRequest(ApiConfiguration.getFindSharedListsUrl(query), 'GET')
-            .then(this.onSuccess<SharedBookListPreview[]>())
+    getLists = (query: string, chunk: number | null, count: number | null) => {
+        return this.configureRequest(ApiConfiguration.getFindSharedListsUrl(query, chunk, count), 'GET')
+            .then(this.onSuccess<Chunked<SharedBookListPreview>>())
             .catch(onError);
     }
 

@@ -9,28 +9,31 @@ using ReadingList.Read.Queries;
 namespace ReadingList.Read.QueryHandlers
 {
     public class
-        GetUserSharedListsQueryHandler : QueryHandler<GetUserSharedLists, IEnumerable<SharedBookListPreviewDto>>
+        GetUserSharedListsQueryHandler : QueryHandler<GetUserSharedLists, ChunkedCollectionDto<SharedBookListPreviewDto>>
     {
         public GetUserSharedListsQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
-        protected override async Task<IEnumerable<SharedBookListPreviewDto>> Handle(
-            SqlQueryContext<GetUserSharedLists, IEnumerable<SharedBookListPreviewDto>> context)
+        protected override async Task<ChunkedCollectionDto<SharedBookListPreviewDto>> Handle(
+            SqlQueryContext<GetUserSharedLists, ChunkedCollectionDto<SharedBookListPreviewDto>> context)
         {
-            using (var reader = await DbConnection.QueryMultipleAsync(context.Sql, context.Parameters))
+            var rows = (await DbConnection.QueryAsync<FindSharedBookListsQueryHandler.SharedListDbRow>(context.Sql, context.Parameters)).ToList();
+
+            if (!rows.Any()) return ChunkedCollectionDto<SharedBookListPreviewDto>.Empty;
+
+            var items = rows.Take(context.Query.Count).Select(r => new SharedBookListPreviewDto
             {
-                var lists = (await reader.ReadAsync<SharedBookListPreviewDto>()).ToList();
+                Id = r.Id,
+                OwnerId = r.OwnerId,
+                Name = r.Name,
+                Type = r.Type,
+                BooksCount = r.BookCount,
+                Tags = r.Tags?.Split(',').Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>()
+            }).ToList();
 
-                var tags = (await reader.ReadAsync<(string TagName, int ListId)>()).ToLookup(t => t.ListId);
-
-                foreach (var list in lists)
-                {
-                    list.Tags = tags[list.Id].Select(t => t.TagName).ToList();
-                }
-
-                return lists;
-            }
+            return new ChunkedCollectionDto<SharedBookListPreviewDto>(items, rows.Count > context.Query.Count,
+                context.Query.Chunk);
         }
     }
 }

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import SimpletSearch from '../../components/SimpleSearch';
 import Grid from '../../components/Grid';
-import { NamedValue, SelectListItem, SharedBookListPreview } from '../../models';
+import { NamedValue, SelectListItem, SharedBookListPreview, Chunked } from '../../models';
 import { SharedBookListService } from '../../services';
 import { Dispatch } from 'redux';
 import { RootState } from '../../store/reducers';
-import { createPropActionWithResult } from '../../utils';
+import { createPropActionWithResult, processFailedRequest } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
@@ -17,10 +17,13 @@ import CreateSharedList from '../../components/CreateSharedList';
 import { Tag } from '../../models/Tag';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
+import { parse } from 'query-string';
+import Pagination from '../../components/Pagination';
 
 interface Props extends RouteComponentProps<any> {
-    getSharedLists: (query: string) => Promise<SharedBookListPreview[]>;
-    getOwnSharedLists: () => Promise<SharedBookListPreview[]>;
+    getSharedLists: (query: string, chunk: number | null, count: number | null) =>
+        Promise<Chunked<SharedBookListPreview>>;
+    getOwnSharedLists: (chunk: number | null, count: number | null) => Promise<Chunked<SharedBookListPreview>>;
     createList: (data: { name: string, tags: Tag[] }) => Promise<SharedBookListPreview>;
     getTags: () => Promise<Tag[]>;
     loadingStart: () => void;
@@ -28,6 +31,9 @@ interface Props extends RouteComponentProps<any> {
 }
 
 interface State {
+    hasPrevious: boolean;
+    hasNext: boolean;
+    chunk: number;
     sharedLists: SharedBookListPreview[] | null;
     tags: SelectListItem[] | null;
     isFormHidden: boolean;
@@ -38,6 +44,9 @@ class SharedBookLists extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            hasPrevious: false,
+            hasNext: false,
+            chunk: 1,
             sharedLists: null,
             isFormHidden: true,
             tags: null,
@@ -46,21 +55,39 @@ class SharedBookLists extends React.Component<Props, State> {
     }
 
     searchHandler = async (query: string) => {
-        this.props.history.push('/shared/search/' + encodeURIComponent(query), {from: this.props.location});
+        const search = this.getSearch();
+        this.props.history.push(
+            '/shared/search?query=' + encodeURIComponent(query) + '&chunk=' + search.chunkNumber,
+            {from: this.props.location}
+        );
     }
 
     async componentDidMount() {
         this.props.loadingStart();
-
-        const query = this.props.match.params.query ? this.props.match.params.query : '';
-        let lists = await this.props.getSharedLists(decodeURIComponent(query));
+        const { query, chunk, count } = parse(this.props.location.search);
+        let chunked;
+        if(query === 'own') {
+            chunked = await this.props.getOwnSharedLists(
+                chunk ? parseInt(chunk as string, 10) : null,
+                count ? parseInt(count as string, 10) : null
+            );
+        } else {
+            chunked = await this.props.getSharedLists(
+                query ? decodeURIComponent(query as string) : '',
+                chunk ? parseInt(chunk as string, 10) : null,
+                count ? parseInt(count as string, 10) : null
+            );
+        }
 
         let tags = await this.props.getTags();
 
-        if(lists && tags) {
+        if(chunked && tags) {
             this.setState(
                 {
-                    sharedLists: lists,
+                    sharedLists: chunked.items,
+                    hasNext: chunked.hasNext,
+                    hasPrevious: chunked.hasPrevious,
+                    chunk: chunked.chunk,
                     tags: tags.map(t => {
                         return {
                             text: t.name,
@@ -75,11 +102,33 @@ class SharedBookLists extends React.Component<Props, State> {
     }
 
     async componentDidUpdate(prevProps: Props) {
-        if(prevProps.match.params.query !== this.props.match.params.query) {
+        const prevSearch = parse(prevProps.location.search);
+        const currentSearch = parse(this.props.location.search);
+        if(prevSearch.query !== currentSearch.query || prevSearch.chunk !== currentSearch.chunk) {
             this.props.loadingStart();
-            const query = this.props.match.params.query ? this.props.match.params.query : '';
-            const lists = await this.props.getSharedLists(decodeURIComponent(query));
-            this.setState({sharedLists: lists}, () => this.props.loadingEnd());
+            const { query, chunk, count } = parse(this.props.location.search);
+            let chunked;
+            if(query === 'own') {
+                chunked = await this.props.getOwnSharedLists(
+                    chunk ? parseInt(chunk as string, 10) : null,
+                    count ? parseInt(count as string, 10) : null
+                );
+            } else {
+                chunked = await this.props.getSharedLists(
+                    query ? decodeURIComponent(query as string) : '',
+                    chunk ? parseInt(chunk as string, 10) : null,
+                    count ? parseInt(count as string, 10) : null
+                );
+            }
+            this.setState(
+                {
+                    sharedLists: chunked.items,
+                    chunk: chunked.chunk,
+                    hasNext: chunked.hasNext,
+                    hasPrevious: chunked.hasPrevious
+                },
+                () => this.props.loadingEnd()
+            );
         }
     }
 
@@ -140,13 +189,46 @@ class SharedBookLists extends React.Component<Props, State> {
         );
     }
 
+    getSearch = () => {
+        let { query, chunk } = parse(this.props.location.search);
+        query = query ? query as string : '';
+        let chunkNumber = chunk ? parseInt(chunk as string, 10) : 1;
+        return {query, chunkNumber};
+    }
+
+    handleNext = () => {
+        const search = this.getSearch();
+        this.props.history.push(
+            `/shared/search?query=${encodeURIComponent(search.query)}&chunk=${search.chunkNumber + 1}`,
+            {from: this.props.location}
+        );
+    }
+
+    handlePrevious = () => {
+        const search = this.getSearch();
+        this.props.history.push(
+            `/shared/search?query=${encodeURIComponent(search.query)}&chunk=${search.chunkNumber - 1}`,
+            {from: this.props.location}
+        );
+    }
+
     render() {
         if (this.state.dataFetched) {
             const items = (this.state.sharedLists as SharedBookListPreview[]).map(this.mapList);
             return (
                 <>
-                    <SimpletSearch query={this.props.match.params.query} onChange={this.searchHandler} />
-                    <Grid items={items} />
+                    <SimpletSearch
+                        query={parse(this.props.location.search).query as string}
+                        onChange={this.searchHandler}
+                    />
+                    <Pagination
+                        onNext={this.handleNext}
+                        onPrevious={this.handlePrevious}
+                        hasNext={this.state.hasNext}
+                        hasPrevious={this.state.hasPrevious}
+                    >
+                        <Grid items={items} />
+                    </Pagination>
                     <FixedGroup>
                         <RoundButton radius={3} title="Create new list" onClick={this.handleButtonClick}>
                             <i className="fas fa-list-alt" />
@@ -170,8 +252,20 @@ class SharedBookLists extends React.Component<Props, State> {
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     const bookService = new SharedBookListService();
     return {
-        getSharedLists: createPropActionWithResult(bookService.getLists, dispatch),
-        getOwnSharedLists: createPropActionWithResult(bookService.getOwnLists, dispatch),
+        getSharedLists: async (query: string, chunk: number | null, count: number | null) => {
+            const result = await bookService.getLists(query, chunk, count);
+            if (!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+            return result.data as Chunked<SharedBookListPreview>;
+        },
+        getOwnSharedLists: async (chunk: number | null, count: number | null) => {
+            const result = await bookService.getOwnLists(chunk, count);
+            if (!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+            return result.data as Chunked<SharedBookListPreview>;
+        },
         createList: createPropActionWithResult(bookService.createList, dispatch),
         getTags: createPropActionWithResult(new TagsService().getTags, dispatch),
         loadingStart: () => {

@@ -45,7 +45,10 @@ namespace ReadingList.Write.Infrastructure
                 }
 
                 while (stack.Count > 0 && !stack.Peek().MoveNext())
-                    stack.Pop();
+                {
+                    var enumerator = stack.Pop();
+                    enumerator.Dispose();
+                }
                 if (stack.Count == 0) break;
                 entityType = stack.Peek().Current.GetTargetType();
             }

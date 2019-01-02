@@ -1,0 +1,23 @@
+.pagination {
+    width: 62%;
+    min-height: 80%;
+    margin: 0 auto;
+}
+
+.buttons {
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.buttons > div {
+    margin: 0;
+    display: inline-block;
+}
+
+.buttons > div:last-child {
+    float: right;
+}
+
+.buttons > div:first-child {
+    float: left;
+}

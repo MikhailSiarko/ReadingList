@@ -5,3 +5,4 @@ export * from './Book';
 export * from './AuthenticationData';
 export * from './Credentials';
 export * from './NamedValue';
+export * from './Chunked';
