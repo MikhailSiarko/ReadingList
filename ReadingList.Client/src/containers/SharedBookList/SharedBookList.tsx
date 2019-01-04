@@ -4,11 +4,11 @@ import { RouteComponentProps } from 'react-router';
 import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI';
-import { SharedBookListItem, SelectListItem } from '../../models/BookList';
+import { SharedBookListItem, SelectListItem, ListInfo } from '../../models/BookList';
 import { Book, User } from '../../models';
 import { RootState } from '../../store/reducers';
 import { connect, Dispatch } from 'react-redux';
-import { SharedBookListService, BookService, UsersService } from '../../services';
+import { SharedBookListService, BookService, UsersService, ListsService } from '../../services';
 import { cloneDeep } from 'lodash';
 import { processFailedRequest } from '../../utils';
 import { withContextMenu, closeContextMenues } from '../../hoc';
@@ -19,6 +19,7 @@ import AddBookForm from '../../components/AddBookForm/AddBookForm';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import SharedListLegend from '../../components/SharedListLegend';
+import ShareBookForm from '../../components/ShareBookForm';
 
 interface Props extends RouteComponentProps<any> {
     getList: (id: number) => Promise<SharedList>;
@@ -27,9 +28,11 @@ interface Props extends RouteComponentProps<any> {
     addItem: (listId: number, bookId: number) => Promise<SharedBookListItem>;
     removeItem: (listId: number, itemId: number) => Promise<number>;
     updateList: (id: number, name: string, tags: Tag[], moderators: number[]) => Promise<SharedList>;
-    loadingStart: () => void;
-    loadingEnd: () => void;
+    startLoading: () => void;
+    endLoading: () => void;
     findBooks: (query: string) => Promise<Book[]>;
+    getModeratedLists: () => Promise<ListInfo[]>;
+    shareBook: (itemId: number, lists: number[]) => Promise<void>;
 }
 
 interface State {
@@ -40,6 +43,9 @@ interface State {
     isFormHidden: boolean;
     books: Book[] | null;
     bookSearchQuery: string | null;
+    sharingBookId: number | null;
+    moderatedLists: ListInfo[] | null;
+    shareBookFormHidden: boolean;
 }
 
 class SharedBookList extends React.Component<Props, State> {
@@ -52,22 +58,25 @@ class SharedBookList extends React.Component<Props, State> {
             bookSearchQuery: null,
             books: null,
             isFormHidden: true,
-            moderatorOptions: null
+            moderatorOptions: null,
+            moderatedLists: null,
+            shareBookFormHidden: true,
+            sharingBookId: null
         };
     }
 
     async componentDidMount() {
         if (this.state.list === null) {
             const id = parseInt(this.props.match.params.id, 10);
-            this.props.loadingStart();
+            this.props.startLoading();
             const list = await this.props.getList(id);
-            this.setState({list}, () => this.props.loadingEnd());
+            this.setState({list}, () => this.props.endLoading());
         }
     }
 
     handleSaveList = async (name: string, assignedTags: Tag[], moderators: number[]) => {
         const list = this.state.list as SharedList;
-        this.props.loadingStart();
+        this.props.startLoading();
         const updatedList = await this.props.updateList(list.id, name, assignedTags, moderators);
         if(updatedList) {
             let options = this.state.tagOptions as SelectListItem[];
@@ -80,14 +89,14 @@ class SharedBookList extends React.Component<Props, State> {
                     };
                 });
             }
-            this.setState({list: updatedList, isInEditMode: false, tagOptions: options}, () => this.props.loadingEnd());
+            this.setState({list: updatedList, isInEditMode: false, tagOptions: options}, () => this.props.endLoading());
         } else {
-            this.props.loadingEnd();
+            this.props.endLoading();
         }
     }
 
     switchToEditMode = async () => {
-        this.props.loadingStart();
+        this.props.startLoading();
         const tags = await this.props.getTags();
         const users = await this.props.getUsers();
         if(tags && users) {
@@ -105,11 +114,11 @@ class SharedBookList extends React.Component<Props, State> {
                         value: u.id
                     };
                 })
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         } else {
             this.setState({
                 isInEditMode: true
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         }
 
     }
@@ -158,7 +167,7 @@ class SharedBookList extends React.Component<Props, State> {
 
             if (confirmDeleting) {
                 if(that.state.list) {
-                    that.props.loadingStart();
+                    that.props.startLoading();
                     const itemId = await that.props.removeItem(that.state.list.id, item.id);
                     if(itemId) {
                         const copy = cloneDeep(that.state.list);
@@ -166,9 +175,9 @@ class SharedBookList extends React.Component<Props, State> {
                         copy.items.splice(index, 1);
                         that.setState({
                             list: copy
-                        }, () => that.props.loadingEnd());
+                        }, () => that.props.endLoading());
                     } else {
-                        that.props.loadingEnd();
+                        that.props.endLoading();
                     }
                 }
             } else {
@@ -180,7 +189,16 @@ class SharedBookList extends React.Component<Props, State> {
     mapItem = (item: SharedBookListItem) => {
         const actions = [];
         if(this.state.list && this.state.list.canBeModerated) {
-            actions.push({text: 'Delete', onClick: this.deleteItem(item)});
+            actions.push(
+                {
+                    text: 'Delete',
+                    onClick: this.deleteItem(item)
+                },
+                {
+                    onClick: () => this.showShareBookForm(item.bookId),
+                    text: 'Share'
+                }
+            );
         }
         const Contexed = withContextMenu(actions, SharedBookLI);
         return <Contexed key={item.id} item={item} onDelete={this.deleteItem(item)} />;
@@ -195,36 +213,36 @@ class SharedBookList extends React.Component<Props, State> {
     }
 
     showBooksForm = async () => {
-        this.props.loadingStart();
+        this.props.startLoading();
         const books = await this.props.findBooks('');
         if(books) {
             this.setState({
                 books,
                 isFormHidden: false
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         } else {
             this.setState({
                 isFormHidden: false
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         }
     }
 
     handleSearchChange = async (query: string) => {
-        this.props.loadingStart();
+        this.props.startLoading();
         const books = await this.props.findBooks(query);
         if(books) {
             this.setState({
                 books,
                 bookSearchQuery: query
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         } else {
-            this.props.loadingEnd();
+            this.props.endLoading();
         }
     }
 
     handleAddBook = async (id: number) => {
         if (this.state.list) {
-            this.props.loadingStart();
+            this.props.startLoading();
             const bookItem = await this.props.addItem(this.state.list.id, id);
             if(bookItem) {
                 let copy = cloneDeep(this.state.list);
@@ -236,7 +254,7 @@ class SharedBookList extends React.Component<Props, State> {
                             books: null,
                             isFormHidden: true
                         },
-                        () => this.props.loadingEnd()
+                        () => this.props.endLoading()
                     );
                 }
             } else {
@@ -245,10 +263,44 @@ class SharedBookList extends React.Component<Props, State> {
                         books: null,
                         isFormHidden: true
                     },
-                    () => this.props.loadingEnd()
+                    () => this.props.endLoading()
                 );
             }
         }
+    }
+
+    showShareBookForm = async (bookId: number) => {
+        this.props.startLoading();
+        const moderatedLists = await this.props.getModeratedLists();
+        if(moderatedLists) {
+            this.setState({
+                shareBookFormHidden: false,
+                moderatedLists,
+                sharingBookId: bookId
+            }, () => this.props.endLoading());
+        } else {
+            this.setState({
+                shareBookFormHidden: false,
+                sharingBookId: bookId
+            }, () => this.props.endLoading());
+        }
+    }
+
+    handleShareBook = async (bookId: number, listsIds: number[]) => {
+        this.props.startLoading();
+        await this.props.shareBook(bookId, listsIds);
+        this.setState({
+            moderatedLists: null,
+            shareBookFormHidden: true,
+            sharingBookId: null
+        }, () => this.props.endLoading());
+    }
+
+    handleCancelSharingBook = () => {
+        this.setState({
+            shareBookFormHidden: true,
+            sharingBookId: null
+        });
     }
 
     render() {
@@ -279,14 +331,25 @@ class SharedBookList extends React.Component<Props, State> {
                                         <i className="fas fa-book" />
                                     </RoundButton>
                                 </FixedGroup>
-                                <AddBookForm
-                                    hidden={this.state.isFormHidden}
-                                    books={this.state.books ? this.state.books : []}
-                                    searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
-                                    onSubmit={this.handleAddBook}
-                                    onCancel={this.closeForm}
-                                    onQueryChange={this.handleSearchChange}
-                                />
+                                {
+                                    !this.state.isFormHidden &&
+                                        <AddBookForm
+                                            books={this.state.books ? this.state.books : []}
+                                            searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
+                                            onSubmit={this.handleAddBook}
+                                            onCancel={this.closeForm}
+                                            onQueryChange={this.handleSearchChange}
+                                        />
+                                }
+                                {
+                                    !this.state.shareBookFormHidden &&
+                                        <ShareBookForm
+                                            options={this.state.moderatedLists ? this.state.moderatedLists : []}
+                                            onSubmit={this.handleShareBook}
+                                            onCancel={this.handleCancelSharingBook}
+                                            choosenBookId={this.state.sharingBookId}
+                                        />
+                                }
                             </>
                         )
                     }
@@ -299,6 +362,7 @@ class SharedBookList extends React.Component<Props, State> {
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     const listService = new SharedBookListService();
+    const bookService = new BookService();
     return {
         getList: async (id: number) => {
             const result = await listService.getList(id);
@@ -347,19 +411,32 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
             }
             return result.data;
         },
-        loadingStart: () => {
+        startLoading: () => {
             dispatch(loadingActions.start());
         },
-        loadingEnd: () => {
+        endLoading: () => {
             dispatch(loadingActions.end());
         },
         findBooks: async (query: string) => {
-            const result = await new BookService().findBooks(query);
+            const result = await bookService.findBooks(query);
             if (!result.isSucceed) {
                 processFailedRequest(result, dispatch);
             }
             return result.data;
-        }
+        },
+        shareBook: async (bookId: number, lists: number[]) => {
+            const result = await bookService.shareBook(bookId, lists);
+            if (!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+        },
+        getModeratedLists: async () => {
+            const result = await new ListsService().getModeratedLists();
+            if(!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+            return result.data;
+        },
     };
 }
 

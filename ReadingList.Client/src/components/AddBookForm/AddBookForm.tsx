@@ -7,7 +7,6 @@ import BookGridItem from '../Grid/BookGridItem';
 import bookItemStyles from '../Grid/BookGridItem/BookGridItem.css';
 
 interface Props {
-    hidden: boolean;
     onSubmit: (id: number) => Promise<void>;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
     searchQuery?: string;
@@ -100,7 +99,6 @@ class AddBookForm extends React.Component<Props> {
                         width: '80%'
                     }
                 }
-                hidden={this.props.hidden}
                 onSubmit={this.handleFormSubmit}
                 onCancel={this.handleFormCancel}
             >

@@ -234,14 +234,16 @@ class SharedBookLists extends React.Component<Props, State> {
                             <i className="fas fa-list-alt" />
                         </RoundButton>
                     </FixedGroup>
-                    <Form
-                        header={'Add new list'}
-                        hidden={this.state.isFormHidden}
-                        onSubmit={this.handleListFormSubmit}
-                        onCancel={this.handleCancel}
-                    >
-                        <CreateSharedList tags={this.state.tags as SelectListItem[]} />
-                    </Form>
+                    {
+                        !this.state.isFormHidden &&
+                            <Form
+                                header={'Add new list'}
+                                onSubmit={this.handleListFormSubmit}
+                                onCancel={this.handleCancel}
+                            >
+                                <CreateSharedList tags={this.state.tags as SelectListItem[]} />
+                            </Form>
+                    }
                 </>
             );
         }

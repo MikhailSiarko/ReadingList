@@ -6,6 +6,8 @@ namespace ReadingList.Models.Read.Abstractions
 
         public int OwnerId { get; set; }
 
+        public string OwnerLogin { get; set; }
+
         public int Type { get; set; }
     }
 }

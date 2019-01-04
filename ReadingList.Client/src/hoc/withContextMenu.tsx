@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from '../styles/global.css';
 
 interface MenuItem {
-    onClick: () => void;
+    onClick: () => void | Promise<void>;
     text: string;
 }
 

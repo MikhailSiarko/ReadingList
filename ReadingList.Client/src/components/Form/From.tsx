@@ -7,7 +7,6 @@ import { isNullOrEmpty } from '../../utils';
 
 interface Props {
     header: string | JSX.Element;
-    hidden: boolean;
     size?: {
         width: string;
         height: string;
@@ -29,11 +28,9 @@ export class Form extends React.Component<Props> {
                 const select = element as HTMLSelectElement;
                 const selected = Array.from(select.selectedOptions).map(i => JSON.parse(i.value));
                 values.push({name: select.name, value: selected});
-                select.value = '';
             } else {
                 const input = element as HTMLInputElement;
                 values.push({name: input.name, value: input.value});
-                input.value = '';
             }
         });
         await this.props.onSubmit(values);
@@ -43,7 +40,6 @@ export class Form extends React.Component<Props> {
         return (
             <form
                 onSubmit={this.handleSubmit}
-                hidden={this.props.hidden}
                 className={styles['form']}
             >
                 <div

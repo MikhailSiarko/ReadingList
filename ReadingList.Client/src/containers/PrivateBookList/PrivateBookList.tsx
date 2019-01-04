@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItem, SelectListItem, PrivateBookList as PrivateList, Book } from '../../models';
+import { PrivateBookListItem, SelectListItem, PrivateBookList as PrivateList, Book, ListInfo } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
-import { PrivateBookListService } from '../../services';
+import { PrivateBookListService, ListsService } from '../../services';
 import { withContextMenu, closeContextMenues } from '../../hoc';
 import BookList from '../../components/BookList';
 import PrivateListEditor from '../../components/PrivateListEditForm';
@@ -17,6 +17,7 @@ import RoundButton from '../../components/RoundButton';
 import FixedGroup from '../../components/FixedGroup';
 import ShareForm from '../../components/ShareForm';
 import PrivateListLegend from '../../components/PrivateListLegend';
+import ShareBookForm from '../../components/ShareBookForm';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;
@@ -29,17 +30,22 @@ interface Props extends RouteComponentProps<any> {
     switchListEditMode: () => void;
     getList: () => Promise<void>;
     getBookStatuses: () => Promise<void>;
-    loadingStart: () => void;
-    loadingEnd: () => void;
+    startLoading: () => void;
+    endLoading: () => void;
     findBooks: (query: string) => Promise<Book[]>;
     shareList: (name: string) => Promise<void>;
+    getModeratedLists: () => Promise<ListInfo[]>;
+    shareBook: (itemId: number, lists: number[]) => Promise<void>;
 }
 
 interface State {
     bookFormHidden: boolean;
     shareFormHidden: boolean;
+    shareBookFormHidden: boolean;
+    moderatedLists: ListInfo[] | null;
     books: Book[] | null;
     bookSearchQuery: string | null;
+    sharingBookId: number | null;
 }
 
 class PrivateBookList extends React.Component<Props, State> {
@@ -49,20 +55,23 @@ class PrivateBookList extends React.Component<Props, State> {
             bookFormHidden: true,
             books: null,
             bookSearchQuery: null,
-            shareFormHidden: true
+            shareFormHidden: true,
+            shareBookFormHidden: true,
+            moderatedLists: null,
+            sharingBookId: null
         };
     }
 
     async componentDidMount() {
         if (!this.props.bookList || !this.props.statuses) {
-            this.props.loadingStart();
+            this.props.startLoading();
             if(!this.props.bookList) {
                 await this.props.getList();
             }
             if(!this.props.statuses) {
                 await this.props.getBookStatuses();
             }
-            this.props.loadingEnd();
+            this.props.endLoading();
         }
     }
 
@@ -85,32 +94,38 @@ class PrivateBookList extends React.Component<Props, State> {
     }
 
     handleUpdateList = async (newName: string) => {
-        this.props.loadingStart();
+        this.props.startLoading();
         await this.props.updateList({name: newName} as PrivateList);
-        this.props.loadingEnd();
+        this.props.endLoading();
     }
 
     handleUpdateItem = async (item: PrivateBookListItem) => {
-        this.props.loadingStart();
+        this.props.startLoading();
         await this.props.updateItem(item);
-        this.props.loadingEnd();
+        this.props.endLoading();
     }
 
     mapItem = (item: PrivateBookListItem) => {
         const deleteItem = this.deleteItem(
             item,
             async itemId => {
-                this.props.loadingStart();
+                this.props.startLoading();
                 await this.props.deleteItem(itemId);
-                this.props.loadingEnd();
+                this.props.endLoading();
             }
         );
 
         const actions = [
-            {onClick: () => this.props.switchItemEditMode(item.id), text: 'Edit'},
+            {
+                onClick: () => this.props.switchItemEditMode(item.id),
+                text: 'Edit'},
             {
                 onClick: deleteItem,
                 text: 'Delete'
+            },
+            {
+                onClick: () => this.showShareBookForm(item.bookId),
+                text: 'Share'
             }
         ];
 
@@ -151,17 +166,17 @@ class PrivateBookList extends React.Component<Props, State> {
     }
 
     showBooksForm = async () => {
-        this.props.loadingStart();
+        this.props.startLoading();
         const books = await this.props.findBooks('');
         if(books) {
             this.setState({
                 books,
                 bookFormHidden: false
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         } else {
             this.setState({
                 bookFormHidden: false
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         }
     }
 
@@ -172,25 +187,25 @@ class PrivateBookList extends React.Component<Props, State> {
     }
 
     handleSearchChange = async (query: string) => {
-        this.props.loadingStart();
+        this.props.startLoading();
         const books = await this.props.findBooks(query);
         if(books) {
             this.setState({
                 books,
                 bookSearchQuery: query
-            }, () => this.props.loadingEnd());
+            }, () => this.props.endLoading());
         } else {
-            this.props.loadingEnd();
+            this.props.endLoading();
         }
     }
 
     handleAddBook = async (id: number) => {
-        this.props.loadingStart();
+        this.props.startLoading();
         await this.props.addItem(id);
         this.setState({
             books: null,
             bookFormHidden: true
-        }, () => this.props.loadingEnd());
+        }, () => this.props.endLoading());
     }
 
     handleShareCancel = () => {
@@ -199,12 +214,46 @@ class PrivateBookList extends React.Component<Props, State> {
         });
     }
 
+    showShareBookForm = async (bookId: number) => {
+        this.props.startLoading();
+        const moderatedLists = await this.props.getModeratedLists();
+        if(moderatedLists) {
+            this.setState({
+                shareBookFormHidden: false,
+                moderatedLists,
+                sharingBookId: bookId
+            }, () => this.props.endLoading());
+        } else {
+            this.setState({
+                shareBookFormHidden: false,
+                sharingBookId: bookId
+            }, () => this.props.endLoading());
+        }
+    }
+
+    handleShareBook = async (bookId: number, listsIds: number[]) => {
+        this.props.startLoading();
+        await this.props.shareBook(bookId, listsIds);
+        this.setState({
+            moderatedLists: null,
+            shareBookFormHidden: true,
+            sharingBookId: null
+        }, () => this.props.endLoading());
+    }
+
     handleShareFormSubmit = async (name: string) => {
-        this.props.loadingStart();
+        this.props.startLoading();
         await this.props.shareList(name);
         this.setState({
             shareFormHidden: true
-        }, () => this.props.loadingEnd());
+        }, () => this.props.endLoading());
+    }
+
+    handleCancelSharingBook = () => {
+        this.setState({
+            shareBookFormHidden: true,
+            sharingBookId: null
+        });
     }
 
     render() {
@@ -228,19 +277,32 @@ class PrivateBookList extends React.Component<Props, State> {
                         <i className="fas fa-book" />
                     </RoundButton>
                 </FixedGroup>
-                <AddBookForm
-                    hidden={this.state.bookFormHidden}
-                    books={this.state.books ? this.state.books : []}
-                    searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
-                    onSubmit={this.handleAddBook}
-                    onCancel={this.closeForm}
-                    onQueryChange={this.handleSearchChange}
-                />
-                <ShareForm
-                    hidden={this.state.shareFormHidden}
-                    onCancel={this.handleShareCancel}
-                    onSubmit={this.handleShareFormSubmit}
-                />
+                {
+                    !this.state.bookFormHidden &&
+                        <AddBookForm
+                            books={this.state.books ? this.state.books : []}
+                            searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
+                            onSubmit={this.handleAddBook}
+                            onCancel={this.closeForm}
+                            onQueryChange={this.handleSearchChange}
+                        />
+                }
+                {
+                    !this.state.shareFormHidden &&
+                        <ShareForm
+                            onCancel={this.handleShareCancel}
+                            onSubmit={this.handleShareFormSubmit}
+                        />
+                }
+                {
+                    !this.state.shareBookFormHidden &&
+                        <ShareBookForm
+                            options={this.state.moderatedLists ? this.state.moderatedLists : []}
+                            onSubmit={this.handleShareBook}
+                            onCancel={this.handleCancelSharingBook}
+                            choosenBookId={this.state.sharingBookId}
+                        />
+                }
             </>
         );
     }
@@ -270,24 +332,37 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         updateList: createPropAction(listService.updateList, dispatch, privateBookListAction.updateList),
         getBookStatuses: createPropAction(listService.getBookStatuses, dispatch,
             privateBookListAction.setBookStatuses),
+        getModeratedLists: async () => {
+            const result = await new ListsService().getModeratedLists();
+            if(!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+            return result.data;
+        },
         shareList: async (name: string) => {
             const result = await listService.sharePrivateList(name);
             if (!result.isSucceed) {
                 processFailedRequest(result, dispatch);
             }
         },
-        loadingStart: () => {
+        startLoading: () => {
             dispatch(loadingActions.start());
         },
-        loadingEnd: () => {
+        endLoading: () => {
             dispatch(loadingActions.end());
         },
         findBooks: async (query: string) => {
             const result = await bookService.findBooks(query);
             if (!result.isSucceed) {
-                alert(result.errorMessage);
+                processFailedRequest(result, dispatch);
             }
             return result.data;
+        },
+        shareBook: async (bookId: number, lists: number[]) => {
+            const result = await bookService.shareBook(bookId, lists);
+            if (!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
         }
     };
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,10 @@ namespace ReadingList.Api.Controllers
             return Ok(books);
         }
 
-        [HttpPost("{bookId}/{listId}")]
-        public async Task<IActionResult> Post([FromRoute] int bookId, [FromRoute] int listId)
+        [HttpPost("{bookId}")]
+        public async Task<IActionResult> Post([FromRoute] int bookId, [FromBody] IEnumerable<int> listsIds)
         {
-            await _domainService.ExecuteAsync(new AddBookToList(User.Claims.GetUserId(), bookId, listId));
+            await _domainService.ExecuteAsync(new AddBookToLists(User.Claims.GetUserId(), bookId, listsIds));
 
             return Ok();
         }

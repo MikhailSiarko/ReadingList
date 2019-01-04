@@ -52,18 +52,23 @@ namespace ReadingList.Write
         public async Task SaveBatchAsync<T>(IEnumerable<T> entities) where T : Entity
         {
             var enumerable = entities.ToList();
-            var existedEntities = enumerable.Where(e => e.Id != default(int)).ToList();
-
-            if (existedEntities.Any())
+            if (enumerable.Any())
             {
-                _dbContext.Set<T>().RemoveRange(existedEntities);
+
+                var existedEntities = enumerable.Where(e => e.Id != default(int)).ToList();
+
+                if (existedEntities.Any())
+                {
+                    _dbContext.RemoveRange(existedEntities);
+
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                await _dbContext.AddRangeAsync(enumerable);
 
                 await _dbContext.SaveChangesAsync();
             }
 
-            await _dbContext.Set<T>().AddRangeAsync(enumerable);
-
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

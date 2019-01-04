@@ -43,6 +43,16 @@ class SharedListEditForm extends React.Component<Props> {
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+        if(event.currentTarget.form) {
+            Array.from(event.currentTarget.form.elements).forEach(i => {
+                if(i.tagName === 'SELECT') {
+                    const select = i as HTMLSelectElement;
+                    Array.from(select.selectedOptions).forEach(o => {
+                        o.selected = false;
+                    });
+                }
+            });
+        }
         this.props.onCancel();
     }
 

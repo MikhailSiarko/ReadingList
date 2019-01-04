@@ -1,5 +1,4 @@
-// tslint:disable-next-line:quotemark
-import ApiService from "./ApiService";
+import ApiService from './ApiService';
 import ApiConfiguration from '../config/ApiConfiguration';
 import { onError } from '../utils';
 import { User } from '../models';

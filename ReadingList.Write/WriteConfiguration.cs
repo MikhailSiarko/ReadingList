@@ -6,7 +6,6 @@ using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Models.Write;
-using ReadingList.Models.Write.HelpEntities;
 using ReadingList.Models.Write.Identity;
 using ReadingList.Write.FetchHandlers;
 
@@ -41,6 +40,13 @@ namespace ReadingList.Write
             services
                 .AddTransient<IFetchHandler<GetListAccessForUser, (bool editable, bool canBeModerated)>,
                     GetListAccessForUserFetchHandler>();
+
+            services
+                .AddTransient<IFetchHandler<GetListsByIds, IEnumerable<BookList>>, GetListsByIdsFetchHandler>();
+
+            services
+                .AddTransient<IFetchHandler<GetItemsByBookAndListIds, IEnumerable<BookListItem>>,
+                    GetItemsByBookAndListIdsFetchHandler>();
 
             services.AddDbContextPool<WriteDbContext>((provider, builder) =>
                 builder.UseSqlite(provider.GetConnectionString("Write")));

@@ -9,4 +9,10 @@ export class BookService extends ApiService {
             .then(this.onSuccess<Book[]>())
             .catch(onError);
     }
+
+    shareBook = (bookId: number, listsIds: number[]) => {
+        return this.configureRequest(ApiConfiguration.getShareBookUrl(bookId), 'POST', listsIds)
+            .then(this.onSuccess<void>())
+            .catch(onError);
+    }
 }

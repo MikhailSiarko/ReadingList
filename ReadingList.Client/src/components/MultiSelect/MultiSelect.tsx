@@ -25,18 +25,24 @@ interface State {
     selectOptions: JSX.Element[];
 }
 
-class MultipleSelect extends React.Component<Props, State> {
+class MultiSelect extends React.Component<Props, State> {
     wrapper: HTMLDivElement;
     searchInput: HTMLInputElement;
     select: HTMLSelectElement;
 
-    constructor(props: Props) {
-        super(props);
-        this.state = this.createStateWithDefault();
+    static getDerivedStateFromProps(props: Props, state: State) {
+        if(state.options.length !== props.options.length) {
+            return {
+                ...state,
+                options: props.options,
+                selectOptions: MultiSelect.renderOptions(props)
+            };
+        }
+        return null;
     }
 
-    renderOptions = (...optionsToAdd: SelectListItem[]) => {
-        let options = this.props.options;
+    static renderOptions = (props: Props, ...optionsToAdd: SelectListItem[]) => {
+        let options = props.options;
         if(optionsToAdd) {
             options = options.concat(optionsToAdd);
         }
@@ -50,6 +56,11 @@ class MultipleSelect extends React.Component<Props, State> {
                 }
             </option>
         ));
+    }
+
+    constructor(props: Props) {
+        super(props);
+        this.state = this.createStateWithDefault();
     }
 
     createStateWithDefault = () => {
@@ -70,7 +81,7 @@ class MultipleSelect extends React.Component<Props, State> {
             optionsHidden: true,
             search: '',
             addHidden: true,
-            selectOptions: this.renderOptions()
+            selectOptions: MultiSelect.renderOptions(this.props)
         };
     }
 
@@ -228,7 +239,7 @@ class MultipleSelect extends React.Component<Props, State> {
             search: '',
             addHidden: true,
             options: this.props.options.filter(i => this.state.value.every(this.buildTextPredicate(i))),
-            selectOptions: this.renderOptions(newOption)
+            selectOptions: MultiSelect.renderOptions(this.props, newOption)
         });
     }
 
@@ -314,4 +325,4 @@ class MultipleSelect extends React.Component<Props, State> {
     }
 }
 
-export default MultipleSelect;
+export default MultiSelect;

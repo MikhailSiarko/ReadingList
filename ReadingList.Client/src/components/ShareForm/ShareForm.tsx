@@ -4,7 +4,6 @@ import { NamedValue } from '../../models';
 import globalStyles from '../../styles/global.css';
 
 interface Props {
-    hidden: boolean;
     onSubmit: (name: string) => Promise<void>;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -31,7 +30,6 @@ class ShareForm extends React.Component<Props> {
         return (
             <Form
                 header={'Share list'}
-                hidden={this.props.hidden}
                 size={
                     {
                         height: '19.5rem',

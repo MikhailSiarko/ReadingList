@@ -3,6 +3,7 @@ export class ApiConfiguration {
     public static LOGIN = '/account/login';
     public static REGISTER = '/account/register';
     public static LISTS = '/lists';
+    public static MODERATED_LISTS = `${ApiConfiguration.LISTS}/moderated`;
     public static PRIVATE_LIST = `${ApiConfiguration.LISTS}/private`;
     public static PRIVATE_LIST_ITEMS = `${ApiConfiguration.LISTS}/private/items`;
     public static SHARED_LISTS = `${ApiConfiguration.LISTS}/shared`;
@@ -42,6 +43,10 @@ export class ApiConfiguration {
 
     public static getSharePrivateListUrl(name: string) {
         return `${ApiConfiguration.PRIVATE_LIST}/share?name=${name}`;
+    }
+
+    public static getShareBookUrl(bookId: number) {
+        return `${ApiConfiguration.BOOKS}/` + bookId;
     }
 }
 

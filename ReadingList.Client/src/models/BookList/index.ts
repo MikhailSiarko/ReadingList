@@ -6,3 +6,4 @@ export * from './Implementations/PrivateBookList';
 export * from './Implementations/PrivateBookListItem';
 export * from './Implementations/SharedBookList';
 export * from './Implementations/SharedBookListPreview';
+export * from './ListInfo';
