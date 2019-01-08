@@ -5,6 +5,7 @@ import SimpleSearch from '../SimpleSearch';
 import Grid from '../Grid';
 import BookGridItem from '../Grid/BookGridItem';
 import bookItemStyles from '../Grid/BookGridItem/BookGridItem.css';
+import Pagination from '../Pagination';
 
 interface Props {
     onSubmit: (id: number) => Promise<void>;
@@ -12,6 +13,10 @@ interface Props {
     searchQuery?: string;
     onQueryChange: (query: string) => void;
     books: Book[];
+    hasPrevious: boolean;
+    hasNext: boolean;
+    onNext: () => void;
+    onPrevious: () => void;
 }
 
 class AddBookForm extends React.Component<Props> {
@@ -107,7 +112,14 @@ class AddBookForm extends React.Component<Props> {
                     onChange={this.handleSearchChange}
                     query={this.props.searchQuery}
                 />
-                <Grid items={this.props.books.map(this.renderBooks)} />
+                <Pagination
+                    hasNext={this.props.hasNext}
+                    hasPrevious={this.props.hasPrevious}
+                    onNext={this.props.onNext}
+                    onPrevious={this.props.onPrevious}
+                >
+                    <Grid items={this.props.books.map(this.renderBooks)} />
+                </Pagination>
             </Form>
         );
     }

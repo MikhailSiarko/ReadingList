@@ -37,8 +37,8 @@ export class ApiConfiguration {
         return `${ApiConfiguration.LISTS}/shared/${listId}/items`;
     }
 
-    public static getBooksSearchUrl(query: string) {
-        return `${ApiConfiguration.BOOKS}?query=${encodeURIComponent(query)}`;
+    public static getBooksSearchUrl(query: string, chunk: number | null) {
+        return `${ApiConfiguration.BOOKS}?query=${encodeURIComponent(query)}&chunk=${chunk}`;
     }
 
     public static getSharePrivateListUrl(name: string) {

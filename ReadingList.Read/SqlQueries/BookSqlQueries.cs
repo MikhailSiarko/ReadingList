@@ -15,6 +15,9 @@ namespace ReadingList.Read.SqlQueries
                    "WHEN @Query LIKE '#%' THEN lower(t.Name) LIKE '%' || substr(@Query, 2) || '%' " +
                    "ELSE lower(b.Author) LIKE '%' || @Query || '%' OR lower(b.Title) LIKE '%' || @Query || '%' " +
                    "END")
+            .OrderBy("b.Id " +
+                     "LIMIT @Count + 1 " +
+                     "OFFSET (@Count * (@Chunk - 1))")
             .ToSql();
     }
 }

@@ -8,16 +8,18 @@ using ReadingList.Read.Queries.Book;
 
 namespace ReadingList.Read.QueryHandlers.Book
 {
-    public class FindBooksQueryHandler : QueryHandler<FindBooks, IEnumerable<BookDto>>
+    public class FindBooksQueryHandler : QueryHandler<FindBooks, ChunkedCollectionDto<BookDto>>
     {
         public FindBooksQueryHandler(IDbConnection dbConnection) : base(dbConnection)
         {
         }
 
-        protected override async Task<IEnumerable<BookDto>> Handle(
-            SqlQueryContext<FindBooks, IEnumerable<BookDto>> context)
+        protected override async Task<ChunkedCollectionDto<BookDto>> Handle(
+            SqlQueryContext<FindBooks, ChunkedCollectionDto<BookDto>> context)
         {
             var rows = (await DbConnection.QueryAsync<BookDbRow>(context.Sql, context.Parameters)).ToList();
+
+            if (!rows.Any()) return ChunkedCollectionDto<BookDto>.Empty;
 
             var books = new List<BookDto>();
 
@@ -38,7 +40,8 @@ namespace ReadingList.Read.QueryHandlers.Book
                 });
             }
 
-            return books;
+            return new ChunkedCollectionDto<BookDto>(books, rows.Count > context.Query.Count,
+                context.Query.Chunk);;
         }
 
         private class BookDbRow

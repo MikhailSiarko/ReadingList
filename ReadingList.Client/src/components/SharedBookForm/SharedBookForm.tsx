@@ -10,7 +10,7 @@ interface Props {
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-class ShareBookForm extends React.Component<Props> {
+class SharedBookForm extends React.Component<Props> {
     static mapListInfo(info: ListInfo): SelectListItem {
         return {
             text: `${info.name} (${info.ownerLogin}, ${info.type === 1 ? 'private' : 'shared'})`,
@@ -65,7 +65,7 @@ class ShareBookForm extends React.Component<Props> {
                 <div>
                     <MultiSelect
                         name="selected-lists"
-                        options={this.props.options.map(ShareBookForm.mapListInfo)}
+                        options={this.props.options.map(SharedBookForm.mapListInfo)}
                         required={true}
                         placeholder="Select lists"
                      />
@@ -75,4 +75,4 @@ class ShareBookForm extends React.Component<Props> {
     }
 }
 
-export default ShareBookForm;
+export default SharedBookForm;

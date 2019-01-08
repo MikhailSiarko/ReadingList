@@ -51,38 +51,6 @@ namespace ReadingList.Read.SqlQueries
             }
         }
 
-        public static string SelectPreviews
-        {
-            get
-            {
-                var getListsSql = new SqlBuilder()
-                    .Select("l.Id", "l.Name", "l.OwnerId", "l.Type", "COUNT(i.Id) AS BooksCount")
-                    .From("BookLists AS l")
-                    .LeftJoin("SharedBookListItems AS i ON i.BookListId = l.Id")
-                    .Where($"Type = {BookListType.Shared:D}")
-                    .GroupBy("l.Id")
-                    .ToSql();
-
-                var getTagsSql = new SqlBuilder()
-                    .Select("Name AS TagName", "SharedBookListId AS ListId")
-                    .From("Tags")
-                    .LeftJoin("(" +
-                              new SqlBuilder()
-                                  .Select("TagId", "SharedBookListId")
-                                  .From("SharedBookListTags")
-                                  .Where("SharedBookListId IN (" +
-                                         new SqlBuilder()
-                                             .Select("Id")
-                                             .From("BookLists")
-                                             .Where($"Type = {BookListType.Shared:D}")
-                                             .ToSql() + ")") +
-                              ") AS it ON it.TagId = Id")
-                    .ToSql();
-
-                return $"{getListsSql}; {getTagsSql}";
-            }
-        }
-
         public static string FindPreviews =>
             new SqlBuilder()
                 .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId",

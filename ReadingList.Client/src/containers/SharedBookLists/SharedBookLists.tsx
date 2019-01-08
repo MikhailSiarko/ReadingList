@@ -196,20 +196,20 @@ class SharedBookLists extends React.Component<Props, State> {
         return {query, chunkNumber};
     }
 
-    handleNext = () => {
+    handlePaging = (stepSign: number) => {
         const search = this.getSearch();
         this.props.history.push(
-            `/shared/search?query=${encodeURIComponent(search.query)}&chunk=${search.chunkNumber + 1}`,
+            `/shared/search?query=${encodeURIComponent(search.query)}&chunk=${search.chunkNumber + (stepSign)}`,
             {from: this.props.location}
         );
     }
 
+    handleNext = () => {
+        this.handlePaging(1);
+    }
+
     handlePrevious = () => {
-        const search = this.getSearch();
-        this.props.history.push(
-            `/shared/search?query=${encodeURIComponent(search.query)}&chunk=${search.chunkNumber - 1}`,
-            {from: this.props.location}
-        );
+        this.handlePaging(-1);
     }
 
     render() {

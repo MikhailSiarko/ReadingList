@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { RootState } from '../../store/reducers';
-import { PrivateBookListItem, SelectListItem, PrivateBookList as PrivateList, Book, ListInfo } from '../../models';
+import {
+    PrivateBookListItem,
+    SelectListItem,
+    PrivateBookList as PrivateList,
+    Book,
+    ListInfo,
+    Chunked
+} from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
 import { privateBookListAction } from '../../store/actions/privateBookList';
@@ -17,7 +24,7 @@ import RoundButton from '../../components/RoundButton';
 import FixedGroup from '../../components/FixedGroup';
 import ShareForm from '../../components/ShareForm';
 import PrivateListLegend from '../../components/PrivateListLegend';
-import ShareBookForm from '../../components/ShareBookForm';
+import SharedBookForm from '../../components/SharedBookForm';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;
@@ -32,7 +39,7 @@ interface Props extends RouteComponentProps<any> {
     getBookStatuses: () => Promise<void>;
     startLoading: () => void;
     endLoading: () => void;
-    findBooks: (query: string) => Promise<Book[]>;
+    findBooks: (query: string, chunk: number | null) => Promise<Chunked<Book>>;
     shareList: (name: string) => Promise<void>;
     getModeratedLists: () => Promise<ListInfo[]>;
     shareBook: (itemId: number, lists: number[]) => Promise<void>;
@@ -46,6 +53,9 @@ interface State {
     books: Book[] | null;
     bookSearchQuery: string | null;
     sharingBookId: number | null;
+    hasPrevious: boolean;
+    hasNext: boolean;
+    chunk: number;
 }
 
 class PrivateBookList extends React.Component<Props, State> {
@@ -58,7 +68,10 @@ class PrivateBookList extends React.Component<Props, State> {
             shareFormHidden: true,
             shareBookFormHidden: true,
             moderatedLists: null,
-            sharingBookId: null
+            sharingBookId: null,
+            chunk: 1,
+            hasNext: false,
+            hasPrevious: false
         };
     }
 
@@ -167,10 +180,12 @@ class PrivateBookList extends React.Component<Props, State> {
 
     showBooksForm = async () => {
         this.props.startLoading();
-        const books = await this.props.findBooks('');
-        if(books) {
+        const chunked = await this.props.findBooks('', 1);
+        if(chunked) {
             this.setState({
-                books,
+                books: chunked.items,
+                hasNext: chunked.hasNext,
+                hasPrevious: chunked.hasPrevious,
                 bookFormHidden: false
             }, () => this.props.endLoading());
         } else {
@@ -188,10 +203,13 @@ class PrivateBookList extends React.Component<Props, State> {
 
     handleSearchChange = async (query: string) => {
         this.props.startLoading();
-        const books = await this.props.findBooks(query);
-        if(books) {
+        const chunked = await this.props.findBooks(query, 1);
+        if(chunked) {
             this.setState({
-                books,
+                books: chunked.items,
+                hasNext: chunked.hasNext,
+                hasPrevious: chunked.hasPrevious,
+                chunk: chunked.chunk,
                 bookSearchQuery: query
             }, () => this.props.endLoading());
         } else {
@@ -256,6 +274,38 @@ class PrivateBookList extends React.Component<Props, State> {
         });
     }
 
+    handlePaging = async (newChunkNumber: number) => {
+        this.props.startLoading();
+        const query = this.state.bookSearchQuery as string;
+        const chunked = await this.props.findBooks(query, newChunkNumber);
+        if(chunked) {
+            this.setState({
+                books: chunked.items,
+                hasNext: chunked.hasNext,
+                hasPrevious: chunked.hasPrevious,
+                chunk: chunked.chunk
+            }, () => this.props.endLoading());
+        } else {
+            this.setState({
+                books: null,
+                bookSearchQuery: null,
+                chunk: 1,
+                hasNext: false,
+                hasPrevious: false
+            }, () => this.props.endLoading());
+        }
+    }
+
+    handleNext = async () => {
+        const chunk = this.state.chunk + 1;
+        this.handlePaging(chunk);
+    }
+
+    handlePrevious = async () => {
+        const chunk = this.state.chunk - 1;
+        this.handlePaging(chunk);
+    }
+
     render() {
         let listItems;
 
@@ -280,6 +330,10 @@ class PrivateBookList extends React.Component<Props, State> {
                 {
                     !this.state.bookFormHidden &&
                         <AddBookForm
+                            hasNext={this.state.hasNext}
+                            hasPrevious={this.state.hasPrevious}
+                            onNext={this.handleNext}
+                            onPrevious={this.handlePrevious}
                             books={this.state.books ? this.state.books : []}
                             searchQuery={this.state.bookSearchQuery ? this.state.bookSearchQuery : ''}
                             onSubmit={this.handleAddBook}
@@ -296,7 +350,7 @@ class PrivateBookList extends React.Component<Props, State> {
                 }
                 {
                     !this.state.shareBookFormHidden &&
-                        <ShareBookForm
+                        <SharedBookForm
                             options={this.state.moderatedLists ? this.state.moderatedLists : []}
                             onSubmit={this.handleShareBook}
                             onCancel={this.handleCancelSharingBook}
@@ -351,8 +405,8 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         endLoading: () => {
             dispatch(loadingActions.end());
         },
-        findBooks: async (query: string) => {
-            const result = await bookService.findBooks(query);
+        findBooks: async (query: string, chunk: number | null) => {
+            const result = await bookService.findBooks(query, chunk);
             if (!result.isSucceed) {
                 processFailedRequest(result, dispatch);
             }
