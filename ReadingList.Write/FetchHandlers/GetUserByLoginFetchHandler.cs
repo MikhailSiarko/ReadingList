@@ -17,7 +17,7 @@ namespace ReadingList.Write.FetchHandlers
 
         public async Task<User> Handle(GetUserByLogin query)
         {
-            return await _dbContext.Users.SingleOrDefaultAsync(u => u.Login == query.Login);
+            return await _dbContext.Table<User>().SingleOrDefaultAsync(u => u.Login == query.Login);
         }
     }
 }

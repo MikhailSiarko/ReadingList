@@ -20,7 +20,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet("moderated")]
         public async Task<IActionResult> GetAvailableForModeration()
         {
-            var lists = await _domainService.AskAsync(new GetModeratedLists(User.Claims.GetUserId()));
+            var lists = await _domainService.AskAsync(new GetModeratedLists(User.GetUserId()));
 
             return Ok(lists);
         }

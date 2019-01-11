@@ -1,9 +1,10 @@
 ﻿using ReadingList.Models.Read;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.Services.Interfaces
 {
     public interface IAuthenticationService
     {
-        AuthenticationDataDto Authenticate(UserDto user);
+        AuthenticationDataDto Authenticate(User user);
     }
 }

@@ -21,7 +21,6 @@ namespace ReadingList.Read
         private static IReadOnlyDictionary<Type, string> ReadQueriesMap => new Dictionary<Type, string>
         {
             // User
-            [typeof(LoginUser)] = UserSqlQueries.SelectByLogin,
             [typeof(GetUser)] = UserSqlQueries.SelectById,
             [typeof(GetModerators)] = UserSqlQueries.SelectModerators,
             // Shared

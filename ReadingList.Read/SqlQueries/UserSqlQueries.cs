@@ -7,8 +7,6 @@ namespace ReadingList.Read.SqlQueries
     {
         public static string SelectById => CreateSqlBuilder().Where("Id = @UserId").ToSql();
 
-        public static string SelectByLogin => CreateSqlBuilder().Where("Login = @Login").ToSql();
-
         public static string SelectModerators => new SqlBuilder()
             .Select("Id", "Login")
             .From("Users")

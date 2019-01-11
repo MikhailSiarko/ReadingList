@@ -3,25 +3,29 @@ using ReadingList.Domain.Commands;
 using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Queries;
 using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Models.Read;
 using ReadingList.Models.Write;
 using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.CommandHandlers
 {
-    public class RegisterUserCommandHandler : CommandHandler<RegisterUser>
+    public class RegisterUserCommandHandler : CommandHandler<RegisterUser, AuthenticationDataDto>
     {
         private readonly IEncryptionService _encryptionService;
 
         private readonly IFetchHandler<GetUserByLogin, User> _userFetchHandler;
 
+        private readonly IAuthenticationService _authenticationService;
+
         public RegisterUserCommandHandler(IDataStorage writeService, IEncryptionService encryptionService,
-            IFetchHandler<GetUserByLogin, User> userFetchHandler) : base(writeService)
+            IFetchHandler<GetUserByLogin, User> userFetchHandler, IAuthenticationService authenticationService) : base(writeService)
         {
             _encryptionService = encryptionService;
             _userFetchHandler = userFetchHandler;
+            _authenticationService = authenticationService;
         }
 
-        protected override async Task Handle(RegisterUser command)
+        protected override async Task<AuthenticationDataDto> Handle(RegisterUser command)
         {
             var user = await _userFetchHandler.Handle(new GetUserByLogin(command.Email));
 
@@ -47,6 +51,11 @@ namespace ReadingList.Domain.CommandHandlers
                 OwnerId = user.Id,
                 Type = BookListType.Private
             });
+
+            if (_encryptionService.Encrypt(command.Password) != user.Password)
+                throw new WrongPasswordException();
+
+            return _authenticationService.Authenticate(user);
         }
     }
 }

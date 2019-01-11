@@ -4,7 +4,6 @@ using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Api.RequestData;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Services.Interfaces;
-using ReadingList.Read.Queries;
 
 namespace ReadingList.Api.Controllers
 {
@@ -30,11 +29,8 @@ namespace ReadingList.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestData requestData)
         {
-            await _domainService.ExecuteAsync(new RegisterUser(requestData.Email, requestData.Password,
+            var authenticationData = await _domainService.ExecuteAsync(new RegisterUser(requestData.Email, requestData.Password,
                 requestData.ConfirmPassword));
-
-            var authenticationData =
-                await _domainService.AskAsync(new LoginUser(requestData.Email, requestData.Password));
 
             return Ok(authenticationData);
         }

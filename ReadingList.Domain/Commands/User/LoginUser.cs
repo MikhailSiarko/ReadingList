@@ -1,17 +1,17 @@
-﻿using MediatR;
+using MediatR;
 using ReadingList.Models.Read;
 
-namespace ReadingList.Read.Queries
+namespace ReadingList.Domain.Commands
 {
     public class LoginUser : IRequest<AuthenticationDataDto>
     {
-        public readonly string Login;
+        public readonly string Email;
 
         public readonly string Password;
 
-        public LoginUser(string login, string password)
+        public LoginUser(string email, string password)
         {
-            Login = login;
+            Email = email;
             Password = password;
         }
     }

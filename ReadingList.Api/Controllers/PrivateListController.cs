@@ -24,7 +24,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var bookList = await _domainService.AskAsync(new GetPrivateList(User.Claims.GetUserId()));
+            var bookList = await _domainService.AskAsync(new GetPrivateList(User.GetUserId()));
 
             return Ok(bookList);
         }
@@ -32,7 +32,7 @@ namespace ReadingList.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UpdatePrivateListRequestData requestData)
         {
-            var list = await _domainService.ExecuteAsync(new UpdatePrivateList(User.Claims.GetUserId(),
+            var list = await _domainService.ExecuteAsync(new UpdatePrivateList(User.GetUserId(),
                 requestData.Name));
 
             return Ok(list);
@@ -41,7 +41,7 @@ namespace ReadingList.Api.Controllers
         [HttpPost("share")]
         public async Task<IActionResult> Share([FromQuery] string name)
         {
-            await _domainService.ExecuteAsync(new SharePrivateList(User.Claims.GetUserId(), name));
+            await _domainService.ExecuteAsync(new SharePrivateList(User.GetUserId(), name));
 
             return Ok();
         }
@@ -49,7 +49,7 @@ namespace ReadingList.Api.Controllers
         [HttpPost("items")]
         public async Task<IActionResult> AddItem([FromBody] AddItemRequestData addItemRequestData)
         {
-            var item = await _domainService.ExecuteAsync(new AddPrivateItem(User.Claims.GetUserId(),
+            var item = await _domainService.ExecuteAsync(new AddPrivateItem(User.GetUserId(),
                 addItemRequestData.BookId));
 
             return Ok(item);
@@ -58,7 +58,7 @@ namespace ReadingList.Api.Controllers
         [HttpGet("items/{id}")]
         public async Task<IActionResult> GetItem([FromRoute] int id)
         {
-            var savedItem = await _domainService.AskAsync(new GetPrivateListItem(id, User.Claims.GetUserId()));
+            var savedItem = await _domainService.AskAsync(new GetPrivateListItem(id, User.GetUserId()));
 
             return Ok(savedItem);
         }
@@ -67,7 +67,7 @@ namespace ReadingList.Api.Controllers
         public async Task<IActionResult> UpdateItem([FromRoute] int id,
             [FromBody] UpdatePrivateItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new UpdatePrivateListItem(User.Claims.GetUserId(), id,
+            var item = await _domainService.ExecuteAsync(new UpdatePrivateListItem(User.GetUserId(), id,
                 requestData.Status));
 
             return Ok(item);
@@ -76,7 +76,7 @@ namespace ReadingList.Api.Controllers
         [HttpDelete("items/{id}")]
         public async Task<IActionResult> DeleteItem([FromRoute] int id)
         {
-            await _domainService.ExecuteAsync(new DeletePrivateItem(id, User.Claims.GetUserId()));
+            await _domainService.ExecuteAsync(new DeletePrivateItem(id, User.GetUserId()));
 
             return Ok();
         }

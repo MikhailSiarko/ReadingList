@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Models.Read;
+using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.Services.Authentication
 {
@@ -18,7 +19,7 @@ namespace ReadingList.Domain.Services.Authentication
             _jwtOptions = jwtOptions;
         }
 
-        private string EncodeSecurityToken(UserDto user)
+        private string EncodeSecurityToken(User user)
         {
             var claimsIdentity = GetIdentity(user);
             var jwt = GenerateToken(_jwtOptions, claimsIdentity.Claims);
@@ -26,7 +27,7 @@ namespace ReadingList.Domain.Services.Authentication
             return tokenHandler.WriteToken(jwt);
         }
 
-        private static ClaimsIdentity GetIdentity(UserDto user)
+        private static ClaimsIdentity GetIdentity(User user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
@@ -35,7 +36,7 @@ namespace ReadingList.Domain.Services.Authentication
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
             };
 
             var claimsIdentity =
@@ -60,13 +61,13 @@ namespace ReadingList.Domain.Services.Authentication
                     SecurityAlgorithms.HmacSha256));
         }
 
-        public AuthenticationDataDto Authenticate(UserDto user)
+        public AuthenticationDataDto Authenticate(User user)
         {
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
             var token = EncodeSecurityToken(user);
-            var userIdentityDto = Mapper.Map<UserDto, UserIdentityDto>(user);
+            var userIdentityDto = Mapper.Map<User, UserIdentityDto>(user);
             return new AuthenticationDataDto(token, userIdentityDto);
         }
     }

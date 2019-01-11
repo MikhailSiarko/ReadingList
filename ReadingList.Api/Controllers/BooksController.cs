@@ -32,7 +32,7 @@ namespace ReadingList.Api.Controllers
         [HttpPost("{bookId}")]
         public async Task<IActionResult> Post([FromRoute] int bookId, [FromBody] IEnumerable<int> listsIds)
         {
-            await _domainService.ExecuteAsync(new AddBookToLists(User.Claims.GetUserId(), bookId, listsIds));
+            await _domainService.ExecuteAsync(new AddBookToLists(User.GetUserId(), bookId, listsIds));
 
             return Ok();
         }

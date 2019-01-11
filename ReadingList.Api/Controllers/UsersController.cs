@@ -21,7 +21,7 @@ namespace ReadingList.Api.Controllers
 
         public async Task<IActionResult> Get()
         {
-            var users = await _domainService.AskAsync(new GetModerators(User.Claims.GetUserId()));
+            var users = await _domainService.AskAsync(new GetModerators(User.GetUserId()));
 
             return Ok(users);
         }

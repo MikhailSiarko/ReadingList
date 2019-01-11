@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using ReadingList.Models.Read;
 
 namespace ReadingList.Domain.Commands
 {
-    public class RegisterUser : IRequest
+    public class RegisterUser : IRequest<AuthenticationDataDto>
     {
         public readonly string Email;
 

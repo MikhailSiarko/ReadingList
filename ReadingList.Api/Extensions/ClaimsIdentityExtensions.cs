@@ -1,14 +1,13 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
 namespace ReadingList.Api.Extensions
 {
-    public static class ClaimsIdentityExtensions
+    public static class ClaimsPrincipalExtensions
     {
-        public static int GetUserId(this IEnumerable<Claim> claims)
+        public static int GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            return int.Parse(claims.Single(c => c.Type == "Id").Value);
+            return int.Parse(claimsPrincipal.Claims.Single(c => c.Type == "Id").Value);
         }
     }
 }
