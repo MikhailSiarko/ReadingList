@@ -36,7 +36,7 @@ namespace ReadingList.Domain.Services.Authentication
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.RoleId.ToString())
             };
 
             var claimsIdentity =
