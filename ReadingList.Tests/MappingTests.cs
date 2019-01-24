@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AutoMapper;
 using ReadingList.Domain;
 using ReadingList.Models.Read;
@@ -78,17 +78,23 @@ namespace ReadingList.Tests
                 {
                     Author = "Author",
                     Title = "Title",
-                    GenreId = "stories"
+                    GenreId = "stories",
+                    Genre = new Genre
+                    {
+                        Id = "stories",
+                        Name = "Stories"
+                    }
                 },
                 BookListId = 5
             };
+
             var mapped = Mapper.Map<SharedBookListItem, SharedBookListItemDto>(sharedBookListItem);
 
             Assert.Equal(sharedBookListItem.Id, mapped.Id);
             Assert.Equal(sharedBookListItem.Book.Title, mapped.Title);
             Assert.Equal(sharedBookListItem.Book.Author, mapped.Author);
             Assert.Equal(sharedBookListItem.BookListId, mapped.ListId);
-            Assert.Equal(sharedBookListItem.Book.GenreId, mapped.Genre);
+            Assert.Equal(sharedBookListItem.Book.Genre.Name, mapped.Genre);
         }
     }
 }
