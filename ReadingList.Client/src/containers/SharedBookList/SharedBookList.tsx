@@ -33,6 +33,7 @@ interface Props extends RouteComponentProps<any> {
     findBooks: (query: string, chunk: number) => Promise<Chunked<Book>>;
     getModeratedLists: () => Promise<ListInfo[]>;
     shareBook: (itemId: number, lists: number[]) => Promise<void>;
+    removeList: (listId: number) => Promise<never>;
 }
 
 interface State {
@@ -346,6 +347,22 @@ class SharedBookList extends React.Component<Props, State> {
         this.handlePaging(chunk);
     }
 
+    removeList = async () => {
+        const confirmDeleting = confirm(
+            `Do you really want to delete the item this list?`);
+
+        if (confirmDeleting) {
+            if(this.state.list) {
+                this.props.startLoading();
+                await this.props.removeList(this.state.list.id);
+                this.props.history.replace('/shared/search');
+                this.props.endLoading();
+            }
+        } else {
+            return;
+        }
+    }
+
     render() {
         let actions = [];
 
@@ -373,6 +390,19 @@ class SharedBookList extends React.Component<Props, State> {
                                     >
                                         <i className="fas fa-book" />
                                     </RoundButton>
+                                    {
+                                        this.state.list.editable
+                                            ? (
+                                                <RoundButton
+                                                    radius={3}
+                                                    title="Delete"
+                                                    onClick={this.removeList}
+                                                >
+                                                    <i className="fas fa-trash" />
+                                                </RoundButton>
+                                            )
+                                            : null
+                                    }
                                 </FixedGroup>
                                 {
                                     !this.state.isFormHidden &&
@@ -484,6 +514,12 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
             }
             return result.data;
         },
+        removeList: async (listId: number) => {
+            const result = await listService.removeList(listId);
+            if (!result.isSucceed) {
+                processFailedRequest(result, dispatch);
+            }
+        }
     };
 }
 

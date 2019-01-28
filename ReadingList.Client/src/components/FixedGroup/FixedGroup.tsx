@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './FixedGroup.css';
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
-    children: JSX.Element[] | JSX.Element;
+    children: (JSX.Element | null)[] | (JSX.Element | null);
 }
 
 const FixedGroup: React.SFC<Props> = props => (

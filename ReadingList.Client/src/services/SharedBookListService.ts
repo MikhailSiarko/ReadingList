@@ -55,6 +55,12 @@ export class SharedBookListService extends ApiService {
             .catch(onError);
     }
 
+    removeList = (listId: number) => {
+        return this.configureRequest(ApiConfiguration.SHARED_LISTS + `/${listId}`, 'DELETE')
+            .then(this.onSuccess<never>())
+            .catch(onError);
+    }
+
     private onDeleteItemSuccess(id: number) {
         return () => new RequestResult<number>(true, id);
     }
