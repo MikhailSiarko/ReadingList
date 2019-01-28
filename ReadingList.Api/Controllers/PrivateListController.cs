@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Extensions;
@@ -29,8 +29,8 @@ namespace ReadingList.Api.Controllers
             return Ok(bookList);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Put([FromBody] UpdatePrivateListRequestData requestData)
+        [HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] UpdatePrivateListRequestData requestData)
         {
             var list = await _domainService.ExecuteAsync(new UpdatePrivateList(User.GetUserId(),
                 requestData.Name));
@@ -52,7 +52,7 @@ namespace ReadingList.Api.Controllers
             var item = await _domainService.ExecuteAsync(new AddPrivateItem(User.GetUserId(),
                 addItemRequestData.BookId));
 
-            return Ok(item);
+            return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item);
         }
 
         [HttpGet("items/{id}")]
@@ -63,7 +63,7 @@ namespace ReadingList.Api.Controllers
             return Ok(savedItem);
         }
 
-        [HttpPut("items/{id}")]
+        [HttpPatch("items/{id}")]
         public async Task<IActionResult> UpdateItem([FromRoute] int id,
             [FromBody] UpdatePrivateItemRequestData requestData)
         {

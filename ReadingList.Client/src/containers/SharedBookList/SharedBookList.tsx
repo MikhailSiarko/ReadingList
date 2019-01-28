@@ -194,17 +194,18 @@ class SharedBookList extends React.Component<Props, State> {
     }
 
     mapItem = (item: SharedBookListItem) => {
-        const actions = [];
+        const actions = [
+            {
+                onClick: () => this.showShareBookForm(item.bookId),
+                text: 'Share'
+            }
+        ];
         if(this.state.list && this.state.list.canBeModerated) {
             actions.push(
                 {
                     text: 'Delete',
                     onClick: this.deleteItem(item)
                 },
-                {
-                    onClick: () => this.showShareBookForm(item.bookId),
-                    text: 'Share'
-                }
             );
         }
         const Contexed = withContextMenu(actions, SharedBookLI);
@@ -418,17 +419,17 @@ class SharedBookList extends React.Component<Props, State> {
                                             onQueryChange={this.handleSearchChange}
                                         />
                                 }
-                                {
-                                    !this.state.shareBookFormHidden &&
-                                        <SharedBookForm
-                                            options={this.state.moderatedLists ? this.state.moderatedLists : []}
-                                            onSubmit={this.handleShareBook}
-                                            onCancel={this.handleCancelSharingBook}
-                                            choosenBookId={this.state.sharingBookId}
-                                        />
-                                }
                             </>
                         )
+                    }
+                    {
+                        !this.state.shareBookFormHidden &&
+                            <SharedBookForm
+                                options={this.state.moderatedLists ? this.state.moderatedLists : []}
+                                onSubmit={this.handleShareBook}
+                                onCancel={this.handleCancelSharingBook}
+                                choosenBookId={this.state.sharingBookId}
+                            />
                     }
                 </>
             );

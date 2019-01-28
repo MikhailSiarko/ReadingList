@@ -38,7 +38,7 @@ export class SharedBookListService extends ApiService {
 
     updateList = (data: { id: number, name: string, tags: Tag[], moderators: number[] | null }) => {
         return this.configureRequest(
-            ApiConfiguration.SHARED_LISTS + `/${data.id}`, 'PUT',
+            ApiConfiguration.SHARED_LISTS + `/${data.id}`, 'PATCH',
             {
                 name: data.name,
                 tags: data.tags,

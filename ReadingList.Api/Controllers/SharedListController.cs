@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Extensions;
@@ -30,7 +30,7 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string query, [FromQuery] int? chunk, [FromQuery] int? count)
+        public async Task<IActionResult> GetRange([FromQuery] string query, [FromQuery] int? chunk, [FromQuery] int? count)
         {
             var bookLists = await _domainService.AskAsync(new FindSharedLists(query, chunk, count));
 
@@ -46,7 +46,7 @@ namespace ReadingList.Api.Controllers
         }
 
         [HttpGet("own")]
-        public async Task<IActionResult> Get([FromQuery] int? chunk, [FromQuery] int? count)
+        public async Task<IActionResult> GetOwn([FromQuery] int? chunk, [FromQuery] int? count)
         {
             var bookLists = await _domainService.AskAsync(new GetUserSharedLists(User.GetUserId(), chunk, count));
 
@@ -58,11 +58,11 @@ namespace ReadingList.Api.Controllers
         {
             var list = await _domainService.ExecuteAsync(new CreateSharedList(User.GetUserId(),
                 requestData.Name, requestData.Tags));
-            return Ok(list);
+            return CreatedAtAction(nameof(Get), new { id = list.Id }, list);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] SharedListRequestData requestData)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] SharedListRequestData requestData)
         {
             var list = await _domainService.ExecuteAsync(
                 new UpdateSharedList(User.GetUserId(), id, requestData.Name, requestData.Tags,
@@ -85,7 +85,7 @@ namespace ReadingList.Api.Controllers
             var item = await _domainService.ExecuteAsync(new AddSharedListItem(listId, User.GetUserId(),
                 requestData.BookId));
 
-            return Ok(item);
+            return CreatedAtAction(nameof(GetItem), new { listId, itemId = item.Id }, item);
         }
 
         [HttpGet("{listId}/items/{itemId}")]
@@ -104,7 +104,7 @@ namespace ReadingList.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("{listId}/items/{itemId}")]
+        [HttpPatch("{listId}/items/{itemId}")]
         public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId,
             [FromBody] AddItemRequestData requestData)
         {
