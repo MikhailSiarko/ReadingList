@@ -19,6 +19,7 @@ import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import { parse } from 'query-string';
 import Pagination from '../../components/Pagination';
+import { Constants } from '../../models/Constants';
 
 interface Props extends RouteComponentProps<any> {
     getSharedLists: (query: string, chunk: number | null, count: number | null) =>
@@ -111,13 +112,13 @@ class SharedBookLists extends React.Component<Props, State> {
             if(query === 'own') {
                 chunked = await this.props.getOwnSharedLists(
                     chunk ? parseInt(chunk as string, 10) : null,
-                    count ? parseInt(count as string, 10) : null
+                    count ? parseInt(count as string, 10) : Constants.ITEMS_PER_PAGE
                 );
             } else {
                 chunked = await this.props.getSharedLists(
                     query ? decodeURIComponent(query as string) : '',
                     chunk ? parseInt(chunk as string, 10) : null,
-                    count ? parseInt(count as string, 10) : null
+                    count ? parseInt(count as string, 10) : Constants.ITEMS_PER_PAGE
                 );
             }
             this.setState(
@@ -155,10 +156,26 @@ class SharedBookLists extends React.Component<Props, State> {
                 })
             }
         );
-        const copies = [...(this.state.sharedLists as SharedBookListPreview[])];
-        if (copies && list) {
-            copies.push(list);
-            this.setState({sharedLists: copies, isFormHidden: true}, () => this.props.loadingEnd());
+
+        const searchData = this.getSearch();
+
+        const lists = await this.props.getSharedLists(
+            searchData.query,
+            searchData.chunkNumber,
+            Constants.ITEMS_PER_PAGE
+        );
+
+        if (list && lists) {
+            this.setState(
+                {
+                    sharedLists: lists.items,
+                    hasPrevious: lists.hasPrevious,
+                    hasNext: lists.hasNext,
+                    chunk: lists.chunk,
+                    isFormHidden: true
+                },
+                () => this.props.loadingEnd()
+            );
         } else {
             this.setState({isFormHidden: true}, () => this.props.loadingEnd());
         }

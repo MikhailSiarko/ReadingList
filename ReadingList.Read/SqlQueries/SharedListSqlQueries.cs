@@ -73,7 +73,7 @@ namespace ReadingList.Read.SqlQueries
                        "ELSE lower(l.Name) LIKE '%' || @Query || '%' " +
                        "END")
                 .GroupBy("l.Id")
-                .OrderBy("l.Id " +
+                .OrderBy("LOWER(l.Name) " +
                          "LIMIT @Count + 1 " +
                          "OFFSET (@Count * (@Chunk - 1))")
                 .ToSql();
@@ -96,7 +96,7 @@ namespace ReadingList.Read.SqlQueries
                 .Where("l.Type = 2")
                 .Where("l.OwnerId = @UserId")
                 .GroupBy("l.Id")
-                .OrderBy("l.Id " +
+                .OrderBy("LOWER(l.Name) " +
                          "LIMIT @Count + 1 " +
                          "OFFSET (@Count * (@Chunk - 1))")
                 .ToSql();
