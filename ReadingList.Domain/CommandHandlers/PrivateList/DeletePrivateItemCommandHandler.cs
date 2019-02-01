@@ -29,7 +29,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = item.BookListId.ToString()
+                });
             }
 
             await WriteService.DeleteAsync<PrivateBookListItem>(item.Id);

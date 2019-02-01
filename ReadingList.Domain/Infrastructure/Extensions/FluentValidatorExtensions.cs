@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentValidation;
 using FluentValidation.Internal;
 using ReadingList.Resources;
@@ -7,10 +7,10 @@ namespace ReadingList.Domain.Infrastructure.Extensions
 {
     public static class FluentValidatorExtensions
     {
-        public static IRuleBuilderOptions<T, TProperty> NotEmptyWithMessage<T, TProperty>(
+        public static IRuleBuilderOptions<T, TProperty> NotEmptyOrNullWithMessage<T, TProperty>(
             this IRuleBuilder<T, TProperty> builder, Func<T, string> propertyNameProvider)
         {
-            return builder.NotEmpty().WithMessage(arg => ValidationMessages.CannotBeEmpty.F(propertyNameProvider(arg)));
+            return builder.NotEmpty().NotNull().WithMessage(arg => ValidationMessages.CannotBeEmptyOrNull.F(propertyNameProvider(arg)));
         }
 
         public static IRuleBuilderOptions<T, TProperty> NotEqualToDefault<T, TProperty>(

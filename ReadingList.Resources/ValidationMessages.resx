@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CannotBeEmpty" xml:space="preserve">
-    <value>{0} can't be empty</value>
+  <data name="CannotBeEmptyOrNull" xml:space="preserve">
+    <value>{0} can't be empty or null</value>
   </data>
   <data name="InvalidValue" xml:space="preserve">
     <value>{0} is invalid</value>
@@ -127,7 +127,7 @@
     <value>Passwords don't confirm</value>
   </data>
   <data name="CannotBeDefault" xml:space="preserve">
-    <value>The {0} can't be {1}</value>
+    <value>The '{0}' can't be {1}</value>
   </data>
   <data name="NoValidationNeeded" xml:space="preserve">
     <value>No validation needed</value>

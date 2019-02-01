@@ -10,12 +10,12 @@ namespace ReadingList.Domain.Validators
         public RegisterCommandValidator()
         {
             RuleFor(command => command.Email)
-                .NotEmptyWithMessage(m => nameof(m.Email))
+                .NotEmptyOrNullWithMessage(m => nameof(m.Email))
                 .EmailAddress().WithMessage(m => ValidationMessages.InvalidValue.F(nameof(m.Email)));
             RuleFor(command => command.Password)
-                .NotEmptyWithMessage(m => nameof(m.Password));
+                .NotEmptyOrNullWithMessage(m => nameof(m.Password));
             RuleFor(command => command.ConfirmPassword)
-                .NotEmptyWithMessage(m => ValidationMessages.CannotBeEmpty.F(nameof(m.ConfirmPassword)))
+                .NotEmptyOrNullWithMessage(m => ValidationMessages.CannotBeEmptyOrNull.F(nameof(m.ConfirmPassword)))
                 .Matches(command => command.Password).WithMessage(m => ValidationMessages.PasswordsNotConfirm);
         }
     }

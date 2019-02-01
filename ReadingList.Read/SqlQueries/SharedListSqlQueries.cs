@@ -21,10 +21,11 @@ namespace ReadingList.Read.SqlQueries
                                            "END";
 
                 var getListsSql = new SqlBuilder()
-                    .Select("Id", "Name", "OwnerId", "Type", $"({canEditSql}) AS Editable", $"({canModerate}) AS CanBeModerated")
-                    .From("BookLists")
+                    .Select("l.Id", "l.Name", "l.OwnerId","us.Login AS OwnerLogin", "l.Type", $"({canEditSql}) AS Editable", $"({canModerate}) AS CanBeModerated")
+                    .From("BookLists AS l")
+                    .LeftJoin("Users AS us ON us.Id = OwnerId")
                     .Where($"Type = {BookListType.Shared:D}")
-                    .Where("Id = @ListId")
+                    .Where("l.Id = @ListId")
                     .ToSql();
 
                 var getTagsSql = new SqlBuilder()
@@ -53,7 +54,7 @@ namespace ReadingList.Read.SqlQueries
 
         public static string FindPreviews =>
             new SqlBuilder()
-                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId",
+                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId", "u.Login AS OwnerLogin",
                     "(" +
                     new SqlBuilder()
                         .Select("GROUP_CONCAT(Name)")
@@ -66,6 +67,7 @@ namespace ReadingList.Read.SqlQueries
                 .LeftJoin("SharedBookListTags AS lt on l.Id = lt.SharedBookListId")
                 .LeftJoin("Tags AS t on lt.TagId = t.Id")
                 .LeftJoin("SharedBookListItems s on l.Id = s.BookListId")
+                .LeftJoin("Users AS u ON u.Id = l.OwnerId")
                 .Where("l.Type = 2")
                 .Where("CASE " +
                        "WHEN @Query IS NULL OR @Query = '' THEN (1 + 1)" +
@@ -80,7 +82,7 @@ namespace ReadingList.Read.SqlQueries
 
         public static string SelectOwn =>
             new SqlBuilder()
-                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId",
+                .Select("DISTINCT l.Id", "l.Name", "l.Type", "l.OwnerId", "u.Login AS OwnerLogin",
                     "(" +
                     new SqlBuilder()
                         .Select("GROUP_CONCAT(Name)")
@@ -93,6 +95,7 @@ namespace ReadingList.Read.SqlQueries
                 .LeftJoin("SharedBookListTags AS lt on l.Id = lt.SharedBookListId")
                 .LeftJoin("Tags AS t on lt.TagId = t.Id")
                 .LeftJoin("SharedBookListItems s on l.Id = s.BookListId")
+                .LeftJoin("Users AS u ON u.Id = l.OwnerId")
                 .Where("l.Type = 2")
                 .Where("l.OwnerId = @UserId")
                 .GroupBy("l.Id")

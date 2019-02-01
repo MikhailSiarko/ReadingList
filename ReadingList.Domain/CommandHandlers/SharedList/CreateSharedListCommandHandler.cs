@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using ReadingList.Domain.Commands;
@@ -7,15 +6,16 @@ using ReadingList.Domain.Infrastructure.Specifications;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Models.Read;
 using ReadingList.Models.Write;
-using ReadingList.Models.Write.HelpEntities;
 using ReadingList.Models.Write.Identity;
 
 namespace ReadingList.Domain.CommandHandlers
 {
     public class CreateSharedListCommandHandler : CommandHandler<CreateSharedList, SharedBookListPreviewDto>
     {
-        public CreateSharedListCommandHandler(IDataStorage writeService) : base(writeService)
+        private readonly IBookListService _bookListService;
+        public CreateSharedListCommandHandler(IDataStorage writeService, IBookListService bookListService) : base(writeService)
         {
+            _bookListService = bookListService;
         }
 
         protected override async Task<SharedBookListPreviewDto> Handle(CreateSharedList command)
@@ -40,19 +40,6 @@ namespace ReadingList.Domain.CommandHandlers
                 });
             }
 
-            var existingTags = command.Tags
-                .Where(t => t.Id != default(int))
-                .ToList();
-
-            var newTags = command.Tags
-                .Where(t => t.Id == default(int))
-                .ToList();
-
-            if (newTags.Any())
-            {
-                await WriteService.SaveBatchAsync(newTags);
-            }
-
             var list = new BookList
             {
                 Name = command.Name,
@@ -60,14 +47,12 @@ namespace ReadingList.Domain.CommandHandlers
                 Type = BookListType.Shared
             };
 
-            list.SharedBookListTags = existingTags
-                .Concat(newTags)
-                .Select(t => new SharedBookListTag
-                {
-                    TagId = t.Id,
-                    SharedBookListId = list.Id
-                })
-                .ToList();
+            var tags = await _bookListService.ProcessTags(command.Tags, list.Id);
+
+            if (tags != null)
+            {
+                list.SharedBookListTags = tags;
+            }
 
             await WriteService.SaveAsync(list);
 

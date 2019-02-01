@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
+using ReadingList.Api.RequestData;
 using ReadingList.Domain.Commands;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Read.Queries.Book;
@@ -29,10 +30,10 @@ namespace ReadingList.Api.Controllers
             return Ok(books);
         }
 
-        [HttpPost("{bookId}")]
-        public async Task<IActionResult> Post([FromRoute] int bookId, [FromBody] IEnumerable<int> listsIds)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Post([FromRoute] int id, [FromBody] IEnumerable<int> listsIds)
         {
-            await _domainService.ExecuteAsync(new AddBookToLists(User.GetUserId(), bookId, listsIds));
+            await _domainService.ExecuteAsync(new AddBookToLists(User.GetUserId(), id, listsIds));
 
             return Ok();
         }

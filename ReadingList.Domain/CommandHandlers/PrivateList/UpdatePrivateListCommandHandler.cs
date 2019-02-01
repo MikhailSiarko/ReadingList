@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -67,7 +67,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = entity.Id.ToString()
+                });
             }
 
             return Task.CompletedTask;

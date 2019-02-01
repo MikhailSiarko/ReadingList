@@ -58,7 +58,7 @@ namespace ReadingList.Api.Controllers
         {
             var list = await _domainService.ExecuteAsync(new CreateSharedList(User.GetUserId(),
                 requestData.Name, requestData.Tags));
-            return CreatedAtAction(nameof(Get), new { id = list.Id }, list);
+            return CreatedAtAction(nameof(Get), new {id = list.Id}, list);
         }
 
         [HttpPatch("{id}")]
@@ -71,46 +71,43 @@ namespace ReadingList.Api.Controllers
             return Ok(list);
         }
 
-        [HttpGet("{listId}/items")]
-        public async Task<IActionResult> GetItems([FromRoute] int listId)
+        [HttpGet("{id}/items")]
+        public async Task<IActionResult> GetItems([FromRoute] int id)
         {
-            var items = await _domainService.AskAsync(new GetSharedListItems(listId));
+            var items = await _domainService.AskAsync(new GetSharedListItems(id));
 
             return Ok(items);
         }
 
-        [HttpPost("{listId}/items")]
-        public async Task<IActionResult> AddItem([FromRoute] int listId, [FromBody] AddItemRequestData requestData)
+        [HttpPost("{id}/items")]
+        public async Task<IActionResult> AddItem([FromRoute] int id, [FromBody] AddItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new AddSharedListItem(listId, User.GetUserId(),
+            var item = await _domainService.ExecuteAsync(new AddSharedListItem(id, User.GetUserId(),
                 requestData.BookId));
 
-            return CreatedAtAction(nameof(GetItem), new { listId, itemId = item.Id }, item);
+            return CreatedAtAction(nameof(GetItem), new {id, itemId = item.Id}, item);
         }
 
-        [HttpGet("{listId}/items/{itemId}")]
-        public async Task<IActionResult> GetItem([FromRoute] int listId, [FromRoute] int itemId)
+        [HttpGet("{id}/items/{itemId}")]
+        public async Task<IActionResult> GetItem([FromRoute] int id, [FromRoute] int itemId)
         {
-            var item = await _domainService.AskAsync(new GetSharedListItem(listId, itemId));
+            var item = await _domainService.AskAsync(new GetSharedListItem(id, itemId));
 
             return Ok(item);
         }
 
-        [HttpDelete("{listId}/items/{itemId}")]
-        public async Task<IActionResult> DeleteItem([FromRoute] int listId, [FromRoute] int itemId)
+        [HttpDelete("{id}/items/{itemId}")]
+        public async Task<IActionResult> DeleteItem([FromRoute] int id, [FromRoute] int itemId)
         {
-            await _domainService.ExecuteAsync(new DeleteSharedListItem(User.GetUserId(), listId, itemId));
+            await _domainService.ExecuteAsync(new DeleteSharedListItem(User.GetUserId(), id, itemId));
 
             return Ok();
         }
 
-        [HttpPatch("{listId}/items/{itemId}")]
-        public async Task<IActionResult> UpdateItem([FromRoute] int listId, [FromRoute] int itemId,
-            [FromBody] AddItemRequestData requestData)
+        [HttpPatch("{id}/items/{itemId}")]
+        public async Task<IActionResult> UpdateItem([FromRoute] int id, [FromRoute] int itemId, [FromBody] AddItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new UpdateSharedListItem(User.GetUserId(),
-                itemId,
-                listId));
+            var item = await _domainService.ExecuteAsync(new UpdateSharedListItem(User.GetUserId(), id, itemId));
 
             return Ok(item);
         }

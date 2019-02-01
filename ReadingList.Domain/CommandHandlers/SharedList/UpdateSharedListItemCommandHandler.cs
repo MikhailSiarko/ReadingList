@@ -46,7 +46,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = command.ListId.ToString()
+                });
             }
 
             return item;
@@ -60,13 +63,6 @@ namespace ReadingList.Domain.CommandHandlers
                 {
                     ["Id"] = command.ItemId.ToString()
                 });
-            }
-
-            var accessSpecification = new BookListAccessSpecification(entity.BookList);
-
-            if (!accessSpecification.SatisfiedBy(command.UserId))
-            {
-                throw new AccessDeniedException();
             }
 
             return Task.CompletedTask;

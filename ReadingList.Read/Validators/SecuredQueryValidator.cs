@@ -1,7 +1,6 @@
 using FluentValidation;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Read.Queries;
-using ReadingList.Resources;
 
 namespace ReadingList.Read.Validators
 {
@@ -9,7 +8,7 @@ namespace ReadingList.Read.Validators
     {
         public SecuredQueryValidator()
         {
-            RuleFor(q => q.UserId).NotEmptyWithMessage(q => ExceptionMessages.UserIdValidationMessage);
+            RuleFor(q => q.UserId).NotEqualToDefault();
         }
     }
 }

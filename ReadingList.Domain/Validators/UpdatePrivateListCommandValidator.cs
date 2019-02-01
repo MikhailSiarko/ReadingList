@@ -10,7 +10,7 @@ namespace ReadingList.Domain.Validators
         public UpdatePrivateListCommandValidator()
         {
             Include(new SecuredCommandValidator<PrivateBookListDto>());
-            RuleFor(m => m.Name).NotEmptyWithMessage(m => nameof(m.Name));
+            RuleFor(m => m.Name).NotEmptyOrNullWithMessage(m => nameof(m.Name));
         }
     }
 }

@@ -38,8 +38,8 @@ namespace ReadingList.Api.Controllers
             return Ok(list);
         }
 
-        [HttpPost("share")]
-        public async Task<IActionResult> Share([FromQuery] string name)
+        [HttpPost("share/{name}")]
+        public async Task<IActionResult> Share([FromRoute] string name)
         {
             await _domainService.ExecuteAsync(new SharePrivateList(User.GetUserId(), name));
 
@@ -52,31 +52,30 @@ namespace ReadingList.Api.Controllers
             var item = await _domainService.ExecuteAsync(new AddPrivateItem(User.GetUserId(),
                 addItemRequestData.BookId));
 
-            return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item);
+            return CreatedAtAction(nameof(GetItem), new {id = item.Id}, item);
         }
 
-        [HttpGet("items/{id}")]
-        public async Task<IActionResult> GetItem([FromRoute] int id)
+        [HttpGet("items/{itemId}")]
+        public async Task<IActionResult> GetItem([FromRoute] int itemId)
         {
-            var savedItem = await _domainService.AskAsync(new GetPrivateListItem(id, User.GetUserId()));
+            var savedItem =
+                await _domainService.AskAsync(new GetPrivateListItem(itemId, User.GetUserId()));
 
             return Ok(savedItem);
         }
 
-        [HttpPatch("items/{id}")]
-        public async Task<IActionResult> UpdateItem([FromRoute] int id,
-            [FromBody] UpdatePrivateItemRequestData requestData)
+        [HttpPatch("items/{itemId}")]
+        public async Task<IActionResult> UpdateItem([FromRoute] int itemId, [FromBody] UpdatePrivateItemRequestData requestData)
         {
-            var item = await _domainService.ExecuteAsync(new UpdatePrivateListItem(User.GetUserId(), id,
-                requestData.Status));
+            var item = await _domainService.ExecuteAsync(new UpdatePrivateListItem(User.GetUserId(), itemId, requestData.Status));
 
             return Ok(item);
         }
 
-        [HttpDelete("items/{id}")]
-        public async Task<IActionResult> DeleteItem([FromRoute] int id)
+        [HttpDelete("items/{itemId}")]
+        public async Task<IActionResult> DeleteItem([FromRoute] int itemId)
         {
-            await _domainService.ExecuteAsync(new DeletePrivateItem(id, User.GetUserId()));
+            await _domainService.ExecuteAsync(new DeletePrivateItem(itemId, User.GetUserId()));
 
             return Ok();
         }

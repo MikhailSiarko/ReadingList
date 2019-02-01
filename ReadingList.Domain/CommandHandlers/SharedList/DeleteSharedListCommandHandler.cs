@@ -28,7 +28,10 @@ namespace ReadingList.Domain.CommandHandlers
             var accessSpecification = new BookListOwnerAccessSpecification(list);
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = list.Id.ToString()
+                });
 
             await WriteService.DeleteAsync<BookList>(list.Id);
         }

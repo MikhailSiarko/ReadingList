@@ -9,7 +9,7 @@ namespace ReadingList.Domain.Validators
     {
         public SecuredCommandValidator()
         {
-            RuleFor(c => c.UserId).NotEmptyWithMessage(c => ExceptionMessages.UserIdValidationMessage);
+            RuleFor(c => c.UserId).NotEmptyOrNullWithMessage(c => ExceptionMessages.UserIdValidationMessage);
         }
     }
 
@@ -17,7 +17,7 @@ namespace ReadingList.Domain.Validators
     {
         public SecuredCommandValidator()
         {
-            RuleFor(c => c.UserId).NotEmptyWithMessage(c => ExceptionMessages.UserIdValidationMessage);
+            RuleFor(c => c.UserId).NotEmptyOrNullWithMessage(c => ExceptionMessages.UserIdValidationMessage);
         }
     }
 }

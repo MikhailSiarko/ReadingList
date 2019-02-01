@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -30,6 +30,7 @@ namespace ReadingList.Read.QueryHandlers
                 Name = r.Name,
                 Type = r.Type,
                 BooksCount = r.BookCount,
+                OwnerLogin = r.OwnerLogin,
                 Tags = r.Tags?.Split(',').Where(t => !string.IsNullOrEmpty(t)).ToList() ?? new List<string>()
             }).ToList();
 
@@ -45,6 +46,8 @@ namespace ReadingList.Read.QueryHandlers
             public string Name { get; set; }
 
             public int OwnerId { get; set; }
+
+            public string OwnerLogin { get; set; }
 
             public int Type { get; set; }
 

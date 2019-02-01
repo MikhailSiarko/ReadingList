@@ -2,7 +2,7 @@
 using ReadingList.Domain.Exceptions;
 using ReadingList.Models.Write;
 
-namespace ReadingList.Domain.Services.Validation
+namespace ReadingList.Domain.Validators
 {
     public static class PrivateBookListItemStatusValidator
     {

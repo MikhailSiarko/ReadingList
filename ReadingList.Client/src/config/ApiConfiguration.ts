@@ -42,7 +42,7 @@ export class ApiConfiguration {
     }
 
     public static getSharePrivateListUrl(name: string) {
-        return `${ApiConfiguration.PRIVATE_LIST}/share?name=${name}`;
+        return `${ApiConfiguration.PRIVATE_LIST}/share/${name}`;
     }
 
     public static getShareBookUrl(bookId: number) {

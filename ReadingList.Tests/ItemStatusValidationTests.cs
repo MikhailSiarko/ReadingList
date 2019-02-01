@@ -1,5 +1,5 @@
 ﻿using ReadingList.Domain.Exceptions;
-using ReadingList.Domain.Services.Validation;
+using ReadingList.Domain.Validators;
 using ReadingList.Models.Write;
 using Xunit;
 

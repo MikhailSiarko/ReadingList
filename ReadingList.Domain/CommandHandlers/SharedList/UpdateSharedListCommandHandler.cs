@@ -24,13 +24,16 @@ namespace ReadingList.Domain.CommandHandlers
 
         private readonly IFetchHandler<GetItemsByListId, IEnumerable<SharedBookListItem>> _itemsFetchHandler;
 
+        private readonly IBookListService _bookListService;
+
         public UpdateSharedListCommandHandler(IDataStorage writeService,
             IFetchHandler<GetListAccessForUser, (bool editable, bool moderated)> listAccessFetchHandler,
-            IFetchHandler<GetItemsByListId, IEnumerable<SharedBookListItem>> itemsFetchHandler)
+            IFetchHandler<GetItemsByListId, IEnumerable<SharedBookListItem>> itemsFetchHandler, IBookListService bookListService)
             : base(writeService)
         {
             _listAccessFetchHandler = listAccessFetchHandler;
             _itemsFetchHandler = itemsFetchHandler;
+            _bookListService = bookListService;
         }
 
         protected override SharedBookListDto Convert(BookList entity, UpdateSharedList command)
@@ -53,26 +56,7 @@ namespace ReadingList.Domain.CommandHandlers
 
         protected override void Update(BookList entity, UpdateSharedList command)
         {
-            var existingTags = command.Tags
-                .Where(t => t.Id != default(int))
-                .ToList();
-
-            var newTags = command.Tags
-                .Where(t => t.Id == default(int))
-                .ToList();
-
-            if (newTags.Any())
-            {
-                WriteService.SaveBatchAsync(newTags).RunSync();
-            }
-
-            var tags = existingTags.Concat(newTags)
-                .Select(t => new SharedBookListTag
-                {
-                    TagId = t.Id,
-                    SharedBookListId = entity.Id
-                })
-                .ToList();
+            var tags = _bookListService.ProcessTags(command.Tags, entity.Id).RunSync();
 
             var moderators = command.Moderators
                 ?.Select(m => new BookListModerator
@@ -85,7 +69,7 @@ namespace ReadingList.Domain.CommandHandlers
             entity.Update(new Dictionary<string, object>
             {
                 [nameof(BookList.Name)] = command.Name,
-                [nameof(BookList.SharedBookListTags)] = tags,
+                [nameof(BookList.SharedBookListTags)] = tags ?? entity.SharedBookListTags,
                 [nameof(BookList.BookListModerators)] = moderators ?? entity.BookListModerators
             });
         }
@@ -109,7 +93,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = command.ListId.ToString()
+                });
             }
 
             var user = await WriteService.GetAsync<User>(command.UserId);

@@ -72,7 +72,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (!accessSpecification.SatisfiedBy(userId))
             {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = list.Id.ToString()
+                });
             }
 
             if (items.Any(i => i.BookId == bookId && i.BookListId == list.Id))

@@ -1,40 +1,36 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using ApplicationExceptions = ReadingList.Domain.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
+using ReadingList.Domain.Exceptions;
 
 namespace ReadingList.Domain.Infrastructure.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        private readonly IValidator<TRequest> _validator;
 
-        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IServiceProvider provider)
         {
-            _validators = validators;
+            _validator = provider.GetService<IValidator<TRequest>>();
         }
 
         public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            var context = new ValidationContext(request);
+            var context = new ValidationContext<TRequest>(request);
 
-            var failures = _validators
-                .Where(v => v.CanValidateInstancesOfType(typeof(TRequest)))
-                .Select(v => v.Validate(context))
-                .SelectMany(result => result.Errors)
-                .Where(f => f != null)
-                .ToList();
+            if (_validator == null) return next();
 
-            if (failures.Count != 0)
+            var result = _validator.Validate(context);
+
+            if (!result.IsValid)
             {
-                throw new ApplicationExceptions.ValidationException(failures);
+                throw new DomainValidationException(result.Errors);
             }
-
             return next();
         }
     }

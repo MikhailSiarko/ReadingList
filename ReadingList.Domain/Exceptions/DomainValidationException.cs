@@ -6,11 +6,11 @@ using ReadingList.Resources;
 
 namespace ReadingList.Domain.Exceptions
 {
-    public class ValidationException : ApplicationException
+    public class DomainValidationException : ApplicationException
     {
         public override string Message { get; }
 
-        public ValidationException(IEnumerable<ValidationFailure> failures)
+        public DomainValidationException(IEnumerable<ValidationFailure> failures)
         {
             var failureString = string.Join("\r\n", failures
                 .Select(e => $"- {e.ErrorMessage}"));

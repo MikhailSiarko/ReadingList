@@ -56,9 +56,8 @@ class SharedBookLists extends React.Component<Props, State> {
     }
 
     searchHandler = async (query: string) => {
-        const search = this.getSearch();
         this.props.history.push(
-            '/shared/search?query=' + encodeURIComponent(query) + '&chunk=' + search.chunkNumber,
+            '/shared/search?query=' + encodeURIComponent(query) + '&chunk=' + 1,
             {from: this.props.location}
         );
     }
@@ -86,9 +85,9 @@ class SharedBookLists extends React.Component<Props, State> {
             this.setState(
                 {
                     sharedLists: chunked.items,
-                    hasNext: chunked.hasNext,
-                    hasPrevious: chunked.hasPrevious,
-                    chunk: chunked.chunk,
+                    hasNext: chunked.chunkInfo.hasNext,
+                    hasPrevious: chunked.chunkInfo.hasPrevious,
+                    chunk: chunked.chunkInfo.chunk,
                     tags: tags.map(t => {
                         return {
                             text: t.name,
@@ -124,9 +123,9 @@ class SharedBookLists extends React.Component<Props, State> {
             this.setState(
                 {
                     sharedLists: chunked.items,
-                    chunk: chunked.chunk,
-                    hasNext: chunked.hasNext,
-                    hasPrevious: chunked.hasPrevious
+                    chunk: chunked.chunkInfo.chunk,
+                    hasNext: chunked.chunkInfo.hasNext,
+                    hasPrevious: chunked.chunkInfo.hasPrevious
                 },
                 () => this.props.loadingEnd()
             );
@@ -169,9 +168,9 @@ class SharedBookLists extends React.Component<Props, State> {
             this.setState(
                 {
                     sharedLists: lists.items,
-                    hasPrevious: lists.hasPrevious,
-                    hasNext: lists.hasNext,
-                    chunk: lists.chunk,
+                    hasPrevious: lists.chunkInfo.hasPrevious,
+                    hasNext: lists.chunkInfo.hasNext,
+                    chunk: lists.chunkInfo.chunk,
                     isFormHidden: true
                 },
                 () => this.props.loadingEnd()

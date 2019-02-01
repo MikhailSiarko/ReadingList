@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,7 +7,7 @@ using ReadingList.Domain.Exceptions;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Domain.Infrastructure.Specifications;
 using ReadingList.Domain.Services.Interfaces;
-using ReadingList.Domain.Services.Validation;
+using ReadingList.Domain.Validators;
 using ReadingList.Models.Read;
 using ReadingList.Models.Write;
 
@@ -53,7 +53,10 @@ namespace ReadingList.Domain.CommandHandlers
 
             if (!accessSpecification.SatisfiedBy(command.UserId))
             {
-                throw new AccessDeniedException();
+                throw new AccessDeniedException<BookList>(new OnExceptionObjectDescriptor
+                {
+                    ["Id"] = entity.BookListId.ToString()
+                });
             }
 
             PrivateBookListItemStatusValidator.Validate(entity.Status, (BookItemStatus) command.Status);

@@ -184,8 +184,8 @@ class PrivateBookList extends React.Component<Props, State> {
         if(chunked) {
             this.setState({
                 books: chunked.items,
-                hasNext: chunked.hasNext,
-                hasPrevious: chunked.hasPrevious,
+                hasNext: chunked.chunkInfo.hasNext,
+                hasPrevious: chunked.chunkInfo.hasPrevious,
                 bookFormHidden: false
             }, () => this.props.endLoading());
         } else {
@@ -207,9 +207,9 @@ class PrivateBookList extends React.Component<Props, State> {
         if(chunked) {
             this.setState({
                 books: chunked.items,
-                hasNext: chunked.hasNext,
-                hasPrevious: chunked.hasPrevious,
-                chunk: chunked.chunk,
+                hasNext: chunked.chunkInfo.hasNext,
+                hasPrevious: chunked.chunkInfo.hasPrevious,
+                chunk: chunked.chunkInfo.chunk,
                 bookSearchQuery: query
             }, () => this.props.endLoading());
         } else {
@@ -281,9 +281,9 @@ class PrivateBookList extends React.Component<Props, State> {
         if(chunked) {
             this.setState({
                 books: chunked.items,
-                hasNext: chunked.hasNext,
-                hasPrevious: chunked.hasPrevious,
-                chunk: chunked.chunk
+                hasNext: chunked.chunkInfo.hasNext,
+                hasPrevious: chunked.chunkInfo.hasPrevious,
+                chunk: chunked.chunkInfo.chunk
             }, () => this.props.endLoading());
         } else {
             this.setState({

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -25,12 +24,7 @@ namespace ReadingList.Api
         {
             services.AddCors();
             ConfigureApplication(services);
-            services.AddMvc().AddFluentValidation(options =>
-            {
-                options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                options.RegisterValidatorsFromAssembly(typeof(JwtBearerConfigurator).Assembly);
-                options.RegisterValidatorsFromAssembly(typeof(SqlQueryContext<,>).Assembly);
-            });
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -54,11 +48,7 @@ namespace ReadingList.Api
                     HttpStatusCode.BadRequest,
                     new[]
                     {
-                        typeof(WrongPasswordException),
-                        typeof(ObjectAlreadyExistsException),
-                        typeof(CannotChangeStatusException),
-                        typeof(ObjectNotExistException),
-                        typeof(ValidationException)
+                        typeof(DomainValidationException)
                     }
                 },
                 {
@@ -66,6 +56,16 @@ namespace ReadingList.Api
                     new[]
                     {
                         typeof(AccessDeniedException)
+                    }
+                },
+                {
+                    HttpStatusCode.UnprocessableEntity,
+                    new[]
+                    {
+                        typeof(ObjectAlreadyExistsException),
+                        typeof(CannotChangeStatusException),
+                        typeof(WrongPasswordException),
+                        typeof(ObjectNotExistException)
                     }
                 }
             };

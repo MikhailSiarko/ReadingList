@@ -1,7 +1,10 @@
 using System.Data;
+using FluentValidation;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
+using ReadingList.Domain;
 using ReadingList.Domain.Infrastructure.Extensions;
+using ReadingList.Read.SqlQueries;
 
 namespace ReadingList.Read
 {
@@ -11,6 +14,8 @@ namespace ReadingList.Read
         {
             services.AddScoped<IDbConnection, SqliteConnection>(provider =>
                 new SqliteConnection(provider.GetConnectionString("Read")));
+
+            DomainConfiguration.AddValidatorsFromAssembly(services, typeof(ListsQueries).Assembly);
 
             return services;
         }

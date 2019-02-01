@@ -61,7 +61,7 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} can&apos;t be {1}.
+        ///   Looks up a localized string similar to The &apos;{0}&apos; can&apos;t be {1}.
         /// </summary>
         public static string CannotBeDefault {
             get {
@@ -70,11 +70,11 @@ namespace ReadingList.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} can&apos;t be empty.
+        ///   Looks up a localized string similar to {0} can&apos;t be empty or null.
         /// </summary>
-        public static string CannotBeEmpty {
+        public static string CannotBeEmptyOrNull {
             get {
-                return ResourceManager.GetString("CannotBeEmpty", resourceCulture);
+                return ResourceManager.GetString("CannotBeEmptyOrNull", resourceCulture);
             }
         }
         

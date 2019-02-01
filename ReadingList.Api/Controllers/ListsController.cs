@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
@@ -8,6 +9,7 @@ using ReadingList.Read.Queries;
 namespace ReadingList.Api.Controllers
 {
     [ApiRoute("[controller]")]
+    [Authorize]
     public class ListsController : Controller
     {
         private readonly IDomainService _domainService;
