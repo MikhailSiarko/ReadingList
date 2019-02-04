@@ -1,6 +1,8 @@
-﻿using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Exceptions;
+using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Validators;
 using ReadingList.Models.Write;
+using ReadingList.Resources;
 using Xunit;
 
 namespace ReadingList.Tests
@@ -17,7 +19,10 @@ namespace ReadingList.Tests
 
             var ex = Assert.Throws<CannotChangeStatusException>(() =>
                 PrivateBookListItemStatusValidator.Validate(item.Status, BookItemStatus.Reading));
-            Assert.Equal("Can't change status from Read to Reading", ex.Message);
+
+            Assert.Equal(
+                ExceptionMessages.CannotChangeStatusFromTo.F(item.Status.ToString("G"),
+                    BookItemStatus.Reading.ToString("G")), ex.Message);
         }
 
         [Fact]
@@ -31,7 +36,8 @@ namespace ReadingList.Tests
 
             var ex = Assert.Throws<CannotChangeStatusException>(() =>
                 PrivateBookListItemStatusValidator.Validate(item.Status, BookItemStatus.ToReading));
-            Assert.Equal("Can't change status from Reading to To Reading", ex.Message);
+            Assert.Equal(ExceptionMessages.CannotChangeStatusFromTo.F(item.Status.ToString("G"),
+                BookItemStatus.ToReading.ToStringFromDescription()), ex.Message);
         }
 
         [Fact]
@@ -45,7 +51,8 @@ namespace ReadingList.Tests
 
             var ex = Assert.Throws<CannotChangeStatusException>(() =>
                 PrivateBookListItemStatusValidator.Validate(item.Status, BookItemStatus.ToReading));
-            Assert.Equal("Can't change status from Started But Postponed to To Reading", ex.Message);
+            Assert.Equal(ExceptionMessages.CannotChangeStatusFromTo.F(item.Status.ToStringFromDescription(),
+                BookItemStatus.ToReading.ToStringFromDescription()), ex.Message);
         }
     }
 }

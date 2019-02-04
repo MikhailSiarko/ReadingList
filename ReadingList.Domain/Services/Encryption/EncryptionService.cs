@@ -1,4 +1,4 @@
-﻿using ReadingList.Domain.Services.Interfaces;
+using ReadingList.Domain.Services.Interfaces;
 
 namespace ReadingList.Domain.Services.Encryption
 {

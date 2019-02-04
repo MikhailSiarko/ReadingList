@@ -1,5 +1,4 @@
 using System.Data;
-using FluentValidation;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Domain;

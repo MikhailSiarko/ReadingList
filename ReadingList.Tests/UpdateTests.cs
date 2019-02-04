@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Models.Write;
 using Xunit;

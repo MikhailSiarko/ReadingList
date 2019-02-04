@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Models.Write.HelpEntities
+namespace ReadingList.Models.Write.HelpEntities
 {
     public class BookTag
     {

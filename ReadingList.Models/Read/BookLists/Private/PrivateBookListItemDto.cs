@@ -1,4 +1,4 @@
-﻿using ReadingList.Models.Read.Abstractions;
+using ReadingList.Models.Read.Abstractions;
 
 namespace ReadingList.Models.Read
 {

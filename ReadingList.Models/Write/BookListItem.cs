@@ -1,4 +1,4 @@
-﻿using ReadingList.Models.Infrastructure;
+using ReadingList.Models.Infrastructure;
 
 namespace ReadingList.Models.Write
 {

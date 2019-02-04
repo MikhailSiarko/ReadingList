@@ -1,4 +1,4 @@
-﻿using ReadingList.Resources;
+using ReadingList.Resources;
 
 namespace ReadingList.Domain.Exceptions
 {

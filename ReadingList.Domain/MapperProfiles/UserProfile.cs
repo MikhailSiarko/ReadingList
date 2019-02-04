@@ -1,4 +1,4 @@
-﻿using ReadingList.Models.Read;
+using ReadingList.Models.Read;
 using ReadingList.Models.Write.Identity;
 using Profile = AutoMapper.Profile;
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ReadingList.Models.Infrastructure;
 using ReadingList.Models.Write.HelpEntities;
 using ReadingList.Models.Write.Identity;

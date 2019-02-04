@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
@@ -40,7 +40,7 @@ namespace ReadingList.Tests
         {
             var provider = new ExceptionToStatusCodeProvider(_map);
             var statusCode = provider.GetStatusCode(typeof(ObjectNotExistException));
-            Assert.Equal(HttpStatusCode.BadRequest, statusCode);
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, statusCode);
         }
 
         [Fact]

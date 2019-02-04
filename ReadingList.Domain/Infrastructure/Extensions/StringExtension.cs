@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Domain.Infrastructure.Extensions
+namespace ReadingList.Domain.Infrastructure.Extensions
 {
     public static class StringExtension
     {

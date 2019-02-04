@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Domain.Services.Interfaces
+namespace ReadingList.Domain.Services.Interfaces
 {
     public interface IEncryptionAlgorithm
     {

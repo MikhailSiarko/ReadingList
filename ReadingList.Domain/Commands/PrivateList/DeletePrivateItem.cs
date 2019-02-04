@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Domain.Commands
+namespace ReadingList.Domain.Commands
 {
     public class DeletePrivateItem : SecuredCommand
     {

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using MediatR;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Domain.Services.Interfaces;

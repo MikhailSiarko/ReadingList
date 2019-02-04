@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Models.Write
+namespace ReadingList.Models.Write
 {
     public enum BookListType
     {

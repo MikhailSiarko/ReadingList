@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ReadingList.Domain.Infrastructure;
 using ReadingList.Models.Write;
 using Xunit;

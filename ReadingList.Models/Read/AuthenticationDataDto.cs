@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Models.Read
+namespace ReadingList.Models.Read
 {
     public class AuthenticationDataDto
     {

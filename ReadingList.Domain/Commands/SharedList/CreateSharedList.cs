@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ReadingList.Models.Read;
 using ReadingList.Models.Write;
 

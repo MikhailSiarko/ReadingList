@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using ReadingList.Domain.Infrastructure.Extensions;
 using ReadingList.Models.Write;
 using ReadingList.Resources;

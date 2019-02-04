@@ -1,4 +1,4 @@
-﻿namespace ReadingList.Models.Write.Identity
+namespace ReadingList.Models.Write.Identity
 {
     public class Profile : Entity
     {

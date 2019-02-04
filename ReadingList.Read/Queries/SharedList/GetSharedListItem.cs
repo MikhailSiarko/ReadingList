@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using ReadingList.Models.Read;
 
 namespace ReadingList.Read.Queries
