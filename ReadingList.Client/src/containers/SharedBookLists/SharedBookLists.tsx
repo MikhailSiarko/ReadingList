@@ -120,15 +120,20 @@ class SharedBookLists extends React.Component<Props, State> {
                     count ? parseInt(count as string, 10) : Constants.ITEMS_PER_PAGE
                 );
             }
-            this.setState(
-                {
-                    sharedLists: chunked.items,
-                    chunk: chunked.chunkInfo.chunk,
-                    hasNext: chunked.chunkInfo.hasNext,
-                    hasPrevious: chunked.chunkInfo.hasPrevious
-                },
-                () => this.props.loadingEnd()
-            );
+
+            if(chunked) {
+                this.setState(
+                    {
+                        sharedLists: chunked.items,
+                        chunk: chunked.chunkInfo.chunk,
+                        hasNext: chunked.chunkInfo.hasNext,
+                        hasPrevious: chunked.chunkInfo.hasPrevious
+                    },
+                    () => this.props.loadingEnd()
+                );
+            } else {
+                this.props.loadingEnd();
+            }
         }
     }
 
