@@ -95,12 +95,7 @@
       "jsx",
       "json",
       "node"
-    ],
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "C:\\Users\\Serko\\WebstormProjects\\untitled\\tsconfig.test.json"
-      }
-    }
+    ]
   },
   "devDependencies": {
     "@types/query-string": "^6.1.1",
