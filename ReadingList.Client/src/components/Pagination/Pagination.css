@@ -1,22 +1,29 @@
 .pagination {
-    width: 70%;
+    width: 90%;
+    height: 100%;
     margin: 0 auto;
 }
 
-.buttons {
-    text-align: center;
-    margin-top: 5rem;
+.pagination > div {
+    margin: 0 auto;
+    display: block;
+    height: 100%;
 }
 
-.buttons > div {
-    margin: 0;
+.pagination > div > div {
     display: inline-block;
+    height: 100%;
 }
 
-.buttons > div:last-child {
-    float: right;
+.pagination > div > div:nth-child(2n + 1) {
+    width: 5%;
 }
 
-.buttons > div:first-child {
-    float: left;
+.pagination > div > div:nth-child(2n) {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.pagination > div > div:last-child {
+    text-align: right;
 }

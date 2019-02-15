@@ -66,9 +66,10 @@
     position: absolute;
     top: 7rem;
     left: 5rem;
+    bottom: 9rem;
     right: 5rem;
 }
 
 .lookup-content > div {
-    margin: 2rem auto;
+    margin: 0 auto;
 }

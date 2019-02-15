@@ -66,7 +66,7 @@ const Register = () => {
                 <RoundButton
                     id={'submit-button'}
                     disabled={true}
-                    radius={3}
+                    radius={2.7}
                     className={applyClasses(globalStyles.disabled, globalStyles.shadowed)}
                     type={'submit'}
                     title="Submit"

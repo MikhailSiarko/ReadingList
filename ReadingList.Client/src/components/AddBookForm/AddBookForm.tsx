@@ -100,8 +100,8 @@ class AddBookForm extends React.Component<Props> {
                 header={'Add book'}
                 size={
                     {
-                        height: '90%',
-                        width: '80%'
+                        height: '98%',
+                        width: '90%'
                     }
                 }
                 onSubmit={this.handleFormSubmit}

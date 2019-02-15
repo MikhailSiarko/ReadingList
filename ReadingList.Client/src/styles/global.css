@@ -4,11 +4,7 @@ html {
     font-size: 10px;
 }
 
-*:focus {
-    outline: none !important;
-}
-
-body {
+* {
     font-family: 'Assistant', sans-serif;
     font-weight: 300;
     margin: 0;
@@ -16,6 +12,10 @@ body {
     border: 0;
     vertical-align: baseline;
     box-sizing: border-box;
+}
+
+*:focus {
+    outline: none !important;
 }
 
 .active {
@@ -52,21 +52,19 @@ body {
 input,
 select,
 textarea {
-    font-weight: 100;
     font-size: 2.2rem;
     border: none;
     border-radius: 0.2rem;
     padding: 0.4rem;
-    color: #757575;
+    color: #3a3a3a;
     background-color: white;
     text-align: center;
     width: 100%;
-    box-sizing: border-box;
 }
 
 input::placeholder,
 textarea::placeholder {
-    color: rgb(196, 196, 196)
+    color: rgb(156, 156, 156)
 }
 
 .invalid-input {
@@ -109,11 +107,11 @@ textarea::placeholder {
     display: block;
     text-align: left;
     border: none;
-    padding: 0.6rem 5rem 0.5rem 1rem;
+    padding: 0.4rem 5rem 0.3rem 1rem;
     min-width: 12rem;
     cursor: pointer;
-    font-size: 1.4rem;
-    font-weight: 200;
+    font-size: 1.6rem;
+    font-weight: 400;
     background: white;
 }
 

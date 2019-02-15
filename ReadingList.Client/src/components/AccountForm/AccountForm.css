@@ -1,18 +1,25 @@
 @import url('https://fonts.googleapis.com/css?family=Monoton');
 
 .account-form {
-    padding: 8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 40vh;
+    width: 40vw;
+    margin-left: -20vw;
+    margin-top: -20vh;
     text-align: center;
 }
 
 .account-form > div {
-    width: 15%;
+    width: 40%;
     margin: 0 auto;
-    margin-bottom: 2rem
+    margin-bottom: 4%;
 }
 
 .account-header {
     font-size: 6.4rem;
+    margin-bottom: 4%;
     font-family: 'Monoton', cursive;
     text-shadow: 0 0.2rem 0.2rem #a5a9af;
     color: #1565c0;
