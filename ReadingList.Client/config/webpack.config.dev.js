@@ -12,6 +12,44 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const CSSModuleLoader = {
+    loader: require.resolve('typings-for-css-modules-loader'),
+    options: {
+      importLoaders: 1,
+      modules: true,
+      namedExport: true,
+      camelCase: true,
+      localIdentName: '[name]__[local]___[hash:base64:5]',
+    },
+}
+
+const CSSLoader = {
+    loader: 'css-loader',
+    options: {
+        importLoaders: 1,
+        modules: true,
+        localIdentName: '[name]__[local]___[hash:base64:5]'
+    }
+}
+
+const postCSSLoader = {
+    loader: 'postcss-loader',
+    options: {
+        ident: 'postcss',
+        plugins: () => [
+          require('postcss-flexbugs-fixes'),
+          autoprefixer({
+            browsers: [
+              '>1%',
+              'last 4 versions',
+              'Firefox ESR',
+              'not ie < 9',
+            ],
+            flexbox: 'no-2009',
+          }),
+        ],
+    }
+}
 
 // Webpack uses `publicPath` to determine where the App is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -96,7 +134,7 @@ module.exports = {
       '.jsx',
     ],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -164,71 +202,31 @@ module.exports = {
             exclude: /\.module\.css$/,
             use: [
               require.resolve('style-loader'),
-              {
-                loader: require.resolve('css-loader'),
-                options: {
-                  importLoaders: 1,
-                  modules: true,
-                  localIdentName: '[name]__[local]___[hash:base64:5]'
-                },
-              },
-              {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  // Necessary for external CSS imports to work
-                  // https://github.com/facebookincubator/create-react-app/issues/2677
-                  ident: 'postcss',
-                  plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9', // React doesn't support IE8 anyway
-                      ],
-                      flexbox: 'no-2009',
-                    }),
-                  ],
-                },
-              },
+              CSSLoader,
+              postCSSLoader,
             ],
           },
           {
             test: /\.module\.css$/,
             use: [
               require.resolve('style-loader'),
-              {
-                loader: require.resolve('typings-for-css-modules-loader'),
-                options: {
-                  importLoaders: 1,
-                  modules: true,
-                  namedExport: true,
-                  camelCase: true,
-                  localIdentName: '[name]__[local]___[hash:base64:5]',
-                },
-              },
-              {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  // Necessary for external CSS imports to work
-                  // https://github.com/facebookincubator/create-react-app/issues/2677
-                  ident: 'postcss',
-                  plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    autoprefixer({
-                      browsers: [
-                        '>1%',
-                        'last 4 versions',
-                        'Firefox ESR',
-                        'not ie < 9', // React doesn't support IE8 anyway
-                      ],
-                      flexbox: 'no-2009',
-                    }),
-                  ],
-                },
-              },
+              CSSModuleLoader,
+              postCSSLoader,
             ],
+          },
+          {
+            test: /\.scss$/,
+            exclude: /\.module\.scss$/,
+            use: ['style-loader', CSSLoader, postCSSLoader, 'sass-loader']
+          },
+          {
+            test: /\.module\.scss$/,
+            use: [
+              'style-loader',
+              CSSModuleLoader,
+              postCSSLoader,
+              'sass-loader',
+            ]
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
@@ -240,7 +238,7 @@ module.exports = {
             // it's runtime that would otherwise processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.js$/, /\.html$/, /\.json$/],
+            exclude: [/\.js$/, /\.html$/, /\.json$/, /\.scss$/],
             loader: require.resolve('file-loader'),
             options: {
               name: 'static/media/[name].[hash:8].[ext]',

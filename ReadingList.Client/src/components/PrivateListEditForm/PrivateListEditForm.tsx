@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Colors from '../../styles/colors';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import RoundButton from '../RoundButton';
 import style from './PrivateListEditor.css';
 

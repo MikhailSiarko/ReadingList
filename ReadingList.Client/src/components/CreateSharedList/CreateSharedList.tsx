@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Container from '../Container';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import MultiSelect from '../MultiSelect';
 import { SelectListItem } from '../../models';
 

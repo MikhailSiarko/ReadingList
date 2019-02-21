@@ -1,4 +1,4 @@
-import { RootState } from '../index';
+import { RootState } from '..';
 import initialState from '../initialState';
 import { getType } from 'typesafe-actions';
 import { PrivateBookListAction, privateBookListAction } from '../../actions/privateBookList';

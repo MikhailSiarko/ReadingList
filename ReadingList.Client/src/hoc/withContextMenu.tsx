@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from '../styles/global.css';
+import styles from '../styles/global.scss';
 
 interface MenuItem {
     onClick: () => void | Promise<void>;

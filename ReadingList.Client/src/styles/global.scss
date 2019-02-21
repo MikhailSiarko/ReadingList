@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Assistant:200,300,400,600');
+@import 'colors';
+@import 'shadows';
 
 html {
     font-size: 10px;
@@ -19,11 +21,11 @@ html {
 }
 
 .active {
-    background-color: #1259a9;
+    background-color: $active;
 }
 
 .disabled {
-    background-color: #4a688b;
+    background-color: $disabled;
 }
 
 .shadowed {
@@ -52,6 +54,7 @@ html {
 input,
 select,
 textarea {
+    @extend %gray-shadow;
     font-size: 2.2rem;
     border: none;
     border-radius: 0.2rem;
@@ -86,7 +89,7 @@ textarea::placeholder {
 .input-validation-message {
     display: block;
     font-size: 1.6rem;
-    color: #ef5350;
+    color: $red;
 }
 
 .context-menu-wrapper {
@@ -96,10 +99,10 @@ textarea::placeholder {
 }
 
 .context-menu {
+    @extend %gray-shadow;
     display: block;
     position: fixed;
     background: white;
-    box-shadow: 0 0.2rem 1rem #999999;
     z-index: 9999;
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SelectListItem } from '../../../models';
-import globalStyles from '../../../styles/global.css';
+import globalStyles from '../../../styles/global.scss';
 import styles from './BookStatusEditor.css';
 
 interface Props {

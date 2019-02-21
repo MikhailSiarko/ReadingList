@@ -1,5 +1,5 @@
 import * as React from 'react';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import styles from '../AccountForm/AccountForm.css';
 import RoundButton from '../RoundButton';
 

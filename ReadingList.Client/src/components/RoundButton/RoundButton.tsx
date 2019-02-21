@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Colors from 'src/styles/colors';
-import globalStyles from 'src/styles/global.css';
+import Colors from '../../styles/colors';
+import globalStyles from '../../styles/global.scss';
 import style from './RoundButton.css';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 

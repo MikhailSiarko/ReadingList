@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Form } from '../Form';
 import { NamedValue } from '../../models';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 
 interface Props {
     onSubmit: (name: string) => Promise<void>;

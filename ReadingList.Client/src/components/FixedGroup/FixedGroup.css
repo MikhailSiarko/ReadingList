@@ -1,9 +1,9 @@
 .fixed-group {
     position: fixed;
-    right: 8rem;
-    bottom: 2rem;
+    right: 2%;
+    bottom: 2%;
 }
 
 .element-wrapper {
-    margin: 2rem auto;
+    margin: 15% auto;
 }

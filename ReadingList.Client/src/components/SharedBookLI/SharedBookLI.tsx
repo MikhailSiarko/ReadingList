@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from '../PrivateBookLI/PrivateBookLI.css';
 import { SharedBookListItem } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import BookInfo from '../PrivateBookLI/BookInfo/BookInfo';
 import { DeleteButton } from '../PrivateBookLI/Buttons';
 import sharedStyles from './SharedBookLI.css';

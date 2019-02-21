@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './SimpleSearch.css';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 
 interface Props {
     query?: string;

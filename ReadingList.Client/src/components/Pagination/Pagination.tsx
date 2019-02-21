@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './Pagination.css';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import Colors from '../../styles/colors';
 import RoundButton from '../RoundButton';
 

@@ -3,7 +3,7 @@ import { SelectListItem } from '../../models';
 import Selected from './Selected';
 import selectStyles from './MultiSelect.css';
 import { applyClasses, isNullOrEmpty } from '../../utils';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 
 interface Props {
     options: SelectListItem[];

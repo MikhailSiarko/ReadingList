@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from '../ListGridItem/ListGridItem.css';
-import globalStyles from '../../../styles/global.css';
+import globalStyles from '../../../styles/global.scss';
 import { applyClasses, reduceTags, createDOMAttributeProps } from '../../../utils';
 
 export interface BookGridItemProps extends React.HTMLProps<HTMLDivElement> {

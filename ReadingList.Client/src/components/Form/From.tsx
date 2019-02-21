@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Colors from 'src/styles/colors';
+import Colors from '../../styles/colors';
 import styles from './Form.css';
 import RoundButton from '../RoundButton';
 import { NamedValue } from '../../models';

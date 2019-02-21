@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './Search.css';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import { isNullOrEmpty } from '../../utils';
 
 interface Props {
