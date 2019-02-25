@@ -7,7 +7,7 @@ export class ApiConfiguration {
     public static PRIVATE_LIST = `${ApiConfiguration.LISTS}/private`;
     public static PRIVATE_LIST_ITEMS = `${ApiConfiguration.LISTS}/private/items`;
     public static SHARED_LISTS = `${ApiConfiguration.LISTS}/shared`;
-    public static SHARED_LISTS_OWN = `${ApiConfiguration.SHARED_LISTS}/own`;
+    public static SHARED_LISTS_OWN = `${ApiConfiguration.SHARED_LISTS}/my`;
     public static BOOK_STATUSES = '/bookstatuses';
     public static BOOKS = '/books';
     public static TAGS = '/tags';
@@ -30,7 +30,7 @@ export class ApiConfiguration {
     }
 
     public static getOwnSharedListsUrl(chunk: number | null, count: number | null) {
-        return `${ApiConfiguration.SHARED_LISTS}/own?chunk=${chunk}&count=${count}`;
+        return `${ApiConfiguration.SHARED_LISTS_OWN}?chunk=${chunk}&count=${count}`;
     }
 
     public static getAddItemToSharedListUrl(listId: number) {

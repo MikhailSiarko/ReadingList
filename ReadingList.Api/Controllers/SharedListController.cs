@@ -45,8 +45,8 @@ namespace ReadingList.Api.Controllers
             return Ok(list);
         }
 
-        [HttpGet("own")]
-        public async Task<IActionResult> GetOwn([FromQuery] int? chunk, [FromQuery] int? count)
+        [HttpGet("my")]
+        public async Task<IActionResult> GetUserLists([FromQuery] int? chunk, [FromQuery] int? count)
         {
             var bookLists = await _domainService.AskAsync(new GetUserSharedLists(User.GetUserId(), chunk, count));
 

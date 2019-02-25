@@ -66,7 +66,7 @@ class SharedBookLists extends React.Component<Props, State> {
         this.props.loadingStart();
         const { query, chunk, count } = parse(this.props.location.search);
         let chunked;
-        if(query === 'own') {
+        if(query === 'my') {
             chunked = await this.props.getOwnSharedLists(
                 chunk ? parseInt(chunk as string, 10) : null,
                 count ? parseInt(count as string, 10) : null
@@ -108,7 +108,7 @@ class SharedBookLists extends React.Component<Props, State> {
             this.props.loadingStart();
             const { query, chunk, count } = parse(this.props.location.search);
             let chunked;
-            if(query === 'own') {
+            if(query === 'my') {
                 chunked = await this.props.getOwnSharedLists(
                     chunk ? parseInt(chunk as string, 10) : null,
                     count ? parseInt(count as string, 10) : Constants.ITEMS_PER_PAGE
