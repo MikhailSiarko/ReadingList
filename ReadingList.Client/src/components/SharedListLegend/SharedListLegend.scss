@@ -7,10 +7,10 @@
 .info {
     margin: 0;
     overflow: hidden;
-}
 
-.info > div {
-    font-size: 1.6rem;
+    & > div {
+        font-size: 1.6rem;
+    }
 }
 
 .wrapper {

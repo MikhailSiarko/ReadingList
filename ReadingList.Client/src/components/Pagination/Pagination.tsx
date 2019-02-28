@@ -1,7 +1,5 @@
 import * as React from 'react';
-import styles from './Pagination.css';
-import globalStyles from '../../styles/global.scss';
-import Colors from '../../styles/colors';
+import styles from './Pagination.scss';
 import RoundButton from '../RoundButton';
 
 interface Props {
@@ -20,8 +18,6 @@ class Pagination extends React.Component<Props> {
                         <RoundButton
                             radius={3}
                             title="Previous"
-                            className={globalStyles.shadowed}
-                            style={{backgroundColor: Colors.Primary}}
                             disabled={!this.props.hasPrevious}
                             onClick={this.props.onPrevious}
                         ><i className="fas fa-arrow-left" /></RoundButton>
@@ -33,8 +29,6 @@ class Pagination extends React.Component<Props> {
                         <RoundButton
                             radius={3}
                             title="Next"
-                            className={globalStyles.shadowed}
-                            style={{backgroundColor: Colors.Primary}}
                             disabled={!this.props.hasNext}
                             onClick={this.props.onNext}
                         ><i className="fas fa-arrow-right" /></RoundButton>

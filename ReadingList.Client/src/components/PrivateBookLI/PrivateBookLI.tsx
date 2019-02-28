@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './PrivateBookLI.css';
+import styles from './PrivateBookLI.scss';
 import { PrivateBookListItem, SelectListItem } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.scss';

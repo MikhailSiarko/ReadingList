@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './Main.css';
+import styles from './Main.scss';
 
 const Main: React.SFC<React.HTMLProps<HTMLMainElement>> = props => (
     <main className={styles.main} {...props}>

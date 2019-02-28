@@ -1,6 +1,5 @@
 import * as React from 'react';
-import globalStyles from '../../styles/global.scss';
-import styles from '../AccountForm/AccountForm.css';
+import styles from '../AccountForm/AccountForm.scss';
 import RoundButton from '../RoundButton';
 
 const Login = () => (
@@ -8,7 +7,6 @@ const Login = () => (
         <h1 className={styles['account-header']}>Login</h1>
         <div>
             <input
-                className={globalStyles.shadowed}
                 type="email"
                 name="email"
                 placeholder="Email"
@@ -17,7 +15,6 @@ const Login = () => (
         </div>
         <div>
             <input
-                className={globalStyles.shadowed}
                 type="password"
                 name="password"
                 placeholder="Password"

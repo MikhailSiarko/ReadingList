@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Book } from '../../models';
-import styles from './BookSearchItem.css';
+import styles from './BookSearchItem.scss';
 import { reduceTags } from '../../utils';
 
 interface Props {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './PrivateListLegend.css';
+import styles from './PrivateListLegend.scss';
 
 interface Props {
     name: string;

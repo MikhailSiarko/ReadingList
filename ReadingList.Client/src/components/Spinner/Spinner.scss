@@ -1,3 +1,5 @@
+@import '../../styles/global';
+
 .spinner-wrapper {
     position: absolute;
     left: 0;
@@ -8,7 +10,7 @@
 }
 
 .spinner {
-    color: #1259a9;
+    color: $primary;
     margin: calc(50vh - 1rem) auto 0 auto;
     font-size: 2rem;
     width: 2rem;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Colors from '../../styles/colors';
-import globalStyles from '../../styles/global.scss';
-import styles from './SharedListEditForm.css';
+import styles from './SharedListEditForm.scss';
 import RoundButton from '../RoundButton';
 import { SelectListItem } from '../../models';
 import MultipleSelect from '../MultiSelect';
@@ -77,7 +76,6 @@ class SharedListEditForm extends React.Component<Props> {
                     <input
                         name={'name'}
                         type={'text'}
-                        className={globalStyles.shadowed}
                         required={true}
                         defaultValue={this.props.name}
                     />
@@ -106,7 +104,7 @@ class SharedListEditForm extends React.Component<Props> {
                     <RoundButton radius={2} type={'submit'}>✓</RoundButton>
                 </div>
                 <div>
-                    <RoundButton radius={2} onClick={this.cancelHandler} color={Colors.Red}>×</RoundButton>
+                    <RoundButton radius={2} onClick={this.cancelHandler} buttonColor={Colors.Red}>×</RoundButton>
                 </div>
             </form>
         );

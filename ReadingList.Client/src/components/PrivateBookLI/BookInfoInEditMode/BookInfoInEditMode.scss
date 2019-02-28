@@ -1,0 +1,14 @@
+.editable-book-info {
+    font-size: 2rem;
+    min-width: 40rem;
+    margin: 0.5rem;
+
+    & > div {
+        font-size: 4rem;
+        font-weight: bold;
+
+        & > span {
+            font-size: 2rem;
+        }
+    }
+}

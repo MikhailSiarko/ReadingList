@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { default as posed } from 'react-pose';
-import style from './Spinner.css';
+import style from './Spinner.scss';
 
 interface Props {
     loading: boolean;

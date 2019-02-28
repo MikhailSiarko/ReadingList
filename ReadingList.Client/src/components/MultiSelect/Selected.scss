@@ -1,6 +1,8 @@
+@import '../../styles/colors';
+
 .selected {
     display: inline-block;
-    background-color: #bec8e9;
+    background-color: $gray;
     border-radius: 0.5rem;
     font-size: 1.6rem;
     padding-left: 0.6rem;
@@ -8,14 +10,14 @@
     color: black;
     font-family: 'Assistant', sans-serif;
     cursor: text;
-}
 
-.selected > button {
-    cursor: pointer;
-    border: none;
-    background-color: transparent;
-}
+    & > button {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
 
-.selected > button:hover {
-    color: red;
+        &:hover {
+            color: $red;
+        }
+    }
 }

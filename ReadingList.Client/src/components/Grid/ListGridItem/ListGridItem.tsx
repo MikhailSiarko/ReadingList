@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './ListGridItem.css';
+import styles from './ListGridItem.scss';
 import globalStyles from '../../../styles/global.scss';
 import { applyClasses, reduceTags, createDOMAttributeProps } from '../../../utils';
 

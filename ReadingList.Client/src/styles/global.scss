@@ -14,10 +14,10 @@ html {
     border: 0;
     vertical-align: baseline;
     box-sizing: border-box;
-}
 
-*:focus {
-    outline: none !important;
+    &:focus {
+        outline: none !important;
+    }
 }
 
 .active {
@@ -28,27 +28,18 @@ html {
     background-color: $disabled;
 }
 
-.shadowed {
-    box-shadow: 0 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.1), 0 0 0 0.1rem rgba(0, 0, 0, 0.08);
-    transition: all 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
-}
-
-.shadowed:hover, .shadowed:focus {
-    box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.1), 0 0 0 0.1rem rgba(0, 0, 0, 0.08);
-}
-
 .inner-shadowed {
     box-shadow: 0 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.16),
     inset 0 0.2rem 0 rgba(255, 255, 255, 0.1),
     0 0 0 0.1rem rgba(0, 0, 0, 0.08),
     inset 0 0 2rem rgba(44, 44, 44, 0.1);
-}
 
-.inner-shadowed:hover, .inner-shadowed:focus {
-    box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.16),
-    inset 0 0.2rem 0 rgba(255, 255, 255, 0.1),
-    0 0 0 0.1rem rgba(0, 0, 0, 0.08),
-    inset 0 0 2rem rgba(44, 44, 44, 0.1);
+    &:focus, &:hover {
+        box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.16),
+        inset 0 0.2rem 0 rgba(255, 255, 255, 0.1),
+        0 0 0 0.1rem rgba(0, 0, 0, 0.08),
+        inset 0 0 2rem rgba(44, 44, 44, 0.1);
+    }
 }
 
 input,
@@ -59,31 +50,18 @@ textarea {
     border: none;
     border-radius: 0.2rem;
     padding: 0.4rem;
-    color: #3a3a3a;
+    color: $dark-gray;
     background-color: white;
     text-align: center;
     width: 100%;
-}
 
-input::placeholder,
-textarea::placeholder {
-    color: rgb(156, 156, 156)
+    &::placeholder {
+        color: $gray
+    }
 }
 
 .invalid-input {
-    border-color: #ef5350 !important;
-    box-shadow: 0 0.1rem 0.2rem #f16c6a !important;
-}
-
-.invalid-input:hover {
-    border-color: rgba(239, 83, 80, 0.4) !important;
-    box-shadow: 0 0.2rem 0.4rem rgba(239, 83, 80, 0.6) !important;
-}
-
-.invalid-input:focus {
-    border-color: rgba(239, 83, 80, 0.4) !important;
-    box-shadow: 0 0.2rem 0.4rem rgba(239, 83, 80, 0.6) !important;
-    outline: none;
+    @extend %red-shadow;
 }
 
 .input-validation-message {
@@ -124,4 +102,12 @@ textarea::placeholder {
 
 button:disabled {
     opacity: 0.7;
+}
+
+.primary {
+    background-color: $primary!important;
+}
+
+.red {
+    background-color: red!important;
 }

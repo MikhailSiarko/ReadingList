@@ -1,3 +1,5 @@
+@import '../../styles/colors';
+
 .notification {
     transition: bottom 500ms ease-in-out;
     position: fixed;
@@ -8,10 +10,18 @@
     border-radius: 1rem;
     padding: 1rem;
     width: 50rem;
+
+    & > h3 {
+        margin: 1rem;
+    }
 }
 
-.notification > h3 {
-    margin: 1rem;
+.error {
+    background-color: $red;
+}
+
+.info {
+    background-color: lighten($primary, 5%);
 }
 
 .notification-active {

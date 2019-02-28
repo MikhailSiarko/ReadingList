@@ -52,7 +52,7 @@ namespace ReadingList.Api.Controllers
             var item = await _domainService.ExecuteAsync(new AddPrivateItem(User.GetUserId(),
                 addItemRequestData.BookId));
 
-            return CreatedAtAction(nameof(GetItem), new {id = item.Id}, item);
+            return CreatedAtAction(nameof(GetItem), new {itemId = item.Id}, item);
         }
 
         [HttpGet("items/{itemId}")]

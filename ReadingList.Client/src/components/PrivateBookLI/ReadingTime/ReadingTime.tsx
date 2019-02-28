@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { convertSecondsToReadingTime } from '../../../utils';
-import styles from './ReadingTime.css';
+import styles from './ReadingTime.scss';
 
 interface Props {
     readingTimeInSeconds: number;

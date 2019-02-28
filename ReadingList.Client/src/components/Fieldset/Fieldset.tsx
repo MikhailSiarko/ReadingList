@@ -1,5 +1,5 @@
 import * as React from 'react';
-import style from './Fieldset.css';
+import style from './Fieldset.scss';
 import { createDOMAttributeProps } from '../../utils';
 
 interface Props extends React.HTMLProps<HTMLFieldSetElement> {

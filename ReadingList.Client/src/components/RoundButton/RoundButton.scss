@@ -1,0 +1,11 @@
+@import '../../styles/colors';
+@import '../../styles/shadows';
+
+.round-button {
+    @extend %gray-shadow;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    background-color: $primary;
+}

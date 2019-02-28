@@ -5,8 +5,9 @@ export interface GlobalStyles {
     ['invalid-input']: string;
     ['context-menu-wrapper']: string;
     ['context-menu']: string;
-    ['shadowed']: string;
     ['inner-shadowed']: string;
+    ['primary']: string;
+    ['red']: string;
 }
 
 declare const globalStyles: GlobalStyles;

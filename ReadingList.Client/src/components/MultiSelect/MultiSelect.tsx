@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { SelectListItem } from '../../models';
 import Selected from './Selected';
-import selectStyles from './MultiSelect.css';
-import { applyClasses, isNullOrEmpty } from '../../utils';
-import globalStyles from '../../styles/global.scss';
+import selectStyles from './MultiSelect.scss';
+import { isNullOrEmpty } from '../../utils';
 
 interface Props {
     options: SelectListItem[];
@@ -250,7 +249,7 @@ class MultiSelect extends React.Component<Props, State> {
                     ref={ref => this.wrapper = (ref as HTMLDivElement)}
                     tabIndex={0}
                     onClick={this.handleClick}
-                    className={applyClasses(globalStyles.shadowed, selectStyles.select)}
+                    className={selectStyles.select}
                 >
                     <select
                         ref={ref => this.select = (ref as HTMLSelectElement)}
@@ -285,7 +284,7 @@ class MultiSelect extends React.Component<Props, State> {
                     }
                     <div onClick={this.stopPropagation}>
                         <div
-                            className={applyClasses(selectStyles.options, globalStyles.shadowed)}
+                            className={selectStyles.options}
                             hidden={this.state.optionsHidden}
                         >
                             <div>

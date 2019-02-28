@@ -5,25 +5,24 @@
     border-radius: 0.4rem;
     margin: 1rem 1rem;
     padding: 0 1rem;
-}
 
-.book-li > div {
-    display: inline-block;
-    box-sizing: border-box;
-    vertical-align: middle;
+    & > div {
+        display: inline-block;
+        box-sizing: border-box;
+        vertical-align: middle;
+    }
 }
 
 .editing-book-li {
     text-align: center;
     transition: all 0.1s;
     border-left: #1565c0 solid 0.5rem;
-    background-color: 929292;
     border-radius: 0.4rem;
     margin: 0.8rem;
     padding: 0 1rem;
-}
 
-.editing-book-li > div {
-    display: block;
-    box-sizing: border-box;
+    & > div {
+        display: block;
+        box-sizing: border-box;
+    }
 }

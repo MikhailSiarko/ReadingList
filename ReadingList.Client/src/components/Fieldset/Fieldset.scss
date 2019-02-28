@@ -1,8 +1,10 @@
+@import '../../styles/global';
+
 .fieldset {
     box-sizing: border-box;
     text-align: center;
     border-radius: 0.4rem;
     border-style: solid;
-    border-color: #5e5e5e;
+    border-color: $gray;
     border-width: 0.1rem;
 }

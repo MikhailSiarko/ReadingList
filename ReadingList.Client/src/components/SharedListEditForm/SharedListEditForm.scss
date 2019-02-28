@@ -1,6 +1,8 @@
-.edit-form > div {
-    display: inline-block;
-    margin: 0 1rem;
+.edit-form {
+    & > div {
+        display: inline-block;
+        margin: 0 1rem;
+    }
 }
 
 .name-editor {

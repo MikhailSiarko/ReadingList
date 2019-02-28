@@ -4,7 +4,7 @@ import { NamedValue, Book } from '../../models';
 import SimpleSearch from '../SimpleSearch';
 import Grid from '../Grid';
 import BookGridItem from '../Grid/BookGridItem';
-import bookItemStyles from '../Grid/BookGridItem/BookGridItem.css';
+import bookItemStyles from '../Grid/BookGridItem/BookGridItem.scss';
 import Pagination from '../Pagination';
 
 interface Props {

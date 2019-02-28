@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Container from '../Container';
-import globalStyles from '../../styles/global.scss';
 import MultiSelect from '../MultiSelect';
 import { SelectListItem } from '../../models';
 
@@ -16,7 +15,6 @@ const CreateSharedList: React.SFC<Props> = props => (
                 name="name"
                 required={true}
                 placeholder="Enter the name"
-                className={globalStyles.shadowed}
             />
         </div>
         <div>

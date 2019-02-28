@@ -1,6 +1,6 @@
 enum Colors {
-    Red = '#ef5350',
-    Primary = '#1565c0'
+    Red = 1,
+    Primary = 2
 }
 
 export default Colors;
