@@ -1,0 +1,16 @@
+.button {
+    right: 0;
+    border: none;
+    box-sizing: border-box;
+    background-color: transparent;
+    font-size: 2rem;
+    cursor: pointer;
+
+    & > i {
+        font-size: 1.6rem;
+    }
+}
+
+.wrapper {
+    padding: 0.5rem;
+}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './Buttons.css';
+import styles from './Buttons.scss';
 
 interface Props {
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;

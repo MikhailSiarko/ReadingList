@@ -1,4 +1,4 @@
-import { User } from './';
+import { User } from '.';
 
 export interface AuthenticationData {
     token: string;

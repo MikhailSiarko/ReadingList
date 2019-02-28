@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Colors from 'src/styles/colors';
-import styles from './Form.css';
+import Colors from '../../styles/colors';
+import styles from './Form.scss';
 import RoundButton from '../RoundButton';
 import { NamedValue } from '../../models';
 import { isNullOrEmpty } from '../../utils';
@@ -61,7 +61,7 @@ export class Form extends React.Component<Props> {
                         <RoundButton
                             radius={3}
                             onClick={this.props.onCancel}
-                            color={Colors.Red}
+                            buttonColor={Colors.Red}
                             title="Cancel"
                         >
                             <i className="fas fa-times" />

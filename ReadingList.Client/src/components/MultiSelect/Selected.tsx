@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SelectListItem } from '../../models';
-import styles from './Selected.css';
+import styles from './Selected.scss';
 
 interface Props {
     item: SelectListItem;

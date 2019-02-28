@@ -1,0 +1,23 @@
+@import '../../styles/colors';
+
+.selected {
+    display: inline-block;
+    background-color: $gray;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    padding-left: 0.6rem;
+    margin: 0.1rem 0.4rem;
+    color: black;
+    font-family: 'Assistant', sans-serif;
+    cursor: text;
+
+    & > button {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+
+        &:hover {
+            color: $red;
+        }
+    }
+}

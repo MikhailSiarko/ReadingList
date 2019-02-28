@@ -1,4 +1,4 @@
-import { RootState } from '../index';
+import { RootState } from '..';
 import initialState from '../initialState';
 import { AuthenticationAction, authenticationActions } from '../../actions/authentication';
 import { getType } from 'typesafe-actions';

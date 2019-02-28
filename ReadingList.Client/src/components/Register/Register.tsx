@@ -1,7 +1,6 @@
 import * as React from 'react';
-import globalStyles from '../../styles/global.css';
-import styles from '../AccountForm/AccountForm.css';
-import { applyClasses } from '../../utils';
+import globalStyles from '../../styles/global.scss';
+import styles from '../AccountForm/AccountForm.scss';
 import RoundButton from '../RoundButton';
 
 const Register = () => {
@@ -35,7 +34,6 @@ const Register = () => {
             <h1 className={styles['account-header']}>Register</h1>
             <div>
                 <input
-                    className={globalStyles.shadowed}
                     type="email"
                     name="email"
                     placeholder="Email"
@@ -44,7 +42,6 @@ const Register = () => {
             </div>
             <div>
                 <input
-                    className={globalStyles.shadowed}
                     type="password"
                     name="password"
                     placeholder="Password"
@@ -53,7 +50,6 @@ const Register = () => {
             </div>
             <div>
                 <input
-                    className={globalStyles.shadowed}
                     type="password"
                     name="confirmPassword"
                     placeholder="Confirm Password"
@@ -67,7 +63,7 @@ const Register = () => {
                     id={'submit-button'}
                     disabled={true}
                     radius={2.7}
-                    className={applyClasses(globalStyles.disabled, globalStyles.shadowed)}
+                    className={globalStyles.disabled}
                     type={'submit'}
                     title="Submit"
                 >

@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+@import '../../styles/colors';
+
+.account-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 70vh;
+    width: 60vw;
+    margin-left: -30vw;
+    margin-top: -35vh;
+    text-align: center;
+
+    & > div {
+        width: 30%;
+        margin: 0 auto 4%;
+    }
+}
+
+.account-header {
+    font-size: 8rem;
+    margin-bottom: 4%;
+    font-family: 'Monoton', cursive;
+    text-shadow: 0 0.2rem 0.2rem $gray;
+    color: $primary;
+}
+
+.form-button-wrapper {
+    margin: 2rem;
+}

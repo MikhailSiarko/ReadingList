@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './Container.css';
+import styles from './Container.scss';
 import { applyClasses } from '../../utils';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const Container: React.SFC<Props> = props => (
-    <div 
+    <div
         style={
             {
                 width: props.width + props.unit

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from './NavBarLink.css';
+import styles from './NavBarLink.scss';
 
 export type NavBarLinkData = {
     text: string;

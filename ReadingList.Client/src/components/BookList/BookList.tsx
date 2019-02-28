@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Fieldset from '../Fieldset';
-import styles from './BookList.css';
+import styles from './BookList.scss';
 import { createDOMAttributeProps } from '../../utils';
 
 export interface Props extends React.HTMLProps<HTMLFieldSetElement> {

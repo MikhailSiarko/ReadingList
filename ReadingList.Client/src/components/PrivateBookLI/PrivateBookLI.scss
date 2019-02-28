@@ -1,0 +1,28 @@
+.book-li {
+    transition: all 0.2s ease-in-out;
+    border-left: #1565c0 solid 0.5rem;
+    background-color: white;
+    border-radius: 0.4rem;
+    margin: 1rem 1rem;
+    padding: 0 1rem;
+
+    & > div {
+        display: inline-block;
+        box-sizing: border-box;
+        vertical-align: middle;
+    }
+}
+
+.editing-book-li {
+    text-align: center;
+    transition: all 0.1s;
+    border-left: #1565c0 solid 0.5rem;
+    border-radius: 0.4rem;
+    margin: 0.8rem;
+    padding: 0 1rem;
+
+    & > div {
+        display: block;
+        box-sizing: border-box;
+    }
+}

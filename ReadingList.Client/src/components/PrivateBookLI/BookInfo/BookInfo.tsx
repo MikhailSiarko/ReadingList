@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './BookInfo.css';
+import styles from './BookInfo.scss';
 import { applyClasses } from '../../../utils';
 
 interface Props extends React.HTMLProps<HTMLDivElement> {

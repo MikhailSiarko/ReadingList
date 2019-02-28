@@ -1,0 +1,11 @@
+@import '../../../styles/colors';
+@import '../ListGridItem/grid-item';
+
+.selected-book-grid-item {
+    border-left: $primary solid 0.5rem!important;
+}
+
+.book-grid-item {
+    @extend %grid-item;
+    border-left: $gray solid 0.5rem;
+}

@@ -1,0 +1,29 @@
+.pagination {
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+
+    & > div {
+        margin: 0 auto;
+        display: block;
+        height: 100%;
+
+        & > div {
+            display: inline-block;
+            height: 100%;
+
+            &:nth-child(2n + 1) {
+                width: 5%;
+            }
+
+            &:nth-child(2n) {
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            &:last-child {
+                text-align: right;
+            }
+        }
+    }
+}

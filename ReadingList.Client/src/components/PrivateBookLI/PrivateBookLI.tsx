@@ -1,8 +1,8 @@
 import * as React from 'react';
-import styles from './PrivateBookLI.css';
+import styles from './PrivateBookLI.scss';
 import { PrivateBookListItem, SelectListItem } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
-import globalStyles from '../../styles/global.css';
+import globalStyles from '../../styles/global.scss';
 import { EditButton, DeleteButton } from './Buttons';
 import BookInfo from './BookInfo/BookInfo';
 import ReadingTime from './ReadingTime';

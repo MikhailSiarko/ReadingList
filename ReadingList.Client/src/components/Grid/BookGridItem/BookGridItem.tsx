@@ -1,6 +1,6 @@
 import * as React from 'react';
-import styles from '../ListGridItem/ListGridItem.css';
-import globalStyles from '../../../styles/global.css';
+import styles from './BookGridItem.scss';
+import globalStyles from '../../../styles/global.scss';
 import { applyClasses, reduceTags, createDOMAttributeProps } from '../../../utils';
 
 export interface BookGridItemProps extends React.HTMLProps<HTMLDivElement> {
@@ -15,7 +15,7 @@ const BookGridItem: React.SFC<BookGridItemProps> = props => {
     return (
         <div
             {...newProps}
-            className={applyClasses(styles['grid-item'], globalStyles['inner-shadowed'])}
+            className={applyClasses(styles['book-grid-item'], globalStyles['inner-shadowed'])}
             data-book-id={props.bookId}
         >
             <h3>{props.header}</h3>

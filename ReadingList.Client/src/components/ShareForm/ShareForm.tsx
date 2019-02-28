@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Form } from '../Form';
 import { NamedValue } from '../../models';
-import globalStyles from '../../styles/global.css';
 
 interface Props {
     onSubmit: (name: string) => Promise<void>;
@@ -41,7 +40,6 @@ class ShareForm extends React.Component<Props> {
             >
                 <div>
                     <input
-                        className={globalStyles.shadowed}
                         type="text"
                         name="shared-list-name"
                         placeholder="Enter shared list name"

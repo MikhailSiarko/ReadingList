@@ -1,0 +1,12 @@
+.edited-status {
+    & p {
+        margin: 0;
+        display: inline-block;
+        font-size: 1.8rem;
+    }
+
+    & > select {
+        font-size: 1.6rem;
+        width: 30%;
+    }
+}

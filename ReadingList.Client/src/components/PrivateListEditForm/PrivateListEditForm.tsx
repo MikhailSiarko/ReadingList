@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Colors from '../../styles/colors';
-import globalStyles from '../../styles/global.css';
 import RoundButton from '../RoundButton';
-import style from './PrivateListEditor.css';
+import style from './PrivateListEditor.scss';
 
 interface Props {
     name: string;
@@ -30,7 +29,6 @@ class PrivateListEditForm extends React.Component<Props> {
                     <input
                         name={'list-name'}
                         type={'text'}
-                        className={globalStyles.shadowed}
                         required={true}
                         defaultValue={this.props.name}
                     />
@@ -41,7 +39,7 @@ class PrivateListEditForm extends React.Component<Props> {
                     </RoundButton>
                 </div>
                 <div>
-                    <RoundButton radius={2} onClick={this.cancelHandler} color={Colors.Red}>
+                    <RoundButton radius={2} onClick={this.cancelHandler} buttonColor={Colors.Red}>
                         <i className="fas fa-times" />
                     </RoundButton>
                 </div>

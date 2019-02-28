@@ -1,6 +1,5 @@
 import * as React from 'react';
-import styles from './Search.css';
-import globalStyles from '../../styles/global.css';
+import styles from './Search.scss';
 import { isNullOrEmpty } from '../../utils';
 
 interface Props {
@@ -104,7 +103,6 @@ class Search extends React.Component<Props, State> {
                         autoFocus={true}
                         ref={ref => this.input = (ref as HTMLInputElement)}
                         onFocus={this.handleFocus}
-                        className={globalStyles.shadowed}
                         type="search"
                         placeholder="Search..."
                         name="searchInput"
@@ -115,7 +113,7 @@ class Search extends React.Component<Props, State> {
                 {
                     this.state.searchItems.length > 0
                         ? (
-                            <ul className={globalStyles.shadowed}>
+                            <ul>
                                 {
                                     this.state.searchItems.map(this.mapItem)
                                 }

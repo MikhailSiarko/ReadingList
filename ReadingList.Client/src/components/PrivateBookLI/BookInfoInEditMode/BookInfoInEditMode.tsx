@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './BookInfoInEditMode.css';
+import styles from './BookInfoInEditMode.scss';
 
 interface Props {
     title: string;

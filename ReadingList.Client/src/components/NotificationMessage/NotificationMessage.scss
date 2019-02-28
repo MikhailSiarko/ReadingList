@@ -1,0 +1,29 @@
+@import '../../styles/colors';
+
+.notification {
+    transition: bottom 500ms ease-in-out;
+    position: fixed;
+    left: 8rem;
+    bottom: -50rem;
+    color: white;
+    font-size: 2rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    width: 50rem;
+
+    & > h3 {
+        margin: 1rem;
+    }
+}
+
+.error {
+    background-color: $red;
+}
+
+.info {
+    background-color: lighten($primary, 5%);
+}
+
+.notification-active {
+    bottom: 6rem;
+}

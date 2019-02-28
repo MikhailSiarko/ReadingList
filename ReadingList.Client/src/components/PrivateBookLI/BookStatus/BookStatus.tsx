@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SelectListItem } from '../../../models';
-import styles from './BookStatus.css';
+import styles from './BookStatus.scss';
 
 interface Props {
     status: number;

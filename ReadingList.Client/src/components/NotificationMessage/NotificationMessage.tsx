@@ -1,18 +1,13 @@
 import * as React from 'react';
 import { NotificationType } from '../../models/NotificationType';
-import styles from './NotificationMessage.css';
-import Colors from '../../styles/colors';
+import styles from './NotificationMessage.scss';
+import { applyClasses } from '../../utils';
 
 interface Props {
     hidden: boolean;
     type: NotificationType;
     content: String;
 }
-
-let notificationMessageColors = {
-    [NotificationType.INFO]: Colors.Primary,
-    [NotificationType.ERROR]: Colors.Red
-};
 
 let notificationMessageHeaders = {
     [NotificationType.INFO]: 'Info',
@@ -45,8 +40,12 @@ class NotificationMessage extends React.Component<Props> {
     render() {
         return (
             <div
-                style={{backgroundColor: notificationMessageColors[this.props.type]}}
-                className={styles.notification}
+                className={
+                    applyClasses(
+                        styles.notification,
+                        this.props.type === NotificationType.INFO ? styles.info : styles.error
+                    )
+                }
                 ref={ref => this.container = ref as HTMLDivElement}
             >
                 <h3>{notificationMessageHeaders[this.props.type]}</h3>

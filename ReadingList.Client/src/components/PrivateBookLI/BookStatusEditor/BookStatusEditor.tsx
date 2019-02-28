@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { SelectListItem } from '../../../models';
-import globalStyles from '../../../styles/global.css';
-import styles from './BookStatusEditor.css';
+import styles from './BookStatusEditor.scss';
 
 interface Props {
     status: number;
@@ -11,7 +10,7 @@ interface Props {
 const BookStatusEditor: React.SFC<Props> = props => (
     <div className={styles['edited-status']}>
         <p>Status:</p>
-        <select className={globalStyles.shadowed} name="status" defaultValue={props.status.toString()}>
+        <select name="status" defaultValue={props.status.toString()}>
             {
                 props.options
                     ? props.options.map(item =>

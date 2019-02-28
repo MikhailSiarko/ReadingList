@@ -1,0 +1,5 @@
+@import './grid-item';
+
+.grid-item {
+    @extend %grid-item;
+}

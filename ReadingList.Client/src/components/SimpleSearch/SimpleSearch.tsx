@@ -1,6 +1,5 @@
 import * as React from 'react';
-import styles from './SimpleSearch.css';
-import globalStyles from '../../styles/global.css';
+import styles from './SimpleSearch.scss';
 
 interface Props {
     query?: string;
@@ -39,7 +38,6 @@ class SimpleSearch extends React.Component<Props, State> {
             <div className={styles['search-wrapper']}>
                 <input
                     autoFocus={true}
-                    className={globalStyles.shadowed}
                     type="search"
                     placeholder="Search..."
                     name="searchInput"

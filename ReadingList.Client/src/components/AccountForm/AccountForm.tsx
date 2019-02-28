@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './AccountForm.css';
+import styles from './AccountForm.scss';
 import { Route } from 'react-router';
 import Register from '../Register';
 import Login from '../Login';

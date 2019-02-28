@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './FixedGroup.css';
+import styles from './FixedGroup.scss';
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
     children: (JSX.Element | null)[] | (JSX.Element | null);
