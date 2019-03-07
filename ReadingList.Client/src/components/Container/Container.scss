@@ -1,3 +1,5 @@
+@import '../../styles/base-sizes';
+
 .container > div {
-    margin: 4rem 0;
+    margin: vh(4) 0;
 }

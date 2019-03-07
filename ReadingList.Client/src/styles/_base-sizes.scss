@@ -1,0 +1,10 @@
+$base-vertical-size: 1vh;
+$base-horizontal-size: 1vw;
+
+@function vh($coefficient) {
+    @return $coefficient * $base-vertical-size;
+}
+
+@function vw($coefficient) {
+    @return $coefficient * $base-horizontal-size;
+}

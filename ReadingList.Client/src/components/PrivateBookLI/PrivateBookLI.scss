@@ -1,10 +1,13 @@
+@import '../../styles/base-sizes';
+@import '../../styles/colors';
+
 .book-li {
     transition: all 0.2s ease-in-out;
-    border-left: #1565c0 solid 0.5rem;
+    border-left: $primary solid vh(0.5);
     background-color: white;
-    border-radius: 0.4rem;
-    margin: 1rem 1rem;
-    padding: 0 1rem;
+    border-radius: vh(0.4);
+    margin: vh(1) vh(1);
+    padding: 0 vh(1);
 
     & > div {
         display: inline-block;
@@ -16,10 +19,10 @@
 .editing-book-li {
     text-align: center;
     transition: all 0.1s;
-    border-left: #1565c0 solid 0.5rem;
-    border-radius: 0.4rem;
-    margin: 0.8rem;
-    padding: 0 1rem;
+    border-left: $primary solid vh(0.5);
+    border-radius: vh(0.4);
+    margin: vh(0.8);
+    padding: 0 vh(1);
 
     & > div {
         display: block;

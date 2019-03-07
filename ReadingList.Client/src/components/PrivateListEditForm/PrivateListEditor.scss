@@ -1,6 +1,8 @@
+@import '../../styles/base-sizes';
+
 .name-form {
     & > div {
         display: inline-block;
-        margin: 0 1rem;
+        margin: 0 vh(1);
     }
 }

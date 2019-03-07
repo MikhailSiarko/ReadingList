@@ -1,14 +1,14 @@
 @import '../../styles/colors';
+@import '../../styles/base-sizes.scss';
 
 .selected {
     display: inline-block;
     background-color: $gray;
-    border-radius: 0.5rem;
-    font-size: 1.6rem;
-    padding-left: 0.6rem;
-    margin: 0.1rem 0.4rem;
+    border-radius: vh(0.5);
+    font-size: vh(1.6);
+    padding: 0 vh(0.6);
+    margin: 0 vh(0.4);
     color: black;
-    font-family: 'Assistant', sans-serif;
     cursor: text;
 
     & > button {

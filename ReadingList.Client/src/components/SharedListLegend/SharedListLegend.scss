@@ -1,3 +1,5 @@
+@import '../../styles/base-sizes';
+
 .header {
     margin: 0;
     font-weight: 400;
@@ -9,10 +11,10 @@
     overflow: hidden;
 
     & > div {
-        font-size: 1.6rem;
+        font-size: vh(1.6);
     }
 }
 
 .wrapper {
-    margin: 0.5rem;
+    margin: vh(0.5);
 }

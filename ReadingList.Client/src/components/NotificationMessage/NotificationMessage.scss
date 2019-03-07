@@ -1,18 +1,19 @@
 @import '../../styles/colors';
+@import '../../styles/base-sizes';
 
 .notification {
     transition: bottom 500ms ease-in-out;
     position: fixed;
-    left: 8rem;
-    bottom: -50rem;
+    left: vh(8);
+    bottom: vh(-50);
     color: white;
-    font-size: 2rem;
-    border-radius: 1rem;
-    padding: 1rem;
-    width: 50rem;
+    font-size: vh(2);
+    border-radius: vh(1);
+    padding: vh(1);
+    width: vh(50);
 
     & > h3 {
-        margin: 1rem;
+        margin: vh(1);
     }
 }
 
@@ -25,5 +26,5 @@
 }
 
 .notification-active {
-    bottom: 6rem;
+    bottom: vh(6);
 }

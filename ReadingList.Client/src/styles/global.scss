@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Assistant:200,300,400,600');
 @import 'colors';
 @import 'shadows';
+@import 'base-sizes';
 
 html {
-    font-size: 10px;
+    font-size: $base-vertical-size;
 }
 
 * {
@@ -29,16 +30,16 @@ html {
 }
 
 .inner-shadowed {
-    box-shadow: 0 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.16),
-    inset 0 0.2rem 0 rgba(255, 255, 255, 0.1),
-    0 0 0 0.1rem rgba(0, 0, 0, 0.08),
-    inset 0 0 2rem rgba(44, 44, 44, 0.1);
+    box-shadow: 0 vh(0.2) vh(0.2) 0 rgba(0, 0, 0, 0.16),
+    inset 0 vh(0.2) 0 rgba(255, 255, 255, 0.1),
+    0 0 0 vh(0.1) rgba(0, 0, 0, 0.08),
+    inset 0 0 vh(2) rgba(44, 44, 44, 0.1);
 
     &:focus, &:hover {
-        box-shadow: 0 0.4rem 0.4rem 0 rgba(0, 0, 0, 0.16),
-        inset 0 0.2rem 0 rgba(255, 255, 255, 0.1),
-        0 0 0 0.1rem rgba(0, 0, 0, 0.08),
-        inset 0 0 2rem rgba(44, 44, 44, 0.1);
+        box-shadow: 0 vh(0.4) vh(0.4) 0 rgba(0, 0, 0, 0.16),
+        inset 0 vh(0.2) 0 rgba(255, 255, 255, 0.1),
+        0 0 0 vh(0.1) rgba(0, 0, 0, 0.08),
+        inset 0 0 vh(2) rgba(44, 44, 44, 0.1);
     }
 }
 
@@ -46,10 +47,10 @@ input,
 select,
 textarea {
     @extend %gray-shadow;
-    font-size: 2.2rem;
+    font-size: vh(2.6);
     border: none;
-    border-radius: 0.2rem;
-    padding: 0.4rem;
+    border-radius: vh(0.5);
+    padding: vh(0.3);
     color: $dark-gray;
     background-color: white;
     text-align: center;
@@ -66,7 +67,7 @@ textarea {
 
 .input-validation-message {
     display: block;
-    font-size: 1.6rem;
+    font-size: vh(1.6);
     color: $red;
 }
 
@@ -88,10 +89,10 @@ textarea {
     display: block;
     text-align: left;
     border: none;
-    padding: 0.4rem 5rem 0.3rem 1rem;
-    min-width: 12rem;
+    padding: vh(0.4) vh(5) vh(0.3) vh(1);
+    min-width: vh(12);
     cursor: pointer;
-    font-size: 1.6rem;
+    font-size: vh(1.6);
     font-weight: 400;
     background: white;
 }
@@ -109,5 +110,5 @@ button:disabled {
 }
 
 .red {
-    background-color: red!important;
+    background-color: $red!important;
 }

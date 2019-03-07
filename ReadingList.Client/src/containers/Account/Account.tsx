@@ -60,7 +60,7 @@ function postAuthProcess(dispatch: Dispatch<RootState>, result: RequestResult<Au
     }
 }
 
-function mapStatetoProps(state: RootState) {
+function mapStateToProps(state: RootState) {
     return {
         loading: state.loading
     };
@@ -86,4 +86,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>, ownProps: Props) {
     };
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)(Account);
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

@@ -22,7 +22,7 @@ const Login = () => (
             />
         </div>
         <div className={styles['form-button-wrapper']}>
-            <RoundButton radius={2.7} type={'submit'} title="Submit"><i className="fas fa-check" /></RoundButton>
+            <RoundButton radius={3} type={'submit'} title="Submit"><i className="fas fa-check" /></RoundButton>
         </div>
     </>
 );

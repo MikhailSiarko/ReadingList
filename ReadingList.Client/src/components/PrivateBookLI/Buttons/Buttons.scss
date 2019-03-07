@@ -1,16 +1,18 @@
+@import '../../../styles/base-sizes';
+
 .button {
     right: 0;
     border: none;
     box-sizing: border-box;
     background-color: transparent;
-    font-size: 2rem;
+    font-size: vh(2);
     cursor: pointer;
 
     & > i {
-        font-size: 1.6rem;
+        font-size: vh(1.6);
     }
 }
 
 .wrapper {
-    padding: 0.5rem;
+    padding: vh(0.5);
 }
