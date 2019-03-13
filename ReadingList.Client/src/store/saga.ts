@@ -6,6 +6,7 @@ import { watchNotificationsSaga, notificationActions } from './notification';
 import { rootPrivateListSaga } from './privateList';
 import { watchBooksSaga } from './book';
 import { loadingActions } from './loading';
+import { Action } from 'redux';
 
 export function* rootSaga() {
     yield all([
@@ -17,34 +18,39 @@ export function* rootSaga() {
     ]);
 }
 
-class RequestResultException {
+class RequestResultException<TData> {
     message: string;
     status: number;
-    constructor(message: string, status: number) {
-        this.message = message;
-        this.status = status;
+    constructor(result: RequestResult<TData>) {
+        if(result.errorMessage) {
+            this.message = result.errorMessage;
+        }
+
+        if(result.status) {
+            this.status = result.status;
+        }
     }
 }
 
-export function* executeAsync(
-    asyncSideEffect: () => Promise<RequestResult<any>>,
-    onSuccessAction?: ((data: any) => any) | null,
-    afterSuccessAction?: ((result: RequestResult<any>) => IterableIterator<any>) | null,
+export function* executeAsync<TData, TAction extends Action & { payload: TData }, TAfterSuccessResult>(
+    asyncSideEffect: () => Promise<RequestResult<TData>>,
+    onSuccessAction?: ((data: TData) => TAction) | null,
+    afterSuccess?: ((data: TData) => TAfterSuccessResult) | null,
     loading: boolean = false) {
         try {
             if(loading) {
                 yield put(loadingActions.start());
             }
-            const result = yield call(asyncSideEffect);
-            if(result.isSucceed) {
+            const result: RequestResult<TData> = yield call(asyncSideEffect);
+            if(result.isSucceed && result.data) {
                 if(onSuccessAction) {
                     yield put(onSuccessAction(result.data));
                 }
-                if(afterSuccessAction) {
-                    yield afterSuccessAction(result);
+                if(afterSuccess) {
+                    yield afterSuccess(result.data);
                 }
-            } else {
-                throw new RequestResultException(result.errorMessage, result.status);
+            } else if(!result.isSucceed) {
+                throw new RequestResultException(result);
             }
         } catch (error) {
             yield put(

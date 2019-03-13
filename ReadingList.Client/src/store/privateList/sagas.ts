@@ -13,9 +13,7 @@ function* fetchListAsync(action: Action) {
         yield executeAsync(
             () => new PrivateListService().getList(),
             privateListActions.updateListSuccess,
-            function* () {
-                yield put(privateListActions.fetchItemStatusesBegin());
-            },
+            _ => put(privateListActions.fetchItemStatusesBegin()),
             true
         );
     }

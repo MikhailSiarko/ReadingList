@@ -1,6 +1,6 @@
 import { AuthenticationService } from 'src/services';
 import { takeLeading, put } from 'redux-saga/effects';
-import { Credentials, RequestResult, AuthenticationData } from 'src/models';
+import { Credentials, AuthenticationData } from 'src/models';
 import { isActionOf } from 'typesafe-actions';
 import { authenticationActions } from './actions';
 import { executeAsync, execute } from '../saga';
@@ -22,9 +22,9 @@ function* signInRequestAsync(action: Action) {
         yield executeAsync(
             () => send(action.payload),
             authenticationActions.signInSuccess,
-            function* (result: RequestResult<any>) {
-                setSessionData(result.data);
-                yield put(push('/'));
+            data => {
+                setSessionData(data);
+                return put(push('/'));
             },
             true
         );
