@@ -6,7 +6,7 @@ import MultiSelect from '../MultiSelect';
 interface Props {
     choosenBookId: number | null;
     options: ListInfo[];
-    onSubmit: (bookId: number, ids: number[]) => Promise<void>;
+    onSubmit: (bookId: number, ids: number[]) => void;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -18,11 +18,11 @@ class SharedBookForm extends React.Component<Props> {
         };
     }
 
-    handleFormSubmit = async (values: NamedValue[]) => {
+    handleFormSubmit = (values: NamedValue[]) => {
         const bookId = values.filter(v => v.name === 'book-id')[0].value;
         const ids = (values.filter(v => v.name === 'selected-lists')[0].value as SelectListItem[])
             .map(i => parseInt(i.value, 10));
-        await this.props.onSubmit(parseInt(bookId, 10), ids);
+        this.props.onSubmit(parseInt(bookId, 10), ids);
     }
 
     handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {

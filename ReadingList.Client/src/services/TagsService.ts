@@ -1,8 +1,7 @@
-// tslint:disable-next-line:quotemark
-import ApiService from "./ApiService";
+import ApiService from './ApiService';
 import ApiConfiguration from '../config/ApiConfiguration';
 import { onError } from '../utils';
-import { Tag } from '../models/Tag';
+import { Tag } from '../models';
 
 export class TagsService extends ApiService {
     getTags = () => {

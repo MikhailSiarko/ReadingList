@@ -1,25 +1,21 @@
 import * as React from 'react';
 import SimpletSearch from '../../components/SimpleSearch';
 import Grid from '../../components/Grid';
-import { NamedValue, SelectListItem, SharedBookListPreview, Chunked } from '../../models';
-import { SharedBookListService } from '../../services';
+import { NamedValue, SelectListItem, SharedBookListPreview, Chunked, Tag, Constants } from '../../models';
 import { Dispatch } from 'redux';
-import { RootState } from '../../store/reducers';
 import { createPropActionWithResult, processFailedRequest } from '../../utils';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { loadingActions } from '../../store/actions/loading';
 import { Form } from '../../components/Form';
-import { TagsService } from '../../services/TagsService';
+import { TagsService, SharedListService } from '../../services';
 import ListGridItem from '../../components/Grid/ListGridItem';
 import { withContextMenu } from '../../hoc';
 import CreateSharedList from '../../components/CreateSharedList';
-import { Tag } from '../../models/Tag';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import { parse } from 'query-string';
 import Pagination from '../../components/Pagination';
-import { Constants } from '../../models/Constants';
+import { loadingActions, RootState } from 'src/store';
 
 interface Props extends RouteComponentProps<any> {
     getSharedLists: (query: string, chunk: number | null, count: number | null) =>
@@ -273,7 +269,7 @@ class SharedBookLists extends React.Component<Props, State> {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const bookService = new SharedBookListService();
+    const bookService = new SharedListService();
     return {
         getSharedLists: async (query: string, chunk: number | null, count: number | null) => {
             const result = await bookService.getLists(query, chunk, count);

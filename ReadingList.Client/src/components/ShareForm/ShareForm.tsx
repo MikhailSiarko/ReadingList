@@ -3,13 +3,13 @@ import { Form } from '../Form';
 import { NamedValue } from '../../models';
 
 interface Props {
-    onSubmit: (name: string) => Promise<void>;
+    onSubmit: (name: string) => void;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 class ShareForm extends React.Component<Props> {
-    handleFormSubmit = async (values: NamedValue[]) => {
-        await this.props.onSubmit(values[0].value);
+    handleFormSubmit = (values: NamedValue[]) => {
+        this.props.onSubmit(values[0].value);
     }
 
     handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {

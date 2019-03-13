@@ -8,7 +8,7 @@ import bookItemStyles from '../Grid/BookGridItem/BookGridItem.scss';
 import Pagination from '../Pagination';
 
 interface Props {
-    onSubmit: (id: number) => Promise<void>;
+    onSubmit: (id: number) => void;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
     searchQuery?: string;
     onQueryChange: (query: string) => void;

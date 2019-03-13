@@ -1,10 +1,7 @@
 import { RequestResult } from '../models';
 import { cloneDeep } from 'lodash';
 import { Dispatch } from 'react-redux';
-import { RootState } from '../store/reducers';
-import { authenticationActions } from '../store/actions/authentication';
-import { notificationActions } from '../store/actions/notification';
-import { loadingActions } from '../store/actions/loading';
+import { RootState, notificationActions, authenticationActions, loadingActions } from '../store';
 
 export function onError(error: RequestResult<never>) {
     return error;

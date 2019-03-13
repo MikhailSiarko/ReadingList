@@ -1,22 +1,19 @@
 import * as React from 'react';
-import { RootState } from '../../store/reducers';
 import { connect } from 'react-redux';
-import { Route, RouteComponentProps, Switch, Redirect } from 'react-router';
+import { Route, RouteComponentProps, Switch, Redirect, withRouter } from 'react-router';
 import PrivateRoute from '../PrivateRoute';
-import { withRouter } from 'react-router';
 import Account from '../Account';
 import NavBar from '../../components/NavBar';
 import { Dispatch } from 'redux';
-import { authenticationActions } from '../../store/actions/authentication';
 import Main from '../../components/Main';
-import { privateBookListAction } from '../../store/actions/privateBookList';
 import PrivateBookList from '../PrivateBookList';
 import SharedBookLists from '../SharedBookLists';
 import DefaultRoute from '../DefaultRoute';
 import SharedBookList from '../SharedBookList';
 import NotificationMessage from '../../components/NotificationMessage';
-import { NotificationType } from '../../models/NotificationType';
+import { NotificationType } from '../../models';
 import Spinner from '../../components/Spinner';
+import { privateListActions, authenticationActions, RootState } from 'src/store';
 
 interface AppProps extends RouteComponentProps<any> {
     loading: boolean;
@@ -95,7 +92,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     return {
         signOut: () => {
-            dispatch(privateBookListAction.unsetPrivate());
+            dispatch(privateListActions.unsetPrivate());
             dispatch(authenticationActions.signOut());
         }
     };

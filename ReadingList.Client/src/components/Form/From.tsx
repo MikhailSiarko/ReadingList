@@ -11,12 +11,12 @@ interface Props {
         width: string;
         height: string;
     };
-    onSubmit: (values: NamedValue[]) => Promise<void>;
+    onSubmit: (values: NamedValue[]) => void;
     onCancel?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export class Form extends React.Component<Props> {
-    handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const form = event.target as HTMLFormElement;
         const inputs = Array.from(form.elements).filter(
@@ -33,7 +33,7 @@ export class Form extends React.Component<Props> {
                 values.push({name: input.name, value: input.value});
             }
         });
-        await this.props.onSubmit(values);
+        this.props.onSubmit(values);
     }
 
     render() {

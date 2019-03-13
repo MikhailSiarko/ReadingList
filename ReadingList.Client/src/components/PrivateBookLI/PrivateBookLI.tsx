@@ -10,6 +10,7 @@ import BookStatus from './BookStatus';
 import Footer from './Footer';
 import BookStatusEditor from './BookStatusEditor';
 import BookInfoInEditMode from './BookInfoInEditMode';
+import { cloneDeep } from 'lodash';
 
 export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
@@ -20,15 +21,14 @@ export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     statuses: SelectListItem[];
 }
 
-class PrivateBookLI extends React.Component<BookListItemProps> {
+class PrivateBookLI extends React.PureComponent<BookListItemProps> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
         const status = target.elements['status'].value;
-        const item = Object.assign({}, this.props.listItem, {
-            status,
-            isOnEditMode: false
-        });
+        const item = cloneDeep(this.props.listItem);
+        item.status = status;
+        item.isInEditMode = false;
         this.props.onSave(item);
     }
 

@@ -1,25 +1,30 @@
 import * as React from 'react';
-import { SharedBookList as SharedList } from '../../models/BookList/Implementations/SharedBookList';
 import { RouteComponentProps } from 'react-router';
-import { loadingActions } from '../../store/actions/loading';
 import BookList from '../../components/BookList';
 import SharedBookLI from '../../components/SharedBookLI';
-import { SharedBookListItem, SelectListItem, ListInfo } from '../../models/BookList';
-import { Book, User, Chunked } from '../../models';
-import { RootState } from '../../store/reducers';
+import {
+    Book,
+    User,
+    Chunked,
+    Tag,
+    SharedBookListItem,
+    SelectListItem,
+    ListInfo,
+    SharedBookList as SharedList
+} from '../../models';
 import { connect, Dispatch } from 'react-redux';
-import { SharedBookListService, BookService, UsersService, ListsService } from '../../services';
+import { SharedListService, BookService, UsersService, ListsService } from '../../services';
 import { cloneDeep } from 'lodash';
 import { processFailedRequest } from '../../utils';
 import { withContextMenu, closeContextMenues } from '../../hoc';
 import SharedListEditForm from '../../components/SharedListEditForm';
 import { TagsService } from '../../services/TagsService';
-import { Tag } from '../../models/Tag';
 import AddBookForm from '../../components/AddBookForm/AddBookForm';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import SharedListLegend from '../../components/SharedListLegend';
 import SharedBookForm from '../../components/SharedBookForm';
+import { loadingActions, RootState } from 'src/store';
 
 interface Props extends RouteComponentProps<any> {
     getList: (id: number) => Promise<SharedList>;
@@ -439,7 +444,7 @@ class SharedBookList extends React.Component<Props, State> {
 }
 
 function mapDispatchToProps(dispatch: Dispatch<RootState>) {
-    const listService = new SharedBookListService();
+    const listService = new SharedListService();
     const bookService = new BookService();
     return {
         getList: async (id: number) => {
