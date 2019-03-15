@@ -1,6 +1,6 @@
-import { AuthenticationService } from 'src/services';
+import { AuthenticationService } from '../../services';
 import { takeLeading, put } from 'redux-saga/effects';
-import { Credentials, AuthenticationData } from 'src/models';
+import { Credentials, AuthenticationData } from '../../models';
 import { isActionOf } from 'typesafe-actions';
 import { authenticationActions } from './actions';
 import { executeAsync, execute } from '../saga';

@@ -12,7 +12,7 @@ import {
     Tag,
     NotificationType,
     SharedBookListPreview
-} from 'src/models';
+} from '../models';
 import { loadingReducer } from './loading/reducer';
 import { notificationReducer } from './notification';
 import { authenticationReducer } from './authentication';

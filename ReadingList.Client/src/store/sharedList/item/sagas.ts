@@ -1,11 +1,11 @@
 import { SharedListItemActionType } from './actionTypes';
 import { isActionOf } from 'typesafe-actions';
-import { executeAsync } from 'src/store/saga';
+import { executeAsync } from '../../saga';
 import { takeLeading, put } from 'redux-saga/effects';
 import { Action } from 'redux';
-import { BookService, SharedListService } from 'src/services';
+import { BookService, SharedListService } from '../../../services';
 import { sharedListActions } from '..';
-import { SharedBookListItem } from 'src/models';
+import { SharedBookListItem } from '../../../models';
 
 function* addItemAsync(action: Action) {
     if(isActionOf(sharedListActions.addItemBegin, action)) {

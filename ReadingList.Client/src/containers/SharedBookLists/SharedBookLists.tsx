@@ -13,9 +13,9 @@ import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import { parse } from 'query-string';
 import Pagination from '../../components/Pagination';
-import { RootState } from 'src/store';
-import { sharedListActions } from 'src/store/sharedList';
-import { tagActions } from 'src/store/tags';
+import { RootState } from '../../store';
+import { sharedListActions } from '../../store/sharedList';
+import { tagActions } from '../../store/tags';
 
 interface Props extends RouteComponentProps<any> {
     lists: Chunked<SharedBookListPreview> | null;

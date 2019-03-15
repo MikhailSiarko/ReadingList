@@ -21,7 +21,7 @@ import FixedGroup from '../../components/FixedGroup';
 import ShareForm from '../../components/ShareForm';
 import PrivateListLegend from '../../components/PrivateListLegend';
 import SharedBookForm from '../../components/SharedBookForm';
-import { privateListActions, RootState, bookActions, moderatedListActions } from 'src/store';
+import { privateListActions, RootState, bookActions, moderatedListActions } from '../../store';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;

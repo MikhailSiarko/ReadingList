@@ -21,8 +21,8 @@ import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import SharedListLegend from '../../components/SharedListLegend';
 import SharedBookForm from '../../components/SharedBookForm';
-import { RootState, bookActions, moderatedListActions } from 'src/store';
-import { sharedListActions } from 'src/store/sharedList/actions';
+import { RootState, bookActions, moderatedListActions } from '../../store';
+import { sharedListActions } from '../../store/sharedList/actions';
 
 interface Props extends RouteComponentProps<any> {
     list: SharedList;

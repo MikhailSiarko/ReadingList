@@ -1,11 +1,11 @@
 import { ModeratorActionType } from './actionTypes';
 import { isActionOf } from 'typesafe-actions';
-import { executeAsync } from 'src/store/saga';
+import { executeAsync } from '../../saga';
 import { takeLeading, put } from 'redux-saga/effects';
 import { Action } from 'redux';
-import { UsersService } from 'src/services';
+import { UsersService } from '../../../services';
 import { sharedListActions } from '..';
-import { User } from 'src/models';
+import { User } from '../../../models';
 
 function* fetchModeratorsAsync(action: Action) {
     if(isActionOf(sharedListActions.fetchModeratorsBegin, action)) {

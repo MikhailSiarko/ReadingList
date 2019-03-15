@@ -1,6 +1,12 @@
 import { ActionType, createAction } from 'typesafe-actions';
 import { SharedListActionType } from './actionTypes';
-import { SharedBookList, SharedListCreateData, SharedListUpdateData, Chunked, SharedBookListPreview } from 'src/models';
+import {
+    SharedBookList,
+    SharedListCreateData,
+    SharedListUpdateData,
+    Chunked,
+    SharedBookListPreview
+} from '../../models';
 import { merge } from 'lodash';
 import { sharedItemActions } from './item/actions';
 import { moderatorActions } from './moderators/actions';

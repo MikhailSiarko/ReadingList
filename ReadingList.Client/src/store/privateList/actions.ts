@@ -1,6 +1,6 @@
 import { ActionType, createAction } from 'typesafe-actions';
 import { PrivateListActionType } from './actionTypes';
-import { PrivateBookList, PrivateListUpdateData } from 'src/models';
+import { PrivateBookList, PrivateListUpdateData } from '../../models';
 import { merge } from 'lodash';
 import { itemActions } from './item/actions';
 import { itemStatusActions } from './itemStatus/actions';

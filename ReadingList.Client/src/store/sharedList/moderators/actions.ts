@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 import { ModeratorActionType } from './actionTypes';
-import { User } from 'src/models';
+import { User } from '../../../models';
 
 export const moderatorActions = {
     fetchModeratorsBegin: createAction(ModeratorActionType.FETCH_MODERATORS_BEGIN),

@@ -1,10 +1,10 @@
 import { TagActionType } from './actionTypes';
 import { isActionOf } from 'typesafe-actions';
-import { executeAsync } from 'src/store/saga';
+import { executeAsync } from '../saga';
 import { takeLeading, put } from 'redux-saga/effects';
 import { Action } from 'redux';
-import { TagsService } from 'src/services';
-import { Tag } from 'src/models';
+import { TagsService } from '../../services';
+import { Tag } from '../../models';
 import { tagActions } from './actions';
 
 function* fetchTagsAsync(action: Action) {

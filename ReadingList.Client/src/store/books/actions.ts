@@ -1,6 +1,6 @@
 import { BookActionType } from './actionTypes';
 import { ActionType, createAction } from 'typesafe-actions';
-import { Chunked, Book } from 'src/models';
+import { Chunked, Book } from '../../models';
 
 export const bookActions = {
     findBegin: createAction(

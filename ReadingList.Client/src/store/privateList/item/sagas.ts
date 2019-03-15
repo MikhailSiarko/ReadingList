@@ -1,11 +1,11 @@
 import { privateListActions } from '..';
 import { PrivateListItemActionType } from './actionTypes';
 import { isActionOf } from 'typesafe-actions';
-import { executeAsync } from 'src/store/saga';
+import { executeAsync } from '../../saga';
 import { takeLeading, put } from 'redux-saga/effects';
 import { Action } from 'redux';
-import { PrivateListService } from 'src/services';
-import { PrivateBookListItem } from 'src/models';
+import { PrivateListService } from '../../../services';
+import { PrivateBookListItem } from '../../../models';
 
 function* addItemAsync(action: Action) {
     if(isActionOf(privateListActions.addItemBegin, action)) {

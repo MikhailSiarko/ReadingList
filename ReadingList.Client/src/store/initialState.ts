@@ -1,5 +1,5 @@
 import { RouterState } from 'connected-react-router';
-import { isNullOrEmpty } from 'src/utils';
+import { isNullOrEmpty } from '../utils';
 import { RootState } from './state';
 
 export const initialState: RootState = {

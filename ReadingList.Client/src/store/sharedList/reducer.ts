@@ -2,7 +2,7 @@ import { RootState } from '../state';
 import { initialState } from '../initialState';
 import { getType } from 'typesafe-actions';
 import { SharedListAction, sharedListActions } from './actions';
-import { List } from 'src/models';
+import { List } from '../../models';
 import { cloneDeep } from 'lodash';
 
 export function sharedBookListReducer(state: RootState.Shared = initialState.shared, action: SharedListAction) {

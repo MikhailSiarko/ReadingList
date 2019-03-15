@@ -1,5 +1,5 @@
 import { all, put, call, SimpleEffect } from 'redux-saga/effects';
-import { RequestResult } from 'src/models';
+import { RequestResult } from '../models';
 import { watchModeratedListsSaga } from './moderatedList';
 import { watchSignIn } from './authentication';
 import { watchNotificationsSaga, notificationActions } from './notification';

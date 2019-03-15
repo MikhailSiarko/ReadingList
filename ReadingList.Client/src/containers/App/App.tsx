@@ -13,7 +13,7 @@ import SharedBookList from '../SharedBookList';
 import NotificationMessage from '../../components/NotificationMessage';
 import { NotificationType } from '../../models';
 import Spinner from '../../components/Spinner';
-import { privateListActions, authenticationActions, RootState } from 'src/store';
+import { privateListActions, authenticationActions, RootState } from '../../store';
 
 interface AppProps extends RouteComponentProps<any> {
     loading: boolean;

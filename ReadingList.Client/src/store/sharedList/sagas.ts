@@ -1,4 +1,4 @@
-import { SharedListService } from 'src/services';
+import { SharedListService } from '../../services';
 import { executeAsync, execute } from '../saga';
 import { put, takeLeading, all } from 'redux-saga/effects';
 import { isActionOf } from 'typesafe-actions';
@@ -9,7 +9,7 @@ import { sharedListActions } from './actions';
 import { push } from 'connected-react-router';
 import { watchModeratorsSaga } from './moderators/sagas';
 import { moderatorActions } from './moderators/actions';
-import { SharedBookList, Chunked, SharedBookListPreview } from 'src/models';
+import { SharedBookList, Chunked, SharedBookListPreview } from '../../models';
 import { tagActions } from '../tags';
 
 function* fetchListAsync(action: Action) {

@@ -1,6 +1,6 @@
 import { ModeratedListActionType } from './actionTypes';
 import { ActionType, createAction } from 'typesafe-actions';
-import { ListInfo } from 'src/models';
+import { ListInfo } from '../../models';
 
 export const moderatedListActions = {
     fetchBegin: createAction(

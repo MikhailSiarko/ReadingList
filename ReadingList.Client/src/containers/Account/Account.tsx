@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { Credentials } from '../../models';
 import AccountForm from '../../components/AccountForm';
 import { isNullOrEmpty } from '../../utils';
-import { authenticationActions, RootState } from 'src/store';
+import { authenticationActions, RootState } from '../../store';
 
 interface Props extends RouteComponentProps<React.HTMLProps<Props>> {
     loading: boolean;

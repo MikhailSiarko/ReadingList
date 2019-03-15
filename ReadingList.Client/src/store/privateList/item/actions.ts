@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 import { PrivateListItemActionType } from './actionTypes';
-import { PrivateBookListItem, PrivateItemUpdateData } from 'src/models';
+import { PrivateBookListItem, PrivateItemUpdateData } from '../../../models';
 
 export const itemActions = {
     addItemBegin: createAction(

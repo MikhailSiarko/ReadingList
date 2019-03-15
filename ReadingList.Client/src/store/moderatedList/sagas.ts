@@ -2,10 +2,10 @@ import { Action } from 'redux';
 import { moderatedListActions } from './actions';
 import { isActionOf } from 'typesafe-actions';
 import { executeAsync } from '..';
-import { ListsService } from 'src/services';
+import { ListsService } from '../../services';
 import { takeLeading, put } from 'redux-saga/effects';
 import { ModeratedListActionType } from './actionTypes';
-import { ListInfo } from 'src/models';
+import { ListInfo } from '../../models';
 
 function* fetchModeratedListsAsync(action: Action) {
     if(isActionOf(moderatedListActions.fetchBegin, action)) {

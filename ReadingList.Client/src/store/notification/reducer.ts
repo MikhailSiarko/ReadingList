@@ -2,7 +2,7 @@ import { RootState } from '../state';
 import { initialState } from '../initialState';
 import { getType } from 'typesafe-actions';
 import { NotificationAction, notificationActions } from './actions';
-import { NotificationType } from 'src/models';
+import { NotificationType } from '../../models';
 
 export function notificationReducer(state: RootState.Notification = initialState.notification,
         action: NotificationAction) {

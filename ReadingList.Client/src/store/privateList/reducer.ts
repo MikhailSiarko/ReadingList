@@ -3,7 +3,7 @@ import { initialState } from '../initialState';
 import { getType } from 'typesafe-actions';
 import { PrivateListAction, privateListActions } from './actions';
 import { cloneDeep } from 'lodash';
-import { PrivateBookList, List } from 'src/models';
+import { PrivateBookList, List } from '../../models';
 
 export function privateBookListReducer(state: RootState.Private = initialState.private, action: PrivateListAction) {
     const copy = cloneDeep(state);

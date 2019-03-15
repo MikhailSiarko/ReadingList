@@ -1,6 +1,6 @@
 import { createAction } from 'typesafe-actions';
 import { SharedListItemActionType } from './actionTypes';
-import { SharedBookListItem } from 'src/models';
+import { SharedBookListItem } from '../../../models';
 
 export const sharedItemActions = {
     addItemBegin: createAction(

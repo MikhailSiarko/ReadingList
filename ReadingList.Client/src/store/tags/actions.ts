@@ -1,6 +1,6 @@
 import { createAction, ActionType } from 'typesafe-actions';
 import { TagActionType } from './actionTypes';
-import { Tag } from 'src/models';
+import { Tag } from '../../models';
 
 export const tagActions = {
     fetchTagBegin: createAction(TagActionType.FETCH_TAGS_BEGIN),

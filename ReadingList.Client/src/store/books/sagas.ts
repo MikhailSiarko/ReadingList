@@ -2,10 +2,10 @@ import { Action } from 'redux';
 import { bookActions } from './actions';
 import { isActionOf } from 'typesafe-actions';
 import { executeAsync } from '..';
-import { BookService } from 'src/services';
+import { BookService } from '../../services';
 import { takeLeading, put } from 'redux-saga/effects';
 import { BookActionType } from './actionTypes';
-import { Chunked, Book } from 'src/models';
+import { Chunked, Book } from '../../models';
 
 function* findBooksAsync(action: Action) {
     if(isActionOf(bookActions.findBegin, action)) {

@@ -1,4 +1,4 @@
-import { PrivateListService } from 'src/services';
+import { PrivateListService } from '../../services';
 import { executeAsync } from '../saga';
 import { privateListActions } from '.';
 import { put, takeLeading, all } from 'redux-saga/effects';
@@ -7,7 +7,7 @@ import { PrivateListActionType } from './actionTypes';
 import { watchPrivateListItem } from './item/sagas';
 import { watchItemStatuses } from './itemStatus/sagas';
 import { Action } from 'redux';
-import { PrivateBookList } from 'src/models';
+import { PrivateBookList } from '../../models';
 
 function* fetchListAsync(action: Action) {
     if(isActionOf(privateListActions.fetchListBegin, action)) {
