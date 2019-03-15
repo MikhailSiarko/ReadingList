@@ -20,5 +20,11 @@ export const initialState: RootState = {
         type: undefined
     },
     books: null,
-    moderatedLists: null
+    moderatedLists: null,
+    shared: {
+        lists: null,
+        list: null,
+        moderators: null
+    },
+    tags: null
 };

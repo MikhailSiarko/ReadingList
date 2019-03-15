@@ -9,6 +9,8 @@ export function moderatedListReducer(
         switch (action.type) {
             case getType(moderatedListActions.fetchSuccess):
                 return action.payload;
+            case getType(moderatedListActions.clearModeratedListsState):
+                return initialState.moderatedLists;
             default:
                 return state;
         }

@@ -1,17 +1,23 @@
 import { List } from '..';
-import { SharedBookListItem } from './SharedBookListItem';
-import { Tag } from '../../Tag';
-import { Moderator } from '../../Moderator';
+import { SharedBookListItem } from './sharedBookListItem';
+import { Tag } from '../../tag';
+import { Moderator } from '../../moderator';
 
-export class SharedBookList implements List<SharedBookListItem> {
-    isInEditMode: boolean = false;
-    name: string;
-    id: number;
-    items: SharedBookListItem[];
+export class SharedBookList extends List<SharedBookListItem> {
     moderators: Moderator[];
-    type: number;
     tags: Tag[];
     booksCount: number;
     editable: boolean;
     canBeModerated: boolean;
 }
+
+export type SharedListUpdateData = {
+    name: string,
+    tags: Tag[],
+    moderators: number[] | null
+};
+
+export type SharedListCreateData = {
+    name: string,
+    tags: Tag[]
+};

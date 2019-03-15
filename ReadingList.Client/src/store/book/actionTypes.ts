@@ -1,4 +1,0 @@
-export enum BookActionType {
-    FIND_BOOKS_BEGIN = 'FIND_BOOKS_BEGIN',
-    FIND_BOOKS_SUCCESS = 'FIND_BOOKS_SUCCESS'
-}

@@ -1,1 +1,1 @@
-export * from './RequestResult';
+export * from './requestResult';

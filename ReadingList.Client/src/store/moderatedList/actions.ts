@@ -9,7 +9,8 @@ export const moderatedListActions = {
     fetchSuccess: createAction(
         ModeratedListActionType.FETCH_MODERATED_LISTS_SUCCESS,
         action => (books: ListInfo[]) => action(books)
-    )
+    ),
+    clearModeratedListsState: createAction(ModeratedListActionType.CLEAR_MODERATED_LISTS_STATE)
 };
 
 export type ModeratedListAction = ActionType<typeof moderatedListActions>;

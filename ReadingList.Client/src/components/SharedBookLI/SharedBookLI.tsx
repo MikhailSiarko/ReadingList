@@ -9,13 +9,13 @@ import sharedStyles from './SharedBookLI.scss';
 
 export interface SharedBookListItemProps extends React.HTMLProps<HTMLLIElement> {
     item: SharedBookListItem;
-    onDelete: (item: SharedBookListItem) => Promise<void>;
+    onDelete: (item: SharedBookListItem) => void;
 }
 
 class SharedBookLI extends React.Component<SharedBookListItemProps> {
-    handleDeleteButtonClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    handleDeleteButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        await this.props.onDelete(this.props.item);
+        this.props.onDelete(this.props.item);
     }
     render() {
         const liProps = createDOMAttributeProps(this.props, 'item', 'onSave', 'onCancel', 'onDelete');

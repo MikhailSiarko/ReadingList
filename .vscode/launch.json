@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/ReadingList.Api/bin/Debug/netcoreapp2.0/ReadingList.Api.dll",
+            "program": "${workspaceFolder}/ReadingList.Api/bin/Debug/netcoreapp2.2/ReadingList.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/ReadingList.Api",
             "stopAtEntry": false,

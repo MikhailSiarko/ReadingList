@@ -58,9 +58,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
-    "create:component": "./node_modules/hygen/lib/bin.js component create",
-    "create:store:item": "./node_modules/hygen/lib/bin.js store create"
+    "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
     "collectCoverageFrom": [

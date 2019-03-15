@@ -1,5 +1,7 @@
 {
     "todo-tree.flat": true,
     "typescript.tsdk": "node_modules\\typescript\\lib",
-    "npm-scripts.showStartNotification": false
+    "npm-scripts.showStartNotification": false,
+    "tslint.autoFixOnSave": true,
+    "editor.fontLigatures": true
 }

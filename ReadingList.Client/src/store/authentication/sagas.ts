@@ -21,10 +21,10 @@ function* signInRequestAsync(action: Action) {
     if(isActionOf(authenticationActions.signInBegin, action)) {
         yield executeAsync(
             () => send(action.payload),
-            authenticationActions.signInSuccess,
-            data => {
+            function* (data: AuthenticationData) {
+                yield put(authenticationActions.signInSuccess(data));
                 setSessionData(data);
-                return put(push('/'));
+                yield put(push('/'));
             },
             true
         );

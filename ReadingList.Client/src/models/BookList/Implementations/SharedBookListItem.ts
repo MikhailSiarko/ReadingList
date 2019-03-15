@@ -1,4 +1,4 @@
-import { ListItem } from '..';
+import { ListItem } from '../abstracts/listItem';
 
 export class SharedBookListItem implements ListItem {
     id: number;

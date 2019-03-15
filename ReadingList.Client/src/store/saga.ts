@@ -1,12 +1,13 @@
-import { all, put, call } from 'redux-saga/effects';
+import { all, put, call, SimpleEffect } from 'redux-saga/effects';
 import { RequestResult } from 'src/models';
 import { watchModeratedListsSaga } from './moderatedList';
 import { watchSignIn } from './authentication';
 import { watchNotificationsSaga, notificationActions } from './notification';
 import { rootPrivateListSaga } from './privateList';
-import { watchBooksSaga } from './book';
+import { watchBooksSaga } from './books';
 import { loadingActions } from './loading';
-import { Action } from 'redux';
+import { rootSharedListSaga } from './sharedList/sagas';
+import { watchTagsSaga } from './tags';
 
 export function* rootSaga() {
     yield all([
@@ -14,7 +15,9 @@ export function* rootSaga() {
         watchNotificationsSaga(),
         rootPrivateListSaga(),
         watchBooksSaga(),
-        watchModeratedListsSaga()
+        watchModeratedListsSaga(),
+        rootSharedListSaga(),
+        watchTagsSaga()
     ]);
 }
 
@@ -32,26 +35,14 @@ class RequestResultException<TData> {
     }
 }
 
-export function* executeAsync<TData, TAction extends Action & { payload: TData }, TAfterSuccessResult>(
-    asyncSideEffect: () => Promise<RequestResult<TData>>,
-    onSuccessAction?: ((data: TData) => TAction) | null,
-    afterSuccess?: ((data: TData) => TAfterSuccessResult) | null,
-    loading: boolean = false) {
+export function* execute<TEffectType, TPayload, TEffect extends SimpleEffect<TEffectType, TPayload>>(
+    effects: (() => IterableIterator<TEffect>) | (() => void),
+    loading?: boolean) {
         try {
             if(loading) {
                 yield put(loadingActions.start());
             }
-            const result: RequestResult<TData> = yield call(asyncSideEffect);
-            if(result.isSucceed && result.data) {
-                if(onSuccessAction) {
-                    yield put(onSuccessAction(result.data));
-                }
-                if(afterSuccess) {
-                    yield afterSuccess(result.data);
-                }
-            } else if(!result.isSucceed) {
-                throw new RequestResultException(result);
-            }
+            yield effects();
         } catch (error) {
             yield put(
                 error.status && error.status < 500
@@ -65,19 +56,30 @@ export function* executeAsync<TData, TAction extends Action & { payload: TData }
         }
 }
 
-export function* execute(sideEffect: () => void, loading?: boolean) {
-    try {
-        if(loading) {
-            yield put(loadingActions.start());
+export function* executeAsync<TEffectType, TPayload, TEffect extends SimpleEffect<TEffectType, TPayload>, TData>(
+    asyncCall: () => Promise<RequestResult<TData>>,
+    effects: ((data: TData) => IterableIterator<TEffect>) | null,
+    loading?: boolean) {
+        try {
+            if(loading) {
+                yield put(loadingActions.start());
+            }
+            const result: RequestResult<TData | undefined> = yield call(asyncCall);
+            if(!result.isSucceed) {
+                throw new RequestResultException(result);
+            }
+            if(effects) {
+                yield effects(result.data as TData);
+            }
+        } catch (error) {
+            yield put(
+                error.status && error.status < 500
+                    ? notificationActions.info(error.message as string)
+                    : notificationActions.error(error.message as string)
+            );
+        } finally {
+            if(loading) {
+                yield put(loadingActions.end());
+            }
         }
-        sideEffect();
-    } catch (error) {
-        yield put(notificationActions.error(error.response
-            ? error.response.data ? error.response.data.errorMessage : error.message
-            : error.message));
-    } finally {
-        if(loading) {
-            yield put(loadingActions.end());
-        }
-    }
 }

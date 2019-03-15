@@ -5,7 +5,9 @@ import {
     PrivateBookList as PrivateList,
     Book,
     ListInfo,
-    Chunked
+    Chunked,
+    PrivateItemUpdateData,
+    PrivateListUpdateData
 } from '../../models';
 import PrivateBookLI from '../../components/PrivateBookLI';
 import { connect, Dispatch } from 'react-redux';
@@ -27,16 +29,18 @@ interface Props extends RouteComponentProps<any> {
     books: Chunked<Book>;
     moderatedLists: ListInfo[];
     addItem: (bookId: number) => void;
-    updateList: (list: PrivateList) => void;
+    updateList: (data: PrivateListUpdateData) => void;
     deleteItem: (itemId: number) => void;
-    updateItem: (item: PrivateBookListItem) => void;
+    updateItem: (itemId: number, data: PrivateItemUpdateData) => void;
     switchItemEditMode: (itemId: number) => void;
     switchListEditMode: () => void;
-    getList: () => void;
+    fetchList: () => void;
     findBooks: (query: string, chunk: number | null) => Chunked<Book>;
     shareList: (name: string) => void;
     getModeratedLists: () => ListInfo[];
     shareBook: (itemId: number, lists: number[]) => void;
+    clearBookState: () => void;
+    clearModeratedListsState: () => void;
 }
 
 interface State {
@@ -47,7 +51,7 @@ interface State {
     sharingBookId: number | null;
 }
 
-class PrivateBookList extends React.PureComponent<Props, State> {
+class PrivateBookList extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -61,7 +65,7 @@ class PrivateBookList extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         if(!this.props.bookList) {
-            this.props.getList();
+            this.props.fetchList();
         }
     }
 
@@ -83,8 +87,8 @@ class PrivateBookList extends React.PureComponent<Props, State> {
         this.props.updateList({name: newName} as PrivateList);
     }
 
-    handleUpdateItem = (item: PrivateBookListItem) => {
-        this.props.updateItem(item);
+    handleUpdateItem = (itemId: number, data: PrivateItemUpdateData) => {
+        this.props.updateItem(itemId, data);
     }
 
     mapItem = (item: PrivateBookListItem) => {
@@ -142,6 +146,7 @@ class PrivateBookList extends React.PureComponent<Props, State> {
             bookFormHidden: true,
             bookSearchQuery: null
         });
+        this.props.clearBookState();
     }
 
     showBooksForm = () => {
@@ -175,6 +180,7 @@ class PrivateBookList extends React.PureComponent<Props, State> {
         this.setState({
             shareFormHidden: true
         });
+        this.props.clearModeratedListsState();
     }
 
     showShareBookForm = (bookId: number) => {
@@ -293,22 +299,22 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
             dispatch(privateListActions.addItemBegin(bookId));
         },
         deleteItem: (itemId: number) => {
-            dispatch(privateListActions.removeItemBegin(itemId));
+            dispatch(privateListActions.deleteItemBegin(itemId));
         },
-        updateItem: (item: PrivateBookListItem) => {
-            dispatch(privateListActions.updateItemBegin(item));
+        updateItem: (itemId: number, data: PrivateItemUpdateData) => {
+            dispatch(privateListActions.updateItemBegin(itemId, data));
         },
         switchItemEditMode: (itemId: number) => {
             dispatch(privateListActions.switchItemEditMode(itemId));
         },
-        getList: () => {
+        fetchList: () => {
             dispatch(privateListActions.fetchListBegin());
         },
         switchListEditMode: () => {
             dispatch(privateListActions.switchListEditMode());
         },
-        updateList: (list: PrivateList) => {
-            dispatch(privateListActions.updateListBegin(list));
+        updateList: (data: PrivateListUpdateData) => {
+            dispatch(privateListActions.updateListBegin(data));
         },
         getModeratedLists: () => {
             dispatch(moderatedListActions.fetchBegin());
@@ -320,7 +326,13 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
             dispatch(bookActions.findBegin(query, chunk));
         },
         shareBook: (bookId: number, lists: number[]) => {
-            dispatch(privateListActions.shareItem(bookId, lists));
+            dispatch(bookActions.shareBook(bookId, lists));
+        },
+        clearBookState: () => {
+            dispatch(bookActions.clearBookState());
+        },
+        clearModeratedListsState: () => {
+            dispatch(moderatedListActions.clearModeratedListsState());
         }
     };
 }

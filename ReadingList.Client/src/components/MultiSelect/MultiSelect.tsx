@@ -5,7 +5,7 @@ import selectStyles from './MultiSelect.scss';
 import { isNullOrEmpty } from '../../utils';
 
 interface Props {
-    options: SelectListItem[];
+    options: SelectListItem[] | null;
     value?: SelectListItem[];
     name: string;
     placeholder?: string;
@@ -30,7 +30,7 @@ class MultiSelect extends React.Component<Props, State> {
     select: HTMLSelectElement;
 
     static getDerivedStateFromProps(props: Props, state: State) {
-        if(state.options.length !== props.options.length) {
+        if(props.options) {
             return {
                 ...state,
                 options: props.options,
@@ -41,20 +41,23 @@ class MultiSelect extends React.Component<Props, State> {
     }
 
     static renderOptions = (props: Props, ...optionsToAdd: SelectListItem[]) => {
-        let options = props.options;
-        if(optionsToAdd) {
-            options = options.concat(optionsToAdd);
+        if(props.options) {
+            let options = props.options;
+            if(optionsToAdd) {
+                options = options.concat(optionsToAdd);
+            }
+            return options.map((option, index) => (
+                <option
+                    value={JSON.stringify(option)}
+                    key={index}
+                >
+                    {
+                        option.text
+                    }
+                </option>
+            ));
         }
-        return options.map((option, index) => (
-            <option
-                value={JSON.stringify(option)}
-                key={index}
-            >
-                {
-                    option.text
-                }
-            </option>
-        ));
+        return new Array<JSX.Element>(0);
     }
 
     constructor(props: Props) {
@@ -64,14 +67,18 @@ class MultiSelect extends React.Component<Props, State> {
 
     createStateWithDefault = () => {
         let chosenOptions = new Array<SelectListItem>(0);
-        let options = this.props.options;
+        let options = new Array<SelectListItem>(0);
+
+        if(this.props.options) {
+            options = this.props.options;
+        }
 
         const value = this.props.value as SelectListItem[];
         if(value) {
-            chosenOptions = this.props.options.filter(
+            chosenOptions = options.filter(
                 o => value.some(this.buildTextPredicate(o, true))
             );
-            options = this.props.options.filter(i => value.every(this.buildTextPredicate(i)));
+            options = options.filter(i => value.every(this.buildTextPredicate(i)));
         }
 
         return {
@@ -128,16 +135,18 @@ class MultiSelect extends React.Component<Props, State> {
                 options: [...this.state.options]
             });
         } else {
-            const optionsIndex = this.props.options.findIndex(predicate);
-            removedIndex = this.state.value.findIndex(predicate);
-            newChosen = [...this.state.value];
-            let removed = newChosen.splice(removedIndex, 1);
-            const newOptions = [...this.state.options];
-            newOptions.splice(optionsIndex, 0, ...removed);
-            this.setState({
-                value: newChosen,
-                options: newOptions
-            });
+            if(this.props.options) {
+                const optionsIndex = this.props.options.findIndex(predicate);
+                removedIndex = this.state.value.findIndex(predicate);
+                newChosen = [...this.state.value];
+                let removed = newChosen.splice(removedIndex, 1);
+                const newOptions = [...this.state.options];
+                newOptions.splice(optionsIndex, 0, ...removed);
+                this.setState({
+                    value: newChosen,
+                    options: newOptions
+                });
+            }
         }
     }
 
@@ -161,31 +170,33 @@ class MultiSelect extends React.Component<Props, State> {
 
     handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
-        if(isNullOrEmpty(event.currentTarget.value)) {
-            const newOptions = this.props.options.filter(
-                i => this.state.value.every(this.buildTextPredicate(i))
-            );
-            this.setState({
-                search: '',
-                options: newOptions
-            });
-        } else {
-            const filtered = this.props.options.filter(
-                o => o.text.toLowerCase().includes(event.currentTarget.value) &&
-                    this.state.value.every(this.buildTextPredicate(o))
-            );
-            if(filtered.length === 0 && this.props.addNewIfNotFound) {
+        if(this.props.options) {
+            if(isNullOrEmpty(event.currentTarget.value)) {
+                const newOptions = this.props.options.filter(
+                    i => this.state.value.every(this.buildTextPredicate(i))
+                );
                 this.setState({
-                    search: event.currentTarget.value,
-                    addHidden: false,
-                    options: filtered
+                    search: '',
+                    options: newOptions
                 });
             } else {
-                this.setState({
-                    search: event.currentTarget.value,
-                    addHidden: true,
-                    options: filtered
-                });
+                const filtered = this.props.options.filter(
+                    o => o.text.toLowerCase().includes(event.currentTarget.value) &&
+                        this.state.value.every(this.buildTextPredicate(o))
+                );
+                if(filtered.length === 0 && this.props.addNewIfNotFound) {
+                    this.setState({
+                        search: event.currentTarget.value,
+                        addHidden: false,
+                        options: filtered
+                    });
+                } else {
+                    this.setState({
+                        search: event.currentTarget.value,
+                        addHidden: true,
+                        options: filtered
+                    });
+                }
             }
         }
     }
@@ -225,21 +236,23 @@ class MultiSelect extends React.Component<Props, State> {
 
     handleAddOption = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        const text = this.searchInput.value;
-        const newOption = {
-            text,
-            value: 0
-        };
-        this.setState({
-            value: [
-                ...this.state.value,
-                newOption
-            ],
-            search: '',
-            addHidden: true,
-            options: this.props.options.filter(i => this.state.value.every(this.buildTextPredicate(i))),
-            selectOptions: MultiSelect.renderOptions(this.props, newOption)
-        });
+        if(this.props.options) {
+            const text = this.searchInput.value;
+            const newOption = {
+                text,
+                value: 0
+            };
+            this.setState({
+                value: [
+                    ...this.state.value,
+                    newOption
+                ],
+                search: '',
+                addHidden: true,
+                options: this.props.options.filter(i => this.state.value.every(this.buildTextPredicate(i))),
+                selectOptions: MultiSelect.renderOptions(this.props, newOption)
+            });
+        }
     }
 
     render() {

@@ -1,0 +1,4 @@
+export enum TagActionType {
+    FETCH_TAGS_BEGIN = 'FETCH_TAGS_BEGIN',
+    FETCH_TAGS_SUCCESS = 'FETCH_TAGS_SUCCESS'
+}

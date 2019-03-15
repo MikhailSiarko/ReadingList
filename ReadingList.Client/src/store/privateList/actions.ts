@@ -1,14 +1,14 @@
 import { ActionType, createAction } from 'typesafe-actions';
 import { PrivateListActionType } from './actionTypes';
-import { PrivateBookList } from 'src/models';
+import { PrivateBookList, PrivateListUpdateData } from 'src/models';
 import { merge } from 'lodash';
-import { itemActions } from './item';
-import { itemStatusActions } from './itemStatus';
+import { itemActions } from './item/actions';
+import { itemStatusActions } from './itemStatus/actions';
 
 const listActions = {
     updateListBegin: createAction(
         PrivateListActionType.UPDATE_PRIVATE_LIST_BEGIN,
-        action => (list: PrivateBookList) => action(list)
+        action => (data: PrivateListUpdateData) => action(data)
     ),
     updateListSuccess: createAction(
         PrivateListActionType.UPDATE_PRIVATE_LIST_SUCCESS,

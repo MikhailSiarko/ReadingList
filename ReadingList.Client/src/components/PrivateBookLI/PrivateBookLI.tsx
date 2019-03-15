@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.scss';
-import { PrivateBookListItem, SelectListItem } from '../../models';
+import { PrivateBookListItem, SelectListItem, PrivateItemUpdateData } from '../../models';
 import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.scss';
 import { EditButton, DeleteButton } from './Buttons';
@@ -10,11 +10,10 @@ import BookStatus from './BookStatus';
 import Footer from './Footer';
 import BookStatusEditor from './BookStatusEditor';
 import BookInfoInEditMode from './BookInfoInEditMode';
-import { cloneDeep } from 'lodash';
 
 export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
-    onSave: (item: PrivateBookListItem) => void;
+    onSave: (itemId: number, data: PrivateItemUpdateData) => void;
     onCancel: (itemId: number) => void;
     onEdit: (itemId: number) => void;
     onDelete: (item: PrivateBookListItem) => void;
@@ -26,10 +25,7 @@ class PrivateBookLI extends React.PureComponent<BookListItemProps> {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
         const status = target.elements['status'].value;
-        const item = cloneDeep(this.props.listItem);
-        item.status = status;
-        item.isInEditMode = false;
-        this.props.onSave(item);
+        this.props.onSave(this.props.listItem.id, { status });
     }
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NotificationType } from '../../models/NotificationType';
+import { NotificationType } from '../../models/notificationType';
 import styles from './NotificationMessage.scss';
 import { applyClasses } from '../../utils';
 

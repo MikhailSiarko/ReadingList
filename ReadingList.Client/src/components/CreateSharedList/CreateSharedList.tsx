@@ -4,7 +4,7 @@ import MultiSelect from '../MultiSelect';
 import { SelectListItem } from '../../models';
 
 interface Props {
-    tags: SelectListItem[];
+    tags: SelectListItem[] | null;
 }
 
 const CreateSharedList: React.SFC<Props> = props => (

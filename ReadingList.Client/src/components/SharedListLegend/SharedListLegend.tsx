@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { reduceTags } from '../../utils';
-import { Tag } from '../../models/Tag';
-import { Moderator } from '../../models/Moderator';
+import { Moderator, Tag } from '../../models';
 import styles from './SharedListLegend.scss';
 
 interface Props {

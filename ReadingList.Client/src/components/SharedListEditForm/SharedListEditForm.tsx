@@ -2,29 +2,27 @@ import * as React from 'react';
 import Colors from '../../styles/colors';
 import styles from './SharedListEditForm.scss';
 import RoundButton from '../RoundButton';
-import { SelectListItem } from '../../models';
 import MultipleSelect from '../MultiSelect';
-import { Tag } from '../../models/Tag';
-import { Moderator } from '../../models/Moderator';
+import { Moderator, Tag, SelectListItem } from '../../models';
 
 interface Props {
     name: string;
     tags: Tag[];
-    tagsOptions: SelectListItem[];
+    tagsOptions: SelectListItem[] | null;
     moderators: Moderator[];
-    moderatorsOptions: SelectListItem[];
-    onSave: (newName: string, tags: Tag[], moderators: number[]) => Promise<void>;
+    moderatorsOptions: SelectListItem[] | null;
+    onSave: (newName: string, tags: Tag[], moderators: number[]) => void;
     onCancel: () => void;
 }
 
 class SharedListEditForm extends React.Component<Props> {
-    submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
         const name = target.elements['name'].value;
         const selectedTags = (target.elements['tags'] as HTMLSelectElement).selectedOptions;
         const selectedModerators = (target.elements['moderators'] as HTMLSelectElement).selectedOptions;
-        await this.props.onSave(
+        this.props.onSave(
             name,
             Array.from(selectedTags).map(i => {
                 const option = (JSON.parse(i.value) as SelectListItem);
