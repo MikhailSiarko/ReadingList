@@ -1,13 +1,15 @@
+@import '../../../styles/base-sizes';
+
 .book-title {
     font-weight: 500;
     margin: 0;
-    padding: 0.95rem 0;
-    font-size: 1.8rem;
+    padding: vh(0.95) 0;
+    font-size: vh(1.8);
 }
 
 .book-info {
-    margin-right: 3rem;
-    font-size: 2.4rem;
+    margin-right: vh(3);
+    font-size: vh(2.4);
     width: 54%;
     vertical-align: middle;
 
@@ -17,7 +19,7 @@
 }
 
 .genre {
-    margin: 0 0 0 1rem;
-    font-size: 1.8rem;
-    padding: 0.95rem 0;
+    margin: 0 0 0 vh(1);
+    font-size: vh(1.8);
+    padding: vh(0.95) 0;
 }

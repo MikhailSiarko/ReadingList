@@ -1,14 +1,16 @@
+@import '../../../styles/base-sizes';
+
 .editable-book-info {
-    font-size: 2rem;
-    min-width: 40rem;
-    margin: 0.5rem;
+    font-size: vh(2);
+    min-width: vh(40);
+    margin: vh(0.5);
 
     & > div {
-        font-size: 4rem;
+        font-size: vh(4);
         font-weight: bold;
 
         & > span {
-            font-size: 2rem;
+            font-size: vh(2);
         }
     }
 }

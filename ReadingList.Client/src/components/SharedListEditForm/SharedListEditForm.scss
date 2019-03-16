@@ -1,22 +1,23 @@
+@import '../../styles/base-sizes';
+
 .edit-form {
     & > div {
         display: inline-block;
-        margin: 0 1rem;
+        margin: 0 vh(1);
+        line-height: vh(5);
     }
 }
 
 .name-editor {
-    width: 25rem;
+    position: relative;
+    top: vh(0.4);
+    width: vh(25);
 }
 
 .tags-select {
-    position: relative;
-    top: 1rem;
-    width: 25rem;
+    width: vh(25);
 }
 
 .moderators {
-    position: relative;
-    top: 1rem;
-    width: 25rem;
+    width: vh(25);
 }

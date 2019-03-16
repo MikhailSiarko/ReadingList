@@ -1,6 +1,8 @@
+@import '../../../styles/base-sizes';
+
 .reading-time {
-    font-size: 1rem;
-    padding: 0.4rem;
+    font-size: vh(1);
+    padding: vh(0.4);
     width: 20%;
 
     & p {

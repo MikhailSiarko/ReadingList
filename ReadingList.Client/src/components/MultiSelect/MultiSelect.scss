@@ -1,5 +1,6 @@
 @import '../../styles/colors';
 @import '../../styles/shadows';
+@import '../../styles/base-sizes';
 
 .select {
     @extend %gray-shadow;
@@ -10,18 +11,14 @@
     color: $gray;
     background-color: white;
     display: block;
-    font-size: 2.2rem;
-    font-weight: 400;
-    padding: 0.6rem;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: vh(2.6);
+    font-weight: 300;
+    border-radius: vh(0.5);
+    padding: vh(0.78);
     cursor: pointer;
-    line-height: 2.2rem;
+    line-height: vh(2.6);
     box-sizing: border-box;
     z-index: 99;
-
-    & > div:not(:last-child) {
-        min-height: 2.4rem;
-    }
 
     & > div:last-child {
         position: relative;
@@ -30,31 +27,31 @@
 
 .wrapper {
     position: relative;
-    height: 2.6rem;
-    padding: 0.4rem;
+    height: vh(2.6);
+    padding: vh(0.6);
     top: 0;
     left: 0;
     right: 0;
 }
 
 .selected-list {
-    font-size: 1.6rem;
+    font-size: vh(2.6);
 }
 
 .options {
     @extend %gray-shadow;
     background-color: white;
-    margin-top: 1rem;
+    margin-top: vh(1);
 
     & > div {
         position: relative;
         box-sizing: border-box;
 
         & > input {
-            font-size: 1.6rem;
+            font-size: vh(1.6);
             margin: 0;
-            padding: 0.5rem 0;
-            border-bottom: 0.1rem #dcdcdc solid;
+            padding: vh(0.5) 0;
+            border-bottom: vh(0.1) #dcdcdc solid;
         }
 
         & > button {
@@ -62,10 +59,10 @@
             background-color: transparent;
             cursor: pointer;
             border: none;
-            font-size: 1.6rem;
+            font-size: vh(1.6);
             top: 0;
-            right: 2rem;
-            padding: 0.5rem 0;
+            right: vh(2);
+            padding: vh(0.5) 0;
             z-index: 99;
 
             &:hover {
@@ -76,12 +73,12 @@
 
     & > ul {
         position: relative;
-        max-height: 25rem;
+        max-height: vh(25);
         overflow: auto;
-        padding: 0 2rem;
+        padding: 0 vh(2);
         margin: auto;
         list-style: none;
-        font-size: 1.6rem;
+        font-size: vh(1.6);
     }
 }
 
@@ -90,6 +87,6 @@
     padding: 0 0;
 
     &:not(:last-child) {
-        border-bottom: 0.1rem solid #dcdcdc;
+        border-bottom: vh(0.1) solid #dcdcdc;
     }
 }

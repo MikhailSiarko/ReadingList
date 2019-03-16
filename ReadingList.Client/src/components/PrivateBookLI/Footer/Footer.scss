@@ -1,6 +1,8 @@
+@import '../../../styles/base-sizes';
+
 .edited-footer {
     & > div {
         display: inline-block;
-        margin: 0.8rem 2rem;
+        margin: vh(0.8) vh(2);
     }
 }

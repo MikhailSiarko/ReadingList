@@ -1,6 +1,8 @@
+@import '../../styles/base-sizes';
+
 .header {
     margin: 0;
     text-transform: uppercase;
     font-weight: 400;
-    padding: 0.5rem;
+    padding: vh(0.5);
 }

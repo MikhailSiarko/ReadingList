@@ -1,34 +1,35 @@
 @import '../../../styles/colors';
+@import '../../../styles/base-sizes';
 
 %grid-item {
     text-align: left;
-    width: 18rem;
-    height: 18rem;
+    width: vh(18);
+    height: vh(18);
     background: white;
-    margin: 1rem auto;
-    padding: 0.2rem;
-    border-radius: 0.4rem;
+    margin: vh(1) auto;
+    padding: vh(0.2);
+    border-radius: vh(0.4);
     transition: all 0.2s ease-in-out;
-    border-left: $primary solid 0.5rem;
+    border-left: $primary solid vh(0.5);
     cursor: pointer;
     box-sizing: border-box;
 
     & > h3 {
-        margin: 0.5rem;
-        font-size: 2rem;
+        margin: vh(0.5);
+        font-size: vh(2);
     }
 
     & > p {
-        font-size: 1.6rem;
+        font-size: vh(1.6);
         margin: 0;
         overflow: hidden;
-        height: 2rem;
+        height: vh(2);
     }
 
     & > h4 {
-        font-size: 2rem;
+        font-size: vh(2);
         font-weight: 200;
-        margin-left: 0.5rem;
+        margin-left: vh(0.5);
         color: black;
     }
 }

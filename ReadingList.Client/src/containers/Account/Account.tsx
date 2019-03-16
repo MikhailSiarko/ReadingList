@@ -42,7 +42,7 @@ class Account extends React.Component<Props> {
     }
 }
 
-function mapStatetoProps(state: RootState) {
+function mapStateToProps(state: RootState) {
     return {
         loading: state.loading
     };
@@ -56,4 +56,4 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
     };
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)(Account);
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

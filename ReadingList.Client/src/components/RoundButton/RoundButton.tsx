@@ -18,11 +18,11 @@ const RoundButton: React.SFC<Props> = props => {
             <button
                 {...clearProps}
                 style={{
-                    height: props.radius * 2 + 'rem',
-                    lineHeight: props.radius * 2 + 'rem',
-                    width: props.radius * 2 + 'rem',
-                    fontSize: props.radius + 'rem',
-                    borderRadius: props.radius + 'rem'
+                    height: props.radius * 2 + 'vh',
+                    lineHeight: props.radius * 2 + 'vh',
+                    width: props.radius * 2 + 'vh',
+                    fontSize: props.radius + 'vh',
+                    borderRadius: props.radius + 'vh'
                 }}
                 className={
                     applyClasses(

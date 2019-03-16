@@ -1,6 +1,8 @@
+@import '../../../styles/base-sizes';
+
 .book-status {
-    font-size: 1rem;
-    padding: 0.4rem;
+    font-size: vh(1);
+    padding: vh(0.4);
     width: 13%;
 
     & p {
