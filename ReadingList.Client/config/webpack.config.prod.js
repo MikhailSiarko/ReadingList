@@ -14,6 +14,25 @@ const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
+const postCSSLoader = {
+    loader: 'postcss-loader',
+    options: {
+        ident: 'postcss',
+        plugins: () => [
+            require('postcss-flexbugs-fixes'),
+            autoprefixer({
+                browsers: [
+                    '>1%',
+                    'last 4 versions',
+                    'Firefox ESR',
+                    'not ie < 9',
+                ],
+                flexbox: 'no-2009',
+            }),
+        ],
+    }
+}
+
 // Webpack uses `publicPath` to determine where the App is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
 const publicPath = paths.servedPath;
@@ -22,6 +41,30 @@ const publicPath = paths.servedPath;
 const shouldUseRelativeAssetPaths = publicPath === './';
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+
+const CSSModuleLoader = {
+    loader: require.resolve('typings-for-css-modules-loader'),
+    options: {
+        importLoaders: 1,
+        minimize: true,
+        sourceMap: shouldUseSourceMap,
+        modules: true,
+        namedExport: true,
+        camelCase: true
+    },
+}
+
+const CSSLoader = {
+    loader: 'css-loader',
+    options: {
+        importLoaders: 1,
+        modules: true,
+        minimize: true,
+        sourceMap: shouldUseSourceMap,
+        localIdentName: '[name]__[local]___[hash:base64:5]'
+    }
+}
+
 // `publicUrl` is just like `publicPath`, but we will provide it to our App
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
@@ -182,38 +225,7 @@ module.exports = {
                       hmr: false,
                     },
                   },
-                  use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: true,
-                        sourceMap: shouldUseSourceMap,
-                        modules: true,
-                        localIdentName: '[name]__[local]___[hash:base64:5]'
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers: [
-                              '>1%',
-                              'last 4 versions',
-                              'Firefox ESR',
-                              'not ie < 9', // React doesn't support IE8 anyway
-                            ],
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
-                  ],
+                  use: [CSSLoader, postCSSLoader]
                 },
                 extractTextPluginOptions
               )
@@ -231,53 +243,27 @@ module.exports = {
                       hmr: false,
                     },
                   },
-                  use: [
-                    {
-                      loader: require.resolve('typings-for-css-modules-loader'),
-                      options: {
-                        importLoaders: 1,
-                        minimize: true,
-                        sourceMap: shouldUseSourceMap,
-                        modules: true,
-                        namedExport: true,
-                        camelCase: true,
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers: [
-                              '>1%',
-                              'last 4 versions',
-                              'Firefox ESR',
-                              'not ie < 9', // React doesn't support IE8 anyway
-                            ],
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
-                  ],
+                  use: [CSSModuleLoader, postCSSLoader],
                 },
                 extractTextPluginOptions
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
-          {
-            test: /\.scss$/,
-            loaders: [
-                require.resolve('style-loader'),
-                require.resolve('css-loader'),
-                require.resolve('sass-loader')
-            ]
-          },
+            {
+                test: /\.scss$/,
+                exclude: /\.module\.scss$/,
+                use: ['style-loader', CSSLoader, postCSSLoader, 'sass-loader']
+            },
+            {
+                test: /\.module\.scss$/,
+                use: [
+                    'style-loader',
+                    CSSModuleLoader,
+                    postCSSLoader,
+                    'sass-loader',
+                ]
+            },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader doesn't use a "test" so it will catch all modules

@@ -11,7 +11,7 @@ import { withContextMenu } from '../../hoc';
 import CreateSharedList from '../../components/CreateSharedList';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
-import { parse } from 'query-string';
+import { parse } from 'querystring';
 import Pagination from '../../components/Pagination';
 import { RootState } from '../../store';
 import { sharedListActions } from '../../store/sharedList';
