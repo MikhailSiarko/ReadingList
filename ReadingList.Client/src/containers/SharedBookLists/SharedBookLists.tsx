@@ -15,7 +15,7 @@ import { parse } from 'query-string';
 import Pagination from '../../components/Pagination';
 import { RootState } from '../../store';
 import { sharedListActions } from '../../store/sharedList';
-import { tagActions } from '../../store/tags';
+import { tagActions } from '../../store';
 
 interface Props extends RouteComponentProps<any> {
     lists: Chunked<SharedBookListPreview> | null;
@@ -24,6 +24,7 @@ interface Props extends RouteComponentProps<any> {
     fetchMySharedLists: (chunk: number | null) => void;
     createList: (data: SharedListCreateData) => void;
     fetchTags: () => void;
+    clearTagsState: () => void;
 }
 
 interface State {
@@ -72,6 +73,7 @@ class SharedBookLists extends React.Component<Props, State> {
 
     handleCancel = () => {
         this.setState({isFormHidden: true});
+        this.props.clearTagsState();
     }
 
     handleListFormSubmit = (values: NamedValue[]) => {
@@ -219,6 +221,9 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         fetchTags: () => {
             dispatch(tagActions.fetchTagBegin());
+        },
+        clearTagsState: () => {
+            dispatch(tagActions.clearTagsState());
         }
     };
 }

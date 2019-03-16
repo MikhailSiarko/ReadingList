@@ -25,10 +25,7 @@ export class PrivateListService extends ApiService {
 
     addItem = (bookId: number) => {
         return this.configureRequest(
-            `${ApiConfiguration.PRIVATE_LIST_ITEMS}`, 'POST',
-            {
-                bookId: bookId
-            })
+            ApiConfiguration.PRIVATE_LIST_ITEMS, 'POST', { bookId })
             .then(this.onSuccess<PrivateBookListItem>())
             .catch(onError);
     }
@@ -50,7 +47,7 @@ export class PrivateListService extends ApiService {
     }
 
     updateList = (data: PrivateListUpdateData) => {
-        return this.configureRequest(`${ApiConfiguration.PRIVATE_LIST}`, 'PATCH', data)
+        return this.configureRequest(ApiConfiguration.PRIVATE_LIST, 'PATCH', data)
             .then(this.onSuccess<PrivateBookList>())
             .catch(onError);
     }

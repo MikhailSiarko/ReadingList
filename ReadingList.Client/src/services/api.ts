@@ -7,45 +7,37 @@ abstract class ApiService {
         return (response: AxiosResponse) => new RequestResult<TOut>(true, response.data);
     }
 
-    protected configureRequest<TData>(url: string, method: string, data?: TData) {
+    protected configureRequest<TData, TParams>(url: string, method: string, data?: TData, params?: TParams) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
 
         axiosInstance.interceptors.request.use(
             config => config,
-            error => {
-                let result = new RequestResult<never>(
-                    false,
-                    undefined,
-                    error.response
-                        ? error.response.data ? error.response.data.errorMessage : error.message
-                        : error.message,
-                    error.response ? error.response.status : undefined
-                );
-                return Promise.reject(result);
-            }
+            this.handleError
         );
 
         axiosInstance.interceptors.response.use(
             response => response,
-            error => {
-                let result = new RequestResult<never>(
-                    false,
-                    undefined,
-                    error.response
-                        ? error.response.data ? error.response.data.errorMessage : error.message
-                        : error.message,
-                    error.response ? error.response.status : undefined
-                );
-
-                return Promise.reject(result);
-            }
+            this.handleError
         );
 
         return axiosInstance.request({
-            url: url,
-            method: method,
-            data: data
+            url,
+            method,
+            data,
+            params
         });
+    }
+
+    private handleError = (error: any) => {
+        let result = new RequestResult<never>(
+            false,
+            undefined,
+            error.response
+                ? error.response.data ? error.response.data.errorMessage : error.message
+                : error.message,
+            error.response ? error.response.status : undefined
+        );
+        return Promise.reject(result);
     }
 }
 

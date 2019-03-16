@@ -13,6 +13,7 @@ export * from './books';
 export * from './moderatedList';
 export * from './saga';
 export * from './state';
+export * from './tags';
 
 declare global {
   interface Window {

@@ -23,6 +23,7 @@ import SharedListLegend from '../../components/SharedListLegend';
 import SharedBookForm from '../../components/SharedBookForm';
 import { RootState, bookActions, moderatedListActions } from '../../store';
 import { sharedListActions } from '../../store/sharedList/actions';
+import { tagActions } from 'src/store';
 
 interface Props extends RouteComponentProps<any> {
     list: SharedList;
@@ -43,6 +44,7 @@ interface Props extends RouteComponentProps<any> {
     clearSharedListState: () => void;
     clearBookState: () => void;
     clearModeratedListsState: () => void;
+    clearTagsState: () => void;
 }
 
 interface State {
@@ -74,6 +76,7 @@ class SharedBookList extends React.Component<Props, State> {
         this.props.clearSharedListState();
         this.props.clearBookState();
         this.props.clearModeratedListsState();
+        this.props.clearTagsState();
     }
 
     handleSaveList = (name: string, tags: Tag[], moderators: number[]) => {
@@ -351,6 +354,7 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         switchToSimpleMode: () => {
             dispatch(sharedListActions.switchListSimpleMode());
+            dispatch(tagActions.clearTagsState());
         },
         clearSharedListState: () => {
             dispatch(sharedListActions.clearShared());
@@ -360,6 +364,9 @@ function mapDispatchToProps(dispatch: Dispatch<RootState>) {
         },
         clearModeratedListsState: () => {
             dispatch(moderatedListActions.clearModeratedListsState());
+        },
+        clearTagsState: () => {
+            dispatch(tagActions.clearTagsState());
         }
     };
 }

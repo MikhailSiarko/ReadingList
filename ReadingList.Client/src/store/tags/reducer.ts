@@ -7,6 +7,8 @@ export function tagReducer(state: RootState.Tags = initialState.tags, action: Ta
     switch (action.type) {
         case getType(tagActions.fetchTagSuccess):
             return action.payload;
+        case getType(tagActions.clearTagsState):
+            return initialState.tags;
         default:
             return state;
     }

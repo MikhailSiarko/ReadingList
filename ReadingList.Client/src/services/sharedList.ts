@@ -13,13 +13,13 @@ import {
 
 export class SharedListService extends ApiService {
     getMyLists = (chunk: number | null, count: number | null) => {
-        return this.configureRequest(ApiConfiguration.getMySharedListsUrl(chunk, count), 'GET')
+        return this.configureRequest(ApiConfiguration.SHARED_LISTS_MY, 'GET', undefined, { chunk, count })
             .then(this.onSuccess<Chunked<SharedBookListPreview>>())
             .catch(onError);
     }
 
     getLists = (query: string, chunk: number | null, count: number | null) => {
-        return this.configureRequest(ApiConfiguration.getFindSharedListsUrl(query, chunk, count), 'GET')
+        return this.configureRequest(ApiConfiguration.SHARED_LISTS, 'GET', undefined, { query, chunk, count })
             .then(this.onSuccess<Chunked<SharedBookListPreview>>())
             .catch(onError);
     }
@@ -44,7 +44,7 @@ export class SharedListService extends ApiService {
 
     updateList = (id: number, data: SharedListUpdateData) => {
         return this.configureRequest(
-            ApiConfiguration.SHARED_LISTS + `/${id}`, 'PATCH',
+            ApiConfiguration.getSharedListUrl(id), 'PATCH',
             data
         )
         .then(this.onSuccess<SharedBookList>())
@@ -58,7 +58,7 @@ export class SharedListService extends ApiService {
     }
 
     deleteList = (listId: number) => {
-        return this.configureRequest(ApiConfiguration.SHARED_LISTS + `/${listId}`, 'DELETE')
+        return this.configureRequest(ApiConfiguration.getSharedListUrl(listId), 'DELETE')
             .then(this.onSuccess<never>())
             .catch(onError);
     }

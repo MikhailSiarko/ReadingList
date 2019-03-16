@@ -18,11 +18,11 @@ export class ApiConfiguration {
     }
 
     public static getSharedListUrl(listId: number) {
-        return `${ApiConfiguration.LISTS}/shared/${listId}`;
+        return `${ApiConfiguration.SHARED_LISTS}/${listId}`;
     }
 
     public static getSharedListItemUrl(listId: number, itemId: number) {
-        return `${ApiConfiguration.LISTS}/shared/${listId}/items/${itemId}`;
+        return `${ApiConfiguration.SHARED_LISTS}/${listId}/items/${itemId}`;
     }
 
     public static getFindSharedListsUrl(query: string, chunk: number | null, count: number | null) {
@@ -34,7 +34,7 @@ export class ApiConfiguration {
     }
 
     public static getAddItemToSharedListUrl(listId: number) {
-        return `${ApiConfiguration.LISTS}/shared/${listId}/items`;
+        return `${ApiConfiguration.SHARED_LISTS}/${listId}/items`;
     }
 
     public static getBooksSearchUrl(query: string, chunk: number | null) {

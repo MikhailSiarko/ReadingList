@@ -5,13 +5,13 @@ import { Book, Chunked } from '../models';
 
 export class BookService extends ApiService {
     findBooks = (query: string, chunk: number | null) => {
-        return this.configureRequest(ApiConfiguration.getBooksSearchUrl(query, chunk), 'GET')
+        return this.configureRequest(ApiConfiguration.BOOKS, 'GET', undefined, { query, chunk })
             .then(this.onSuccess<Chunked<Book>>())
             .catch(onError);
     }
 
     shareBook = (bookId: number, listsIds: number[]) => {
-        return this.configureRequest(ApiConfiguration.getShareBookUrl(bookId), 'POST', listsIds)
+        return this.configureRequest(ApiConfiguration.BOOKS, 'POST', listsIds, { bookId })
             .then(this.onSuccess<void>())
             .catch(onError);
     }
