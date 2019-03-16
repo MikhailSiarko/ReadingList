@@ -1,7 +1,5 @@
 import { RequestResult } from '../models';
 import { cloneDeep } from 'lodash';
-import { Dispatch } from 'react-redux';
-import { RootState, notificationActions, authenticationActions, loadingActions } from '../store';
 
 export function onError(error: RequestResult<never>) {
     return error;
@@ -46,49 +44,8 @@ export function convertSecondsToReadingTime(seconds: number): string {
     return `days: ${days} | hours: ${hours} | minutes: ${minutes}`;
 }
 
-export function processFailedRequest(result: RequestResult<any>, dispatch: Dispatch<RootState>) {
-    if (!result.isSucceed && result.status && result.status === 401) {
-        dispatch(authenticationActions.signOut());
-        dispatch(loadingActions.end());
-    } else if (!result.isSucceed) {
-        dispatch(loadingActions.end());
-        if(result.status && result.status >= 500) {
-            dispatch(notificationActions.error(result.errorMessage as string));
-        } else {
-            dispatch(notificationActions.info(result.errorMessage as string));
-        }
-        setTimeout(() => dispatch(notificationActions.hide()), 4000);
-    }
-}
-
 export function applyClasses(...classes: string[]) {
     return classes.join(' ');
-}
-
-export function createPropAction<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>,
-                                            dispatch: Dispatch<RootState>, action?: (out: TOut) => any) {
-    return async function (inner: TIn) {
-        const result = await func(inner);
-        if (result.isSucceed && result.data && action) {
-            dispatch(action(result.data));
-        } else {
-            processFailedRequest(result, dispatch);
-        }
-    };
-}
-
-export function createPropActionWithResult<TIn, TOut>(func: (data: TIn) => Promise<RequestResult<TOut>>,
-                                                      dispatch: Dispatch<RootState>, action?: (out: TOut) => any) {
-    return async function (inner: TIn) {
-        const result = await func(inner);
-        if (result.isSucceed && result.data && action) {
-            dispatch(action(result.data));
-        } else if (!result.isSucceed) {
-            processFailedRequest(result, dispatch);
-            return;
-        }
-        return result.data as TOut;
-    };
 }
 
 export function reduceTags(tags: string[]) {
