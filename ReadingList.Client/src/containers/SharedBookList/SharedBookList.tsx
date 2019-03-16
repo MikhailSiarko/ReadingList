@@ -183,6 +183,7 @@ class SharedBookList extends React.Component<Props, State> {
         this.setState({
             isFormHidden: true
         });
+        this.props.clearBookState();
     }
 
     showShareBookForm = (bookId: number) => {

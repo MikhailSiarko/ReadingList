@@ -83,8 +83,8 @@ class PrivateBookList extends React.Component<Props, State> {
         };
     }
 
-    handleUpdateList = (newName: string) => {
-        this.props.updateList({name: newName} as PrivateList);
+    handleUpdateList = (data: PrivateListUpdateData) => {
+        this.props.updateList(data);
     }
 
     handleUpdateItem = (itemId: number, data: PrivateItemUpdateData) => {
@@ -235,7 +235,13 @@ class PrivateBookList extends React.Component<Props, State> {
             listItems = this.props.bookList.items.map(this.mapItem);
         }
 
-        const bookListActions = [{onClick: this.props.switchListEditMode, text: 'Edit list name'}];
+        const bookListActions = [
+            {
+                onClick: this.props.switchListEditMode,
+                text: 'Edit list name'
+            }
+        ];
+        
         const ContexedList = withContextMenu(bookListActions, BookList);
 
         return (

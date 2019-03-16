@@ -2,10 +2,11 @@ import * as React from 'react';
 import Colors from '../../styles/colors';
 import RoundButton from '../RoundButton';
 import style from './PrivateListEditor.scss';
+import { PrivateListUpdateData } from 'src/models';
 
 interface Props {
     name: string;
-    onSave: (newName: string) => void;
+    onSave: (data: PrivateListUpdateData) => void;
     onCancel: () => void;
 }
 
@@ -14,7 +15,7 @@ class PrivateListEditForm extends React.Component<Props> {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
         const newName = target.elements['list-name'].value;
-        this.props.onSave(newName);
+        this.props.onSave({ name: newName });
     }
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
