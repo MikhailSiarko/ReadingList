@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Route, RouteComponentProps, Switch, Redirect, withRouter } from 'react-router';
+import { RouteComponentProps, Switch, Redirect, withRouter, Route } from 'react-router';
 import PrivateRoute from '../PrivateRoute';
-import Account from '../Account';
 import NavBar from '../../components/NavBar';
 import { Dispatch } from 'redux';
 import Main from '../../components/Main';
@@ -14,6 +13,8 @@ import NotificationMessage from '../../components/NotificationMessage';
 import { NotificationType } from '../../models';
 import Spinner from '../../components/Spinner';
 import { privateListActions, authenticationActions, RootState } from '../../store';
+import { accountRoutes, privateListRoutes, sharedListRoutes } from '../../routes';
+import Account from '../Account/Account';
 
 interface AppProps extends RouteComponentProps<any> {
     loading: boolean;
@@ -31,13 +32,13 @@ class App extends React.Component<AppProps> {
     render() {
         const navLinks = this.props.identity.isAuthenticated
             ? [
-                {text: 'Private List', href: '/private'},
-                {text: 'Shared Lists', href: '/shared/search'},
+                {text: 'Private List', href: privateListRoutes.PRIVATE_LIST},
+                {text: 'Shared Lists', href: sharedListRoutes.SHARED_LISTS},
                 {text: 'Logout', href: '', action: this.signOutHandler}
             ]
             : [
-                {text: 'Login', href: '/account/login'},
-                {text: 'Register', href: '/account/register'}
+                {text: 'Login', href: accountRoutes.LOGIN},
+                {text: 'Register', href: accountRoutes.REGISTER}
             ];
 
         return (
@@ -47,27 +48,27 @@ class App extends React.Component<AppProps> {
                     <Switch>
                         <PrivateRoute
                             exact={true}
-                            path="/private"
+                            path={privateListRoutes.PRIVATE_LIST}
                             component={PrivateBookList}
                         />
 
                         <PrivateRoute
                             exact={true}
-                            path="/shared/search/"
+                            path={sharedListRoutes.SHARED_LISTS}
                             component={SharedBookLists}
                         />
                         <PrivateRoute
                             exact={true}
-                            path="/shared/:id"
+                            path={sharedListRoutes.SHARED_LIST}
                             component={SharedBookList}
                         />
                         {
                             !this.props.identity.isAuthenticated
-                                ? <Route path="/account" component={Account} />
-                                : <Redirect to="/private" />
+                                ? <Route path={accountRoutes.ACCOUNT} component={Account} />
+                                : <Redirect to={privateListRoutes.PRIVATE_LIST} />
                         }
-                        <DefaultRoute defaultPath="/private" forPath="/" />
-                        <DefaultRoute defaultPath="/shared/search" forPath="/shared" />
+                        <DefaultRoute defaultPath={privateListRoutes.PRIVATE_LIST} forPath="/" />
+                        <DefaultRoute defaultPath={sharedListRoutes.SHARED_LISTS} forPath={sharedListRoutes.SHARED} />
                     </Switch>
                 </Main>
                 <NotificationMessage

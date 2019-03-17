@@ -3,6 +3,7 @@ import styles from './AccountForm.scss';
 import { Route } from 'react-router';
 import Register from '../Register';
 import Login from '../Login';
+import { accountRoutes } from '../../routes';
 
 interface Props {
     onSubmit: (email: string, password: string, confirmPassword?: string) => void;
@@ -21,8 +22,8 @@ class AccountForm extends React.Component<Props> {
     render() {
         return (
             <form className={styles['account-form']} onSubmit={this.handleSubmit}>
-                <Route path="/account/register" component={Register} />
-                <Route path="/account/login" component={Login} />
+                <Route path={accountRoutes.REGISTER} component={Register} />
+                <Route path={accountRoutes.LOGIN} component={Login} />
             </form>
         );
     }

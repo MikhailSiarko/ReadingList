@@ -39,7 +39,7 @@ class SharedBookLists extends React.Component<Props, State> {
         };
     }
 
-    searchHandler = async (query: string) => {
+    searchHandler = (query: string) => {
         this.props.history.push(
             '/shared/search?query=' + encodeURIComponent(query) + '&chunk=' + 1,
             {from: this.props.location}
