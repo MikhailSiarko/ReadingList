@@ -1,8 +1,8 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.scss';
 import style from './RoundButton.scss';
-import { applyClasses, createDOMAttributeProps } from '../../utils';
 import Colors from '../../styles/colors';
+import * as classNames from 'classnames';
 
 interface Props extends React.HTMLProps<HTMLButtonElement> {
     buttonColor?: Colors;
@@ -12,11 +12,17 @@ interface Props extends React.HTMLProps<HTMLButtonElement> {
 }
 
 const RoundButton: React.SFC<Props> = props => {
-    const clearProps = createDOMAttributeProps(props, 'buttonColor', 'radius', 'wrapperStyle', 'wrapperClassName');
+    const { buttonColor, radius, wrapperStyle, wrapperClassName, ...restOfProps } = props;
+    const className = classNames({
+        [globalStyles['inner-shadowed']]: true,
+        [style['round-button']]: true,
+        [globalStyles['red']]: props.buttonColor === Colors.Red,
+        [globalStyles['primary']]: props.buttonColor === Colors.Primary
+    });
     return (
         <div style={props.wrapperStyle} className={props.wrapperClassName}>
             <button
-                {...clearProps}
+                {...restOfProps}
                 style={{
                     height: props.radius * 2 + 'vh',
                     lineHeight: props.radius * 2 + 'vh',
@@ -24,17 +30,7 @@ const RoundButton: React.SFC<Props> = props => {
                     fontSize: props.radius + 'vh',
                     borderRadius: props.radius + 'vh'
                 }}
-                className={
-                    applyClasses(
-                        globalStyles['inner-shadowed'],
-                        style['round-button'],
-                        props.buttonColor
-                            ? props.buttonColor === Colors.Red
-                                ? globalStyles.red
-                                : globalStyles.primary
-                            : globalStyles.primary
-                    )
-                }
+                className={className}
             >
                 {props.children}
             </button>

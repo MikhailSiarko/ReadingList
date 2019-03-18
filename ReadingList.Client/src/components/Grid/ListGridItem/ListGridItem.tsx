@@ -1,7 +1,8 @@
 import * as React from 'react';
 import styles from './ListGridItem.scss';
 import globalStyles from '../../../styles/global.scss';
-import { applyClasses, reduceTags, createDOMAttributeProps } from '../../../utils';
+import { reduceTags } from '../../../utils';
+import * as classNames from 'classnames';
 
 export interface ListGridItemProps extends React.HTMLProps<HTMLDivElement> {
     header: string;
@@ -10,11 +11,11 @@ export interface ListGridItemProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 const ListGridItem: React.SFC<ListGridItemProps> = props => {
-    const newProps = createDOMAttributeProps(props, 'header', 'tags', 'booksCount');
+    const { header, tags, booksCount, ...restOfProps } = props;
     return (
         <div
-            {...newProps}
-            className={applyClasses(styles['grid-item'], globalStyles['inner-shadowed'])}
+            {...restOfProps}
+            className={classNames(styles['grid-item'], globalStyles['inner-shadowed'])}
             onClick={props.onClick}
         >
             <h3>{props.header}</h3>

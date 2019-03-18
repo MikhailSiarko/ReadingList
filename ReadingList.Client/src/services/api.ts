@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { createAxiosDefaultConfiguration } from '../config/defaultConfig';
 import { RequestResult } from '../models';
+import { get } from 'lodash';
 
 abstract class ApiService {
     protected onSuccess<TOut>() {
@@ -29,13 +30,11 @@ abstract class ApiService {
     }
 
     private handleError = (error: any) => {
-        let result = new RequestResult<never>(
+        const result = new RequestResult<never>(
             false,
             undefined,
-            error.response
-                ? error.response.data ? error.response.data.errorMessage : error.message
-                : error.message,
-            error.response ? error.response.status : undefined
+            get(error, 'response.data.errorMessage', error.message),
+            get(error, 'response.status')
         );
         return Promise.reject(result);
     }

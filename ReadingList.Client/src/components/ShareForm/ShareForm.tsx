@@ -1,15 +1,26 @@
 import * as React from 'react';
 import { Form } from '../Form';
-import { NamedValue } from '../../models';
 
 interface Props {
     onSubmit: (name: string) => void;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-class ShareForm extends React.Component<Props> {
-    handleFormSubmit = (values: NamedValue[]) => {
-        this.props.onSubmit(values[0].value);
+interface State {
+    name?: string;
+}
+
+class ShareForm extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = { name: undefined };
+    }
+
+    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if(this.state.name) {
+            this.props.onSubmit(this.state.name);
+        }
     }
 
     handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,6 +36,11 @@ class ShareForm extends React.Component<Props> {
         this.props.onCancel(event);
     }
 
+    handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        this.setState({ name: event.target.value });
+    }
+
     render() {
         return (
             <Form
@@ -35,7 +51,7 @@ class ShareForm extends React.Component<Props> {
                         width: '40rem'
                     }
                 }
-                onSubmit={this.handleFormSubmit}
+                onSubmit={this.handleSubmit}
                 onCancel={this.handleCancel}
             >
                 <div>
@@ -43,6 +59,8 @@ class ShareForm extends React.Component<Props> {
                         type="text"
                         name="shared-list-name"
                         placeholder="Enter shared list name"
+                        value={this.state.name}
+                        onChange={this.handleNameChange}
                     />
                 </div>
             </Form>

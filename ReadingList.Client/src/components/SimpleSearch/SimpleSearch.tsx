@@ -6,30 +6,21 @@ interface Props {
     onChange: (query: string) => void;
 }
 
-interface State {
-    timer: NodeJS.Timer | null;
-}
-
-class SimpleSearch extends React.Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {timer: null};
-    }
+class SimpleSearch extends React.Component<Props> {
+    private timer: NodeJS.Timer;
 
     handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
-        clearTimeout(this.state.timer as NodeJS.Timer);
+        clearTimeout(this.timer);
         const value = event.target.value;
-        this.setState({
-            timer: setTimeout(async () => {
-                await this.props.onChange(value);
-            }, 500)
-        });
+        this.timer = setTimeout(() => {
+            this.props.onChange(value);
+        }, 500);
     }
 
     componentWillUnmount() {
-        if (this.state.timer) {
-            clearTimeout(this.state.timer);
+        if (this.timer) {
+            clearTimeout(this.timer);
         }
     }
 

@@ -20,7 +20,7 @@ import AddBookForm from '../../components/AddBookForm/AddBookForm';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import SharedListLegend from '../../components/SharedListLegend';
-import SharedBookForm from '../../components/SharedBookForm';
+import ShareBookForm from '../../components/ShareBookForm';
 import { RootState, bookActions, moderatedListActions } from '../../store';
 import { sharedListActions } from '../../store/sharedList/actions';
 import { tagActions } from 'src/store';
@@ -97,36 +97,27 @@ class SharedBookList extends React.Component<Props, State> {
     renderLegend = () => {
         if (this.props.list) {
             if(this.props.list.isInEditMode) {
-                return (
+                return this.props.tags && this.props.moderators && (
                     <SharedListEditForm
                         tags={this.props.list.tags}
                         moderators={this.props.list.moderators}
-                        moderatorsOptions={
-                            this.props.moderators
-                                ? this.props.moderators.map(this.mapModerator)
-                                : null
-                        }
+                        moderatorsOptions={this.props.moderators.map(this.mapModerator)}
                         name={this.props.list.name}
-                        tagsOptions={
-                            this.props.tags
-                                ? this.props.tags.map(this.mapTag)
-                                : null
-                        }
+                        tagsOptions={this.props.tags.map(this.mapTag)}
                         onSave={this.handleSaveList}
                         onCancel={this.props.switchToSimpleMode}
                     />
                 );
             }
-            return (
-                <SharedListLegend
-                    moderators={this.props.list.moderators}
-                    name={this.props.list.name}
-                    tags={this.props.list.tags}
-                />
+            return this.props.list.moderators && (
+                    <SharedListLegend
+                        moderators={this.props.list.moderators}
+                        name={this.props.list.name}
+                        tags={this.props.list.tags}
+                    />
             );
-        } else {
-            return '';
         }
+        return null;
     }
 
     deleteItem = (item: SharedBookListItem) => {
@@ -298,9 +289,9 @@ class SharedBookList extends React.Component<Props, State> {
                         )
                     }
                     {
-                        !this.state.shareBookFormHidden &&
-                            <SharedBookForm
-                                options={this.props.moderatedLists ? this.props.moderatedLists : []}
+                        !this.state.shareBookFormHidden && this.props.moderatedLists &&
+                            <ShareBookForm
+                                options={this.props.moderatedLists}
                                 onSubmit={this.handleShareBook}
                                 onCancel={this.handleCancelSharingBook}
                                 choosenBookId={this.state.sharingBookId}

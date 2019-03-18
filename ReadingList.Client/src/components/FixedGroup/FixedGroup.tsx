@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './FixedGroup.scss';
 
 interface Props extends React.HTMLProps<HTMLDivElement> {
-    children: (JSX.Element | null)[] | (JSX.Element | null);
+    children: React.ReactNode;
 }
 
 const FixedGroup: React.SFC<Props> = props => (
@@ -10,7 +10,7 @@ const FixedGroup: React.SFC<Props> = props => (
         {
             Array.isArray(props.children)
             ? (
-                (props.children as Array<JSX.Element>).map((element, index) => {
+                React.Children.map(props.children, (element, index) => {
                     return (
                         <div key={index} className={styles['element-wrapper']}>
                             {element}

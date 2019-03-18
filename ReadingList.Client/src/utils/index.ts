@@ -1,5 +1,4 @@
 import { RequestResult } from '../models';
-import { cloneDeep } from 'lodash';
 
 export function onError(error: RequestResult<never>) {
     return error;
@@ -12,18 +11,6 @@ export function setAuthHeader() {
     } else {
         return {};
     }
-}
-
-export function deleteProperties(object: Object, properties: string[]) {
-    for (const property of properties) {
-        delete object[property];
-    }
-}
-
-export function createDOMAttributeProps(props: Object, ...propertiesToDelete: string[]) {
-    let copy = cloneDeep(props) as any;
-    deleteProperties(copy, propertiesToDelete);
-    return copy;
 }
 
 export function isNullOrEmpty(str: string | null | undefined) {
@@ -42,10 +29,6 @@ export function convertSecondsToReadingTime(seconds: number): string {
         minutes = '0' + minutes;
     }
     return `days: ${days} | hours: ${hours} | minutes: ${minutes}`;
-}
-
-export function applyClasses(...classes: string[]) {
-    return classes.join(' ');
 }
 
 export function reduceTags(tags: string[]) {

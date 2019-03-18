@@ -20,7 +20,7 @@ import RoundButton from '../../components/RoundButton';
 import FixedGroup from '../../components/FixedGroup';
 import ShareForm from '../../components/ShareForm';
 import PrivateListLegend from '../../components/PrivateListLegend';
-import SharedBookForm from '../../components/SharedBookForm';
+import ShareBookForm from '../../components/ShareBookForm';
 import { privateListActions, RootState, bookActions, moderatedListActions } from '../../store';
 
 interface Props extends RouteComponentProps<any> {
@@ -94,8 +94,8 @@ class PrivateBookList extends React.Component<Props, State> {
     mapItem = (item: PrivateBookListItem) => {
         const deleteItem = this.deleteItem(
             item,
-            async itemId => {
-                await this.props.deleteItem(itemId);
+            itemId => {
+                this.props.deleteItem(itemId);
             }
         );
 
@@ -241,7 +241,7 @@ class PrivateBookList extends React.Component<Props, State> {
                 text: 'Edit list name'
             }
         ];
-        
+
         const ContexedList = withContextMenu(bookListActions, BookList);
 
         return (
@@ -277,9 +277,9 @@ class PrivateBookList extends React.Component<Props, State> {
                         />
                 }
                 {
-                    !this.state.shareBookFormHidden &&
-                        <SharedBookForm
-                            options={this.props.moderatedLists ? this.props.moderatedLists : []}
+                    !this.state.shareBookFormHidden && this.props.moderatedLists &&
+                        <ShareBookForm
+                            options={this.props.moderatedLists}
                             onSubmit={this.handleShareBook}
                             onCancel={this.handleCancelSharingBook}
                             choosenBookId={this.state.sharingBookId}

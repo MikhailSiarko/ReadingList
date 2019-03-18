@@ -1,16 +1,15 @@
 import * as React from 'react';
 import style from './Fieldset.scss';
-import { createDOMAttributeProps } from '../../utils';
 
 interface Props extends React.HTMLProps<HTMLFieldSetElement> {
     className?: string;
-    legend: string | JSX.Element;
+    legend: string | JSX.Element | null;
 }
 
 const Fieldset: React.SFC<Props> = props => {
-    const fieldsetProps = createDOMAttributeProps(props, 'className', 'children', 'legend');
+    const { className, children, legend, ...restOfProps } = props;
     return (
-        <fieldset className={style.fieldset + ` ${props.className}`} {...fieldsetProps}>
+        <fieldset className={style.fieldset + ` ${props.className}`} {...restOfProps}>
             <legend>{props.legend}</legend>
             {props.children}
         </fieldset>

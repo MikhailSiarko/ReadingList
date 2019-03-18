@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styles from './PrivateBookLI.scss';
 import { PrivateBookListItem, SelectListItem, PrivateItemUpdateData } from '../../models';
-import { applyClasses, createDOMAttributeProps } from '../../utils';
 import globalStyles from '../../styles/global.scss';
 import { EditButton, DeleteButton } from './Buttons';
 import BookInfo from './BookInfo/BookInfo';
@@ -10,6 +9,7 @@ import BookStatus from './BookStatus';
 import Footer from './Footer';
 import BookStatusEditor from './BookStatusEditor';
 import BookInfoInEditMode from './BookInfoInEditMode';
+import * as classNames from 'classnames';
 
 export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
@@ -44,19 +44,21 @@ class PrivateBookLI extends React.PureComponent<BookListItemProps> {
     }
 
     render() {
-        const liProps = createDOMAttributeProps(
-            this.props,
-            'listItem',
-            'onSave',
-            'onCancel',
-            'options',
-            'statuses',
-            'onEdit',
-            'onDelete'
-        );
+        const {
+            listItem,
+            onSave,
+            onCancel,
+            statuses,
+            onEdit,
+            onDelete,
+            ...restOfProps
+        } = this.props;
         if (this.props.listItem.isInEditMode) {
             return (
-                <li className={applyClasses(styles['editing-book-li'], globalStyles['inner-shadowed'])} {...liProps}>
+                <li
+                    className={classNames(styles['editing-book-li'], globalStyles['inner-shadowed'])}
+                    {...restOfProps}
+                >
                     <form onSubmit={this.onSubmitHandler}>
                         <BookInfoInEditMode title={this.props.listItem.title} author={this.props.listItem.author} />
                         <BookStatusEditor status={this.props.listItem.status} options={this.props.statuses} />
@@ -67,7 +69,7 @@ class PrivateBookLI extends React.PureComponent<BookListItemProps> {
         }
 
         return (
-            <li className={applyClasses(styles['book-li'], globalStyles['inner-shadowed'])} {...liProps}>
+            <li className={classNames(styles['book-li'], globalStyles['inner-shadowed'])} {...restOfProps}>
                 <BookInfo
                     title={this.props.listItem.title}
                     author={this.props.listItem.author}

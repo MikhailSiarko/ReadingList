@@ -25,28 +25,12 @@ export class ApiConfiguration {
         return `${ApiConfiguration.SHARED_LISTS}/${listId}/items/${itemId}`;
     }
 
-    public static getFindSharedListsUrl(query: string, chunk: number | null, count: number | null) {
-        return `${ApiConfiguration.SHARED_LISTS}?query=${encodeURIComponent(query)}&chunk=${chunk}&count=${count}`;
-    }
-
-    public static getMySharedListsUrl(chunk: number | null, count: number | null) {
-        return `${ApiConfiguration.SHARED_LISTS_MY}?chunk=${chunk}&count=${count}`;
-    }
-
     public static getAddItemToSharedListUrl(listId: number) {
         return `${ApiConfiguration.SHARED_LISTS}/${listId}/items`;
     }
 
-    public static getBooksSearchUrl(query: string, chunk: number | null) {
-        return `${ApiConfiguration.BOOKS}?query=${encodeURIComponent(query)}&chunk=${chunk}`;
-    }
-
     public static getSharePrivateListUrl(name: string) {
         return `${ApiConfiguration.PRIVATE_LIST}/share/${name}`;
-    }
-
-    public static getShareBookUrl(bookId: number) {
-        return `${ApiConfiguration.BOOKS}/` + bookId;
     }
 }
 

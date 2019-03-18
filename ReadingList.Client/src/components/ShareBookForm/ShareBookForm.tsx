@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Form } from '../Form';
-import { NamedValue, SelectListItem, ListInfo } from '../../models';
+import { SelectListItem, ListInfo } from '../../models';
 import MultiSelect from '../MultiSelect';
 
 interface Props {
@@ -10,7 +10,11 @@ interface Props {
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-class SharedBookForm extends React.Component<Props> {
+interface State {
+    selectedLists?: SelectListItem[];
+}
+
+class ShareBookForm extends React.Component<Props, State> {
     static mapListInfo(info: ListInfo): SelectListItem {
         return {
             text: `${info.name} (${info.ownerLogin}, ${info.type === 1 ? 'private' : 'shared'})`,
@@ -18,11 +22,18 @@ class SharedBookForm extends React.Component<Props> {
         };
     }
 
-    handleFormSubmit = (values: NamedValue[]) => {
-        const bookId = values.filter(v => v.name === 'book-id')[0].value;
-        const ids = (values.filter(v => v.name === 'selected-lists')[0].value as SelectListItem[])
-            .map(i => parseInt(i.value, 10));
-        this.props.onSubmit(parseInt(bookId, 10), ids);
+    constructor(props: Props) {
+        super(props);
+        this.state = { selectedLists: undefined };
+    }
+
+    handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if(this.props.choosenBookId && this.state.selectedLists) {
+            this.props.onSubmit(this.props.choosenBookId, this.state.selectedLists.map(list => {
+                return parseInt(list.value, 10);
+            }));
+        }
     }
 
     handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,6 +54,10 @@ class SharedBookForm extends React.Component<Props> {
         this.props.onCancel(event);
     }
 
+    handleListsChange = (lists: SelectListItem[]) => {
+        this.setState({ selectedLists: lists });
+    }
+
     render() {
         return (
             <Form
@@ -53,7 +68,7 @@ class SharedBookForm extends React.Component<Props> {
                         width: '40rem'
                     }
                 }
-                onSubmit={this.handleFormSubmit}
+                onSubmit={this.handleSubmit}
                 onCancel={this.handleCancel}
             >
                 <input
@@ -63,16 +78,21 @@ class SharedBookForm extends React.Component<Props> {
                     readOnly={true}
                 />
                 <div>
-                    <MultiSelect
-                        name="selected-lists"
-                        options={this.props.options.map(SharedBookForm.mapListInfo)}
-                        required={true}
-                        placeholder="Select lists"
-                     />
+                    {
+                        this.props.options &&
+                        <MultiSelect
+                            name="selected-lists"
+                            options={this.props.options.map(ShareBookForm.mapListInfo)}
+                            required={true}
+                            placeholder="Select lists"
+                            value={this.state.selectedLists}
+                            onChange={this.handleListsChange}
+                        />
+                    }
                 </div>
             </Form>
         );
     }
 }
 
-export default SharedBookForm;
+export default ShareBookForm;

@@ -5,9 +5,10 @@ import selectStyles from './MultiSelect.scss';
 import { isNullOrEmpty } from '../../utils';
 
 interface Props {
-    options: SelectListItem[] | null;
+    options: SelectListItem[];
     value?: SelectListItem[];
     name: string;
+    onChange?: (values: SelectListItem[]) => void;
     placeholder?: string;
     required?: boolean;
     addNewIfNotFound?: boolean;
@@ -28,17 +29,6 @@ class MultiSelect extends React.Component<Props, State> {
     wrapper: HTMLDivElement;
     searchInput: HTMLInputElement;
     select: HTMLSelectElement;
-
-    static getDerivedStateFromProps(props: Props, state: State) {
-        if(props.options) {
-            return {
-                ...state,
-                options: props.options,
-                selectOptions: MultiSelect.renderOptions(props)
-            };
-        }
-        return null;
-    }
 
     static renderOptions = (props: Props, ...optionsToAdd: SelectListItem[]) => {
         if(props.options) {
@@ -111,6 +101,10 @@ class MultiSelect extends React.Component<Props, State> {
                 value: newChosen,
                 options: newOptions
             });
+
+            if(this.props.onChange) {
+                this.props.onChange(newChosen);
+            }
         }
     }
 
@@ -134,6 +128,9 @@ class MultiSelect extends React.Component<Props, State> {
                 value: newChosen,
                 options: [...this.state.options]
             });
+            if(this.props.onChange) {
+                this.props.onChange(newChosen);
+            }
         } else {
             if(this.props.options) {
                 const optionsIndex = this.props.options.findIndex(predicate);
@@ -146,6 +143,9 @@ class MultiSelect extends React.Component<Props, State> {
                     value: newChosen,
                     options: newOptions
                 });
+                if(this.props.onChange) {
+                    this.props.onChange(newChosen);
+                }
             }
         }
     }
@@ -214,24 +214,12 @@ class MultiSelect extends React.Component<Props, State> {
         }
     }
 
-    handleSubmit = () => {
-        this.setState(this.createStateWithDefault());
-    }
-
     componentDidMount() {
         document.addEventListener('click', this.handleWindowClick);
-        const form = this.select.form as HTMLFormElement;
-        if(form) {
-            form.addEventListener('submit', this.handleSubmit);
-        }
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleWindowClick);
-        const form = this.select.form as HTMLFormElement;
-        if(form) {
-            form.removeEventListener('submit', this.handleSubmit);
-        }
     }
 
     handleAddOption = (event: React.MouseEvent<HTMLButtonElement>) => {

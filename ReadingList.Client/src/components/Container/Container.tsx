@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './Container.scss';
-import { applyClasses } from '../../utils';
+import * as classNames from 'classnames';
 
 interface Props {
     width: number;
@@ -15,7 +15,7 @@ const Container: React.SFC<Props> = props => (
                 width: props.width + props.unit
             }
         }
-        className={applyClasses(styles.container, props.className ? props.className : '')}
+        className={classNames(styles.container, props.className)}
     >
         {props.children}
     </div>

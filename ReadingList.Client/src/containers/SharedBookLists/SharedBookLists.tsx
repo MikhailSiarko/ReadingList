@@ -1,25 +1,24 @@
 import * as React from 'react';
-import SimpletSearch from '../../components/SimpleSearch';
+import SimpleSearch from '../../components/SimpleSearch';
 import Grid from '../../components/Grid';
 import { NamedValue, SelectListItem, SharedBookListPreview, Chunked, Tag, SharedListCreateData } from '../../models';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { Form } from '../../components/Form';
 import ListGridItem from '../../components/Grid/ListGridItem';
 import { withContextMenu } from '../../hoc';
-import CreateSharedList from '../../components/CreateSharedList';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
-import { parse } from 'querystring';
+import { parse } from 'query-string';
 import Pagination from '../../components/Pagination';
 import { RootState } from '../../store';
 import { sharedListActions } from '../../store/sharedList';
 import { tagActions } from '../../store';
+import CreateSharedListForm from 'src/components/CreateSharedListForm';
 
 interface Props extends RouteComponentProps<any> {
-    lists: Chunked<SharedBookListPreview> | null;
-    tags: Tag[] | null;
+    lists: Chunked<SharedBookListPreview>;
+    tags: Tag[];
     fetchSharedLists: (query: string, chunk: number | null) => void;
     fetchMySharedLists: (chunk: number | null) => void;
     createList: (data: SharedListCreateData) => void;
@@ -76,16 +75,14 @@ class SharedBookLists extends React.Component<Props, State> {
         this.props.clearTagsState();
     }
 
-    handleListFormSubmit = (values: NamedValue[]) => {
-        const name = values.filter(item => item.name === 'name')[0].value;
-        const tags = values.filter(item => item.name === 'tags')[0].value as SelectListItem[];
+    handleListFormSubmit = (name: string, tags: NamedValue[]) => {
         this.props.createList(
             {
                 name,
                 tags: tags.map(i => {
                     return {
                         id: i.value,
-                        name: i.text
+                        name: i.name
                     };
                 })
             }
@@ -161,7 +158,7 @@ class SharedBookLists extends React.Component<Props, State> {
             const items = (this.props.lists.items as SharedBookListPreview[]).map(this.mapList);
             return (
                 <>
-                    <SimpletSearch
+                    <SimpleSearch
                         query={parse(this.props.location.search).query as string}
                         onChange={this.searchHandler}
                     />
@@ -179,20 +176,12 @@ class SharedBookLists extends React.Component<Props, State> {
                         </RoundButton>
                     </FixedGroup>
                     {
-                        !this.state.isFormHidden &&
-                            <Form
-                                header={'Add new list'}
-                                onSubmit={this.handleListFormSubmit}
+                        !this.state.isFormHidden && this.props.tags &&
+                            <CreateSharedListForm
+                                tags={this.props.tags.map(this.mapTag)}
                                 onCancel={this.handleCancel}
-                            >
-                                <CreateSharedList
-                                    tags={
-                                        this.props.tags
-                                            ? this.props.tags.map(this.mapTag)
-                                            : null
-                                    }
-                                />
-                            </Form>
+                                onSubmit={this.handleListFormSubmit}
+                            />
                     }
                 </>
             );

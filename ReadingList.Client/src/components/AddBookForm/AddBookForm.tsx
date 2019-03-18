@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Form } from '../Form';
-import { NamedValue, Book } from '../../models';
+import { Book } from '../../models';
 import SimpleSearch from '../SimpleSearch';
 import Grid from '../Grid';
 import BookGridItem from '../Grid/BookGridItem';
@@ -19,7 +19,16 @@ interface Props {
     onPrevious: () => void;
 }
 
-class AddBookForm extends React.Component<Props> {
+interface State {
+    bookId: number | null;
+}
+
+class AddBookForm extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = { bookId: null };
+    }
+
     renderBooks = (book: Book) => {
         return (
             <BookGridItem
@@ -28,24 +37,16 @@ class AddBookForm extends React.Component<Props> {
                 header={`${book.title}\n\r${book.author}`}
                 tags={book.tags}
                 genre={book.genre}
-                onClick={this.handleGridItemClick}
+                selected={book.id === this.state.bookId}
+                onItemClick={this.handleGridItemClick}
             />
         );
     }
 
-    handleGridItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        const item = event.currentTarget;
-        const grid = item.parentElement as HTMLElement;
-        const input = document.querySelector('input[name="selected-book"]') as HTMLInputElement;
-        if(item.classList.contains(bookItemStyles['selected-book-grid-item'])) {
-            this.resetBookInput();
-            this.unselectBook(grid);
-        } else {
-            this.unselectBook(grid);
-            item.classList.add(bookItemStyles['selected-book-grid-item']);
-            input.value = item.dataset.bookId as string;
-        }
+    handleGridItemClick = (bookId: number) => {
+        this.setState({
+            bookId
+        });
     }
 
     unselectBook = (grid: HTMLElement) => {
@@ -55,7 +56,7 @@ class AddBookForm extends React.Component<Props> {
         });
     }
 
-    handleSearchChange = async (query: string) => {
+    handleSearchChange = (query: string) => {
         const input = document.querySelector('input[name="selected-book"]') as HTMLInputElement;
         this.resetBookInput(input);
         const grid = (input.parentElement as HTMLElement).lastElementChild as HTMLElement;
@@ -83,15 +84,11 @@ class AddBookForm extends React.Component<Props> {
         this.props.onCancel(event);
     }
 
-    handleFormSubmit = async (values: NamedValue[]) => {
-        const idValue = values.filter(v => v.name === 'selected-book')[0].value;
-        if(idValue) {
-            const id = parseInt(values.filter(v => v.name === 'selected-book')[0].value, 10);
-            await this.props.onSubmit(id);
-        } else {
-            alert('A book isn\'t chosen!');
+    handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if(this.state.bookId) {
+            this.props.onSubmit(this.state.bookId);
         }
-
     }
 
     render() {

@@ -8,48 +8,42 @@ import { Moderator, Tag, SelectListItem } from '../../models';
 interface Props {
     name: string;
     tags: Tag[];
-    tagsOptions: SelectListItem[] | null;
+    tagsOptions: SelectListItem[];
     moderators: Moderator[];
-    moderatorsOptions: SelectListItem[] | null;
+    moderatorsOptions: SelectListItem[];
     onSave: (newName: string, tags: Tag[], moderators: number[]) => void;
     onCancel: () => void;
 }
 
-class SharedListEditForm extends React.Component<Props> {
+interface State {
+    tags: SelectListItem[];
+    moderators: SelectListItem[];
+    name: string;
+}
+
+class SharedListEditForm extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            moderators: props.moderators.map(this.mapModerator),
+            name: props.name,
+            tags: props.tags.map(this.mapTag)
+        };
+    }
+
     submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const target = event.target as HTMLFormElement;
-        const name = target.elements['name'].value;
-        const selectedTags = (target.elements['tags'] as HTMLSelectElement).selectedOptions;
-        const selectedModerators = (target.elements['moderators'] as HTMLSelectElement).selectedOptions;
         this.props.onSave(
-            name,
-            Array.from(selectedTags).map(i => {
-                const option = (JSON.parse(i.value) as SelectListItem);
-                return {
-                    id: option.value,
-                    name: option.text
-                };
+            this.state.name,
+            this.state.tags.map(t => {
+                return { id: parseInt(t.value, 10), name: t.text };
             }),
-            Array.from(selectedModerators).map(i => {
-                const option = (JSON.parse(i.value) as SelectListItem);
-                return option.value;
-            })
+            this.state.moderators.map(m => parseInt(m.value, 10))
         );
     }
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if(event.currentTarget.form) {
-            Array.from(event.currentTarget.form.elements).forEach(i => {
-                if(i.tagName === 'SELECT') {
-                    const select = i as HTMLSelectElement;
-                    Array.from(select.selectedOptions).forEach(o => {
-                        o.selected = false;
-                    });
-                }
-            });
-        }
         this.props.onCancel();
     }
 
@@ -67,6 +61,19 @@ class SharedListEditForm extends React.Component<Props> {
         };
     }
 
+    handleTagsChange = (tags: SelectListItem[]) => {
+        this.setState({ tags });
+    }
+
+    handleModeratorsChange = (moderators: SelectListItem[]) => {
+        this.setState({ moderators });
+    }
+
+    handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        this.setState({ name: event.target.value });
+    }
+
     render() {
         return (
             <form onSubmit={this.submitHandler} className={styles['edit-form']}>
@@ -75,28 +82,41 @@ class SharedListEditForm extends React.Component<Props> {
                         name={'name'}
                         type={'text'}
                         required={true}
-                        defaultValue={this.props.name}
+                        value={this.state.name}
+                        onChange={this.handleNameChange}
                     />
                 </div>
                 <div className={styles['tags-select']}>
-                    <MultipleSelect
-                        name={'tags'}
-                        options={this.props.tagsOptions}
-                        value={this.props.tags.map(this.mapTag)}
-                        selectedFormat={item => `#${item.text}`}
-                        addNewIfNotFound={true}
-                        placeholder={'Select tags'}
-                    />
+                    {
+                        this.props.tagsOptions &&
+                            (
+                                <MultipleSelect
+                                    name={'tags'}
+                                    options={this.props.tagsOptions}
+                                    value={this.props.tags.map(this.mapTag)}
+                                    selectedFormat={item => `#${item.text}`}
+                                    addNewIfNotFound={true}
+                                    placeholder={'Select tags'}
+                                    onChange={this.handleTagsChange}
+                                />
+                            )
+                    }
                 </div>
                 <div className={styles['moderators']}>
-                    <MultipleSelect
-                        name={'moderators'}
-                        options={this.props.moderatorsOptions}
-                        value={this.props.moderators.map(this.mapModerator)}
-                        selectedFormat={item => item.text}
-                        addNewIfNotFound={false}
-                        placeholder={'Select moderators'}
-                    />
+                    {
+                        this.props.moderatorsOptions &&
+                            (
+                                <MultipleSelect
+                                    name={'moderators'}
+                                    options={this.props.moderatorsOptions}
+                                    value={this.props.moderators.map(this.mapModerator)}
+                                    selectedFormat={item => item.text}
+                                    addNewIfNotFound={false}
+                                    placeholder={'Select moderators'}
+                                    onChange={this.handleModeratorsChange}
+                                />
+                            )
+                    }
                 </div>
                 <div>
                     <RoundButton radius={2} type={'submit'}>✓</RoundButton>

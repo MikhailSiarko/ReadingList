@@ -10,17 +10,29 @@ interface Props {
     onCancel: () => void;
 }
 
-class PrivateListEditForm extends React.Component<Props> {
+interface State {
+    name: string;
+}
+
+class PrivateListEditForm extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = { name: props.name };
+    }
+
     submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const target = event.target as HTMLFormElement;
-        const newName = target.elements['list-name'].value;
-        this.props.onSave({ name: newName });
+        this.props.onSave({ name: this.state.name });
     }
 
     cancelHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         this.props.onCancel();
+    }
+
+    handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault();
+        this.setState({ name: event.target.value });
     }
 
     render() {
@@ -31,7 +43,8 @@ class PrivateListEditForm extends React.Component<Props> {
                         name={'list-name'}
                         type={'text'}
                         required={true}
-                        defaultValue={this.props.name}
+                        value={this.props.name}
+                        onChange={this.handleNameChange}
                     />
                 </div>
                 <div>
