@@ -9,9 +9,9 @@ import {
     PrivateItemUpdateData,
     PrivateListUpdateData
 } from '../../models';
-import PrivateBookLI from '../../components/PrivateBookLI';
+import PrivateBookItem from '../../components/PrivateBookItem';
 import { connect, Dispatch } from 'react-redux';
-import { withContextMenu, closeContextMenues } from '../../hoc';
+import { withContextMenu } from '../../hoc';
 import BookList from '../../components/BookList';
 import PrivateListEditor from '../../components/PrivateListEditForm';
 import { RouteComponentProps } from 'react-router';
@@ -71,7 +71,6 @@ class PrivateBookList extends React.Component<Props, State> {
 
     deleteItem(item: PrivateBookListItem, deleteFromProps: (itemId: number) => void) {
         return function () {
-            closeContextMenues();
             const confirmDeleting = confirm(
                 `Do you really want to delete the item "${item.title}" by ${item.author}`);
 
@@ -113,7 +112,7 @@ class PrivateBookList extends React.Component<Props, State> {
             }
         ];
 
-        const Contexed = withContextMenu(actions, PrivateBookLI);
+        const Contexed = withContextMenu(actions, PrivateBookItem);
 
         return (
             <Contexed
@@ -282,7 +281,7 @@ class PrivateBookList extends React.Component<Props, State> {
                             options={this.props.moderatedLists}
                             onSubmit={this.handleShareBook}
                             onCancel={this.handleCancelSharingBook}
-                            choosenBookId={this.state.sharingBookId}
+                            chosenBookId={this.state.sharingBookId}
                         />
                 }
             </>

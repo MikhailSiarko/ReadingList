@@ -23,14 +23,14 @@ import { sharedBookListReducer } from './sharedList';
 import { tagReducer } from './tags';
 
 export type RootState = Readonly<{
-    loading: RootState.Loading;
-    identity: RootState.Identity;
-    router: RouterState;
-    private: RootState.Private;
-    shared: RootState.Shared;
+    loading: RootState.Loading,
+    identity: RootState.Identity,
+    router: RouterState,
+    private: RootState.Private,
+    shared: RootState.Shared,
     notification: RootState.Notification,
-    books: RootState.Books;
-    moderatedLists: RootState.ModeratedLists
+    books: RootState.Books,
+    moderatedLists: RootState.ModeratedLists,
     tags: RootState.Tags
 }>;
 

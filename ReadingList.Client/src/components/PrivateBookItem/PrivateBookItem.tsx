@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styles from './PrivateBookLI.scss';
+import styles from './PrivateBookItem.scss';
 import { PrivateBookListItem, SelectListItem, PrivateItemUpdateData } from '../../models';
 import globalStyles from '../../styles/global.scss';
 import { EditButton, DeleteButton } from './Buttons';
@@ -20,7 +20,7 @@ export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
     statuses: SelectListItem[];
 }
 
-class PrivateBookLI extends React.PureComponent<BookListItemProps> {
+class PrivateBookItem extends React.PureComponent<BookListItemProps> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
@@ -53,15 +53,15 @@ class PrivateBookLI extends React.PureComponent<BookListItemProps> {
             onDelete,
             ...restOfProps
         } = this.props;
-        if (this.props.listItem.isInEditMode) {
+        if (listItem.isInEditMode) {
             return (
                 <li
-                    className={classNames(styles['editing-book-li'], globalStyles['inner-shadowed'])}
+                    className={classNames(styles['editing-book-item'], globalStyles['inner-shadowed'])}
                     {...restOfProps}
                 >
                     <form onSubmit={this.onSubmitHandler}>
-                        <BookInfoInEditMode title={this.props.listItem.title} author={this.props.listItem.author} />
-                        <BookStatusEditor status={this.props.listItem.status} options={this.props.statuses} />
+                        <BookInfoInEditMode title={listItem.title} author={listItem.author} />
+                        <BookStatusEditor status={listItem.status} options={statuses} />
                         <Footer onCancel={this.cancelHandler} />
                     </form>
                 </li>
@@ -69,14 +69,14 @@ class PrivateBookLI extends React.PureComponent<BookListItemProps> {
         }
 
         return (
-            <li className={classNames(styles['book-li'], globalStyles['inner-shadowed'])} {...restOfProps}>
+            <li className={classNames(styles['book-item'], globalStyles['inner-shadowed'])} {...restOfProps}>
                 <BookInfo
-                    title={this.props.listItem.title}
-                    author={this.props.listItem.author}
-                    genre={this.props.listItem.genre}
+                    title={listItem.title}
+                    author={listItem.author}
+                    genre={listItem.genre}
                 />
-                <ReadingTime readingTimeInSeconds={this.props.listItem.readingTimeInSeconds} />
-                <BookStatus status={this.props.listItem.status} statuses={this.props.statuses} />
+                <ReadingTime readingTimeInSeconds={listItem.readingTimeInSeconds} />
+                <BookStatus status={listItem.status} statuses={statuses} />
                 <EditButton onClick={this.handleEditButtonClick} />
                 <DeleteButton onClick={this.handleDeleteButtonClick} />
             </li>
@@ -84,4 +84,4 @@ class PrivateBookLI extends React.PureComponent<BookListItemProps> {
     }
 }
 
-export default PrivateBookLI;
+export default PrivateBookItem;

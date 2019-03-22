@@ -1,7 +1,7 @@
 @import '../../styles/base-sizes';
 @import '../../styles/colors';
 
-.book-li {
+.book-item {
     transition: all 0.2s ease-in-out;
     border-left: $primary solid vh(0.5);
     background-color: white;
@@ -16,7 +16,7 @@
     }
 }
 
-.editing-book-li {
+.editing-book-item {
     text-align: center;
     transition: all 0.1s;
     border-left: $primary solid vh(0.5);

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import BookList from '../../components/BookList';
-import SharedBookLI from '../../components/SharedBookLI';
+import SharedBookItem from '../../components/SharedBookItem';
 import {
     Book,
     User,
@@ -14,16 +14,14 @@ import {
     SharedListUpdateData
 } from '../../models';
 import { connect, Dispatch } from 'react-redux';
-import { withContextMenu, closeContextMenues } from '../../hoc';
+import { withContextMenu } from '../../hoc';
 import SharedListEditForm from '../../components/SharedListEditForm';
 import AddBookForm from '../../components/AddBookForm/AddBookForm';
 import FixedGroup from '../../components/FixedGroup';
 import RoundButton from '../../components/RoundButton';
 import SharedListLegend from '../../components/SharedListLegend';
 import ShareBookForm from '../../components/ShareBookForm';
-import { RootState, bookActions, moderatedListActions } from '../../store';
-import { sharedListActions } from '../../store/sharedList/actions';
-import { tagActions } from 'src/store';
+import { RootState, bookActions, moderatedListActions, sharedListActions, tagActions } from '../../store';
 
 interface Props extends RouteComponentProps<any> {
     list: SharedList;
@@ -121,7 +119,6 @@ class SharedBookList extends React.Component<Props, State> {
     }
 
     deleteItem = (item: SharedBookListItem) => {
-        closeContextMenues();
         const confirmDeleting = confirm(
             `Do you really want to delete the item "${item.title}" by ${item.author}`);
 
@@ -149,7 +146,7 @@ class SharedBookList extends React.Component<Props, State> {
                 },
             );
         }
-        const Contexed = withContextMenu(actions, SharedBookLI);
+        const Contexed = withContextMenu(actions, SharedBookItem);
         return <Contexed key={item.id} item={item} onDelete={() => this.deleteItem(item)} />;
     }
 
@@ -294,7 +291,7 @@ class SharedBookList extends React.Component<Props, State> {
                                 options={this.props.moderatedLists}
                                 onSubmit={this.handleShareBook}
                                 onCancel={this.handleCancelSharingBook}
-                                choosenBookId={this.state.sharingBookId}
+                                chosenBookId={this.state.sharingBookId}
                             />
                     }
                 </>

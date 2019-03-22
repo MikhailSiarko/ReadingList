@@ -7,8 +7,8 @@ interface NavBarProps extends React.HTMLProps<HTMLElement> {
 }
 
 const NavBar: React.SFC<NavBarProps> = props => {
-    const navLinks = props.links.map((value, index) => <NavBarLink link={value} key={'nav-link-' + index} />);
     const { links, ...restOfProps } = props;
+    const navLinks = links.map((value, index) => <NavBarLink link={value} key={'nav-link-' + index} />);
     return (
         <nav className={styles['nav-bar']} {...restOfProps}>
             {navLinks}

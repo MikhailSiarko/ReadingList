@@ -26,9 +26,7 @@ interface State {
 }
 
 class MultiSelect extends React.Component<Props, State> {
-    wrapper: HTMLDivElement;
-    searchInput: HTMLInputElement;
-    select: HTMLSelectElement;
+    private wrapper: HTMLDivElement;
 
     static renderOptions = (props: Props, ...optionsToAdd: SelectListItem[]) => {
         if(props.options) {
@@ -53,6 +51,10 @@ class MultiSelect extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = this.createStateWithDefault();
+    }
+
+    getWrapperRef = (ref: HTMLDivElement) => {
+        this.wrapper = ref;
     }
 
     createStateWithDefault = () => {
@@ -225,7 +227,7 @@ class MultiSelect extends React.Component<Props, State> {
     handleAddOption = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if(this.props.options) {
-            const text = this.searchInput.value;
+            const text = this.state.search;
             const newOption = {
                 text,
                 value: 0
@@ -247,13 +249,12 @@ class MultiSelect extends React.Component<Props, State> {
         return (
             <div className={selectStyles.wrapper}>
                 <div
-                    ref={ref => this.wrapper = (ref as HTMLDivElement)}
+                    ref={this.getWrapperRef}
                     tabIndex={0}
                     onClick={this.handleClick}
                     className={selectStyles.select}
                 >
                     <select
-                        ref={ref => this.select = (ref as HTMLSelectElement)}
                         name={this.props.name}
                         hidden={true}
                         disabled={true}
@@ -290,7 +291,6 @@ class MultiSelect extends React.Component<Props, State> {
                         >
                             <div>
                                 <input
-                                    ref={ref => this.searchInput = (ref as HTMLInputElement)}
                                     type="text"
                                     value={this.state.search}
                                     onChange={this.handleSearchChange}

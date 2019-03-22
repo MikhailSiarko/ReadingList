@@ -4,7 +4,6 @@ import { Book } from '../../models';
 import SimpleSearch from '../SimpleSearch';
 import Grid from '../Grid';
 import BookGridItem from '../Grid/BookGridItem';
-import bookItemStyles from '../Grid/BookGridItem/BookGridItem.scss';
 import Pagination from '../Pagination';
 
 interface Props {
@@ -49,38 +48,19 @@ class AddBookForm extends React.Component<Props, State> {
         });
     }
 
-    unselectBook = (grid: HTMLElement) => {
-        const items = grid.getElementsByClassName(bookItemStyles['selected-book-grid-item']);
-        Array.from(items).forEach(i => {
-            i.classList.remove(bookItemStyles['selected-book-grid-item']);
+    unselectBook = () => {
+        this.setState({
+            bookId: null
         });
     }
 
     handleSearchChange = (query: string) => {
-        const input = document.querySelector('input[name="selected-book"]') as HTMLInputElement;
-        this.resetBookInput(input);
-        const grid = (input.parentElement as HTMLElement).lastElementChild as HTMLElement;
-        this.unselectBook(grid);
+        this.unselectBook();
         this.props.onQueryChange(query);
-    }
-
-    resetBookInput(input: HTMLInputElement | null = null) {
-        if(!input) {
-            input = document.querySelector('input[name="selected-book"]') as HTMLInputElement;
-        }
-        input.value = '';
     }
 
     handleFormCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if(event.currentTarget.form) {
-            Array.from(event.currentTarget.form.elements).forEach(i => {
-                if(i.tagName === 'INPUT') {
-                    const input = i as HTMLInputElement;
-                    input.value = '';
-                }
-            });
-        }
         this.props.onCancel(event);
     }
 
@@ -104,7 +84,6 @@ class AddBookForm extends React.Component<Props, State> {
                 onSubmit={this.handleFormSubmit}
                 onCancel={this.handleFormCancel}
             >
-                <input type="text" name="selected-book" hidden={true} defaultValue="" />
                 <SimpleSearch
                     onChange={this.handleSearchChange}
                     query={this.props.searchQuery}

@@ -13,7 +13,7 @@ const BookInfo: React.SFC<Props> = props => (
         <h5 className={styles['book-title']}>
             <q>{props.title}</q> by {props.author}
         </h5>
-    {props.genre && <p className={styles.genre}>({props.genre})</p>}
+        {props.genre && <p className={styles.genre}>({props.genre})</p>}
     </div>
 );
 

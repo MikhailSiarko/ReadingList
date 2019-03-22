@@ -1,5 +1,6 @@
 import * as React from 'react';
 import style from './Fieldset.scss';
+import classnames from 'classnames';
 
 interface Props extends React.HTMLProps<HTMLFieldSetElement> {
     className?: string;
@@ -9,9 +10,9 @@ interface Props extends React.HTMLProps<HTMLFieldSetElement> {
 const Fieldset: React.SFC<Props> = props => {
     const { className, children, legend, ...restOfProps } = props;
     return (
-        <fieldset className={style.fieldset + ` ${props.className}`} {...restOfProps}>
-            <legend>{props.legend}</legend>
-            {props.children}
+        <fieldset className={classnames(style.fieldset, className)} {...restOfProps}>
+            <legend>{legend}</legend>
+            {children}
         </fieldset>
     );
 };

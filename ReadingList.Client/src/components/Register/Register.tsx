@@ -2,76 +2,77 @@ import * as React from 'react';
 import globalStyles from '../../styles/global.scss';
 import styles from '../AccountForm/AccountForm.scss';
 import RoundButton from '../RoundButton';
+import * as classNames from 'classnames';
 
-const Register = () => {
-    function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const confirmPasswordInput = event.target as HTMLInputElement;
-        const form = confirmPasswordInput.form as HTMLFormElement;
-        const passwordInput = form.elements.namedItem('password') as HTMLInputElement;
-        const validationSpan = document.getElementById('validation-message') as HTMLSpanElement;
-        if (passwordInput && confirmPasswordInput) {
-            const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
-            if (confirmPasswordInput.value === passwordInput.value) {
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.classList.remove(globalStyles.disabled);
-                }
-                confirmPasswordInput.classList.remove(globalStyles['invalid-input']);
-                validationSpan.classList.remove(globalStyles['input-validation-message']);
-            } else {
-                if (submitButton) {
-                    submitButton.disabled = true;
-                    submitButton.classList.add(globalStyles.disabled);
-                }
-                confirmPasswordInput.classList.add(globalStyles['invalid-input']);
-                validationSpan.classList.add(globalStyles['input-validation-message']);
+interface Props {
+    email: string;
+    password: string;
+    confirmPassword: string | undefined;
+    isValid: boolean;
+    onEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onPasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onConfirmPasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Register: React.SFC<Props> = props => (
+    <>
+        <h1 className={styles['account-header']}>Register</h1>
+        <div>
+            <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                required={true}
+                value={props.email}
+                onChange={props.onEmailChange}
+            />
+        </div>
+        <div>
+            <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                required={true}
+                value={props.password}
+                onChange={props.onPasswordChange}
+            />
+        </div>
+        <div>
+            <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                required={true}
+                value={props.confirmPassword}
+                onChange={props.onConfirmPasswordChange}
+                className={classNames({
+                    [globalStyles['invalid-input']]: props.confirmPassword !== undefined &&!props.isValid
+                })}
+            />
+            {
+                props.confirmPassword !== undefined && !props.isValid &&
+                    (
+                        <span
+                            hidden={props.isValid}
+                            className={globalStyles['input-validation-message']}
+                        >
+                            Passwords do not confirm
+                        </span>
+                    )
             }
-        }
-    }
-
-    return (
-        <>
-            <h1 className={styles['account-header']}>Register</h1>
-            <div>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required={true}
-                />
-            </div>
-            <div>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required={true}
-                />
-            </div>
-            <div>
-                <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    required={true}
-                    onChange={handlePasswordChange}
-                />
-                <span hidden={true} id={'validation-message'}>Passwords don't confirm</span>
-            </div>
-            <div className={styles['form-button-wrapper']}>
-                <RoundButton
-                    id={'submit-button'}
-                    disabled={true}
-                    radius={3}
-                    className={globalStyles.disabled}
-                    type={'submit'}
-                    title="Submit"
-                >
-                    <i className="fas fa-check" />
-                </RoundButton>
-            </div>
-        </>
-    );
-};
+        </div>
+        <div className={styles['form-button-wrapper']}>
+            <RoundButton
+                id={'submit-button'}
+                disabled={!props.isValid}
+                radius={3}
+                type={'submit'}
+                title="Submit"
+            >
+                <i className="fas fa-check" />
+            </RoundButton>
+        </div>
+    </>
+);
 
 export default Register;

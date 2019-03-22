@@ -16,19 +16,19 @@ const RoundButton: React.SFC<Props> = props => {
     const className = classNames({
         [globalStyles['inner-shadowed']]: true,
         [style['round-button']]: true,
-        [globalStyles['red']]: props.buttonColor === Colors.Red,
-        [globalStyles['primary']]: props.buttonColor === Colors.Primary
+        [globalStyles['red']]: buttonColor === Colors.Red,
+        [globalStyles['primary']]: buttonColor === Colors.Primary
     });
     return (
-        <div style={props.wrapperStyle} className={props.wrapperClassName}>
+        <div style={wrapperStyle} className={wrapperClassName}>
             <button
                 {...restOfProps}
                 style={{
-                    height: props.radius * 2 + 'vh',
-                    lineHeight: props.radius * 2 + 'vh',
-                    width: props.radius * 2 + 'vh',
-                    fontSize: props.radius + 'vh',
-                    borderRadius: props.radius + 'vh'
+                    height: radius * 2 + 'vh',
+                    lineHeight: radius * 2 + 'vh',
+                    width: radius * 2 + 'vh',
+                    fontSize: radius + 'vh',
+                    borderRadius: radius + 'vh'
                 }}
                 className={className}
             >

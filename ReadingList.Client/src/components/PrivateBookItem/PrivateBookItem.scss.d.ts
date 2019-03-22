@@ -1,5 +1,6 @@
 interface BookItemStyle {
-    ['shared-book-li']: string;
+    ['book-item']: string;
+    ['editing-book-item']: string;
 }
 
 declare const bookItemStyle: BookItemStyle;

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import styles from '../PrivateBookLI/PrivateBookLI.scss';
+import styles from '../PrivateBookItem/PrivateBookItem.scss';
 import { SharedBookListItem } from '../../models';
 import globalStyles from '../../styles/global.scss';
-import BookInfo from '../PrivateBookLI/BookInfo/BookInfo';
-import { DeleteButton } from '../PrivateBookLI/Buttons';
-import sharedStyles from './SharedBookLI.scss';
+import BookInfo from '../PrivateBookItem/BookInfo/BookInfo';
+import { DeleteButton } from '../PrivateBookItem/Buttons';
+import sharedStyles from './SharedBookItem.scss';
 import * as classNames from 'classnames';
 
 export interface SharedBookListItemProps extends React.HTMLProps<HTMLLIElement> {
@@ -20,12 +20,12 @@ class SharedBookLI extends React.Component<SharedBookListItemProps> {
     render() {
         const { item, onDelete, ...restOfProps } = this.props;
         return (
-            <li className={classNames(styles['book-li'], globalStyles['inner-shadowed'])} {...restOfProps}>
+            <li className={classNames(styles['book-item'], globalStyles['inner-shadowed'])} {...restOfProps}>
                 <BookInfo
-                    title={this.props.item.title}
-                    author={this.props.item.author}
-                    className={sharedStyles['shared-book-li']}
-                    genre={this.props.item.genre}
+                    title={item.title}
+                    author={item.author}
+                    className={sharedStyles['shared-book-item']}
+                    genre={item.genre}
                 />
                 <DeleteButton onClick={this.handleDeleteButtonClick} />
             </li>

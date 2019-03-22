@@ -4,7 +4,7 @@ import { SelectListItem, ListInfo } from '../../models';
 import MultiSelect from '../MultiSelect';
 
 interface Props {
-    choosenBookId: number | null;
+    chosenBookId: number | null;
     options: ListInfo[];
     onSubmit: (bookId: number, ids: number[]) => void;
     onCancel: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -29,8 +29,8 @@ class ShareBookForm extends React.Component<Props, State> {
 
     handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if(this.props.choosenBookId && this.state.selectedLists) {
-            this.props.onSubmit(this.props.choosenBookId, this.state.selectedLists.map(list => {
+        if(this.props.chosenBookId && this.state.selectedLists) {
+            this.props.onSubmit(this.props.chosenBookId, this.state.selectedLists.map(list => {
                 return parseInt(list.value, 10);
             }));
         }
@@ -38,19 +38,6 @@ class ShareBookForm extends React.Component<Props, State> {
 
     handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        if(event.currentTarget.form) {
-            Array.from(event.currentTarget.form.elements).forEach(i => {
-                if(i.tagName === 'SELECT') {
-                    const select = i as HTMLSelectElement;
-                    Array.from(select.selectedOptions).forEach(o => {
-                        o.selected = false;
-                    });
-                } else {
-                    const input = i as HTMLSelectElement;
-                    input.value = '';
-                }
-            });
-        }
         this.props.onCancel(event);
     }
 
@@ -74,7 +61,7 @@ class ShareBookForm extends React.Component<Props, State> {
                 <input
                     hidden={true}
                     name="book-id"
-                    value={this.props.choosenBookId ? this.props.choosenBookId.toString() : ''}
+                    value={this.props.chosenBookId ? this.props.chosenBookId.toString() : ''}
                     readOnly={true}
                 />
                 <div>

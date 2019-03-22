@@ -30,12 +30,12 @@ class BookGridItem extends React.Component<BookGridItemProps> {
             <div
                 {...restOfProps}
                 className={className}
-                data-book-id={this.props.bookId}
+                data-book-id={bookId}
                 onClick={this.handleItemClick}
             >
-                <h3>{this.props.header}</h3>
-                <p>{reduceTags(this.props.tags)}</p>
-                <h4>{this.props.genre}</h4>
+                <h3>{header}</h3>
+                <p>{reduceTags(tags)}</p>
+                <h4>{genre}</h4>
             </div>
         );
     }

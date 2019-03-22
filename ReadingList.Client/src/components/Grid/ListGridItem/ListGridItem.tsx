@@ -18,9 +18,9 @@ const ListGridItem: React.SFC<ListGridItemProps> = props => {
             className={classNames(styles['grid-item'], globalStyles['inner-shadowed'])}
             onClick={props.onClick}
         >
-            <h3>{props.header}</h3>
-            <p>{reduceTags(props.tags)}</p>
-            <h4>{props.booksCount} book(s)</h4>
+            <h3>{header}</h3>
+            <p>{reduceTags(tags)}</p>
+            <h4>{booksCount} book(s)</h4>
         </div>
     );
 };

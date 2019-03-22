@@ -9,6 +9,7 @@ export * from './initialState';
 export * from './loading';
 export * from './notification';
 export * from './privateList';
+export * from './sharedList';
 export * from './books';
 export * from './moderatedList';
 export * from './saga';
