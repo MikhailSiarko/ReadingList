@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import BookList from '../../components/BookList';
-import SharedBookItem from '../../components/SharedBookItem';
+import { BookList, SharedBookItem, SharedListEditForm, SharedListLegend, ShareBookForm } from '../../components';
 import {
     Book,
     User,
@@ -15,12 +14,8 @@ import {
 } from '../../models';
 import { connect, Dispatch } from 'react-redux';
 import { withContextMenu } from '../../hoc';
-import SharedListEditForm from '../../components/SharedListEditForm';
 import AddBookForm from '../../components/AddBookForm/AddBookForm';
-import FixedGroup from '../../components/FixedGroup';
-import RoundButton from '../../components/RoundButton';
-import SharedListLegend from '../../components/SharedListLegend';
-import ShareBookForm from '../../components/ShareBookForm';
+import { RoundButton, FixedGroup } from '../../controls';
 import { RootState, bookActions, moderatedListActions, sharedListActions, tagActions } from '../../store';
 
 interface Props extends RouteComponentProps<any> {

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Colors from '../../styles/colors';
 import styles from './SharedListEditForm.scss';
-import RoundButton from '../RoundButton';
-import MultipleSelect from '../MultiSelect';
+import { RoundButton, MultiSelect } from '../../controls';
 import { Moderator, Tag, SelectListItem } from '../../models';
 
 interface Props {
@@ -90,7 +89,7 @@ class SharedListEditForm extends React.Component<Props, State> {
                     {
                         this.props.tagsOptions &&
                             (
-                                <MultipleSelect
+                                <MultiSelect
                                     name={'tags'}
                                     options={this.props.tagsOptions}
                                     value={this.props.tags.map(this.mapTag)}
@@ -106,7 +105,7 @@ class SharedListEditForm extends React.Component<Props, State> {
                     {
                         this.props.moderatorsOptions &&
                             (
-                                <MultipleSelect
+                                <MultiSelect
                                     name={'moderators'}
                                     options={this.props.moderatorsOptions}
                                     value={this.props.moderators.map(this.mapModerator)}

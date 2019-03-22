@@ -1,2 +1,1 @@
-import CreateSharedListForm from './CreateSharedListForm';
-export default CreateSharedListForm;
+export { default as CreateSharedListForm } from './CreateSharedListForm';

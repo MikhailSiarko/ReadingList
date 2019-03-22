@@ -9,19 +9,20 @@ import {
     PrivateItemUpdateData,
     PrivateListUpdateData
 } from '../../models';
-import PrivateBookItem from '../../components/PrivateBookItem';
+import {
+    PrivateBookItem,
+    BookList,
+    PrivateListEditor,
+    AddBookForm,
+    ShareForm,
+    PrivateListLegend,
+    ShareBookForm
+} from '../../components';
 import { connect, Dispatch } from 'react-redux';
 import { withContextMenu } from '../../hoc';
-import BookList from '../../components/BookList';
-import PrivateListEditor from '../../components/PrivateListEditForm';
 import { RouteComponentProps } from 'react-router';
-import AddBookForm from '../../components/AddBookForm';
-import RoundButton from '../../components/RoundButton';
-import FixedGroup from '../../components/FixedGroup';
-import ShareForm from '../../components/ShareForm';
-import PrivateListLegend from '../../components/PrivateListLegend';
-import ShareBookForm from '../../components/ShareBookForm';
 import { privateListActions, RootState, bookActions, moderatedListActions } from '../../store';
+import PrivateListActions from 'src/components/PrivateListActions/PrivateListActions';
 
 interface Props extends RouteComponentProps<any> {
     bookList: PrivateList;
@@ -246,14 +247,7 @@ class PrivateBookList extends React.Component<Props, State> {
         return (
             <>
                 <ContexedList items={listItems} legend={this.renderLegend()} />
-                <FixedGroup>
-                    <RoundButton radius={3} title="Share this list" onClick={this.showShareForm}>
-                        <i className="fas fa-share-alt" />
-                    </RoundButton>
-                    <RoundButton radius={3} title="Add book" onClick={this.showBooksForm}>
-                        <i className="fas fa-book" />
-                    </RoundButton>
-                </FixedGroup>
+                <PrivateListActions onShare={this.showShareForm} onAddBook={this.showBooksForm} />
                 {
                     !this.state.bookFormHidden && this.props.books &&
                         <AddBookForm

@@ -1,2 +1,1 @@
-import ReadingTime from './ReadingTime';
-export default ReadingTime;
+export { default as ReadingTime } from './ReadingTime';

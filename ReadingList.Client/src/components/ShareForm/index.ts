@@ -1,2 +1,1 @@
-import ShareForm from './ShareForm';
-export default ShareForm;
+export { default as ShareForm } from './ShareForm';

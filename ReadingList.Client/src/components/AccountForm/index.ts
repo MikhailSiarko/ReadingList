@@ -1,2 +1,1 @@
-import AccountForm from './AccountForm';
-export default AccountForm;
+export { default as AccountForm } from './AccountForm';

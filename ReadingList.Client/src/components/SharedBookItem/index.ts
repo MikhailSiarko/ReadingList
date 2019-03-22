@@ -1,2 +1,1 @@
-import SharedBookItem from './SharedBookItem';
-export default SharedBookItem;
+export { default as SharedBookItem } from './SharedBookItem';

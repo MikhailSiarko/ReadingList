@@ -1,20 +1,15 @@
 import * as React from 'react';
-import SimpleSearch from '../../components/SimpleSearch';
-import Grid from '../../components/Grid';
+import { SimpleSearch, Grid, FixedGroup, RoundButton, Pagination } from '../../controls';
 import { NamedValue, SelectListItem, SharedBookListPreview, Chunked, Tag, SharedListCreateData } from '../../models';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import ListGridItem from '../../components/Grid/ListGridItem';
+import { ListGridItem, CreateSharedListForm } from '../../components';
 import { withContextMenu } from '../../hoc';
-import FixedGroup from '../../components/FixedGroup';
-import RoundButton from '../../components/RoundButton';
 import { parse } from 'query-string';
-import Pagination from '../../components/Pagination';
 import { RootState } from '../../store';
 import { sharedListActions } from '../../store/sharedList';
 import { tagActions } from '../../store';
-import CreateSharedListForm from 'src/components/CreateSharedListForm';
 
 interface Props extends RouteComponentProps<any> {
     lists: Chunked<SharedBookListPreview>;

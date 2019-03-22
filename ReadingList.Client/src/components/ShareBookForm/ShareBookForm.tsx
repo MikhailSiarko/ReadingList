@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Form } from '../Form';
+import { Form, MultiSelect } from '../../controls';
 import { SelectListItem, ListInfo } from '../../models';
-import MultiSelect from '../MultiSelect';
 
 interface Props {
     chosenBookId: number | null;

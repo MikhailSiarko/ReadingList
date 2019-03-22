@@ -1,5 +1,5 @@
 import * as React from 'react';
-import RoundButton from '../../RoundButton';
+import { RoundButton } from '../../../controls';
 import Colors from '../../../styles/colors';
 import styles from './Footer.scss';
 

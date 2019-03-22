@@ -1,2 +1,1 @@
-import SharedListEditForm from './SharedListEditForm';
-export default SharedListEditForm;
+export { default as SharedListEditForm } from './SharedListEditForm';

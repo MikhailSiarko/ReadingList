@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { Form } from '../Form';
+import { Form, SimpleSearch, Pagination, Grid } from '../../controls';
 import { Book } from '../../models';
-import SimpleSearch from '../SimpleSearch';
-import Grid from '../Grid';
-import BookGridItem from '../Grid/BookGridItem';
-import Pagination from '../Pagination';
+import { BookGridItem } from '../BookGridItem';
 
 interface Props {
     onSubmit: (id: number) => void;

@@ -3,24 +3,24 @@ import styles from './PrivateBookItem.scss';
 import { PrivateBookListItem, SelectListItem, PrivateItemUpdateData } from '../../models';
 import globalStyles from '../../styles/global.scss';
 import { EditButton, DeleteButton } from './Buttons';
-import BookInfo from './BookInfo/BookInfo';
-import ReadingTime from './ReadingTime';
-import BookStatus from './BookStatus';
-import Footer from './Footer';
-import BookStatusEditor from './BookStatusEditor';
-import BookInfoInEditMode from './BookInfoInEditMode';
+import { BookInfo } from './BookInfo';
+import { ReadingTime } from './ReadingTime';
+import { BookStatus } from './BookStatus';
+import { Footer } from './Footer';
+import { BookStatusEditor } from './BookStatusEditor';
+import { BookInfoInEditMode } from './BookInfoInEditMode';
 import * as classNames from 'classnames';
 
-export interface BookListItemProps extends React.HTMLProps<HTMLLIElement> {
+interface Props extends React.HTMLProps<HTMLLIElement> {
     listItem: PrivateBookListItem;
     onSave: (itemId: number, data: PrivateItemUpdateData) => void;
     onCancel: (itemId: number) => void;
     onEdit: (itemId: number) => void;
     onDelete: (item: PrivateBookListItem) => void;
-    statuses: SelectListItem[];
+    statuses: SelectListItem[] | null;
 }
 
-class PrivateBookItem extends React.PureComponent<BookListItemProps> {
+class PrivateBookItem extends React.PureComponent<Props> {
     onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const target = event.target as HTMLFormElement;
@@ -53,7 +53,7 @@ class PrivateBookItem extends React.PureComponent<BookListItemProps> {
             onDelete,
             ...restOfProps
         } = this.props;
-        if (listItem.isInEditMode) {
+        if (listItem.isInEditMode && statuses) {
             return (
                 <li
                     className={classNames(styles['editing-book-item'], globalStyles['inner-shadowed'])}
@@ -76,7 +76,7 @@ class PrivateBookItem extends React.PureComponent<BookListItemProps> {
                     genre={listItem.genre}
                 />
                 <ReadingTime readingTimeInSeconds={listItem.readingTimeInSeconds} />
-                <BookStatus status={listItem.status} statuses={statuses} />
+                {statuses && (<BookStatus status={statuses.filter(item => item.value === listItem.status)[0].text} />)}
                 <EditButton onClick={this.handleEditButtonClick} />
                 <DeleteButton onClick={this.handleDeleteButtonClick} />
             </li>

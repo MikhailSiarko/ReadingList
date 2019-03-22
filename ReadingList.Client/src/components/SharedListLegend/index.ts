@@ -1,2 +1,1 @@
-import SharedListLegend from './SharedListLegend';
-export default SharedListLegend;
+export { default as SharedListLegend } from './SharedListLegend';

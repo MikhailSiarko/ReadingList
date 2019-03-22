@@ -1,8 +1,6 @@
 import * as React from 'react';
-import Container from '../Container';
-import MultiSelect from '../MultiSelect';
+import { Container, MultiSelect, Form } from '../../controls';
 import { SelectListItem, NamedValue } from '../../models';
-import { Form } from '../Form';
 
 interface Props {
     tags: SelectListItem[];

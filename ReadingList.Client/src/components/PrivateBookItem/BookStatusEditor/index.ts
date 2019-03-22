@@ -1,2 +1,1 @@
-import BookStatusEditor from './BookStatusEditor';
-export default BookStatusEditor;
+export { default as BookStatusEditor } from './BookStatusEditor';

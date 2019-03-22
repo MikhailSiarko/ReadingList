@@ -1,2 +1,1 @@
-import PrivateListEditor from './PrivateListEditForm';
-export default PrivateListEditor;
+export { default as PrivateListEditor } from './PrivateListEditForm';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import globalStyles from '../../styles/global.scss';
 import styles from '../AccountForm/AccountForm.scss';
-import RoundButton from '../RoundButton';
+import { RoundButton } from '../../controls';
 import * as classNames from 'classnames';
 
 interface Props {

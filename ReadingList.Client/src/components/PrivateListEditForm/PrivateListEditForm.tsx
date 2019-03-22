@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Colors from '../../styles/colors';
-import RoundButton from '../RoundButton';
+import { RoundButton } from '../../controls';
 import style from './PrivateListEditor.scss';
 import { PrivateListUpdateData } from 'src/models';
 

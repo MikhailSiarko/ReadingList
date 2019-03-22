@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from '../AccountForm/AccountForm.scss';
-import RoundButton from '../RoundButton';
+import { RoundButton } from '../../controls';
 
 interface Props {
     email: string;

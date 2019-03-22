@@ -1,2 +1,1 @@
-import BookInfoInEditMode from './BookInfoInEditMode';
-export default BookInfoInEditMode;
+export { default as BookInfoInEditMode } from './BookInfoInEditMode';

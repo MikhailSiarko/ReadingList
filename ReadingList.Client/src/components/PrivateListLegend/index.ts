@@ -1,2 +1,1 @@
-import PrivateListLegend from './PrivateListLegend';
-export default PrivateListLegend;
+export { default as PrivateListLegend} from './PrivateListLegend';

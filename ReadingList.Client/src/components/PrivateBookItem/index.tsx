@@ -1,2 +1,1 @@
-import PrivateBookItem from './PrivateBookItem';
-export default PrivateBookItem;
+export { default as PrivateBookItem } from './PrivateBookItem';

@@ -3,12 +3,10 @@ import { Route, RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { Credentials } from '../../models';
-import AccountForm from '../../components/AccountForm';
+import { AccountForm, Login, Register } from '../../components';
 import { isNullOrEmpty } from '../../utils';
 import { authenticationActions, RootState } from '../../store';
 import { accountRoutes } from '../../routes';
-import Login from '../../components/Login';
-import Register from 'src/components/Register';
 
 interface Props extends RouteComponentProps<React.HTMLProps<Props>> {
     loading: boolean;

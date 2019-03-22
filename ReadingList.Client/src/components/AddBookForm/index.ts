@@ -1,2 +1,1 @@
-import AddBookFrom from './AddBookForm';
-export default AddBookFrom;
+export { default as AddBookForm } from './AddBookForm';

@@ -5,7 +5,7 @@ interface Props {
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
- export const EditButton: React.SFC<Props> = props => {
+export const EditButton: React.SFC<Props> = props => {
     return (
         <div className={styles['wrapper']}>
             <button className={styles['button']} onClick={props.onClick} title="Edit">

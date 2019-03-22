@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Form } from '../Form';
+import { Form } from '../../controls';
 
 interface Props {
     onSubmit: (name: string) => void;

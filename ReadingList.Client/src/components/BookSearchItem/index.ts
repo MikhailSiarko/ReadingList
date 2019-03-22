@@ -1,2 +1,1 @@
-import BookSearchItem from './BookSearchItem';
-export default BookSearchItem;
+export { default as BookSearchItem } from './BookSearchItem';

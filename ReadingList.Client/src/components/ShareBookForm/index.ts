@@ -1,2 +1,1 @@
-import ShareBookForm from './ShareBookForm';
-export default ShareBookForm;
+export { default as ShareBookForm } from './ShareBookForm';

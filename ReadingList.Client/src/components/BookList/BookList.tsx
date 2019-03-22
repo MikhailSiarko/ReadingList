@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Fieldset from '../Fieldset';
+import { Fieldset } from '../../controls';
 import styles from './BookList.scss';
 
-export interface Props extends React.HTMLProps<HTMLFieldSetElement> {
+interface Props extends React.HTMLProps<HTMLFieldSetElement> {
     items: JSX.Element[] | undefined;
     legend: string | JSX.Element | null;
 }
