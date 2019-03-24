@@ -13,7 +13,7 @@ class Pagination extends React.Component<Props> {
     render() {
         return (
             <div className={styles.pagination}>
-                <div>
+                <div className={styles['pagination-container']}>
                     <RoundButton
                         radius={3}
                         title="Previous"

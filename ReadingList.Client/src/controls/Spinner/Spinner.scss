@@ -8,24 +8,24 @@
     top: 0;
     bottom: 0;
     background-color: rgba(255, 255, 255, 0.7);
-    z-index: 99999
-}
+    z-index: 99999;
 
-.spinner {
-    color: $primary;
-    margin: vh(49) auto 0 auto;
-    font-size: vh(2);
-    width: vh(2);
-    height: vh(2);
-    border-radius: 50%;
-    position: relative;
-    text-indent: -9999em;
-    -webkit-animation: load4 1.3s infinite linear;
-    animation: load4 1.3s infinite linear;
-    -webkit-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    transform: translateZ(0);
-  }
+    & > .spinner {
+        color: $primary;
+        margin: vh(49) auto 0 auto;
+        font-size: vh(2);
+        width: vh(2);
+        height: vh(2);
+        border-radius: 50%;
+        position: relative;
+        text-indent: -9999em;
+        -webkit-animation: load4 1.3s infinite linear;
+        animation: load4 1.3s infinite linear;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
 
   @-webkit-keyframes load4 {
     0%,

@@ -23,7 +23,7 @@ const NotificationMessage: React.SFC<Props> = props => {
     });
     return (
         <div className={className}>
-            <h3>{notificationMessageHeaders[props.type]}</h3>
+            <h3 className={styles['header']}>{notificationMessageHeaders[props.type]}</h3>
             <p>{props.content}</p>
         </div>
     );

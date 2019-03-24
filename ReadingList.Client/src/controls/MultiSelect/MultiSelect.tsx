@@ -289,21 +289,23 @@ export class MultiSelect extends React.Component<Props, State> {
                             className={selectStyles.options}
                             hidden={this.state.optionsHidden}
                         >
-                            <div>
+                            <div className={selectStyles['options-container']}>
                                 <input
                                     type="text"
+                                    className={selectStyles['search']}
                                     value={this.state.search}
                                     onChange={this.handleSearchChange}
                                     placeholder={'Type to search'}
                                 />
                                 <button
                                     type="button"
+                                    className={selectStyles['add-button']}
                                     title="Add as chosen option"
                                     hidden={this.state.addHidden}
                                     onClick={this.handleAddOption}
                                 >✓</button>
                             </div>
-                            <ul>
+                            <ul className={selectStyles['select-list']}>
                                 {
                                     this.state.options.map((item, index) => (
                                         <li

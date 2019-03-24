@@ -9,7 +9,11 @@ interface Props {
 const BookInfoInEditMode: React.SFC<Props> = props => (
     <div className={styles['editable-book-info']}>
         <div className={styles['editing-book-title']}>
-            <div>{props.title} <span>by</span> {props.author}</div>
+            <div
+                className={styles['title-line']}
+            >
+                {props.title} <span className={styles['by']}>by</span> {props.author}
+            </div>
         </div>
     </div>
 );

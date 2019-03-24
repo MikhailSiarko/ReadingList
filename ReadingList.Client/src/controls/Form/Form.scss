@@ -20,68 +20,63 @@
         vertical-align: middle;
         content: '';
     }
-}
 
-.lookup {
-    position: relative;
-    display: inline-block;
-    white-space: normal;
-    vertical-align: middle;
-    background-color: white;
-    width: 30%;
-    height: 80%;
-    text-align: center;
-    border-radius: vh(1);
-    padding: vh(2);
-}
-
-.header {
-    position: absolute;
-    left: vh(2);
-    right: vh(2);
-    top: vh(1);
-
-    & h2 {
-        color: black;
-        font-size: vh(3);
-        text-transform: uppercase;
-        font-weight: 100;
-        margin: 0;
-        box-sizing: border-box;
-        padding: vh(1) 0;
-    }
-
-    & hr {
+    & .line {
         height: vh(0.1);
         background-color: black;
     }
-}
 
-.buttons-wrapper {
-    position: absolute;
-    bottom: vh(0);
-    right: vh(2);
-    left: vh(2);
-
-    & > div {
+    & > .lookup {
+        position: relative;
         display: inline-block;
-        margin: vh(1);
-    }
+        white-space: normal;
+        vertical-align: middle;
+        background-color: white;
+        width: 30%;
+        height: 80%;
+        text-align: center;
+        border-radius: vh(1);
+        padding: vh(2);
 
-    & hr {
-        height: vh(0.1);
-        background-color: black;
-    }
-}
+        & > .lookup-content {
+            position: absolute;
+            top: vh(7);
+            left: vh(5);
+            bottom: vh(9);
+            right: vh(5);
 
-.lookup-content {
-    position: absolute;
-    top: vh(7);
-    left: vh(5);
-    bottom: vh(9);
-    right: vh(5);
+            & > .lookup-container {
+                margin: 0 auto;
+            }
+        }
 
-    & > div {
-        margin: 0 auto;
+        & > .header {
+            position: absolute;
+            left: vh(2);
+            right: vh(2);
+            top: vh(1);
+
+            & > .header-content {
+                color: black;
+                font-size: vh(3);
+                text-transform: uppercase;
+                font-weight: 100;
+                margin: 0;
+                box-sizing: border-box;
+                padding: vh(1) 0;
+            }
+        }
+
+        & > .buttons {
+            position: absolute;
+            bottom: vh(0);
+            right: vh(2);
+            left: vh(2);
+
+            & > .button {
+                display: inline-block;
+                margin: vh(1);
+            }
+        }
     }
 }

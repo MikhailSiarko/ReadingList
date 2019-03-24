@@ -20,7 +20,7 @@ export class Selected extends React.PureComponent<Props> {
         return (
             <div className={styles.selected}>
                 <span>{this.props.format ? this.props.format(this.props.item) : this.props.item.text}</span>
-                <button type="button" onClick={this.handleClick}>×</button>
+                <button className={styles['remove-button']} type="button" onClick={this.handleClick}>×</button>
             </div>
         );
     }

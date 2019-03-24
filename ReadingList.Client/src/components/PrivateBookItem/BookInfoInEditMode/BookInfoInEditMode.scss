@@ -5,11 +5,11 @@
     min-width: vh(40);
     margin: vh(0.5);
 
-    & > div {
+    & > .title-line {
         font-size: vh(4);
         font-weight: bold;
 
-        & > span {
+        & > .by {
             font-size: vh(2);
         }
     }

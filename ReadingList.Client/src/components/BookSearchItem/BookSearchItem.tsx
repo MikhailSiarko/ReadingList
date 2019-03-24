@@ -10,7 +10,7 @@ interface Props {
 const BookSearchItem: React.SFC<Props> = props => (
     <div className={styles['book-search-item']}>
         <p>{props.book.title} by {props.book.author}</p>
-        <p>{reduceTags(props.book.tags)}</p>
+        <p className={styles['tags']}>{reduceTags(props.book.tags)}</p>
     </div>
 );
 

@@ -1,6 +1,7 @@
 interface AccountStyle {
     ['account-form']: string;
     ['account-header']: string;
+    ['wrapper']: string;
     ['form-button-wrapper']: string;
 }
 

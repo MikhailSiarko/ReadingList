@@ -5,13 +5,8 @@
     padding: vh(0.4);
     width: 13%;
 
-    & p {
+    & .status-content {
         margin: 0;
         display: inline-block;
-    }
-
-    & > select {
-        border: none;
-        text-align: left;
     }
 }

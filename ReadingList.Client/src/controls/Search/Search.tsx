@@ -87,7 +87,7 @@ class Search extends React.Component<Props, State> {
 
     mapItem = (item: any, index: number) => {
         return (
-            <li key={index} data-item-index={index} onClick={this.handleItemClick}>
+            <li className={styles['search-item']} key={index} data-item-index={index} onClick={this.handleItemClick}>
                 {
                     this.props.itemRender(item)
                 }
@@ -101,6 +101,7 @@ class Search extends React.Component<Props, State> {
                 <form onSubmit={this.handleSubmit} autoComplete="off">
                     <input
                         autoFocus={true}
+                        className={styles['search-input']}
                         ref={ref => this.input = (ref as HTMLInputElement)}
                         onFocus={this.handleFocus}
                         type="search"
@@ -113,7 +114,7 @@ class Search extends React.Component<Props, State> {
                 {
                     this.state.searchItems.length > 0
                         ? (
-                            <ul>
+                            <ul className={styles['search-list']}>
                                 {
                                     this.state.searchItems.map(this.mapItem)
                                 }

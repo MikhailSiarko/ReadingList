@@ -1,13 +1,13 @@
 @import '../../../styles/base-sizes';
 
 .edited-status {
-    & p {
+    & > .label {
         margin: 0;
         display: inline-block;
         font-size: vh(1.8);
     }
 
-    & > select {
+    & > .select {
         font-size: vh(1.6);
         width: 30%;
     }

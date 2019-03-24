@@ -17,7 +17,7 @@ interface Props {
 const Register: React.SFC<Props> = props => (
     <>
         <h1 className={styles['account-header']}>Register</h1>
-        <div>
+        <div className={styles['wrapper']}>
             <input
                 type="email"
                 name="email"
@@ -27,7 +27,7 @@ const Register: React.SFC<Props> = props => (
                 onChange={props.onEmailChange}
             />
         </div>
-        <div>
+        <div className={styles['wrapper']}>
             <input
                 type="password"
                 name="password"
@@ -37,7 +37,7 @@ const Register: React.SFC<Props> = props => (
                 onChange={props.onPasswordChange}
             />
         </div>
-        <div>
+        <div className={styles['wrapper']}>
             <input
                 type="password"
                 name="confirmPassword"

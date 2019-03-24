@@ -3,27 +3,27 @@
     height: 100%;
     margin: 0 auto;
 
-    & > div {
+    & > .pagination-container {
         margin: 0 auto;
         display: block;
         height: 100%;
 
-        & > div {
+        & > :nth-child(n) {
             display: inline-block;
             height: 100%;
+        }
 
-            &:nth-child(2n + 1) {
-                width: 5%;
-            }
+        & > :nth-child(2n + 1) {
+            width: 5%;
+        }
 
-            &:nth-child(2n) {
-                width: 90%;
-                margin: 0 auto;
-            }
+        & > :nth-child(2n) {
+            width: 90%;
+            margin: 0 auto;
+        }
 
-            &:last-child {
-                text-align: right;
-            }
+        & > :last-child {
+            text-align: right;
         }
     }
 }

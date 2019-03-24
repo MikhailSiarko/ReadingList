@@ -8,11 +8,13 @@ interface Props {
 
 const ReadingTime: React.SFC<Props> = props => (
     <div className={styles['reading-time']}>
-        <p>
+        <p className={styles['time-content']}>
             Reading time:
         </p>
         <br />
-        <p>{convertSecondsToReadingTime(props.readingTimeInSeconds)}</p>
+        <p className={styles['time-content']}>
+            {convertSecondsToReadingTime(props.readingTimeInSeconds)}
+        </p>
     </div>
 );
 

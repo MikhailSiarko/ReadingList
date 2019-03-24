@@ -9,8 +9,8 @@ interface Props {
 
 const BookStatusEditor: React.SFC<Props> = props => (
     <div className={styles['edited-status']}>
-        <p>Status:</p>
-        <select name="status" defaultValue={props.status.toString()}>
+        <p className={styles['label']}>Status:</p>
+        <select className={styles['select']} name="status" defaultValue={props.status.toString()}>
             {
                 props.options
                     ? props.options.map(item =>

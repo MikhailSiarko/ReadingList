@@ -9,7 +9,7 @@
     margin: vh(1) vh(1);
     padding: 0 vh(1);
 
-    & > div {
+    & > :nth-child(n) {
         display: inline-block;
         box-sizing: border-box;
         vertical-align: middle;
@@ -24,7 +24,7 @@
     margin: vh(0.8);
     padding: 0 vh(1);
 
-    & > div {
+    & > :nth-child(n) {
         display: block;
         box-sizing: border-box;
     }

@@ -6,12 +6,12 @@
     margin: 0 auto;
     text-align: center;
 
-    & input[type="search"] {
+    & .search-input[type="search"] {
         margin: vh(0.5) auto;
         width: 100%;
     }
 
-    & ul {
+    & .search-list {
         @extend %gray-shadow;
         width: 20%;
         font-size: vh(2.2);
@@ -22,7 +22,7 @@
         left: 40%;
         background-color: white;
 
-        & li {
+        & .search-item {
             cursor: pointer;
             padding: vh(1) 0;
 

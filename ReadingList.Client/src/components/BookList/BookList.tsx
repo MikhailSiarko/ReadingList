@@ -12,7 +12,11 @@ const BookList: React.SFC<Props> = props => {
     return (
         <Fieldset className={styles['list-fieldset']} legend={legend} {...restOfProps}>
             <ul className={styles['book-list']}>
-                {items && items.length > 0 ? props.items : <h3>Here are no books yet</h3>}
+                {
+                    items && items.length > 0
+                        ? props.items
+                        : <h3 className={styles['title']}>Here are no books yet</h3>
+                }
             </ul>
         </Fieldset>
     );

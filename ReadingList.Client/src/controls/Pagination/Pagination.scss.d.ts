@@ -1,5 +1,6 @@
 interface PaginationStyle {
     ['pagination']: string;
+    ['pagination-container']: string;
     ['buttons']: string;
 }
 

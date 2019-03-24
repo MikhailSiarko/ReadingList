@@ -8,9 +8,9 @@ interface Props {
 const BookStatus: React.SFC<Props> = ({status}) => {
     return (
         <div className={styles['book-status']}>
-            <p>Status:</p>
+            <p className={styles['status-content']}>Status:</p>
             <br />
-            <p>{status}</p>
+            <p className={styles['status-content']}>{status}</p>
         </div>
     );
 };

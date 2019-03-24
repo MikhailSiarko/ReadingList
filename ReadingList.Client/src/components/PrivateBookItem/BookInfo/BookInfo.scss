@@ -13,7 +13,7 @@
     width: 54%;
     vertical-align: middle;
 
-    & > * {
+    & > :nth-child(n) {
         display: inline-block;
     }
 }

@@ -14,7 +14,7 @@ class Login extends React.Component<Props> {
         return (
             <>
                 <h1 className={styles['account-header']}>Login</h1>
-                <div>
+                <div className={styles['wrapper']}>
                     <input
                         type="email"
                         name="email"
@@ -24,7 +24,7 @@ class Login extends React.Component<Props> {
                         onChange={this.props.onEmailChange}
                     />
                 </div>
-                <div>
+                <div className={styles['wrapper']}>
                     <input
                         type="password"
                         name="password"

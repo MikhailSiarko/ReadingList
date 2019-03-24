@@ -1,5 +1,6 @@
 export interface Style {
     ['notification']: string;
+    ['header']: string;
     ['notification-active']: string;
     ['error']: string;
     ['info']: string;

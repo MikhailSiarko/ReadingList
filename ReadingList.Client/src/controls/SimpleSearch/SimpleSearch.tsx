@@ -29,6 +29,7 @@ class SimpleSearch extends React.Component<Props> {
             <div className={styles['search-wrapper']}>
                 <input
                     autoFocus={true}
+                    className={styles['search-input']}
                     type="search"
                     placeholder="Search..."
                     name="searchInput"

@@ -1,23 +1,23 @@
 @import '../../styles/base-sizes';
 
 .edit-form {
-    & > div {
+    & > :nth-child(n) {
         display: inline-block;
         margin: 0 vh(1);
         line-height: vh(5);
     }
-}
 
-.name-editor {
-    position: relative;
-    top: vh(0.4);
-    width: vh(25);
-}
+    & > .name-editor {
+        position: relative;
+        top: vh(0.4);
+        width: vh(25);
+    }
 
-.tags-select {
-    width: vh(25);
-}
+    & > .tags-select {
+        width: vh(25);
+    }
 
-.moderators {
-    width: vh(25);
+    & > .moderators {
+        width: vh(25);
+    }
 }

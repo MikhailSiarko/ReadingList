@@ -2,29 +2,6 @@
 @import '../../styles/shadows';
 @import '../../styles/base-sizes';
 
-.select {
-    @extend %gray-shadow;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    color: $gray;
-    background-color: white;
-    display: block;
-    font-size: vh(2.6);
-    font-weight: 300;
-    border-radius: vh(0.5);
-    padding: vh(0.78);
-    cursor: pointer;
-    line-height: vh(2.6);
-    box-sizing: border-box;
-    z-index: 99;
-
-    & > div:last-child {
-        position: relative;
-    }
-}
-
 .wrapper {
     position: relative;
     height: vh(2.6);
@@ -32,61 +9,76 @@
     top: 0;
     left: 0;
     right: 0;
-}
 
-.selected-list {
-    font-size: vh(2.6);
-}
-
-.options {
-    @extend %gray-shadow;
-    background-color: white;
-    margin-top: vh(1);
-
-    & > div {
-        position: relative;
+    & > .select {
+        @extend %gray-shadow;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        color: $gray;
+        background-color: white;
+        display: block;
+        font-size: vh(2.6);
+        font-weight: 300;
+        border-radius: vh(0.5);
+        padding: vh(0.78);
+        cursor: pointer;
+        line-height: vh(2.6);
         box-sizing: border-box;
+        z-index: 99;
+    }
 
-        & > input {
-            font-size: vh(1.6);
-            margin: 0;
-            padding: vh(0.5) 0;
-            border-bottom: vh(0.1) #dcdcdc solid;
-        }
+    & .options {
+        @extend %gray-shadow;
+        position: relative;
+        background-color: white;
+        margin-top: vh(1);
 
-        & > button {
-            position: absolute;
-            background-color: transparent;
-            cursor: pointer;
-            border: none;
-            font-size: vh(1.6);
-            top: 0;
-            right: vh(2);
-            padding: vh(0.5) 0;
-            z-index: 99;
+        & > .options-container {
+            box-sizing: border-box;
 
-            &:hover {
-                color: $primary;
+            & > .search {
+                font-size: vh(1.6);
+                margin: 0;
+                padding: vh(0.5) 0;
+                border-bottom: vh(0.1) #dcdcdc solid;
+            }
+
+            & > .add-button {
+                position: absolute;
+                background-color: transparent;
+                cursor: pointer;
+                border: none;
+                font-size: vh(1.6);
+                top: 0;
+                right: vh(2);
+                padding: vh(0.5) 0;
+                z-index: 99;
+
+                &:hover {
+                    color: $primary;
+                }
             }
         }
-    }
 
-    & > ul {
-        position: relative;
-        max-height: vh(25);
-        overflow: auto;
-        padding: 0 vh(2);
-        margin: auto;
-        list-style: none;
-        font-size: vh(1.6);
-    }
-}
+        & > .select-list {
+            position: relative;
+            max-height: vh(25);
+            overflow: auto;
+            padding: 0 vh(2);
+            margin: auto;
+            list-style: none;
+            font-size: vh(1.6);
 
-.select-item {
-    cursor: pointer;
-    padding: 0 0;
+            & > .select-item {
+                cursor: pointer;
+                padding: 0 0;
 
-    &:not(:last-child) {
-        border-bottom: vh(0.1) solid #dcdcdc;
+                &:not(:last-child) {
+                    border-bottom: vh(0.1) solid #dcdcdc;
+                }
+            }
+        }
     }
 }

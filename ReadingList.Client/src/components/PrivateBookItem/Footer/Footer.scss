@@ -1,7 +1,7 @@
 @import '../../../styles/base-sizes';
 
 .edited-footer {
-    & > div {
+    & > :nth-child(n) {
         display: inline-block;
         margin: vh(0.8) vh(2);
     }

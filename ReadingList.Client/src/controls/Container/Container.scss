@@ -1,5 +1,8 @@
 @import '../../styles/base-sizes';
 
-.container > div {
-    margin: vh(4) 0;
+.container {
+    width: 90%;
+    & > :nth-child(n) {
+        margin: vh(4) auto;
+    }
 }

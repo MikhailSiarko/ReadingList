@@ -12,20 +12,20 @@
     margin-top: vh(-35);
     text-align: center;
 
-    & > div {
+    & > .wrapper {
         width: vh(45);
         margin: 0 auto vh(4);
     }
-}
 
-.account-header {
-    font-size: vh(8);
-    margin-bottom: vh(4);
-    font-family: 'Monoton', cursive;
-    text-shadow: 0 vh(0.2) vh(0.2) $gray;
-    color: $primary;
-}
+    & > .form-button-wrapper {
+        margin: vh(2);
+    }
 
-.form-button-wrapper {
-    margin: vh(2);
+    & > .account-header {
+        font-size: vh(8);
+        margin-bottom: vh(4);
+        font-family: 'Monoton', cursive;
+        text-shadow: 0 vh(0.2) vh(0.2) $gray;
+        color: $primary;
+    }
 }

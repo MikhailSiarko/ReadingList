@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, MultiSelect, Form } from '../../controls';
+import { MultiSelect, Form } from '../../controls';
 import { SelectListItem, NamedValue } from '../../models';
 
 interface Props {
@@ -45,31 +45,28 @@ class CreateSharedListForm extends React.Component<Props, State> {
                 onSubmit={this.handleSubmit}
                 onCancel={this.props.onCancel}
             >
-                <Container width={80} unit={'%'}>
-                    <div>
-                        <input
-                            type="text"
-                            name="name"
-                            required={true}
-                            placeholder="Enter the name"
-                            value={this.state.name}
-                            onChange={this.handleNameChange}
-                        />
-                    </div>
-                    <div>
-                        <MultiSelect
-                            name="tags"
-                            placeholder={'Select tags'}
-                            options={this.props.tags}
-                            selectedFormat={item => `#${item.text}`}
-                            value={this.state.chosenTags}
-                            addNewIfNotFound={true}
-                            onChange={this.handleTagsChange}
-                        />
-                    </div>
-                </Container>
+                <div>
+                    <input
+                        type="text"
+                        name="name"
+                        required={true}
+                        placeholder="Enter the name"
+                        value={this.state.name}
+                        onChange={this.handleNameChange}
+                    />
+                </div>
+                <div>
+                    <MultiSelect
+                        name="tags"
+                        placeholder={'Select tags'}
+                        options={this.props.tags}
+                        selectedFormat={item => `#${item.text}`}
+                        value={this.state.chosenTags}
+                        addNewIfNotFound={true}
+                        onChange={this.handleTagsChange}
+                    />
+                </div>
             </Form>
-
         );
     }
 }
