@@ -1,0 +1,29 @@
+@import '../../styles/base-sizes';
+
+.list-fieldset {
+    padding: vh(1);
+    margin: vh(1) auto;
+    width: vw(70);
+    min-height: vh(88);
+
+    @media screen and (min-device-width: 320px) and (max-device-width: 1440px) {
+        width: vw(82);
+    }
+
+    & > .book-list {
+        list-style: none;
+        padding: 0;
+        font-size: vh(1.6);
+        margin: 0 auto;
+        box-sizing: border-box;
+        text-align: left;
+
+        & .title {
+            font-weight: 300;
+            letter-spacing: vh(0.2);
+            line-height: vh(2.2);
+            text-align: center;
+            text-transform: uppercase;
+        }
+    }
+}

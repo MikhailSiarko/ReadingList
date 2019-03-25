@@ -1,0 +1,22 @@
+@import '../../../styles/colors';
+@import '../../../styles/base-sizes';
+
+.nav-bar-link {
+    text-align: center;
+    display: inline-block;
+    padding: vh(1) vh(2.5);
+    margin: 0 auto;
+    cursor: pointer;
+    min-width: vh(7.5);
+    text-decoration: none;
+    color: inherit;
+    font-size: vh(2.2);
+
+    &:hover {
+        background-color: darken($primary, 5%);
+    }
+}
+
+.active-nav-bar-link {
+    background-color: darken($primary, 5%);
+}

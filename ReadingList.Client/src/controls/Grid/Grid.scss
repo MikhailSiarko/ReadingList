@@ -1,0 +1,8 @@
+.grid {
+    height: 90%;
+    width: 90%;
+    display: grid;
+    grid-template-columns: calc(100%/5) calc(100%/5) calc(100%/5) calc(100%/5) calc(100%/5);
+    grid-template-rows: calc(100%/3) calc(100%/3) calc(100%/3);
+    margin: 0 auto;
+}

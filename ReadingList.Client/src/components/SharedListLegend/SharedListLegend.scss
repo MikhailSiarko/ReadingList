@@ -1,0 +1,20 @@
+@import '../../styles/base-sizes';
+
+.header {
+    margin: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.info {
+    margin: 0;
+    overflow: hidden;
+
+    & > .additional-info {
+        font-size: vh(1.6);
+    }
+}
+
+.wrapper {
+    margin: vh(0.5);
+}

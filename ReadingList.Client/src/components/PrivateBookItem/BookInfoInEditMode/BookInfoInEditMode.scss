@@ -1,0 +1,16 @@
+@import '../../../styles/base-sizes';
+
+.editable-book-info {
+    font-size: vh(2);
+    min-width: vh(40);
+    margin: vh(0.5);
+
+    & > .title-line {
+        font-size: vh(4);
+        font-weight: bold;
+
+        & > .by {
+            font-size: vh(2);
+        }
+    }
+}

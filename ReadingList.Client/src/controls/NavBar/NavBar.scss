@@ -1,0 +1,13 @@
+@import '../../styles/colors';
+@import '../../styles/base-sizes';
+
+.nav-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0;
+    box-shadow: 0 vh(0.1) vh(0.2) $gray;
+    transition: all 0.1s;
+    color: white;
+    background-color: $primary;
+}

@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+@import '../../styles/colors';
+@import '../../styles/base-sizes';
+
+.account-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: vh(70);
+    width: vw(60);
+    margin-left: vw(-30);
+    margin-top: vh(-35);
+    text-align: center;
+
+    & > .wrapper {
+        width: vh(45);
+        margin: 0 auto vh(4);
+    }
+
+    & > .form-button-wrapper {
+        margin: vh(2);
+    }
+
+    & > .account-header {
+        font-size: vh(8);
+        margin-bottom: vh(4);
+        font-family: 'Monoton', cursive;
+        text-shadow: 0 vh(0.2) vh(0.2) $gray;
+        color: $primary;
+    }
+}

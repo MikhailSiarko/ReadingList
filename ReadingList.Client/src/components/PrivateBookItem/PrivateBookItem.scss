@@ -1,0 +1,31 @@
+@import '../../styles/base-sizes';
+@import '../../styles/colors';
+
+.book-item {
+    transition: all 0.2s ease-in-out;
+    border-left: $primary solid vh(0.5);
+    background-color: white;
+    border-radius: vh(0.4);
+    margin: vh(1) vh(1);
+    padding: 0 vh(1);
+
+    & > :nth-child(n) {
+        display: inline-block;
+        box-sizing: border-box;
+        vertical-align: middle;
+    }
+}
+
+.editing-book-item {
+    text-align: center;
+    transition: all 0.1s;
+    border-left: $primary solid vh(0.5);
+    border-radius: vh(0.4);
+    margin: vh(0.8);
+    padding: 0 vh(1);
+
+    & > :nth-child(n) {
+        display: block;
+        box-sizing: border-box;
+    }
+}

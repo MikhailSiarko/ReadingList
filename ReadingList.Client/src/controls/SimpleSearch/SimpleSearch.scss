@@ -1,0 +1,12 @@
+@import '../../styles/base-sizes';
+
+.search-wrapper {
+    width: 20%;
+    text-align: center;
+    margin: vh(8) auto vh(2);
+
+    & .search-input[type="search"] {
+        margin: vh(0.5) auto;
+        width: 100%;
+    }
+}

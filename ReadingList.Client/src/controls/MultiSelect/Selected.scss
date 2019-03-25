@@ -1,0 +1,23 @@
+@import '../../styles/colors';
+@import '../../styles/base-sizes.scss';
+
+.selected {
+    display: inline-block;
+    background-color: $gray;
+    border-radius: vh(0.5);
+    font-size: vh(1.6);
+    padding: 0 vh(0.6);
+    margin: 0 vh(0.4);
+    color: black;
+    cursor: text;
+
+    & > .remove-button {
+        cursor: pointer;
+        border: none;
+        background-color: transparent;
+
+        &:hover {
+            color: $red;
+        }
+    }
+}

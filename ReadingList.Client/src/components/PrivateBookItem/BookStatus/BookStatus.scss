@@ -1,0 +1,12 @@
+@import '../../../styles/base-sizes';
+
+.book-status {
+    font-size: vh(1);
+    padding: vh(0.4);
+    width: 13%;
+
+    & .status-content {
+        margin: 0;
+        display: inline-block;
+    }
+}

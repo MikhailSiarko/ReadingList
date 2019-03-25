@@ -1,0 +1,12 @@
+@import '../../../styles/base-sizes';
+
+.reading-time {
+    font-size: vh(1);
+    padding: vh(0.4);
+    width: 20%;
+
+    & > .time-content {
+        margin: 0;
+        display: inline-block;
+    }
+}

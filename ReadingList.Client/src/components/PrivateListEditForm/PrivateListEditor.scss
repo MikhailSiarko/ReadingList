@@ -1,0 +1,8 @@
+@import '../../styles/base-sizes';
+
+.name-form {
+    & > :nth-child(n) {
+        display: inline-block;
+        margin: 0 vh(1);
+    }
+}

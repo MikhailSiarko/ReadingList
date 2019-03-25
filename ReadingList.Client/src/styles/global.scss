@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css?family=Assistant:200,300,400,600');
+@import 'colors';
+@import 'shadows';
+@import 'base-sizes';
+
+html {
+    font-size: $base-vertical-size;
+}
+
+* {
+    font-family: 'Assistant', sans-serif;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    box-sizing: border-box;
+
+    &:focus {
+        outline: none !important;
+    }
+}
+
+.active {
+    background-color: $active;
+}
+
+.disabled {
+    background-color: $disabled;
+}
+
+.inner-shadowed {
+    box-shadow: 0 vh(0.2) vh(0.2) 0 rgba(0, 0, 0, 0.16),
+    inset 0 vh(0.2) 0 rgba(255, 255, 255, 0.1),
+    0 0 0 vh(0.1) rgba(0, 0, 0, 0.08),
+    inset 0 0 vh(2) rgba(44, 44, 44, 0.1);
+
+    &:focus, &:hover {
+        box-shadow: 0 vh(0.4) vh(0.4) 0 rgba(0, 0, 0, 0.16),
+        inset 0 vh(0.2) 0 rgba(255, 255, 255, 0.1),
+        0 0 0 vh(0.1) rgba(0, 0, 0, 0.08),
+        inset 0 0 vh(2) rgba(44, 44, 44, 0.1);
+    }
+}
+
+input,
+select,
+textarea {
+    @extend %gray-shadow;
+    font-size: vh(2.6);
+    border: none;
+    border-radius: vh(0.5);
+    padding: vh(0.3);
+    color: $dark-gray;
+    background-color: white;
+    text-align: center;
+    width: 100%;
+
+    &::placeholder {
+        color: $gray
+    }
+}
+
+.invalid-input {
+    @extend %red-shadow;
+}
+
+.input-validation-message {
+    font-size: vh(1.6);
+    color: $red;
+}
+
+.context-menu-wrapper {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.context-menu {
+    @extend %gray-shadow;
+    display: block;
+    position: fixed;
+    background: white;
+    z-index: 9999;
+}
+
+.context-menu button {
+    display: block;
+    text-align: left;
+    border: none;
+    padding: vh(0.4) vh(5) vh(0.3) vh(1);
+    min-width: vh(12);
+    cursor: pointer;
+    font-size: vh(1.6);
+    font-weight: 400;
+    background: white;
+}
+
+.context-menu button:hover {
+    background-color: #ddd;
+}
+
+button:disabled {
+    opacity: 0.7;
+}
+
+.primary {
+    background-color: $primary!important;
+}
+
+.red {
+    background-color: $red!important;
+}

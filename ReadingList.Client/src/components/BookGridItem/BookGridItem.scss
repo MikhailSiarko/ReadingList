@@ -1,0 +1,12 @@
+@import '../../styles/colors';
+@import '../ListGridItem/grid-item';
+@import '../../styles/base-sizes';
+
+.selected-book-grid-item {
+    border-left: $primary solid vh(0.5)!important;
+}
+
+.book-grid-item {
+    @extend %grid-item;
+    border-left: $gray solid vh(0.5);
+}

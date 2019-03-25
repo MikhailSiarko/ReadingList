@@ -1,0 +1,11 @@
+@import '../../styles/colors';
+@import '../../styles/base-sizes';
+
+.fieldset {
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: vh(0.4);
+    border-style: solid;
+    border-color: $gray;
+    border-width: vh(0.1);
+}

@@ -1,0 +1,30 @@
+@import '../../styles/colors';
+@import '../../styles/base-sizes';
+
+.notification {
+    transition: bottom 500ms ease-in-out;
+    position: fixed;
+    left: vh(8);
+    bottom: vh(-50);
+    color: white;
+    font-size: vh(2);
+    border-radius: vh(1);
+    padding: vh(1);
+    width: vh(50);
+
+    & > .header {
+        margin: vh(1);
+    }
+}
+
+.error {
+    background-color: $red;
+}
+
+.info {
+    background-color: lighten($primary, 5%);
+}
+
+.notification-active {
+    bottom: vh(6);
+}

@@ -1,0 +1,33 @@
+@import './colors';
+@import './base-sizes';
+
+%gray-shadow {
+    box-shadow: 0 vh(0.2) vh(0.2) 0 rgba($dark-gray, 0.2), 0 0 0 vh(0.1) rgba($dark-gray, 0.1)!important;
+    transition: all 200ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    &:focus, &:hover {
+        box-shadow: 0 vh(0.4) vh(0.4) 0 rgba($dark-gray, 0.2), 0 0 0 vh(0.1) rgba($dark-gray, 0.1)!important;
+    }
+}
+
+%red-shadow {
+    border-color: $red !important;
+    box-shadow: 0 vh(0.1) vh(0.2) lighten($red, 5%) !important;
+    &:focus, &:hover {
+        border-color: rgba($red, 0.7) !important;
+        box-shadow: 0 vh(0.2) vh(0.4) rgba($red, 0.6) !important;
+        outline: none;
+    }
+}
+
+%inner-shadow {
+    box-shadow: 0 vh(0.2) vh(0.2) 0 rgba(0, 0, 0, 0.16),
+    inset 0 vh(0.2) 0 rgba(255, 255, 255, 0.1),
+    0 0 0 0.1rem rgba(0, 0, 0, 0.08),
+    inset 0 0 2rem rgba(44, 44, 44, 0.1);
+    &:focus, &:hover {
+        box-shadow: 0 vh(0.4) vh(0.4) 0 rgba(0, 0, 0, 0.16),
+        inset 0 vh(0.2) 0 rgba(255, 255, 255, 0.1),
+        0 0 0 vh(0.1) rgba(0, 0, 0, 0.08),
+        inset 0 0 vh(2) rgba(44, 44, 44, 0.1);
+    }
+}

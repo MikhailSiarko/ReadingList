@@ -1,0 +1,18 @@
+@import '../../../styles/base-sizes';
+
+.wrapper {
+    padding: vh(0.5);
+
+    & > .button {
+        right: 0;
+        border: none;
+        box-sizing: border-box;
+        background-color: transparent;
+        font-size: vh(2);
+        cursor: pointer;
+
+        & > .icon {
+            font-size: vh(1.6);
+        }
+    }
+}

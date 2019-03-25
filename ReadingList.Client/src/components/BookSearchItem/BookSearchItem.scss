@@ -1,0 +1,10 @@
+@import '../../styles/base-sizes';
+
+.book-search-item, .book-search-item * {
+    margin: 0;
+    padding: 0;
+}
+
+.book-search-item > .tags {
+    font-size: vh(1.5);
+}
