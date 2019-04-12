@@ -50,7 +50,7 @@ class ShareBookForm extends React.Component<Props, State> {
                 header={'Share item'}
                 size={
                     {
-                        height: '19.5rem',
+                        height: '27.5rem',
                         width: '40rem'
                     }
                 }

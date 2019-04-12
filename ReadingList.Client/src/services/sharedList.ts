@@ -1,6 +1,5 @@
 import ApiService from './api';
 import { ApiConfiguration } from '../config/apiConfig';
-import { onError } from '../utils';
 import {
     RequestResult,
     Chunked,
@@ -15,31 +14,31 @@ export class SharedListService extends ApiService {
     getMyLists = (chunk: number | null, count: number | null) => {
         return this.configureRequest(ApiConfiguration.SHARED_LISTS_MY, 'GET', undefined, { chunk, count })
             .then(this.onSuccess<Chunked<SharedBookListPreview>>())
-            .catch(onError);
+            .catch(this.onError);
     }
 
     getLists = (query: string, chunk: number | null, count: number | null) => {
         return this.configureRequest(ApiConfiguration.SHARED_LISTS, 'GET', undefined, { query, chunk, count })
             .then(this.onSuccess<Chunked<SharedBookListPreview>>())
-            .catch(onError);
+            .catch(this.onError);
     }
 
     getList = (id: number) => {
         return this.configureRequest(ApiConfiguration.getSharedListUrl(id), 'GET')
             .then(this.onSuccess<SharedBookList>())
-            .catch(onError);
+            .catch(this.onError);
     }
 
     addItem = (listId: number, bookId: number) => {
         return this.configureRequest(ApiConfiguration.getAddItemToSharedListUrl(listId), 'POST', {bookId})
             .then(this.onSuccess<SharedBookListItem>())
-            .catch(onError);
+            .catch(this.onError);
     }
 
     createList = (data: SharedListCreateData) => {
         return this.configureRequest(ApiConfiguration.SHARED_LISTS, 'POST', data)
             .then(this.onSuccess<SharedBookListPreview>())
-            .catch(onError);
+            .catch(this.onError);
     }
 
     updateList = (id: number, data: SharedListUpdateData) => {
@@ -48,19 +47,19 @@ export class SharedListService extends ApiService {
             data
         )
         .then(this.onSuccess<SharedBookList>())
-        .catch(onError);
+        .catch(this.onError);
     }
 
     deleteItem = (listId: number, itemId: number) => {
         return this.configureRequest(ApiConfiguration.getSharedListItemUrl(listId, itemId), 'DELETE')
             .then(this.onDeleteItemSuccess(itemId))
-            .catch(onError);
+            .catch(this.onError);
     }
 
     deleteList = (listId: number) => {
         return this.configureRequest(ApiConfiguration.getSharedListUrl(listId), 'DELETE')
             .then(this.onSuccess<never>())
-            .catch(onError);
+            .catch(this.onError);
     }
 
     private onDeleteItemSuccess(id: number) {

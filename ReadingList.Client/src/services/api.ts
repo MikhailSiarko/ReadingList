@@ -8,6 +8,10 @@ abstract class ApiService {
         return (response: AxiosResponse) => new RequestResult<TOut>(true, response.data);
     }
 
+    protected onError(error: RequestResult<never>) {
+        return error;
+    }
+
     protected configureRequest<TData, TParams>(url: string, method: string, data?: TData, params?: TParams) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
 
