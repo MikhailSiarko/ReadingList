@@ -49,7 +49,7 @@ class Account extends React.Component<Props, State> {
             confirmPassword={this.state.confirmPassword}
             onEmailChange={this.handleEmailChange}
             onPasswordChange={this.handlePasswordChange}
-            onConfirmPasswordChange={this.handleConfirnmPasswordChange}
+            onConfirmPasswordChange={this.handleConfirmPasswordChange}
             isValid={this.state.password === this.state.confirmPassword}
         />
     )
@@ -102,7 +102,7 @@ class Account extends React.Component<Props, State> {
         this.setState({ password: event.target.value });
     }
 
-    handleConfirnmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         this.setState({ confirmPassword: event.target.value });
     }

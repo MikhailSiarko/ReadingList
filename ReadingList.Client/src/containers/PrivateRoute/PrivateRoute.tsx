@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { RootState } from '../../store';
+import { accountRoutes } from '../../routes';
 
 interface PrivateRouteProps {
     component: React.ComponentType<any>;
@@ -17,7 +18,7 @@ class PrivateRoute extends React.Component<PrivateRouteProps> {
                 props => (
                     this.props.isAuthenticated
                         ? <this.props.component {...props} />
-                        : <Redirect to={{pathname: '/account/login', state: {from: props.location}}} />
+                        : <Redirect to={{pathname: accountRoutes.LOGIN, state: {from: props.location}}} />
                     )
             } />
         );
