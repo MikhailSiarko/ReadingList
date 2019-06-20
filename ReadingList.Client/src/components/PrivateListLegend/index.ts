@@ -1,1 +1,1 @@
-export { default as PrivateListLegend} from './PrivateListLegend';
+export { default as PrivateListLegend } from './PrivateListLegend';

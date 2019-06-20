@@ -4,7 +4,7 @@ import style from './RoundButton.scss';
 import Colors from '../../styles/colors';
 import * as classNames from 'classnames';
 
-interface Props extends React.HTMLProps<HTMLButtonElement> {
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     buttonColor?: Colors;
     radius: number;
     wrapperStyle?: React.CSSProperties;

@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, Method } from 'axios';
 import { createAxiosDefaultConfiguration } from '../config/defaultConfig';
 import { RequestResult } from '../models';
 import { get } from 'lodash';
@@ -12,7 +12,7 @@ abstract class ApiService {
         return error;
     }
 
-    protected configureRequest<TData, TParams>(url: string, method: string, data?: TData, params?: TParams) {
+    protected configureRequest<TData, TParams>(url: string, method: Method, data?: TData, params?: TParams) {
         const axiosInstance = axios.create(createAxiosDefaultConfiguration());
 
         axiosInstance.interceptors.request.use(

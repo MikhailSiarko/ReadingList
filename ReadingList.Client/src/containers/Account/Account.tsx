@@ -8,7 +8,7 @@ import { isNullOrEmpty } from '../../utils';
 import { authenticationActions, RootState } from '../../store';
 import { accountRoutes } from '../../routes';
 
-interface Props extends RouteComponentProps<React.HTMLProps<Props>> {
+interface Props extends RouteComponentProps<any> {
     loading: boolean;
     signIn: (credentials: Credentials) => void;
 }
