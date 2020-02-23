@@ -103,10 +103,6 @@ export class MultiSelect extends React.Component<Props, State> {
                 value: newChosen,
                 options: newOptions
             });
-
-            if(this.props.onChange) {
-                this.props.onChange(newChosen);
-            }
         }
     }
 
@@ -130,9 +126,7 @@ export class MultiSelect extends React.Component<Props, State> {
                 value: newChosen,
                 options: [...this.state.options]
             });
-            if(this.props.onChange) {
-                this.props.onChange(newChosen);
-            }
+            
         } else {
             if(this.props.options) {
                 const optionsIndex = this.props.options.findIndex(predicate);
@@ -145,9 +139,6 @@ export class MultiSelect extends React.Component<Props, State> {
                     value: newChosen,
                     options: newOptions
                 });
-                if(this.props.onChange) {
-                    this.props.onChange(newChosen);
-                }
             }
         }
     }
@@ -222,6 +213,13 @@ export class MultiSelect extends React.Component<Props, State> {
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleWindowClick);
+    }
+
+    componentDidUpdate(_: any, prevState: State) {
+        const isEqual = prevState.value.every(i => this.state.value.findIndex(v => v === i) !== -1);
+        if(!isEqual && this.props.onChange) {
+            this.props.onChange(this.state.value);
+        }
     }
 
     handleAddOption = (event: React.MouseEvent<HTMLButtonElement>) => {

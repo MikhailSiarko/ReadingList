@@ -44,6 +44,7 @@ const Form: React.SFC<Props> = props => (
                     <i className="fas fa-check" />
                 </RoundButton>
                 <RoundButton
+                    type="button"
                     wrapperClassName={styles['button']}
                     radius={3}
                     onClick={props.onCancel}
