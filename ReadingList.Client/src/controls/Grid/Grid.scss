@@ -1,8 +1,14 @@
 .grid {
-    height: 90%;
+    height: 100%;
     width: 90%;
     display: grid;
     grid-template-columns: calc(100%/5) calc(100%/5) calc(100%/5) calc(100%/5) calc(100%/5);
     grid-template-rows: calc(100%/3) calc(100%/3) calc(100%/3);
     margin: 0 auto;
+
+    & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }

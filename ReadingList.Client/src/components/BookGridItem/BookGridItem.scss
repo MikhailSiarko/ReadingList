@@ -8,5 +8,6 @@
 
 .book-grid-item {
     @extend %grid-item;
+    display: block!important;
     border-left: $gray solid vh(0.5);
 }

@@ -1,5 +1,5 @@
 import { applyMiddleware, compose, createStore, GenericStoreEnhancer } from 'redux';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { rootReducer, RootState } from './state';
 import { SagaMiddleware } from 'redux-saga';

@@ -102,6 +102,10 @@ export class MultiSelect extends React.Component<Props, State> {
             this.setState({
                 value: newChosen,
                 options: newOptions
+            }, () => {
+                if(this.props.onChange) {
+                    this.props.onChange(this.state.value);
+                }
             });
         }
     }
@@ -125,8 +129,12 @@ export class MultiSelect extends React.Component<Props, State> {
             this.setState({
                 value: newChosen,
                 options: [...this.state.options]
+            }, () => {
+                if(this.props.onChange) {
+                    this.props.onChange(this.state.value);
+                }
             });
-            
+
         } else {
             if(this.props.options) {
                 const optionsIndex = this.props.options.findIndex(predicate);
@@ -138,6 +146,10 @@ export class MultiSelect extends React.Component<Props, State> {
                 this.setState({
                     value: newChosen,
                     options: newOptions
+                }, () => {
+                    if(this.props.onChange) {
+                        this.props.onChange(this.state.value);
+                    }
                 });
             }
         }
@@ -215,13 +227,6 @@ export class MultiSelect extends React.Component<Props, State> {
         document.removeEventListener('click', this.handleWindowClick);
     }
 
-    componentDidUpdate(_: any, prevState: State) {
-        const isEqual = prevState.value.every(i => this.state.value.findIndex(v => v === i) !== -1);
-        if(!isEqual && this.props.onChange) {
-            this.props.onChange(this.state.value);
-        }
-    }
-
     handleAddOption = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if(this.props.options) {
@@ -239,6 +244,10 @@ export class MultiSelect extends React.Component<Props, State> {
                 addHidden: true,
                 options: this.props.options.filter(i => this.state.value.every(this.buildTextPredicate(i))),
                 selectOptions: MultiSelect.renderOptions(this.props, newOption)
+            }, () => {
+                if(this.props.onChange) {
+                    this.props.onChange(this.state.value);
+                }
             });
         }
     }
