@@ -9,9 +9,9 @@ using ReadingList.Read.Queries;
 
 namespace ReadingList.Read.QueryHandlers
 {
-    public class GetBookStatusesQueryHandler : IRequestHandler<GetBookStatuses, IEnumerable<SelectListItem>>
+    public class GetBookStatusesQueryHandler : IRequestHandler<GetBookStatuses, IEnumerable<SelectListItem<int>>>
     {
-        public async Task<IEnumerable<SelectListItem>> Handle(GetBookStatuses request,
+        public async Task<IEnumerable<SelectListItem<int>>> Handle(GetBookStatuses request,
             CancellationToken cancellationToken)
         {
             return await Task.Run(() => BookItemStatus.Read.ToSelectListItems(), cancellationToken);

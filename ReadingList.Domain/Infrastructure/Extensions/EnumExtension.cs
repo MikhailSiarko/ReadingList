@@ -14,17 +14,17 @@ namespace ReadingList.Domain.Infrastructure.Extensions
             return attribute != null ? attribute.Description : @enum.ToString();
         }
 
-        public static IEnumerable<SelectListItem> ToSelectListItems(this Enum @enum)
+        public static IEnumerable<SelectListItem<int>> ToSelectListItems(this Enum @enum)
         {
             var enumType = @enum.GetType();
 
             var values = Enum.GetValues(enumType);
 
-            var items = new List<SelectListItem>();
+            var items = new List<SelectListItem<int>>();
 
             foreach (var value in values)
             {
-                items.Add(new SelectListItem
+                items.Add(new SelectListItem<int>
                 {
                     Value = (int) Convert.ChangeType(value, enumType),
                     Text = ((Enum) value).ToStringFromDescription()

@@ -1,3 +1,4 @@
+using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
 using ReadingList.Api.GraphQL.MutationTypes;
 
@@ -7,8 +8,8 @@ namespace ReadingList.Api.GraphQL
     {
         public ReadingListMutation()
         {
-            Field<AccountMutation>("register", resolve: _ => new { });
-            Field<BooksMutation>("addToLists", resolve: _ => new { });
+            Field<AccountMutation>("account", resolve: _ => new { });
+            Field<BookMutation>("book", resolve: _ => new { }).RequiresAuthorization();
         }
     }
 }

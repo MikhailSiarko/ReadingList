@@ -20,8 +20,7 @@ namespace ReadingList.Api.GraphQL.QueryTypes
                 resolve: async context =>
                 {
                     var input = context.GetArgument<LoginRequestData>("input");
-                    return await domainService.AskAsync(new
-                        LoginUser(input.Email, input.Password));
+                    return await domainService.AskAsync(new LoginUser(input.Email, input.Password));
                 });
         }
     }

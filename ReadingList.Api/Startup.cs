@@ -8,9 +8,9 @@ using GraphQL.Types;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using ReadingList.Api.GraphQL;
+using ReadingList.Api.Infrastructure;
 using ReadingList.Api.Middlewares;
 using ReadingList.Domain;
 using ReadingList.Domain.Commands;
@@ -31,11 +31,19 @@ namespace ReadingList.Api
             services.AddCors();
             ConfigureApplication(services);
             services.AddMvc();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
             services.AddScoped<ISchema, ReadingListSchema>();
             services.AddGraphQL(o => { o.ExposeExceptions = true; })
-                .AddGraphTypes(ServiceLifetime.Scoped);
+                .AddGraphTypes(ServiceLifetime.Scoped)
+                .AddGraphQLAuthorization(b =>
+                {
+                    b.AddPolicy(Constants.AuthenticatedPolicy, pb =>
+                    {
+                        pb.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                        pb.RequireAuthenticatedUser();
+                    });
+                })
+                .AddUserContextBuilder(ctx => ctx.User);
         }
 
         public void Configure(IApplicationBuilder app)

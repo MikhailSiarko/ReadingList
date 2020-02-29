@@ -9,7 +9,10 @@ namespace ReadingList.Api.GraphQL.InputTypes
         {
             Name = "AddToListsInput";
             Field(x => x.Id);
-            Field(x => x.ListIds);
+            Field<NonNullGraphType<ListGraphType<IntGraphType>>>(
+                "listIds",
+                resolve: ctx => ctx.Source.ListIds
+                );
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ReadingList.Api.GraphQL.MutationTypes
                 resolve: async context =>
                 {
                     var input = context.GetArgument<RegisterRequestData>("input");
-                    return await domainService.AskAsync(new RegisterUser(input.Email, input.Password, input.ConfirmPassword));
+                    return await domainService.ExecuteAsync(new RegisterUser(input.Email, input.Password, input.ConfirmPassword));
                 });
         }
     }

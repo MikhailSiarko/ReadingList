@@ -1,3 +1,4 @@
+using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
 using ReadingList.Api.GraphQL.QueryTypes;
 
@@ -8,8 +9,8 @@ namespace ReadingList.Api.GraphQL
         public ReadingListQuery()
         {
             Field<AccountQuery>("account", resolve: _ => new { });
-            Field<BooksQuery>("books", resolve: _ => new { });
-            Field<BookStatusesQuery>("bookStatuses", resolve: _ => new { });
+            Field<BooksQuery>("books", resolve: _ => new { }).RequiresAuthorization();
+            Field<BookListsQuery>("lists", resolve: _ => new { }).RequiresAuthorization();
         }
     }
 }
