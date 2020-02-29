@@ -9,6 +9,7 @@ namespace ReadingList.Api.GraphQL
         {
             Field<AccountQuery>("account", resolve: _ => new { });
             Field<BooksQuery>("books", resolve: _ => new { });
+            Field<BookStatusesQuery>("bookStatuses", resolve: _ => new { });
         }
     }
 }

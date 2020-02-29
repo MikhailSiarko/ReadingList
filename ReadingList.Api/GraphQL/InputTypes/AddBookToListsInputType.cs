@@ -7,7 +7,7 @@ namespace ReadingList.Api.GraphQL.InputTypes
     {
         public AddBookToListsInputType()
         {
-            Name = "AddToLists";
+            Name = "AddToListsInput";
             Field(x => x.Id);
             Field(x => x.ListIds);
         }

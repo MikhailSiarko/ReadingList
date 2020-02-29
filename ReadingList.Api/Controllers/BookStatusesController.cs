@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ReadingList.Api.Extensions;
 using ReadingList.Api.Infrastructure.Attributes;
 using ReadingList.Domain.Services.Interfaces;
 using ReadingList.Read.Queries;
