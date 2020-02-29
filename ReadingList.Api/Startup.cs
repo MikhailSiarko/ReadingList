@@ -1,10 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using GraphQL;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
+using GraphQL.Types;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using ReadingList.Api.GraphQL;
 using ReadingList.Api.Middlewares;
 using ReadingList.Domain;
 using ReadingList.Domain.Commands;
@@ -25,6 +31,11 @@ namespace ReadingList.Api
             services.AddCors();
             ConfigureApplication(services);
             services.AddMvc();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<ISchema, ReadingListSchema>();
+            services.AddGraphQL(o => { o.ExposeExceptions = true; })
+                .AddGraphTypes(ServiceLifetime.Scoped);
         }
 
         public void Configure(IApplicationBuilder app)
@@ -37,6 +48,8 @@ namespace ReadingList.Api
                 builder.AllowAnyOrigin();
             });
             app.UseAuthentication();
+            app.UseGraphQL<ISchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
             app.UseMvc();
         }
 
